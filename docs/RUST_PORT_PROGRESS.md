@@ -21,6 +21,8 @@ Branch: `rust-port-en-time`.
 | + generic intersect (date+year, dow+date, t-on-day) | 189 / 984 | 795 | 3 / 10 | ruleIntersect/ruleIntersectOf — highest-leverage so far |
 | + Duration dim + in/within/ago/from-now | 213 / 984 | 771 | 5 / 10 | inDuration (round to lower(grain)+shift); +2 tz DST cases |
 | + written numerals (units/tens/composite) | 238 / 984 | 746 | 5 / 10 | ok_for_time flag (informal couple/few/dozen not a TOD) |
+| + holiday infra + samples | 258 / 984 | 726 | 4 / 10 | seq_map/take_nth_after/take_last_of; holidayBeta; intersect keeps holiday |
+| + full holiday table (subagent) | (in progress) | — | — | subagent a6647ce6 expanding holiday_rules() |
 
 ## How to run
 
@@ -38,7 +40,7 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru written numerals. **238/984**.
+Cumulative thru holiday infra. **258/984**. Subagent expanding the full holiday table.
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
