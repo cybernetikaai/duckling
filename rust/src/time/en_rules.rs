@@ -938,6 +938,34 @@ fn pred_nth_td(n: i64, not_immediate: bool, td: &TimeData) -> TimeData {
     }
 }
 
+fn is_ordinal(t: &Token) -> bool {
+    matches!(t, Token::Ordinal(_))
+}
+fn is_grain_month_or_coarser(t: &Token) -> bool {
+    matches!(t, Token::Time(td) if td.grain >= Grain::Month)
+}
+
+/// "<ordinal> <day-of-week> of <month-or-greater>" (ruleNthTimeOfTime).
+/// e.g. "third tuesday of september 2014" = 3rd Tuesday in that September.
+fn nth_dow_of_time_rules() -> Vec<Rule> {
+    vec![Rule {
+        name: "nth <day-of-week> of <month-or-greater>".into(),
+        pattern: vec![
+            PatternItem::Predicate(Box::new(is_ordinal)),
+            PatternItem::Predicate(Box::new(is_a_day_of_week)),
+            PatternItem::Regex(compile(r"of|in")),
+            PatternItem::Predicate(Box::new(is_grain_month_or_coarser)),
+        ],
+        prod: Box::new(|tokens| match tokens {
+            [Token::Ordinal(od), Token::Time(dow), _, Token::Time(td2)] => {
+                let inter = intersect_td(td2, dow)?;
+                Some(Token::Time(pred_nth_td(od.value - 1, false, &inter)))
+            }
+            _ => None,
+        }),
+    }]
+}
+
 /// this/next/last <time> (ports of ruleThisTime / ruleNextTime / ruleLastTime).
 fn this_next_last_time_rules() -> Vec<Rule> {
     fn rule(name: &str, re: &str, n: i64, not_immediate: bool) -> Rule {
@@ -1248,6 +1276,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(season_rules());
     rules.extend(numeric_date_rules());
     rules.extend(this_next_last_time_rules());
+    rules.extend(nth_dow_of_time_rules());
     rules.extend(time_pod_rules());
     rules.extend(intersect_rules());
     rules

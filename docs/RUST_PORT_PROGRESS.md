@@ -26,6 +26,7 @@ Branch: `rust-port-en-time`.
 | + this/next/last <time> (predNth) | 281 / 984 | 703 | 4 / 10 | take_nth; holiday/cycle composites (this/last thanksgiving) |
 | + seasons + <time> <part-of-day> | 300 / 984 | 684 | 4 / 10 | season intervals (Form::Season); intersect(pod, time) |
 | + numeric dates (M/D, M/D/Y, D Mon Y, M/YYYY) | 317 / 984 | 667 | 4 / 10 | + hardening: non-panicking add, day_of_month guard, range checks |
+| + nth <dow> of <month> | 318 / 984 | 666 | 3 / 10 | predNth(intersect(month,dow)); +1 tz (1st Sun of Nov DST) |
 
 ## How to run
 
@@ -43,7 +44,7 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru numeric dates. **317/984**. Next: interval TOD-AMPM (3-4pm), <time> on <day>, end/beginning of <time>, then ranking (unique mode).
+Cumulative thru nth-dow-of-month. **318/984**, tz_stress 3/10. Next: end/beginning of <time>, interval TOD-AMPM (3-4pm), <time> on <day>, then ranking (unique mode).
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
