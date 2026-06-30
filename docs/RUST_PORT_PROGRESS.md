@@ -28,6 +28,8 @@ Branch: `rust-port-en-time`.
 | + numeric dates (M/D, M/D/Y, D Mon Y, M/YYYY) | 317 / 984 | 667 | 4 / 10 | + hardening: non-panicking add, day_of_month guard, range checks |
 | + nth <dow> of <month> | 318 / 984 | 666 | 3 / 10 | predNth(intersect(month,dow)); +1 tz (1st Sun of Nov DST) |
 | + end/beginning of month (EOM/BOM) | 334 / 984 | 650 | 3 / 10 | oracle-verified interval bounds; by-variant from now |
+| + time_computed predicate | 334 / 984 | 650 | 3 / 10 | infra for computed holidays (explicit date list) |
+| + computed/lunar holidays (subagent) | (in progress) | — | — | subagent a4d0774 porting Computed.hs (~40 holidays, ~83 inputs) |
 
 ## How to run
 
@@ -45,7 +47,7 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru end/beginning of month. **334/984**, tz_stress 3/10. Next: interval TOD-AMPM (3-4pm), <time> on <day>, end/beginning of week/year, then ranking (unique mode).
+Cumulative thru end/beginning of month + time_computed infra. **334/984**. Subagent porting computed/lunar holiday tables (~83 inputs). Then: interval TOD-AMPM, <time> on <day>, ranking (unique mode).
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
