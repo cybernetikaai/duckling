@@ -23,6 +23,7 @@ Branch: `rust-port-en-time`.
 | + written numerals (units/tens/composite) | 238 / 984 | 746 | 5 / 10 | ok_for_time flag (informal couple/few/dozen not a TOD) |
 | + holiday infra + samples | 258 / 984 | 726 | 4 / 10 | seq_map/take_nth_after/take_last_of; holidayBeta; intersect keeps holiday |
 | + full holiday table (subagent) | 268 / 984 | 716 | 4 / 10 | ~177 fixed/nth/last-weekday holidays (subagent 99ed4676) |
+| + this/next/last <time> (predNth) | 281 / 984 | 703 | 4 / 10 | take_nth; holiday/cycle composites (this/last thanksgiving) |
 
 ## How to run
 
@@ -40,7 +41,7 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru full holiday table. **268/984**. Next: this/next/last <time> (predNth) for holiday/date composites.
+Cumulative thru this/next/last <time>. **281/984**. Next: numeric M/D/Y dates, seasons, <time> <part-of-day> glue, then ranking (unique mode).
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &

@@ -332,6 +332,38 @@ pub fn take_nth_after(n: i64, not_immediate: bool, cyclic: Predicate, base: Pred
     }))
 }
 
+/// nth occurrence of `pred` relative to the reference time (port of takeNth).
+/// n>=0 picks from the future (skipping the current one if not_immediate and it
+/// covers now); n<0 picks from the past. Used by predNth for this/next/last.
+pub fn take_nth(n: i64, not_immediate: bool, pred: Predicate) -> Predicate {
+    Predicate::Series(Rc::new(move |t: TimeObject, ctx: &TimeContext| {
+        let base = ctx.ref_time;
+        let (past, future) = pred.run(base, ctx);
+        let nth = if n >= 0 {
+            let fut: Vec<TimeObject> = future.take((n as usize) + 2).collect();
+            let drop_n = if not_immediate
+                && fut.first().is_some_and(|a| time_intersect(*a, base).is_some())
+            {
+                (n as usize) + 1
+            } else {
+                n as usize
+            };
+            fut.into_iter().nth(drop_n)
+        } else {
+            past.skip(((-n) - 1) as usize).next()
+        };
+        match nth {
+            None => (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::empty()) as BoxIter),
+            Some(o) if time_starts_before_end_of(t, o) => {
+                (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::once(o)) as BoxIter)
+            }
+            Some(o) => {
+                (Box::new(std::iter::once(o)) as BoxIter, Box::new(std::iter::empty()) as BoxIter)
+            }
+        }
+    }))
+}
+
 /// last occurrence of `cyclic` within each `base` occurrence (takeLastOf).
 /// e.g. last Monday of May = Memorial Day.
 pub fn take_last_of(cyclic: Predicate, base: Predicate) -> Predicate {

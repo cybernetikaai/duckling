@@ -6,7 +6,7 @@ use crate::regex::compile;
 use crate::time::object::IntervalType;
 use crate::time::predicate::{
     Predicate, ampm_predicate, cycle_nth, day_of_month, day_of_week, hour, hour_minute,
-    hour_minute_second, in_duration, intersect, month, take_last_of, take_nth_after,
+    hour_minute_second, in_duration, intersect, month, take_last_of, take_nth, take_nth_after,
     time_intervals, year as year_pred,
 };
 use crate::types::{Form, PatternItem, Rule, TimeData, Token};
@@ -869,6 +869,46 @@ fn duration_rules() -> Vec<Rule> {
     ]
 }
 
+/// Approximation of isOkWithThisNext: holidays and date-like forms can take
+/// "this/next/last"; bare time-of-day cannot.
+fn is_ok_with_this_next(t: &Token) -> bool {
+    matches!(t, Token::Time(td) if td.holiday.is_some()
+        || matches!(td.form, Some(Form::DayOfWeek) | Some(Form::Month { .. }) | Some(Form::PartOfDay)))
+}
+fn pred_nth_td(n: i64, not_immediate: bool, td: &TimeData) -> TimeData {
+    TimeData {
+        pred: take_nth(n, not_immediate, td.pred.clone()),
+        grain: td.grain,
+        latent: false,
+        not_immediate: false,
+        form: td.form,
+        direction: None,
+        holiday: td.holiday.clone(),
+    }
+}
+
+/// this/next/last <time> (ports of ruleThisTime / ruleNextTime / ruleLastTime).
+fn this_next_last_time_rules() -> Vec<Rule> {
+    fn rule(name: &str, re: &str, n: i64, not_immediate: bool) -> Rule {
+        Rule {
+            name: name.to_string(),
+            pattern: vec![
+                PatternItem::Regex(compile(re)),
+                PatternItem::Predicate(Box::new(is_ok_with_this_next)),
+            ],
+            prod: Box::new(move |tokens| match tokens {
+                [_, Token::Time(td)] => Some(Token::Time(pred_nth_td(n, not_immediate, td))),
+                _ => None,
+            }),
+        }
+    }
+    vec![
+        rule("this <time>", r"this|current|coming", 0, false),
+        rule("next <time>", r"next", 0, true),
+        rule("last <time>", r"(this past|last|previous)", -1, false),
+    ]
+}
+
 /// Fixed-date / nth-weekday / last-weekday holidays (port of mkRuleHolidays).
 /// Computed/lunar holidays (Easter, Chinese NY, …) need precomputed tables and
 /// are out of scope here. dow: Mon=1..Sun=7.
@@ -1080,6 +1120,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(part_of_day_rules());
     rules.extend(duration_rules());
     rules.extend(holiday_rules());
+    rules.extend(this_next_last_time_rules());
     rules.extend(intersect_rules());
     rules
 }
