@@ -58,7 +58,10 @@ pub fn add(dt: DateTime, g: Grain, n: i64) -> DateTime {
         Grain::Quarter => Span::new().months(3 * n),
         Grain::Year => Span::new().years(n),
     };
-    dt.checked_add(span).expect("datetime add overflow")
+    // Out-of-range results (e.g. a phone number mis-parsed as a huge year) must
+    // not panic; return dt unchanged so such candidates simply resolve to nothing
+    // useful and get filtered (never full-range for those inputs).
+    dt.checked_add(span).unwrap_or(dt)
 }
 
 pub fn round(dt: DateTime, g: Grain) -> DateTime {

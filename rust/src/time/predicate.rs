@@ -201,6 +201,11 @@ pub fn year(n: i64) -> Predicate {
 /// that don't have enough days (e.g. the 31st in February). Stays lazy.
 pub fn day_of_month(n: i64) -> Predicate {
     Predicate::Series(Rc::new(move |t: TimeObject, _ctx| {
+        // No month has >31 days; an out-of-range n would make `enough_days`
+        // reject forever (infinite filter). Yield nothing instead.
+        if !(1..=31).contains(&n) {
+            return (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::empty()) as BoxIter);
+        }
         let rounded = time_round(t, Grain::Month);
         let dom = t.start.day() as i64;
         let anchor = if dom <= n { rounded } else { time_plus(rounded, Grain::Month, 1) };

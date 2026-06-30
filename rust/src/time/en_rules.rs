@@ -960,6 +960,80 @@ fn this_next_last_time_rules() -> Vec<Rule> {
     ]
 }
 
+fn month_num(s: &str) -> Option<i64> {
+    let s = s.to_lowercase();
+    ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
+        .iter()
+        .position(|p| s.starts_with(p))
+        .map(|i| (i + 1) as i64)
+}
+fn valid_md(m: i64, d: i64) -> bool {
+    (1..=12).contains(&m) && (1..=31).contains(&d)
+}
+fn year_month_day_td(y: i64, m: i64, d: i64) -> Option<TimeData> {
+    if !valid_md(m, d) {
+        return None;
+    }
+    intersect_td(&month_day_td(m, d), &year_td(y))
+}
+fn year_month_td(y: i64, m: i64) -> Option<TimeData> {
+    if !(1..=12).contains(&m) {
+        return None;
+    }
+    intersect_td(&month_td(m), &year_td(y))
+}
+fn parse_i(g: &[String], i: usize) -> Option<i64> {
+    g.get(i)?.parse().ok()
+}
+
+/// Numeric date formats (US order: M/D/Y). Ports of the mm/dd(/yyyy), dd/mon/yyyy,
+/// mm/yyyy rules.
+fn numeric_date_rules() -> Vec<Rule> {
+    vec![
+        Rule {
+            name: "mm/dd/yyyy".into(),
+            pattern: vec![PatternItem::Regex(compile(
+                r"(\d{1,2})[-/.](\d{1,2})[-/.](\d{2,4})",
+            ))],
+            prod: Box::new(|tokens| {
+                let g = regex_groups(tokens)?;
+                year_month_day_td(parse_i(g, 2)?, parse_i(g, 0)?, parse_i(g, 1)?).map(Token::Time)
+            }),
+        },
+        Rule {
+            name: "dd/mon/yyyy".into(),
+            pattern: vec![PatternItem::Regex(compile(
+                r"(\d{1,2})(?:st|nd|rd|th)?[-/.\s]+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[-/.\s]+(\d{2,4})",
+            ))],
+            prod: Box::new(|tokens| {
+                let g = regex_groups(tokens)?;
+                let m = month_num(g.get(1)?)?;
+                year_month_day_td(parse_i(g, 2)?, m, parse_i(g, 0)?).map(Token::Time)
+            }),
+        },
+        Rule {
+            name: "mm/yyyy".into(),
+            pattern: vec![PatternItem::Regex(compile(r"(0?[1-9]|1[0-2])[/-](\d{4})"))],
+            prod: Box::new(|tokens| {
+                let g = regex_groups(tokens)?;
+                year_month_td(parse_i(g, 1)?, parse_i(g, 0)?).map(Token::Time)
+            }),
+        },
+        Rule {
+            name: "mm/dd".into(),
+            pattern: vec![PatternItem::Regex(compile(r"(\d{1,2})\s*[/-]\s*(\d{1,2})"))],
+            prod: Box::new(|tokens| {
+                let g = regex_groups(tokens)?;
+                let (m, d) = (parse_i(g, 0)?, parse_i(g, 1)?);
+                if !valid_md(m, d) {
+                    return None;
+                }
+                Some(Token::Time(month_day_td(m, d)))
+            }),
+        },
+    ]
+}
+
 /// Fixed-date / nth-weekday / last-weekday holidays (port of mkRuleHolidays).
 /// Computed/lunar holidays (Easter, Chinese NY, …) need precomputed tables and
 /// are out of scope here. dow: Mon=1..Sun=7.
@@ -1172,6 +1246,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(duration_rules());
     rules.extend(holiday_rules());
     rules.extend(season_rules());
+    rules.extend(numeric_date_rules());
     rules.extend(this_next_last_time_rules());
     rules.extend(time_pod_rules());
     rules.extend(intersect_rules());
