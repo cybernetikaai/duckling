@@ -8,8 +8,18 @@ use std::iter::successors;
 use std::rc::Rc;
 
 use crate::grain::{Grain, add, round as grain_round};
-use crate::time::object::{TimeObject, time_plus, time_round, time_starts_before_end_of};
+use crate::time::object::{
+    TimeObject, time_intersect, time_plus, time_round, time_starts_before_end_of,
+};
 use jiff::civil::DateTime;
+
+const SAFE_MAX: usize = 10;
+
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum Ampm {
+    Am,
+    Pm,
+}
 
 pub type BoxIter = Box<dyn Iterator<Item = TimeObject>>;
 pub type SeriesFn = dyn Fn(TimeObject, &TimeContext) -> (BoxIter, BoxIter);
@@ -95,6 +105,82 @@ pub fn month(n: i64) -> Predicate {
     }))
 }
 
+/// Hour-of-day predicate (port of runHourPredicate). is12h + optional am/pm.
+pub fn hour(is12h: bool, ampm: Option<Ampm>, n: i64) -> Predicate {
+    Predicate::Series(Rc::new(move |t: TimeObject, _ctx| {
+        let h = t.start.hour() as i64;
+        let step: i64 = if is12h && n <= 12 && ampm.is_none() { 12 } else { 24 };
+        let n2 = match ampm {
+            Some(Ampm::Am) => n.rem_euclid(12),
+            Some(Ampm::Pm) => n.rem_euclid(12) + 12,
+            None => n,
+        };
+        let rounded = time_round(t, Grain::Hour);
+        let anchor = time_plus(rounded, Grain::Hour, (n2 - h).rem_euclid(step));
+        time_sequence(Grain::Hour, step, anchor)
+    }))
+}
+
+/// Minute predicate (port of runMinutePredicate).
+pub fn minute(n: i64) -> Predicate {
+    Predicate::Series(Rc::new(move |t: TimeObject, _ctx| {
+        let m = t.start.minute() as i64;
+        let rounded = time_round(t, Grain::Minute);
+        let anchor = time_plus(rounded, Grain::Minute, (n - m).rem_euclid(60));
+        time_sequence(Grain::Hour, 1, anchor)
+    }))
+}
+
+/// Second predicate (port of runSecondPredicate, integer seconds).
+pub fn second(n: i64) -> Predicate {
+    Predicate::Series(Rc::new(move |t: TimeObject, _ctx| {
+        let s = t.start.second() as i64;
+        let rounded = time_round(t, Grain::Second);
+        let anchor = time_plus(rounded, Grain::Second, (n - s).rem_euclid(60));
+        time_sequence(Grain::Minute, 1, anchor)
+    }))
+}
+
+/// Intersection via runCompose (Types.hs:623). `fine` must be the smaller grain.
+/// Stays lazy: take_while is bounded by `.take(SAFE_MAX)` so infinite series
+/// (e.g. hourly across ±2000y) are never materialized.
+pub fn intersect(fine: Predicate, coarse: Predicate) -> Predicate {
+    Predicate::Series(Rc::new(move |now: TimeObject, ctx: &TimeContext| {
+        let (past2, future2) = coarse.run(now, ctx);
+        let min_t = ctx.min_time;
+        let max_t = ctx.max_time;
+        let f_back = fine.clone();
+        let f_fwd = fine.clone();
+        let back: Vec<TimeObject> = past2
+            .take_while(move |t| time_starts_before_end_of(min_t, *t))
+            .take(SAFE_MAX)
+            .flat_map(move |time1| compose_one(&f_back, time1))
+            .collect();
+        let fwd: Vec<TimeObject> = future2
+            .take_while(move |t| time_starts_before_end_of(*t, max_t))
+            .take(SAFE_MAX)
+            .flat_map(move |time1| compose_one(&f_fwd, time1))
+            .collect();
+        (Box::new(back.into_iter()) as BoxIter, Box::new(fwd.into_iter()) as BoxIter)
+    }))
+}
+
+fn compose_one(fine: &Predicate, time1: TimeObject) -> Vec<TimeObject> {
+    let fixed = TimeContext { ref_time: time1, min_time: time1, max_time: time1 };
+    let (_p, f) = fine.run(time1, &fixed);
+    f.take_while(move |this| time_starts_before_end_of(*this, time1))
+        .filter_map(move |t| time_intersect(t, time1))
+        .collect()
+}
+
+pub fn hour_minute(is12h: bool, h: i64, m: i64) -> Predicate {
+    intersect(minute(m), hour(is12h, None, h))
+}
+
+pub fn hour_minute_second(is12h: bool, h: i64, m: i64, s: i64) -> Predicate {
+    intersect(second(s), intersect(minute(m), hour(is12h, None, h)))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -126,5 +212,17 @@ mod tests {
         let m = future_head(&month(2), &ctx);
         assert_eq!(m.start, date(2013, 2, 1).at(0, 0, 0, 0));
         assert_eq!(m.grain, Grain::Month);
+    }
+    #[test]
+    fn hour_minute_composes() {
+        let now = TimeObject { start: date(2013, 2, 12).at(4, 30, 0, 0), grain: Grain::Second, end: None };
+        let ctx = TimeContext {
+            ref_time: now,
+            min_time: TimeObject { start: date(2011, 2, 12).at(4, 30, 0, 0), ..now },
+            max_time: TimeObject { start: date(2015, 2, 12).at(4, 30, 0, 0), ..now },
+        };
+        let h = future_head(&hour_minute(true, 4, 23), &ctx);
+        assert_eq!(h.start, date(2013, 2, 12).at(4, 23, 0, 0));
+        assert_eq!(h.grain, Grain::Minute);
     }
 }

@@ -3,8 +3,29 @@
 
 use crate::grain::Grain;
 use crate::regex::compile;
-use crate::time::predicate::{cycle_nth, day_of_week, month};
+use crate::time::predicate::{
+    Predicate, cycle_nth, day_of_week, hour_minute, hour_minute_second, month,
+};
 use crate::types::{Form, PatternItem, Rule, TimeData, Token};
+
+fn regex_groups(tokens: &[Token]) -> Option<&Vec<String>> {
+    match tokens.first() {
+        Some(Token::RegexMatch(g)) => Some(g),
+        _ => None,
+    }
+}
+
+fn tod(pred: Predicate, grain: Grain, hours: Option<i64>, is12h: bool) -> TimeData {
+    TimeData {
+        pred,
+        grain,
+        latent: false,
+        not_immediate: false,
+        form: Some(Form::TimeOfDay { hours: hours.map(|h| h as i8), is12h }),
+        direction: None,
+        holiday: None,
+    }
+}
 
 /// A rule whose regex matches an instant phrase and produces `cycle_nth(g, n)`.
 fn instant(name: &str, g: Grain, n: i64, re: &str) -> Rule {
@@ -83,6 +104,53 @@ fn months() -> Vec<Rule> {
         .collect()
 }
 
+fn time_of_day_rules() -> Vec<Rule> {
+    vec![
+        Rule {
+            name: "hh:mm".into(),
+            pattern: vec![PatternItem::Regex(compile(r"((?:[01]?\d)|(?:2[0-3]))[:.]([0-5]\d)"))],
+            prod: Box::new(|tokens| {
+                let g = regex_groups(tokens)?;
+                let h: i64 = g.first()?.parse().ok()?;
+                let m: i64 = g.get(1)?.parse().ok()?;
+                let is12h = h != 0 && h < 12;
+                Some(Token::Time(tod(hour_minute(is12h, h, m), Grain::Minute, Some(h), is12h)))
+            }),
+        },
+        Rule {
+            name: "hhhmm".into(),
+            pattern: vec![PatternItem::Regex(compile(
+                r"(?<!/)((?:[01]?\d)|(?:2[0-3]))h(([0-5]\d)|(?!\d))",
+            ))],
+            prod: Box::new(|tokens| {
+                let g = regex_groups(tokens)?;
+                let h: i64 = g.first()?.parse().ok()?;
+                let m: i64 = g.get(1).and_then(|s| s.parse().ok()).unwrap_or(0);
+                Some(Token::Time(tod(hour_minute(false, h, m), Grain::Minute, Some(h), false)))
+            }),
+        },
+        Rule {
+            name: "hh:mm:ss".into(),
+            pattern: vec![PatternItem::Regex(compile(
+                r"((?:[01]?\d)|(?:2[0-3]))[:.]([0-5]\d)[:.]([0-5]\d)",
+            ))],
+            prod: Box::new(|tokens| {
+                let g = regex_groups(tokens)?;
+                let h: i64 = g.first()?.parse().ok()?;
+                let m: i64 = g.get(1)?.parse().ok()?;
+                let s: i64 = g.get(2)?.parse().ok()?;
+                let is12h = h < 12;
+                Some(Token::Time(tod(
+                    hour_minute_second(is12h, h, m, s),
+                    Grain::Second,
+                    Some(h),
+                    is12h,
+                )))
+            }),
+        },
+    ]
+}
+
 pub fn en_rules() -> Vec<Rule> {
     let mut rules = vec![
         instant("now", Grain::Second, 0, r"now|at\s+the\s+moment|atm"),
@@ -92,5 +160,6 @@ pub fn en_rules() -> Vec<Rule> {
     ];
     rules.extend(days_of_week());
     rules.extend(months());
+    rules.extend(time_of_day_rules());
     rules
 }
