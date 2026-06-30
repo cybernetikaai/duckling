@@ -6,7 +6,7 @@ use crate::regex::compile;
 use crate::time::object::IntervalType;
 use crate::time::predicate::{
     Predicate, ampm_predicate, cycle_nth, day_of_month, day_of_week, hour, hour_minute,
-    hour_minute_second, intersect, month, time_intervals, year as year_pred,
+    hour_minute_second, in_duration, intersect, month, time_intervals, year as year_pred,
 };
 use crate::types::{Form, PatternItem, Rule, TimeData, Token};
 
@@ -740,6 +740,80 @@ fn intersect_rules() -> Vec<Rule> {
     ]
 }
 
+fn is_a_duration(t: &Token) -> bool {
+    matches!(t, Token::Duration(_))
+}
+fn duration_of(t: &Token) -> Option<(i64, Grain)> {
+    if let Token::Duration(d) = t {
+        Some((d.value, d.grain))
+    } else {
+        None
+    }
+}
+fn in_duration_td(value: i64, grain: Grain) -> TimeData {
+    TimeData {
+        pred: in_duration(value, grain),
+        grain: crate::grain::lower(grain),
+        latent: false,
+        not_immediate: false,
+        form: None,
+        direction: None,
+        holiday: None,
+    }
+}
+
+/// Relative-duration rules (ports of ruleIntervalForDurations / inDuration etc).
+fn duration_rules() -> Vec<Rule> {
+    vec![
+        Rule {
+            name: "in|within|after <duration>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"(in|within|after)")),
+                PatternItem::Predicate(Box::new(is_a_duration)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::RegexMatch(g), dur] => {
+                    let (v, gr) = duration_of(dur)?;
+                    let w = g.first()?.to_lowercase();
+                    if w == "within" {
+                        interval_td(IntervalType::Open, &now_td(), &in_duration_td(v, gr))
+                            .map(Token::Time)
+                    } else {
+                        Some(Token::Time(in_duration_td(v, gr)))
+                    }
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "<duration> from now|hence|ago".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_a_duration)),
+                PatternItem::Regex(compile(r"(from now|hence|ago)")),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [dur, Token::RegexMatch(g)] => {
+                    let (v, gr) = duration_of(dur)?;
+                    let signed = if g.first()?.eq_ignore_ascii_case("ago") { -v } else { v };
+                    Some(Token::Time(in_duration_td(signed, gr)))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "in <number> (implicit minutes)".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"in")),
+                PatternItem::Predicate(is_integer_between(0, 60)),
+            ],
+            prod: Box::new(|tokens| {
+                let n = get_int_value(tokens.get(1)?)?;
+                Some(Token::Time(in_duration_td(n, Grain::Minute)))
+            }),
+        },
+    ]
+}
+
 pub fn en_rules() -> Vec<Rule> {
     let mut rules = vec![
         instant("now", Grain::Second, 0, r"now|at\s+the\s+moment|atm"),
@@ -755,6 +829,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(cycle_and_relative_rules());
     rules.extend(interval_rules());
     rules.extend(part_of_day_rules());
+    rules.extend(duration_rules());
     rules.extend(intersect_rules());
     rules
 }

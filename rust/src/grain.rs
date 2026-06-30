@@ -16,6 +16,20 @@ pub enum Grain {
     Year,
 }
 
+/// One grain finer (port of TimeGrain.lower).
+pub fn lower(g: Grain) -> Grain {
+    match g {
+        Grain::NoGrain | Grain::Second => Grain::Second,
+        Grain::Minute => Grain::Second,
+        Grain::Hour => Grain::Minute,
+        Grain::Day => Grain::Hour,
+        Grain::Week => Grain::Day,
+        Grain::Month => Grain::Day,
+        Grain::Quarter => Grain::Month,
+        Grain::Year => Grain::Month,
+    }
+}
+
 pub fn grain_str(g: Grain) -> &'static str {
     match g {
         Grain::NoGrain => "no-grain",

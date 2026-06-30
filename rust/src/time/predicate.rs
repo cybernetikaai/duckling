@@ -7,7 +7,7 @@
 use std::iter::successors;
 use std::rc::Rc;
 
-use crate::grain::{Grain, add, round as grain_round};
+use crate::grain::{Grain, add, lower, round as grain_round};
 use crate::time::object::{
     IntervalType, TimeObject, time_interval, time_intersect, time_plus, time_plus_end, time_round,
     time_starts_before_end_of,
@@ -229,6 +229,22 @@ pub fn ampm_predicate(is_am: bool) -> Predicate {
         let prev = time_plus_end(anchor, Grain::Hour, -24);
         let past = successors(Some(prev), move |p| Some(time_plus_end(*p, Grain::Hour, -24)));
         (Box::new(past) as BoxIter, Box::new(fwd) as BoxIter)
+    }))
+}
+
+/// "in <duration>" / "<duration> ago" (negative value): round now to
+/// lower(grain), then shift by the duration (port of inDuration/shiftDuration).
+/// Single occurrence, grain = lower(duration grain).
+pub fn in_duration(value: i64, grain: Grain) -> Predicate {
+    Predicate::Series(Rc::new(move |t: TimeObject, ctx: &TimeContext| {
+        let lg = lower(grain);
+        let start = add(grain_round(ctx.ref_time.start, lg), grain, value);
+        let obj = TimeObject { start, grain: lg, end: None };
+        if time_starts_before_end_of(t, obj) {
+            (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::once(obj)) as BoxIter)
+        } else {
+            (Box::new(std::iter::once(obj)) as BoxIter, Box::new(std::iter::empty()) as BoxIter)
+        }
     }))
 }
 

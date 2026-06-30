@@ -6,6 +6,7 @@
 
 pub mod grain;
 pub mod document;
+pub mod duration;
 pub mod regex;
 pub mod types;
 pub mod engine;
@@ -29,6 +30,7 @@ thread_local! {
         let mut r = numeral::numeral_rules();
         r.extend(ordinal::ordinal_rules());
         r.extend(timegrain::timegrain_rules());
+        r.extend(duration::duration_rules());
         r.extend(time::en_rules::en_rules());
         r
     };
