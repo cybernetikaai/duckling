@@ -3334,7 +3334,7 @@
    "expected": {
     "type": "value",
     "value": "2013-12-31T00:00:00.000-02:00",
-    "grain": "year",
+    "grain": "day",
     "holidayBeta": "New Year's Eve"
    }
   },
@@ -3343,7 +3343,7 @@
    "expected": {
     "type": "value",
     "value": "2013-12-31T00:00:00.000-02:00",
-    "grain": "year",
+    "grain": "day",
     "holidayBeta": "New Year's Eve"
    }
   },
@@ -7630,7 +7630,7 @@
    "expected": {
     "type": "value",
     "value": "2014-01-31T00:00:00.000-02:00",
-    "grain": "year",
+    "grain": "day",
     "holidayBeta": "Chinese New Year"
    }
   },
@@ -7639,7 +7639,7 @@
    "expected": {
     "type": "value",
     "value": "2014-01-31T00:00:00.000-02:00",
-    "grain": "year",
+    "grain": "day",
     "holidayBeta": "Chinese New Year"
    }
   },
@@ -7648,7 +7648,7 @@
    "expected": {
     "type": "value",
     "value": "2013-02-10T00:00:00.000-02:00",
-    "grain": "year",
+    "grain": "day",
     "holidayBeta": "Chinese New Year"
    }
   },
@@ -7657,7 +7657,7 @@
    "expected": {
     "type": "value",
     "value": "2013-02-10T00:00:00.000-02:00",
-    "grain": "year",
+    "grain": "day",
     "holidayBeta": "Chinese New Year"
    }
   },
@@ -7666,7 +7666,7 @@
    "expected": {
     "type": "value",
     "value": "2013-02-10T00:00:00.000-02:00",
-    "grain": "year",
+    "grain": "day",
     "holidayBeta": "Chinese New Year"
    }
   },
@@ -7675,7 +7675,7 @@
    "expected": {
     "type": "value",
     "value": "2018-02-16T00:00:00.000-02:00",
-    "grain": "year",
+    "grain": "day",
     "holidayBeta": "Chinese New Year"
    }
   },
@@ -8158,7 +8158,7 @@
    "expected": {
     "type": "value",
     "value": "2018-09-11T00:00:00.000-02:00",
-    "grain": "year",
+    "grain": "day",
     "holidayBeta": "Islamic New Year"
    }
   },
@@ -8167,7 +8167,7 @@
    "expected": {
     "type": "value",
     "value": "2018-09-11T00:00:00.000-02:00",
-    "grain": "year",
+    "grain": "day",
     "holidayBeta": "Islamic New Year"
    }
   },
@@ -8809,7 +8809,7 @@
    "expected": {
     "type": "value",
     "value": "2018-08-17T00:00:00.000-02:00",
-    "grain": "year",
+    "grain": "day",
     "holidayBeta": "Parsi New Year"
    }
   },
@@ -8818,7 +8818,7 @@
    "expected": {
     "type": "value",
     "value": "2018-08-17T00:00:00.000-02:00",
-    "grain": "year",
+    "grain": "day",
     "holidayBeta": "Parsi New Year"
    }
   },
@@ -8827,7 +8827,7 @@
    "expected": {
     "type": "value",
     "value": "2022-08-16T00:00:00.000-02:00",
-    "grain": "year",
+    "grain": "day",
     "holidayBeta": "Parsi New Year"
    }
   },
@@ -8836,7 +8836,7 @@
    "expected": {
     "type": "value",
     "value": "2022-08-16T00:00:00.000-02:00",
-    "grain": "year",
+    "grain": "day",
     "holidayBeta": "Parsi New Year"
    }
   },
@@ -8912,11 +8912,11 @@
     "type": "interval",
     "from": {
      "value": "2013-03-23T20:30:00.000-02:00",
-     "grain": "hour"
+     "grain": "minute"
     },
     "to": {
      "value": "2013-03-23T21:31:00.000-02:00",
-     "grain": "hour"
+     "grain": "minute"
     },
     "holidayBeta": "Earth Hour"
    }
@@ -8927,11 +8927,11 @@
     "type": "interval",
     "from": {
      "value": "2016-03-19T20:30:00.000-02:00",
-     "grain": "hour"
+     "grain": "minute"
     },
     "to": {
      "value": "2016-03-19T21:31:00.000-02:00",
-     "grain": "hour"
+     "grain": "minute"
     },
     "holidayBeta": "Earth Hour"
    }

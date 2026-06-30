@@ -100,10 +100,13 @@ for m in re.finditer(r"examples\s*\(", text):
     ctor = expr.strip().split(None, 1)[0]
     tuples = [tuple(int(x) if "." not in x else float(x) for x in g)
               for g in TUPLE.findall(expr)]
-    grain_words = [w for w in re.findall(r"[A-Za-z]+", expr) if w in GRAINS]
     holiday = STR.findall(expr)
-    direction = "After" if re.search(r"\bAfter\b", expr) else (
-                "Before" if re.search(r"\bBefore\b", expr) else None)
+    # Detect grain/direction from the expr with quoted holiday names removed,
+    # so a holiday like "New Year's Eve" can't be mistaken for grain Year.
+    expr_nostr = STR.sub("", expr)
+    grain_words = [w for w in re.findall(r"[A-Za-z]+", expr_nostr) if w in GRAINS]
+    direction = "After" if re.search(r"\bAfter\b", expr_nostr) else (
+                "Before" if re.search(r"\bBefore\b", expr_nostr) else None)
 
     if not grain_words:
         skipped.append((ln, "no grain", expr[:60]))
