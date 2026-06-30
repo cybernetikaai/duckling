@@ -9,8 +9,8 @@ use std::rc::Rc;
 
 use crate::grain::{Grain, add, lower, round as grain_round};
 use crate::time::object::{
-    IntervalType, TimeObject, time_interval, time_intersect, time_plus, time_plus_end, time_round,
-    time_starts_before_end_of,
+    IntervalType, TimeObject, time_before, time_interval, time_intersect, time_plus, time_plus_end,
+    time_round, time_starting_at_the_end_of, time_starts_before_end_of,
 };
 use jiff::civil::DateTime;
 
@@ -250,44 +250,97 @@ pub fn in_duration(value: i64, grain: Grain) -> Predicate {
 
 const SAFE_MAX_INTERVAL: usize = 12;
 
-/// Interval predicate (port of runTimeIntervalsPredicate + timeSeqMap):
-/// for each occurrence of pred1, the interval runs to pred2's first occurrence
-/// after it. Re-buckets into past/future around "now".
+/// Generic timeSeqMap: apply `f` to each occurrence of `g` (bounded), then
+/// re-bucket into (past, future) around `now`. `dont_reverse` mirrors the
+/// Haskell flag (intervals keep order; nth/last reverse).
+fn seq_map<F>(
+    dont_reverse: bool,
+    f: F,
+    g: &Predicate,
+    now: TimeObject,
+    ctx: &TimeContext,
+) -> (Vec<TimeObject>, Vec<TimeObject>)
+where
+    F: Fn(TimeObject) -> Option<TimeObject>,
+{
+    let (g_past, g_future) = g.run(now, ctx);
+    let past1: Vec<TimeObject> = g_past.take(SAFE_MAX_INTERVAL).filter_map(|s| f(s)).collect();
+    let future1: Vec<TimeObject> = g_future.take(SAFE_MAX_INTERVAL).filter_map(|s| f(s)).collect();
+
+    let ends_after_now = |x: &TimeObject| time_starts_before_end_of(now, *x);
+
+    let sp = past1.iter().position(|x| !ends_after_now(x)).unwrap_or(past1.len());
+    let new_future = past1[..sp].to_vec();
+    let old_past: Vec<TimeObject> = past1[sp..]
+        .iter()
+        .cloned()
+        .take_while(|x| time_starts_before_end_of(ctx.min_time, *x))
+        .collect();
+
+    let bp = future1.iter().position(|x| ends_after_now(x)).unwrap_or(future1.len());
+    let new_past = future1[..bp].to_vec();
+    let old_future: Vec<TimeObject> = future1[bp..]
+        .iter()
+        .cloned()
+        .take_while(|x| time_starts_before_end_of(*x, ctx.max_time))
+        .collect();
+
+    let rev = |mut v: Vec<TimeObject>| {
+        if !dont_reverse {
+            v.reverse();
+        }
+        v
+    };
+    let past = rev(new_past).into_iter().chain(old_past).collect();
+    let future = rev(new_future).into_iter().chain(old_future).collect();
+    (past, future)
+}
+
+/// Interval predicate (runTimeIntervalsPredicate): each pred1 occurrence runs
+/// to pred2's first occurrence after it.
 pub fn time_intervals(kind: IntervalType, pred1: Predicate, pred2: Predicate) -> Predicate {
     Predicate::Series(Rc::new(move |now: TimeObject, ctx: &TimeContext| {
-        let make = |segment: TimeObject| -> Option<TimeObject> {
+        let f = |segment: TimeObject| -> Option<TimeObject> {
             let (_p, mut fut2) = pred2.run(segment, ctx);
             fut2.next().map(|first_future| time_interval(kind, segment, first_future))
         };
-        let (p1_past, p1_future) = pred1.run(now, ctx);
-        let past1: Vec<TimeObject> =
-            p1_past.take(SAFE_MAX_INTERVAL).filter_map(|s| make(s)).collect();
-        let future1: Vec<TimeObject> =
-            p1_future.take(SAFE_MAX_INTERVAL).filter_map(|s| make(s)).collect();
+        let (past, future) = seq_map(true, f, &pred1, now, ctx);
+        (Box::new(past.into_iter()) as BoxIter, Box::new(future.into_iter()) as BoxIter)
+    }))
+}
 
-        // true when x ends after now (so it counts as current/future)
-        let ends_after_now = |x: &TimeObject| time_starts_before_end_of(now, *x);
+/// nth occurrence of `cyclic` within/after each `base` occurrence (takeNthAfter).
+/// e.g. predNthAfter(3, Thursday, November) = the 4th Thursday = Thanksgiving.
+pub fn take_nth_after(n: i64, not_immediate: bool, cyclic: Predicate, base: Predicate) -> Predicate {
+    Predicate::Series(Rc::new(move |now: TimeObject, ctx: &TimeContext| {
+        let f = |t: TimeObject| -> Option<TimeObject> {
+            let (past, future) = cyclic.run(t, ctx);
+            if n >= 0 {
+                let fut: Vec<TimeObject> = future.take((n as usize) + 2).collect();
+                let drop_n = if not_immediate && fut.first().is_some_and(|a| time_before(*a, t)) {
+                    (n as usize) + 1
+                } else {
+                    n as usize
+                };
+                fut.into_iter().nth(drop_n)
+            } else {
+                past.skip(((-n) - 1) as usize).next()
+            }
+        };
+        let (past, future) = seq_map(false, f, &base, now, ctx);
+        (Box::new(past.into_iter()) as BoxIter, Box::new(future.into_iter()) as BoxIter)
+    }))
+}
 
-        // intervals built from pred1's PAST: the still-future prefix, then bounded old past
-        let sp = past1.iter().position(|x| !ends_after_now(x)).unwrap_or(past1.len());
-        let new_future = past1[..sp].to_vec();
-        let old_past: Vec<TimeObject> = past1[sp..]
-            .iter()
-            .cloned()
-            .take_while(|x| time_starts_before_end_of(ctx.min_time, *x))
-            .collect();
-
-        // intervals built from pred1's FUTURE: the not-yet-future prefix -> past, rest bounded
-        let bp = future1.iter().position(|x| ends_after_now(x)).unwrap_or(future1.len());
-        let new_past = future1[..bp].to_vec();
-        let old_future: Vec<TimeObject> = future1[bp..]
-            .iter()
-            .cloned()
-            .take_while(|x| time_starts_before_end_of(*x, ctx.max_time))
-            .collect();
-
-        let past: Vec<TimeObject> = new_past.into_iter().chain(old_past).collect();
-        let future: Vec<TimeObject> = new_future.into_iter().chain(old_future).collect();
+/// last occurrence of `cyclic` within each `base` occurrence (takeLastOf).
+/// e.g. last Monday of May = Memorial Day.
+pub fn take_last_of(cyclic: Predicate, base: Predicate) -> Predicate {
+    Predicate::Series(Rc::new(move |now: TimeObject, ctx: &TimeContext| {
+        let f = |t: TimeObject| -> Option<TimeObject> {
+            let (mut past, _future) = cyclic.run(time_starting_at_the_end_of(t), ctx);
+            past.next()
+        };
+        let (past, future) = seq_map(false, f, &base, now, ctx);
         (Box::new(past.into_iter()) as BoxIter, Box::new(future.into_iter()) as BoxIter)
     }))
 }

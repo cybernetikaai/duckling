@@ -6,7 +6,8 @@ use crate::regex::compile;
 use crate::time::object::IntervalType;
 use crate::time::predicate::{
     Predicate, ampm_predicate, cycle_nth, day_of_month, day_of_week, hour, hour_minute,
-    hour_minute_second, in_duration, intersect, month, time_intervals, year as year_pred,
+    hour_minute_second, in_duration, intersect, month, take_last_of, take_nth_after,
+    time_intervals, year as year_pred,
 };
 use crate::types::{Form, PatternItem, Rule, TimeData, Token};
 
@@ -543,8 +544,57 @@ fn intersect_td(a: &TimeData, b: &TimeData) -> Option<TimeData> {
         not_immediate: false,
         form: None,
         direction: None,
-        holiday: None,
+        holiday: a.holiday.clone().or_else(|| b.holiday.clone()),
     })
+}
+
+fn month_td(n: i64) -> TimeData {
+    TimeData {
+        pred: month(n),
+        grain: Grain::Month,
+        latent: false,
+        not_immediate: false,
+        form: Some(Form::Month { month: n as i8 }),
+        direction: None,
+        holiday: None,
+    }
+}
+fn month_day_td(m: i64, d: i64) -> TimeData {
+    // fixed calendar date; intersect always succeeds here
+    intersect_td(&month_td(m), &day_of_month_td(d)).expect("month_day")
+}
+fn nth_dow_of_month_td(n: i64, dow: i64, m: i64) -> TimeData {
+    TimeData {
+        pred: take_nth_after(n - 1, true, day_of_week(dow), month(m)),
+        grain: Grain::Day,
+        latent: false,
+        not_immediate: false,
+        form: None,
+        direction: None,
+        holiday: None,
+    }
+}
+fn last_dow_of_month_td(dow: i64, m: i64) -> TimeData {
+    TimeData {
+        pred: take_last_of(day_of_week(dow), month(m)),
+        grain: Grain::Day,
+        latent: false,
+        not_immediate: false,
+        form: None,
+        direction: None,
+        holiday: None,
+    }
+}
+fn mk_holiday(name: &str, mut td: TimeData) -> TimeData {
+    td.holiday = Some(name.to_string());
+    td
+}
+fn holiday_rule(name: &'static str, re: &str, make: impl Fn() -> TimeData + 'static) -> Rule {
+    Rule {
+        name: format!("holiday: {name}"),
+        pattern: vec![PatternItem::Regex(compile(re))],
+        prod: Box::new(move |_| Some(Token::Time(mk_holiday(name, make())))),
+    }
 }
 
 /// Build an interval TimeData (port of the `interval` helper).
@@ -819,6 +869,22 @@ fn duration_rules() -> Vec<Rule> {
     ]
 }
 
+/// Fixed-date / nth-weekday / last-weekday holidays (port of mkRuleHolidays).
+/// Computed/lunar holidays (Easter, Chinese NY, …) need precomputed tables and
+/// are out of scope here. dow: Mon=1..Sun=7.
+fn holiday_rules() -> Vec<Rule> {
+    vec![
+        holiday_rule("Christmas", r"(xmas|christmas)( day)?", || month_day_td(12, 25)),
+        holiday_rule("Christmas Eve", r"(xmas|christmas)('s)? eve", || month_day_td(12, 24)),
+        holiday_rule("New Year's Day", r"new year'?s?( day)?", || month_day_td(1, 1)),
+        holiday_rule("New Year's Eve", r"new year'?s? eve", || month_day_td(12, 31)),
+        holiday_rule("Halloween", r"hall?owe?en( day)?", || month_day_td(10, 31)),
+        holiday_rule("Valentine's Day", r"valentine'?s?( day)?", || month_day_td(2, 14)),
+        holiday_rule("Thanksgiving Day", r"thanksgiving( day)?", || nth_dow_of_month_td(4, 4, 11)),
+        holiday_rule("Memorial Day", r"memorial day", || last_dow_of_month_td(1, 5)),
+    ]
+}
+
 pub fn en_rules() -> Vec<Rule> {
     let mut rules = vec![
         instant("now", Grain::Second, 0, r"now|at\s+the\s+moment|atm"),
@@ -835,6 +901,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(interval_rules());
     rules.extend(part_of_day_rules());
     rules.extend(duration_rules());
+    rules.extend(holiday_rules());
     rules.extend(intersect_rules());
     rules
 }

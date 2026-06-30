@@ -43,6 +43,10 @@ pub fn time_end(t: TimeObject) -> DateTime {
     t.end.unwrap_or_else(|| add(t.start, t.grain, 1))
 }
 
+pub fn time_starting_at_the_end_of(t: TimeObject) -> TimeObject {
+    TimeObject { start: time_end(t), grain: t.grain, end: None }
+}
+
 pub fn time_before(a: TimeObject, b: TimeObject) -> bool {
     a.start < b.start
 }

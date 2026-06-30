@@ -64,11 +64,17 @@ pub fn resolve_time(td: &TimeData, ctx: &ResolveContext) -> Option<serde_json::V
     };
     // Offset for this resolved local instant, from the zone (DST-correct).
     let off = chosen.start.to_zoned(ctx.zone.clone()).ok()?.offset();
-    match chosen.end {
+    let mut value = match chosen.end {
         Some(end) => {
             let off_end = end.to_zoned(ctx.zone.clone()).ok()?.offset();
-            Some(interval_value(chosen.start, off, end, off_end, chosen.grain))
+            interval_value(chosen.start, off, end, off_end, chosen.grain)
         }
-        None => Some(simple_value(chosen.start, off, chosen.grain)),
+        None => simple_value(chosen.start, off, chosen.grain),
+    };
+    if let Some(h) = &td.holiday {
+        if let serde_json::Value::Object(o) = &mut value {
+            o.insert("holidayBeta".to_string(), serde_json::Value::String(h.clone()));
+        }
     }
+    Some(value)
 }
