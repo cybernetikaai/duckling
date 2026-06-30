@@ -68,7 +68,8 @@ fn is_dom_ordinal(t: &Token) -> bool {
     matches!(t, Token::Ordinal(o) if (1..=31).contains(&o.value))
 }
 fn is_dom_integer(t: &Token) -> bool {
-    matches!(t, Token::Numeral(_)) && get_int_value(t).is_some_and(|v| (1..=31).contains(&v))
+    matches!(t, Token::Numeral(n) if crate::numeral::ok_for_time(n)
+        && crate::numeral::int_value(n).is_some_and(|v| (1..=31).contains(&v)))
 }
 fn is_dom_value(t: &Token) -> bool {
     is_dom_ordinal(t) || is_dom_integer(t)
@@ -101,7 +102,11 @@ fn intersect_dom(td: &TimeData, dom_token: &Token) -> Option<TimeData> {
 }
 
 fn is_integer_between(lo: i64, hi: i64) -> Box<dyn Fn(&Token) -> bool> {
-    Box::new(move |t| get_int_value(t).is_some_and(|v| v >= lo && v <= hi))
+    Box::new(move |t| {
+        matches!(t, Token::Numeral(n)
+            if crate::numeral::ok_for_time(n)
+                && crate::numeral::int_value(n).is_some_and(|v| (lo..=hi).contains(&v)))
+    })
 }
 
 fn is_a_time_of_day(t: &Token) -> bool {

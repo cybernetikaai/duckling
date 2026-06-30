@@ -20,6 +20,7 @@ Branch: `rust-port-en-time`.
 | + parts of day (morning/evening/tonight) | 126 / 984 | 858 | 1 / 10 | hour-interval + partOfDay form + intersect(today,...) |
 | + generic intersect (date+year, dow+date, t-on-day) | 189 / 984 | 795 | 3 / 10 | ruleIntersect/ruleIntersectOf — highest-leverage so far |
 | + Duration dim + in/within/ago/from-now | 213 / 984 | 771 | 5 / 10 | inDuration (round to lower(grain)+shift); +2 tz DST cases |
+| + written numerals (units/tens/composite) | 238 / 984 | 746 | 5 / 10 | ok_for_time flag (informal couple/few/dozen not a TOD) |
 
 ## How to run
 
@@ -37,8 +38,7 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative: instants, days/months, time-of-day, Numeral+year+am/pm+noon, Ordinal+DOM,
-TimeGrain+this/next/last, intervals, parts-of-day, generic intersect, Duration+relative. **213/984**.
+Cumulative thru written numerals. **238/984**.
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
