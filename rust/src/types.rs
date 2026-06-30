@@ -5,6 +5,7 @@
 
 use crate::grain::Grain;
 use crate::numeral::NumeralData;
+use crate::ordinal::OrdinalData;
 use crate::regex::Re;
 use crate::time::object::IntervalDirection;
 use crate::time::predicate::Predicate;
@@ -49,6 +50,7 @@ pub enum Token {
     RegexMatch(Vec<String>),
     Time(TimeData),
     Numeral(NumeralData),
+    Ordinal(OrdinalData),
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]

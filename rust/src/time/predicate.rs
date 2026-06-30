@@ -200,6 +200,24 @@ pub fn year(n: i64) -> Predicate {
     }))
 }
 
+/// Day-of-month predicate (port of runDayOfTheMonthPredicate). Skips months
+/// that don't have enough days (e.g. the 31st in February). Stays lazy.
+pub fn day_of_month(n: i64) -> Predicate {
+    Predicate::Series(Rc::new(move |t: TimeObject, _ctx| {
+        let rounded = time_round(t, Grain::Month);
+        let dom = t.start.day() as i64;
+        let anchor = if dom <= n { rounded } else { time_plus(rounded, Grain::Month, 1) };
+        let fwd = successors(Some(anchor), |p| Some(time_plus(*p, Grain::Month, 1)))
+            .filter(move |to: &TimeObject| n <= to.start.date().days_in_month() as i64)
+            .map(move |to| time_plus(to, Grain::Day, n - 1));
+        let prev = time_plus(anchor, Grain::Month, -1);
+        let past = successors(Some(prev), |p| Some(time_plus(*p, Grain::Month, -1)))
+            .filter(move |to: &TimeObject| n <= to.start.date().days_in_month() as i64)
+            .map(move |to| time_plus(to, Grain::Day, n - 1));
+        (Box::new(past) as BoxIter, Box::new(fwd) as BoxIter)
+    }))
+}
+
 /// AM/PM as a 12h interval per day (port of runAMPMPredicate, sans the
 /// maybe-shrink-first refinement, which only matters when "now" is inside the
 /// interval — add if a corpus case needs it).

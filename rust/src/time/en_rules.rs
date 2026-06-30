@@ -4,8 +4,8 @@
 use crate::grain::Grain;
 use crate::regex::compile;
 use crate::time::predicate::{
-    Predicate, ampm_predicate, cycle_nth, day_of_week, hour, hour_minute, hour_minute_second,
-    intersect, month, year as year_pred,
+    Predicate, ampm_predicate, cycle_nth, day_of_month, day_of_week, hour, hour_minute,
+    hour_minute_second, intersect, month, year as year_pred,
 };
 use crate::types::{Form, PatternItem, Rule, TimeData, Token};
 
@@ -28,8 +28,54 @@ fn not_latent(mut td: TimeData) -> TimeData {
 fn get_int_value(t: &Token) -> Option<i64> {
     match t {
         Token::Numeral(n) => crate::numeral::int_value(n),
+        Token::Ordinal(o) => Some(o.value),
         _ => None,
     }
+}
+
+fn is_a_month(t: &Token) -> bool {
+    matches!(t, Token::Time(td) if matches!(td.form, Some(Form::Month { .. })))
+}
+fn is_a_day_of_week(t: &Token) -> bool {
+    matches!(t, Token::Time(td) if matches!(td.form, Some(Form::DayOfWeek)))
+}
+fn is_month_or_dow(t: &Token) -> bool {
+    is_a_month(t) || is_a_day_of_week(t)
+}
+fn is_dom_ordinal(t: &Token) -> bool {
+    matches!(t, Token::Ordinal(o) if (1..=31).contains(&o.value))
+}
+fn is_dom_integer(t: &Token) -> bool {
+    matches!(t, Token::Numeral(_)) && get_int_value(t).is_some_and(|v| (1..=31).contains(&v))
+}
+fn is_dom_value(t: &Token) -> bool {
+    is_dom_ordinal(t) || is_dom_integer(t)
+}
+
+fn day_of_month_td(n: i64) -> TimeData {
+    TimeData {
+        pred: day_of_month(n),
+        grain: Grain::Day,
+        latent: false,
+        not_immediate: false,
+        form: None,
+        direction: None,
+        holiday: None,
+    }
+}
+
+/// Intersect a month/day-of-week time with a day-of-month value (port of intersectDOM).
+fn intersect_dom(td: &TimeData, dom_token: &Token) -> Option<TimeData> {
+    let n = get_int_value(dom_token)?;
+    Some(TimeData {
+        pred: intersect(day_of_month(n), td.pred.clone()),
+        grain: Grain::Day,
+        latent: false,
+        not_immediate: false,
+        form: None,
+        direction: None,
+        holiday: td.holiday.clone(),
+    })
 }
 
 fn is_integer_between(lo: i64, hi: i64) -> Box<dyn Fn(&Token) -> bool> {
@@ -300,6 +346,88 @@ fn numeral_dependent_rules() -> Vec<Rule> {
     ]
 }
 
+/// Day-of-month + month-day rules (need Ordinal/Numeral). Ports of the
+/// ruleDOM* / ruleNamedDOM* / ruleMonthDOM* family.
+fn day_of_month_rules() -> Vec<Rule> {
+    vec![
+        Rule {
+            name: "<day-of-month> (ordinal)".into(),
+            pattern: vec![PatternItem::Predicate(Box::new(is_dom_ordinal))],
+            prod: Box::new(|tokens| {
+                let n = get_int_value(tokens.first()?)?;
+                Some(Token::Time(mk_latent(day_of_month_td(n))))
+            }),
+        },
+        Rule {
+            name: "the <day-of-month> (number)".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"the")),
+                PatternItem::Predicate(Box::new(is_dom_integer)),
+            ],
+            prod: Box::new(|tokens| {
+                let n = get_int_value(tokens.get(1)?)?;
+                Some(Token::Time(mk_latent(day_of_month_td(n))))
+            }),
+        },
+        Rule {
+            name: "the <day-of-month> (ordinal)".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"the")),
+                PatternItem::Predicate(Box::new(is_dom_ordinal)),
+            ],
+            prod: Box::new(|tokens| {
+                let n = get_int_value(tokens.get(1)?)?;
+                Some(Token::Time(day_of_month_td(n)))
+            }),
+        },
+        Rule {
+            name: "<named-month>|<named-day> <day-of-month> (ordinal)".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_month_or_dow)),
+                PatternItem::Predicate(Box::new(is_dom_ordinal)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(td), dom] => intersect_dom(td, dom).map(Token::Time),
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "<named-month> <day-of-month> (non ordinal)".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_a_month)),
+                PatternItem::Predicate(Box::new(is_dom_integer)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(td), dom] => intersect_dom(td, dom).map(Token::Time),
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "<day-of-month> (ordinal or number) of <named-month>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_dom_value)),
+                PatternItem::Regex(compile(r"of|in")),
+                PatternItem::Predicate(Box::new(is_a_month)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [dom, _, Token::Time(td)] => intersect_dom(td, dom).map(Token::Time),
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "<day-of-month> (ordinal or number) <named-month>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_dom_value)),
+                PatternItem::Predicate(Box::new(is_a_month)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [dom, Token::Time(td)] => intersect_dom(td, dom).map(Token::Time),
+                _ => None,
+            }),
+        },
+    ]
+}
+
 pub fn en_rules() -> Vec<Rule> {
     let mut rules = vec![
         instant("now", Grain::Second, 0, r"now|at\s+the\s+moment|atm"),
@@ -311,5 +439,6 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(months());
     rules.extend(time_of_day_rules());
     rules.extend(numeral_dependent_rules());
+    rules.extend(day_of_month_rules());
     rules
 }

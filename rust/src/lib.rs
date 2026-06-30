@@ -11,6 +11,7 @@ pub mod types;
 pub mod engine;
 pub mod json;
 pub mod numeral;
+pub mod ordinal;
 pub mod resolve;
 pub mod time;
 
@@ -25,6 +26,7 @@ thread_local! {
     // tokens and Time rules consume the others via predicate pattern items.
     static RULES: Vec<Rule> = {
         let mut r = numeral::numeral_rules();
+        r.extend(ordinal::ordinal_rules());
         r.extend(time::en_rules::en_rules());
         r
     };
