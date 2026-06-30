@@ -1,0 +1,100 @@
+//! Golden corpus harness. Loads the fixtures transcribed from Duckling's EN
+//! Time corpus and asserts the Rust parser reproduces each resolved value.
+//!
+//! Match modes (env `DUCKLING_MATCH`):
+//!   contains (default) — expected value is among the full-range Time results
+//!   unique             — exactly one full-range Time result, equal to expected
+//! `contains` lets rule logic land before the ranker exists; Phase 4 tightens
+//! to `unique` (Duckling's real corpus semantics).
+
+use serde_json::Value;
+
+fn load() -> Value {
+    let raw = include_str!("../fixtures/en_time_corpus.json");
+    serde_json::from_str(raw).expect("fixtures parse")
+}
+
+fn ctx() -> duckling::ResolveContext {
+    // Test context: civil 2013-02-12 04:30:00 at a fixed -02:00 zone (no transitions).
+    let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(-2));
+    let reference = jiff::civil::date(2013, 2, 12)
+        .at(4, 30, 0, 0)
+        .to_zoned(zone.clone())
+        .unwrap()
+        .timestamp();
+    duckling::ResolveContext { reference, zone, with_latent: false }
+}
+
+/// "values" is the alternatives array; behavior-compat ignores it.
+fn strip_values(mut v: Value) -> Value {
+    if let Value::Object(ref mut o) = v {
+        o.remove("values");
+    }
+    v
+}
+
+fn contains_mode() -> bool {
+    std::env::var("DUCKLING_MATCH").as_deref() != Ok("unique")
+}
+
+fn full_range_time_values(input: &str, ctx: &duckling::ResolveContext) -> Vec<Value> {
+    let n = input.chars().count();
+    duckling::parse(input, ctx)
+        .into_iter()
+        .filter(|e| e.dim == "time" && e.start == 0 && e.end == n)
+        .map(|e| strip_values(e.value))
+        .collect()
+}
+
+#[test]
+fn positive_corpus() {
+    let data = load();
+    let ctx = ctx();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for ex in data["positive"].as_array().unwrap() {
+        let expected = &ex["expected"];
+        if expected.is_null() {
+            continue; // long-tail/ambiguous; revisited in Phase 5
+        }
+        checked += 1;
+        let input = ex["input"].as_str().unwrap();
+        let got = full_range_time_values(input, &ctx);
+        let exp = strip_values(expected.clone());
+        let ok = if contains_mode() {
+            got.iter().any(|g| g == &exp)
+        } else {
+            got.len() == 1 && got[0] == exp
+        };
+        if !ok {
+            failures.push(format!("{input:?}\n  expected {exp}\n  got      {got:?}"));
+        }
+    }
+    eprintln!("checked {checked}, {} failing", failures.len());
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.iter().take(40).cloned().collect::<Vec<_>>().join("\n")
+    );
+}
+
+#[test]
+fn negative_corpus() {
+    let data = load();
+    let ctx = ctx();
+    let mut failures = Vec::new();
+    for ex in data["negative"].as_array().unwrap() {
+        let input = ex.as_str().unwrap();
+        let n = full_range_time_values(input, &ctx).len();
+        if n != 0 {
+            failures.push(format!("{input:?} produced {n} time parses"));
+        }
+    }
+    assert!(
+        failures.is_empty(),
+        "{} negatives leaked:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
+}

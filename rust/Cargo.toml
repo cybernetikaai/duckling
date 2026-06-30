@@ -1,0 +1,10 @@
+[package]
+name = "duckling"
+version = "0.0.0"
+edition = "2024"
+
+[dependencies]
+jiff = "0.2"          # civil + zoned datetime, IANA tz, DST handling
+fancy-regex = "0.13"  # PCRE-style lookaround (stdlib `regex` rejects it)
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
