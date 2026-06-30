@@ -988,6 +988,48 @@ fn this_next_last_time_rules() -> Vec<Rule> {
     ]
 }
 
+fn dom_of_this_month(d: i64) -> Option<TimeData> {
+    intersect_td(&day_of_month_td(d), &cycle_nth_td(Grain::Month, 0))
+}
+fn dom_of_next_month(d: i64) -> Option<TimeData> {
+    intersect_td(&day_of_month_td(d), &cycle_nth_td(Grain::Month, 1))
+}
+
+/// end-of-month / beginning-of-month (ports of ruleEndOfMonth/ruleBeginningOfMonth).
+fn end_beginning_of_month_rules() -> Vec<Rule> {
+    vec![
+        Rule {
+            name: "by end of month".into(),
+            pattern: vec![PatternItem::Regex(compile(
+                r"by (?:the )?(?:eom|end of (?:the )?month)",
+            ))],
+            prod: Box::new(|_| {
+                interval_td(IntervalType::Open, &now_td(), &dom_of_next_month(1)?).map(Token::Time)
+            }),
+        },
+        Rule {
+            name: "end of month".into(),
+            pattern: vec![PatternItem::Regex(compile(
+                r"(?:(?:at )?the )?(?:eom|end of (?:the )?month)",
+            ))],
+            prod: Box::new(|_| {
+                interval_td(IntervalType::Open, &dom_of_this_month(21)?, &dom_of_next_month(1)?)
+                    .map(Token::Time)
+            }),
+        },
+        Rule {
+            name: "beginning of month".into(),
+            pattern: vec![PatternItem::Regex(compile(
+                r"(?:(?:at )?the )?(?:bom|beginning of (?:the )?month)",
+            ))],
+            prod: Box::new(|_| {
+                interval_td(IntervalType::Closed, &dom_of_this_month(1)?, &dom_of_this_month(10)?)
+                    .map(Token::Time)
+            }),
+        },
+    ]
+}
+
 fn month_num(s: &str) -> Option<i64> {
     let s = s.to_lowercase();
     ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
@@ -1275,6 +1317,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(holiday_rules());
     rules.extend(season_rules());
     rules.extend(numeric_date_rules());
+    rules.extend(end_beginning_of_month_rules());
     rules.extend(this_next_last_time_rules());
     rules.extend(nth_dow_of_time_rules());
     rules.extend(time_pod_rules());
