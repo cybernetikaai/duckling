@@ -508,6 +508,33 @@ fn is_a_time(t: &Token) -> bool {
 fn now_td() -> TimeData {
     cycle_nth_td(Grain::Second, 0)
 }
+fn today_td() -> TimeData {
+    cycle_nth_td(Grain::Day, 0)
+}
+fn is_a_part_of_day(t: &Token) -> bool {
+    matches!(t, Token::Time(td) if matches!(td.form, Some(Form::PartOfDay)))
+}
+fn part_of_day(mut td: TimeData) -> TimeData {
+    td.form = Some(Form::PartOfDay);
+    td
+}
+
+/// Intersect two TimeData (finer grain drives the composition).
+fn intersect_td(a: &TimeData, b: &TimeData) -> Option<TimeData> {
+    if matches!(a.pred, Predicate::Empty) || matches!(b.pred, Predicate::Empty) {
+        return None;
+    }
+    let (fine, coarse) = if a.grain <= b.grain { (a, b) } else { (b, a) };
+    Some(TimeData {
+        pred: intersect(fine.pred.clone(), coarse.pred.clone()),
+        grain: a.grain.min(b.grain),
+        latent: false,
+        not_immediate: false,
+        form: None,
+        direction: None,
+        holiday: None,
+    })
+}
 
 /// Build an interval TimeData (port of the `interval` helper).
 fn interval_td(kind: IntervalType, td1: &TimeData, td2: &TimeData) -> Option<TimeData> {
@@ -604,6 +631,75 @@ fn interval_rules() -> Vec<Rule> {
     ]
 }
 
+fn hour_interval(h1: i64, h2: i64) -> Option<TimeData> {
+    interval_td(IntervalType::Open, &hour_td(false, h1), &hour_td(false, h2))
+}
+
+fn part_of_day_rules() -> Vec<Rule> {
+    vec![
+        Rule {
+            name: "part of days".into(),
+            pattern: vec![PatternItem::Regex(compile(
+                r"(morning|after ?noo?n(ish)?|evening|night|(at )?lunch)",
+            ))],
+            prod: Box::new(|tokens| {
+                let m = regex_groups(tokens)?.first()?.to_lowercase();
+                let (h1, h2) = if m.contains("morning") {
+                    (0, 12)
+                } else if m.contains("evening") || m.contains("night") {
+                    (18, 0)
+                } else if m.contains("lunch") {
+                    (12, 14)
+                } else {
+                    (12, 19) // afternoon
+                };
+                Some(Token::Time(part_of_day(mk_latent(hour_interval(h1, h2)?))))
+            }),
+        },
+        Rule {
+            name: "early morning".into(),
+            pattern: vec![PatternItem::Regex(compile(
+                r"early ((in|hours of) the )?morning",
+            ))],
+            prod: Box::new(|_| Some(Token::Time(part_of_day(mk_latent(hour_interval(0, 9)?))))),
+        },
+        Rule {
+            name: "in|during the <part-of-day>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"(in|during)( the)?")),
+                PatternItem::Predicate(Box::new(is_a_part_of_day)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(td)] => Some(Token::Time(not_latent(td.clone()))),
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "this <part-of-day>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"this")),
+                PatternItem::Predicate(Box::new(is_a_part_of_day)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(td)] => {
+                    intersect_td(&today_td(), td).map(|t| Token::Time(part_of_day(t)))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "tonight".into(),
+            pattern: vec![PatternItem::Regex(compile(r"(late )?toni(ght|gth|te)s?"))],
+            prod: Box::new(|tokens| {
+                let m = regex_groups(tokens)?.first()?.to_lowercase();
+                let h = if m.contains("late") { 21 } else { 18 };
+                let evening = hour_interval(h, 0)?;
+                intersect_td(&today_td(), &evening).map(|t| Token::Time(part_of_day(t)))
+            }),
+        },
+    ]
+}
+
 pub fn en_rules() -> Vec<Rule> {
     let mut rules = vec![
         instant("now", Grain::Second, 0, r"now|at\s+the\s+moment|atm"),
@@ -618,5 +714,6 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(day_of_month_rules());
     rules.extend(cycle_and_relative_rules());
     rules.extend(interval_rules());
+    rules.extend(part_of_day_rules());
     rules
 }

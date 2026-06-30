@@ -17,6 +17,7 @@ Branch: `rust-port-en-time`.
 | + Ordinal + day-of-month + month-day | 86 / 984 | 898 | 1 / 10 | intersectDOM; 1st tz_stress green (Sydney +11:00) |
 | + TimeGrain + this/next/last cycle + next-dow | 107 / 984 | 877 | 1 / 10 | cycle_nth reused; next-dow via intersect w/ next week |
 | + intervals (from/to, between, dash, by) | 120 / 984 | 864 | 1 / 10 | timeSeqMap port; cycle_nth fixed to single-element (takeNth) |
+| + parts of day (morning/evening/tonight) | 126 / 984 | 858 | 1 / 10 | hour-interval + partOfDay form + intersect(today,...) |
 
 ## How to run
 
@@ -34,7 +35,13 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-- Next: candidates by remaining-count — intervals (from–to / X–Y), day-of-month+month-day (needs Ordinal), this/next/last, written numerals.
+Cumulative this run: instants, days/months, time-of-day, Numeral(int)+year+am/pm+noon,
+Ordinal+day-of-month, TimeGrain+this/next/last, intervals, parts-of-day. **126/984**.
+
+Next high-value targets (by remaining count): `<time> <part-of-day>` &
+`<time> on <day>` intersect (unlocks many interval+day combos), written numerals
+(one..ninety), relative durations (needs Duration dim), holidays (subagent),
+numeric M/D/Y dates, then ranking (unique mode) + real-zone tz_stress.
 
 ## Backlog (rough order)
 
