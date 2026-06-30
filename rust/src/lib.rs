@@ -10,6 +10,7 @@ pub mod regex;
 pub mod types;
 pub mod engine;
 pub mod json;
+pub mod numeral;
 pub mod resolve;
 pub mod time;
 
@@ -20,7 +21,13 @@ use types::{Rule, Token};
 
 thread_local! {
     // Compile the rule set (regexes) once per thread, not once per parse.
-    static RULES: Vec<Rule> = time::en_rules::en_rules();
+    // All dimensions share one rule set; the engine produces Numeral/Time/...
+    // tokens and Time rules consume the others via predicate pattern items.
+    static RULES: Vec<Rule> = {
+        let mut r = numeral::numeral_rules();
+        r.extend(time::en_rules::en_rules());
+        r
+    };
 }
 
 /// Parse `input` against the EN Time rules and return resolved entities.

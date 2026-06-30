@@ -30,6 +30,15 @@ pub fn time_plus(t: TimeObject, g: Grain, n: i64) -> TimeObject {
     TimeObject { start: add(t.start, g, n), grain: t.grain.min(g), end: None }
 }
 
+/// Shift the whole interval (start and end) by n*g; preserves length.
+pub fn time_plus_end(t: TimeObject, g: Grain, n: i64) -> TimeObject {
+    TimeObject {
+        start: add(t.start, g, n),
+        grain: t.grain.min(g),
+        end: t.end.map(|e| add(e, g, n)),
+    }
+}
+
 pub fn time_end(t: TimeObject) -> DateTime {
     t.end.unwrap_or_else(|| add(t.start, t.grain, 1))
 }

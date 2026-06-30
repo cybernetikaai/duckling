@@ -4,6 +4,7 @@
 //! (Numeral, Ordinal, Duration, TimeGrain) are added as dependencies land.
 
 use crate::grain::Grain;
+use crate::numeral::NumeralData;
 use crate::regex::Re;
 use crate::time::object::IntervalDirection;
 use crate::time::predicate::Predicate;
@@ -47,6 +48,7 @@ impl TimeData {
 pub enum Token {
     RegexMatch(Vec<String>),
     Time(TimeData),
+    Numeral(NumeralData),
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]

@@ -13,6 +13,7 @@ Branch: `rust-port-en-time`.
 | Phase 1 (instants) | 8 / 984 | 976 | 0 / 10 | now/today/tomorrow/yesterday |
 | + days-of-week + months | 24 / 984 | 960 | 0 / 10 | + notImmediate, + rule-compile cache (32s→0.1s) |
 | + time-of-day (hh:mm/hhhmm/hh:mm:ss) | 40 / 984 | 944 | 0 / 10 | hour/minute/second preds + intersect (runCompose) |
+| + Numeral(int) + year + am/pm + noon | 73 / 984 | 911 | 0 / 10 | bare-hour→am/pm, year predicate, AM/PM interval |
 
 ## How to run
 
@@ -30,7 +31,7 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-- Next: minimal Numeral (ints + written small numbers + a/an) → unblocks bare hours ("4pm"), years ("in 2014"), day-of-month, durations. Then am/pm + noon/midnight rules.
+- Next: candidates by remaining-count — intervals (from–to / X–Y), day-of-month+month-day (needs Ordinal), this/next/last, written numerals.
 
 ## Backlog (rough order)
 

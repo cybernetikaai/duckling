@@ -4,7 +4,8 @@
 use crate::grain::Grain;
 use crate::regex::compile;
 use crate::time::predicate::{
-    Predicate, cycle_nth, day_of_week, hour_minute, hour_minute_second, month,
+    Predicate, ampm_predicate, cycle_nth, day_of_week, hour, hour_minute, hour_minute_second,
+    intersect, month, year as year_pred,
 };
 use crate::types::{Form, PatternItem, Rule, TimeData, Token};
 
@@ -12,6 +13,73 @@ fn regex_groups(tokens: &[Token]) -> Option<&Vec<String>> {
     match tokens.first() {
         Some(Token::RegexMatch(g)) => Some(g),
         _ => None,
+    }
+}
+
+fn mk_latent(mut td: TimeData) -> TimeData {
+    td.latent = true;
+    td
+}
+fn not_latent(mut td: TimeData) -> TimeData {
+    td.latent = false;
+    td
+}
+
+fn get_int_value(t: &Token) -> Option<i64> {
+    match t {
+        Token::Numeral(n) => crate::numeral::int_value(n),
+        _ => None,
+    }
+}
+
+fn is_integer_between(lo: i64, hi: i64) -> Box<dyn Fn(&Token) -> bool> {
+    Box::new(move |t| get_int_value(t).is_some_and(|v| v >= lo && v <= hi))
+}
+
+fn is_a_time_of_day(t: &Token) -> bool {
+    matches!(t, Token::Time(td) if matches!(td.form, Some(Form::TimeOfDay { .. })))
+}
+
+fn is_month_or_year(t: &Token) -> bool {
+    matches!(t, Token::Time(td) if matches!(td.form, Some(Form::Month { .. })) || td.grain == Grain::Year)
+}
+
+fn hour_td(is12h: bool, n: i64) -> TimeData {
+    TimeData {
+        pred: hour(is12h, None, n),
+        grain: Grain::Hour,
+        latent: false,
+        not_immediate: false,
+        form: Some(Form::TimeOfDay { hours: Some(n as i8), is12h }),
+        direction: None,
+        holiday: None,
+    }
+}
+
+fn year_td(n: i64) -> TimeData {
+    // 2-digit years map to 1950..2049 (port of `year` helper).
+    let y = if n <= 99 { (n + 50).rem_euclid(100) + 1950 } else { n };
+    TimeData {
+        pred: year_pred(y),
+        grain: Grain::Year,
+        latent: false,
+        not_immediate: false,
+        form: None,
+        direction: None,
+        holiday: None,
+    }
+}
+
+/// Apply am/pm to a time-of-day by intersecting with a 12h interval.
+fn time_of_day_ampm(is_am: bool, td: &TimeData) -> TimeData {
+    TimeData {
+        pred: intersect(td.pred.clone(), ampm_predicate(is_am)),
+        grain: td.grain,
+        latent: false,
+        not_immediate: false,
+        form: Some(Form::TimeOfDay { hours: None, is12h: false }),
+        direction: None,
+        holiday: td.holiday.clone(),
     }
 }
 
@@ -151,6 +219,87 @@ fn time_of_day_rules() -> Vec<Rule> {
     ]
 }
 
+/// Rules that consume Numeral tokens (years, bare hours) and the rules that
+/// build on them (am/pm, at-TOD, noon/midnight).
+fn numeral_dependent_rules() -> Vec<Rule> {
+    vec![
+        Rule {
+            name: "year (latent)".into(),
+            pattern: vec![PatternItem::Predicate(is_integer_between(25, 10000))],
+            prod: Box::new(|tokens| {
+                let n = get_int_value(tokens.first()?)?;
+                Some(Token::Time(mk_latent(year_td(n))))
+            }),
+        },
+        Rule {
+            name: "in|during <named-month>|year".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"in|during")),
+                PatternItem::Predicate(Box::new(is_month_or_year)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(td)] => Some(Token::Time(not_latent(td.clone()))),
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "time-of-day (latent)".into(),
+            pattern: vec![PatternItem::Predicate(is_integer_between(0, 23))],
+            prod: Box::new(|tokens| {
+                let n = get_int_value(tokens.first()?)?;
+                Some(Token::Time(mk_latent(hour_td(n < 13, n))))
+            }),
+        },
+        Rule {
+            name: "at <time-of-day>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"at|@")),
+                PatternItem::Predicate(Box::new(is_a_time_of_day)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(td)] => Some(Token::Time(not_latent(td.clone()))),
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "<time-of-day> am|pm".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_a_time_of_day)),
+                PatternItem::Regex(compile(r"(in the )?([ap])(\s|\.)?(m?)\.?")),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(td), Token::RegexMatch(g)] => {
+                    let is_am = g.get(1).map(|s| s.eq_ignore_ascii_case("a")).unwrap_or(false);
+                    let m_empty = g.get(3).map(|s| s.is_empty()).unwrap_or(true);
+                    if td.latent && m_empty {
+                        Some(Token::Time(mk_latent(time_of_day_ampm(is_am, td))))
+                    } else if let Some(Form::TimeOfDay { hours: Some(h), .. }) = td.form {
+                        if h < 13 {
+                            Some(Token::Time(time_of_day_ampm(is_am, td)))
+                        } else {
+                            None
+                        }
+                    } else {
+                        None
+                    }
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "noon|midnight|EOD".into(),
+            pattern: vec![PatternItem::Regex(compile(
+                r"(noon|midni(ght|te)|(the )?(EOD|end of (the )?day))",
+            ))],
+            prod: Box::new(|tokens| {
+                let g = regex_groups(tokens)?;
+                let noon = g.first()?.eq_ignore_ascii_case("noon");
+                Some(Token::Time(hour_td(false, if noon { 12 } else { 0 })))
+            }),
+        },
+    ]
+}
+
 pub fn en_rules() -> Vec<Rule> {
     let mut rules = vec![
         instant("now", Grain::Second, 0, r"now|at\s+the\s+moment|atm"),
@@ -161,5 +310,6 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(days_of_week());
     rules.extend(months());
     rules.extend(time_of_day_rules());
+    rules.extend(numeral_dependent_rules());
     rules
 }

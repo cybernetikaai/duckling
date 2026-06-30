@@ -9,7 +9,8 @@ use std::rc::Rc;
 
 use crate::grain::{Grain, add, round as grain_round};
 use crate::time::object::{
-    TimeObject, time_intersect, time_plus, time_round, time_starts_before_end_of,
+    IntervalType, TimeObject, time_interval, time_intersect, time_plus, time_plus_end, time_round,
+    time_starts_before_end_of,
 };
 use jiff::civil::DateTime;
 
@@ -179,6 +180,41 @@ pub fn hour_minute(is12h: bool, h: i64, m: i64) -> Predicate {
 
 pub fn hour_minute_second(is12h: bool, h: i64, m: i64, s: i64) -> Predicate {
     intersect(second(s), intersect(minute(m), hour(is12h, None, h)))
+}
+
+/// Year predicate (port of runYearPredicate): a single occurrence, in past or
+/// future depending on whether the reference year is before/after n.
+pub fn year(n: i64) -> Predicate {
+    Predicate::Series(Rc::new(move |t: TimeObject, _ctx| {
+        let tyear = t.start.year() as i64;
+        let y = TimeObject {
+            start: add(grain_round(t.start, Grain::Year), Grain::Year, n - tyear),
+            grain: Grain::Year,
+            end: None,
+        };
+        if tyear <= n {
+            (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::once(y)) as BoxIter)
+        } else {
+            (Box::new(std::iter::once(y)) as BoxIter, Box::new(std::iter::empty()) as BoxIter)
+        }
+    }))
+}
+
+/// AM/PM as a 12h interval per day (port of runAMPMPredicate, sans the
+/// maybe-shrink-first refinement, which only matters when "now" is inside the
+/// interval — add if a corpus case needs it).
+pub fn ampm_predicate(is_am: bool) -> Predicate {
+    Predicate::Series(Rc::new(move |t: TimeObject, _ctx| {
+        let n = if is_am { 0 } else { 12 };
+        let rounded = time_round(t, Grain::Day);
+        let anchor_start = time_plus(rounded, Grain::Hour, n);
+        let anchor_end = time_plus(anchor_start, Grain::Hour, 12);
+        let anchor = time_interval(IntervalType::Open, anchor_start, anchor_end);
+        let fwd = successors(Some(anchor), move |p| Some(time_plus_end(*p, Grain::Hour, 24)));
+        let prev = time_plus_end(anchor, Grain::Hour, -24);
+        let past = successors(Some(prev), move |p| Some(time_plus_end(*p, Grain::Hour, -24)));
+        (Box::new(past) as BoxIter, Box::new(fwd) as BoxIter)
+    }))
 }
 
 #[cfg(test)]
