@@ -253,6 +253,19 @@ pub fn in_duration(value: i64, grain: Grain) -> Predicate {
     }))
 }
 
+/// Predicate from an explicit, chronologically-sorted list of dates (port of
+/// timeComputed). Used for computed/lunar holidays (Easter, Diwali, …).
+pub fn time_computed(dates: Vec<TimeObject>) -> Predicate {
+    let dates = std::rc::Rc::new(dates);
+    Predicate::Series(Rc::new(move |t: TimeObject, _ctx| {
+        let idx = dates.partition_point(|d| time_before(*d, t));
+        let mut past: Vec<TimeObject> = dates[..idx].to_vec();
+        past.reverse();
+        let future: Vec<TimeObject> = dates[idx..].to_vec();
+        (Box::new(past.into_iter()) as BoxIter, Box::new(future.into_iter()) as BoxIter)
+    }))
+}
+
 const SAFE_MAX_INTERVAL: usize = 12;
 
 /// Generic timeSeqMap: apply `f` to each occurrence of `g` (bounded), then
