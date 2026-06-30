@@ -3,3 +3,4 @@
 pub mod object;
 pub mod predicate;
 pub mod en_rules;
+pub mod computed;
