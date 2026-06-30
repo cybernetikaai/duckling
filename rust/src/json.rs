@@ -31,3 +31,17 @@ pub fn rfc3339(dt: DateTime, off: Offset) -> String {
 pub fn simple_value(dt: DateTime, off: Offset, g: Grain) -> Value {
     json!({ "type": "value", "value": rfc3339(dt, off), "grain": grain_str(g) })
 }
+
+pub fn interval_value(
+    start: DateTime,
+    off_start: Offset,
+    end: DateTime,
+    off_end: Offset,
+    g: Grain,
+) -> Value {
+    json!({
+        "type": "interval",
+        "from": { "value": rfc3339(start, off_start), "grain": grain_str(g) },
+        "to": { "value": rfc3339(end, off_end), "grain": grain_str(g) },
+    })
+}

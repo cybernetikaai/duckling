@@ -3,7 +3,7 @@
 use serde::Serialize;
 
 use crate::grain::{Grain, add};
-use crate::json::simple_value;
+use crate::json::{interval_value, simple_value};
 use crate::time::object::{TimeObject, time_intersect};
 use crate::time::predicate::TimeContext;
 use crate::types::TimeData;
@@ -64,5 +64,11 @@ pub fn resolve_time(td: &TimeData, ctx: &ResolveContext) -> Option<serde_json::V
     };
     // Offset for this resolved local instant, from the zone (DST-correct).
     let off = chosen.start.to_zoned(ctx.zone.clone()).ok()?.offset();
-    Some(simple_value(chosen.start, off, chosen.grain))
+    match chosen.end {
+        Some(end) => {
+            let off_end = end.to_zoned(ctx.zone.clone()).ok()?.offset();
+            Some(interval_value(chosen.start, off, end, off_end, chosen.grain))
+        }
+        None => Some(simple_value(chosen.start, off, chosen.grain)),
+    }
 }

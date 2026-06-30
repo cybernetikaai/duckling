@@ -3,9 +3,10 @@
 
 use crate::grain::Grain;
 use crate::regex::compile;
+use crate::time::object::IntervalType;
 use crate::time::predicate::{
     Predicate, ampm_predicate, cycle_nth, day_of_month, day_of_week, hour, hour_minute,
-    hour_minute_second, intersect, month, year as year_pred,
+    hour_minute_second, intersect, month, time_intervals, year as year_pred,
 };
 use crate::types::{Form, PatternItem, Rule, TimeData, Token};
 
@@ -498,6 +499,111 @@ fn cycle_and_relative_rules() -> Vec<Rule> {
     ]
 }
 
+fn is_not_latent(t: &Token) -> bool {
+    matches!(t, Token::Time(td) if !td.latent)
+}
+fn is_a_time(t: &Token) -> bool {
+    matches!(t, Token::Time(_))
+}
+fn now_td() -> TimeData {
+    cycle_nth_td(Grain::Second, 0)
+}
+
+/// Build an interval TimeData (port of the `interval` helper).
+fn interval_td(kind: IntervalType, td1: &TimeData, td2: &TimeData) -> Option<TimeData> {
+    if matches!(td1.pred, Predicate::Empty) || matches!(td2.pred, Predicate::Empty) {
+        return None;
+    }
+    Some(TimeData {
+        pred: time_intervals(kind, td1.pred.clone(), td2.pred.clone()),
+        grain: td1.grain.min(td2.grain),
+        latent: false,
+        not_immediate: false,
+        form: None,
+        direction: None,
+        holiday: None,
+    })
+}
+
+fn interval_rules() -> Vec<Rule> {
+    let sep = r"\-|to|th?ru|through|(un)?til(l)?";
+    vec![
+        Rule {
+            name: "<datetime> - <datetime> (interval)".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_not_latent)),
+                PatternItem::Regex(compile(sep)),
+                PatternItem::Predicate(Box::new(is_not_latent)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(a), _, Token::Time(b)] => {
+                    interval_td(IntervalType::Closed, a, b).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "from <datetime> - <datetime> (interval)".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"from")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+                PatternItem::Regex(compile(sep)),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(a), _, Token::Time(b)] => {
+                    interval_td(IntervalType::Closed, a, b).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "between <time> and <time>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"between")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+                PatternItem::Regex(compile(r"and")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(a), _, Token::Time(b)] => {
+                    interval_td(IntervalType::Closed, a, b).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "<time-of-day> - <time-of-day> (interval)".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(|t: &Token| {
+                    is_not_latent(t) && is_a_time_of_day(t)
+                })),
+                PatternItem::Regex(compile(r"\-|:|to|th?ru|through|(un)?til(l)?")),
+                PatternItem::Predicate(Box::new(is_a_time_of_day)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(a), _, Token::Time(b)] => {
+                    interval_td(IntervalType::Closed, a, b).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "by <time>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"by")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(td)] => {
+                    interval_td(IntervalType::Open, &now_td(), td).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
+    ]
+}
+
 pub fn en_rules() -> Vec<Rule> {
     let mut rules = vec![
         instant("now", Grain::Second, 0, r"now|at\s+the\s+moment|atm"),
@@ -511,5 +617,6 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(numeral_dependent_rules());
     rules.extend(day_of_month_rules());
     rules.extend(cycle_and_relative_rules());
+    rules.extend(interval_rules());
     rules
 }
