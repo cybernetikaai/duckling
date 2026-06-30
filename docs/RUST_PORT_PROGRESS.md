@@ -18,6 +18,7 @@ Branch: `rust-port-en-time`.
 | + TimeGrain + this/next/last cycle + next-dow | 107 / 984 | 877 | 1 / 10 | cycle_nth reused; next-dow via intersect w/ next week |
 | + intervals (from/to, between, dash, by) | 120 / 984 | 864 | 1 / 10 | timeSeqMap port; cycle_nth fixed to single-element (takeNth) |
 | + parts of day (morning/evening/tonight) | 126 / 984 | 858 | 1 / 10 | hour-interval + partOfDay form + intersect(today,...) |
+| + generic intersect (date+year, dow+date, t-on-day) | 189 / 984 | 795 | 3 / 10 | ruleIntersect/ruleIntersectOf — highest-leverage so far |
 
 ## How to run
 
@@ -35,8 +36,9 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative this run: instants, days/months, time-of-day, Numeral(int)+year+am/pm+noon,
-Ordinal+day-of-month, TimeGrain+this/next/last, intervals, parts-of-day. **126/984**.
+Cumulative: instants, days/months, time-of-day, Numeral(int)+year+am/pm+noon,
+Ordinal+day-of-month, TimeGrain+this/next/last, intervals, parts-of-day, generic intersect. **189/984**.
+A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
 `<time> on <day>` intersect (unlocks many interval+day combos), written numerals

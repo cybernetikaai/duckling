@@ -502,6 +502,12 @@ fn cycle_and_relative_rules() -> Vec<Rule> {
 fn is_not_latent(t: &Token) -> bool {
     matches!(t, Token::Time(td) if !td.latent)
 }
+fn grain_finer_than(g: Grain) -> Box<dyn Fn(&Token) -> bool> {
+    Box::new(move |t| matches!(t, Token::Time(td) if td.grain < g))
+}
+fn is_grain_of_year(t: &Token) -> bool {
+    matches!(t, Token::Time(td) if td.grain == Grain::Year)
+}
 fn is_a_time(t: &Token) -> bool {
     matches!(t, Token::Time(_))
 }
@@ -700,6 +706,40 @@ fn part_of_day_rules() -> Vec<Rule> {
     ]
 }
 
+/// Generic intersection of two adjacent times (ports of ruleIntersect /
+/// ruleIntersectOf). Composes dates+years, dow+month-day, time-on-day, etc.
+fn intersect_rules() -> Vec<Rule> {
+    vec![
+        Rule {
+            name: "intersect".into(),
+            pattern: vec![
+                PatternItem::Predicate(grain_finer_than(Grain::Year)),
+                PatternItem::Predicate(Box::new(|t| is_not_latent(t) || is_grain_of_year(t))),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(a), Token::Time(b)] if !a.latent || !b.latent => {
+                    intersect_td(a, b).map(|t| Token::Time(not_latent(t)))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "intersect by ',', 'of', 'from', 's".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_not_latent)),
+                PatternItem::Regex(compile(r"of|from|for|'s|,|@")),
+                PatternItem::Predicate(Box::new(is_not_latent)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(a), _, Token::Time(b)] => {
+                    intersect_td(a, b).map(|t| Token::Time(not_latent(t)))
+                }
+                _ => None,
+            }),
+        },
+    ]
+}
+
 pub fn en_rules() -> Vec<Rule> {
     let mut rules = vec![
         instant("now", Grain::Second, 0, r"now|at\s+the\s+moment|atm"),
@@ -715,5 +755,6 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(cycle_and_relative_rules());
     rules.extend(interval_rules());
     rules.extend(part_of_day_rules());
+    rules.extend(intersect_rules());
     rules
 }
