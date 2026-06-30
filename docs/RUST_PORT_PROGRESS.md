@@ -24,6 +24,7 @@ Branch: `rust-port-en-time`.
 | + holiday infra + samples | 258 / 984 | 726 | 4 / 10 | seq_map/take_nth_after/take_last_of; holidayBeta; intersect keeps holiday |
 | + full holiday table (subagent) | 268 / 984 | 716 | 4 / 10 | ~177 fixed/nth/last-weekday holidays (subagent 99ed4676) |
 | + this/next/last <time> (predNth) | 281 / 984 | 703 | 4 / 10 | take_nth; holiday/cycle composites (this/last thanksgiving) |
+| + seasons + <time> <part-of-day> | 300 / 984 | 684 | 4 / 10 | season intervals (Form::Season); intersect(pod, time) |
 
 ## How to run
 
@@ -41,7 +42,7 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru this/next/last <time>. **281/984**. Next: numeric M/D/Y dates, seasons, <time> <part-of-day> glue, then ranking (unique mode).
+Cumulative thru seasons + time-POD. **300/984** (>30%). Next: numeric M/D/Y dates, interval TOD-AMPM (3-4pm), <time> on <day>, then ranking (unique mode).
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &

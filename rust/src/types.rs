@@ -17,6 +17,7 @@ pub enum Form {
     TimeOfDay { hours: Option<i8>, is12h: bool },
     Month { month: i8 },
     PartOfDay,
+    Season,
 }
 
 #[derive(Clone)]

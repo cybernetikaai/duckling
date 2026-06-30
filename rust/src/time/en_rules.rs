@@ -873,7 +873,58 @@ fn duration_rules() -> Vec<Rule> {
 /// "this/next/last"; bare time-of-day cannot.
 fn is_ok_with_this_next(t: &Token) -> bool {
     matches!(t, Token::Time(td) if td.holiday.is_some()
-        || matches!(td.form, Some(Form::DayOfWeek) | Some(Form::Month { .. }) | Some(Form::PartOfDay)))
+        || matches!(td.form, Some(Form::DayOfWeek) | Some(Form::Month { .. }) | Some(Form::PartOfDay) | Some(Form::Season)))
+}
+
+fn season_td(sm: i64, sd: i64, em: i64, ed: i64) -> Option<TimeData> {
+    let mut td = interval_td(IntervalType::Open, &month_day_td(sm, sd), &month_day_td(em, ed))?;
+    td.form = Some(Form::Season);
+    Some(td)
+}
+
+fn season_rules() -> Vec<Rule> {
+    let seasons: [(&str, &str, i64, i64, i64, i64); 4] = [
+        ("summer", r"summer", 6, 21, 9, 23),
+        ("fall", r"fall|autumn", 9, 23, 12, 21),
+        ("winter", r"winter", 12, 21, 3, 20),
+        ("spring", r"spring", 3, 20, 6, 21),
+    ];
+    seasons
+        .iter()
+        .map(|&(name, re, sm, sd, em, ed)| Rule {
+            name: format!("season {name}"),
+            pattern: vec![PatternItem::Regex(compile(re))],
+            prod: Box::new(move |_| season_td(sm, sd, em, ed).map(Token::Time)),
+        })
+        .collect()
+}
+
+fn time_pod_rules() -> Vec<Rule> {
+    vec![
+        Rule {
+            name: "<time> <part-of-day>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_a_time)),
+                PatternItem::Predicate(Box::new(is_a_part_of_day)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(td), Token::Time(pod)] => intersect_td(pod, td).map(Token::Time),
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "<part-of-day> of <time>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_a_part_of_day)),
+                PatternItem::Regex(compile(r"of")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(pod), _, Token::Time(td)] => intersect_td(pod, td).map(Token::Time),
+                _ => None,
+            }),
+        },
+    ]
 }
 fn pred_nth_td(n: i64, not_immediate: bool, td: &TimeData) -> TimeData {
     TimeData {
@@ -1120,7 +1171,9 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(part_of_day_rules());
     rules.extend(duration_rules());
     rules.extend(holiday_rules());
+    rules.extend(season_rules());
     rules.extend(this_next_last_time_rules());
+    rules.extend(time_pod_rules());
     rules.extend(intersect_rules());
     rules
 }
