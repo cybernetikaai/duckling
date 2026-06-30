@@ -21,6 +21,9 @@ pub struct TimeData {
     pub pred: Predicate,
     pub grain: Grain,
     pub latent: bool,
+    /// When the first future occurrence covers "now", skip to the next one
+    /// (e.g. "tuesday" on a Tuesday means *next* Tuesday). Port of notImmediate.
+    pub not_immediate: bool,
     pub form: Option<Form>,
     pub direction: Option<IntervalDirection>,
     pub holiday: Option<String>,
@@ -28,7 +31,15 @@ pub struct TimeData {
 
 impl TimeData {
     pub fn new(pred: Predicate, grain: Grain) -> Self {
-        TimeData { pred, grain, latent: false, form: None, direction: None, holiday: None }
+        TimeData {
+            pred,
+            grain,
+            latent: false,
+            not_immediate: false,
+            form: None,
+            direction: None,
+            holiday: None,
+        }
     }
 }
 

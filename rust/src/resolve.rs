@@ -4,7 +4,7 @@ use serde::Serialize;
 
 use crate::grain::{Grain, add};
 use crate::json::simple_value;
-use crate::time::object::TimeObject;
+use crate::time::object::{TimeObject, time_intersect};
 use crate::time::predicate::TimeContext;
 use crate::types::TimeData;
 
@@ -51,7 +51,17 @@ pub fn resolve_time(td: &TimeData, ctx: &ResolveContext) -> Option<serde_json::V
         max_time: TimeObject { start: add(ref_dt, Grain::Year, 2000), grain: Grain::Second, end: None },
     };
     let (mut past, mut future) = td.pred.run(ref_time, &tc);
-    let chosen = future.next().or_else(|| past.next())?;
+    let chosen = match future.next() {
+        None => past.next()?,
+        Some(ahead) => {
+            // notImmediate: if the first future occurrence covers "now", use the next.
+            if td.not_immediate && time_intersect(ahead, ref_time).is_some() {
+                future.next().unwrap_or(ahead)
+            } else {
+                ahead
+            }
+        }
+    };
     // Offset for this resolved local instant, from the zone (DST-correct).
     let off = chosen.start.to_zoned(ctx.zone.clone()).ok()?.offset();
     Some(simple_value(chosen.start, off, chosen.grain))

@@ -16,25 +16,31 @@ pub mod time;
 pub use resolve::{Entity, ResolveContext};
 
 use document::Document;
-use types::Token;
+use types::{Rule, Token};
+
+thread_local! {
+    // Compile the rule set (regexes) once per thread, not once per parse.
+    static RULES: Vec<Rule> = time::en_rules::en_rules();
+}
 
 /// Parse `input` against the EN Time rules and return resolved entities.
 pub fn parse(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
     let doc = Document::new(input);
-    let rules = time::en_rules::en_rules();
-    let nodes = engine::parse_string(&rules, &doc);
-    nodes
-        .iter()
-        .filter_map(|n| match &n.token {
-            Token::Time(td) => resolve::resolve_time(td, ctx).map(|value| Entity {
-                dim: "time".to_string(),
-                body: doc.substring(n.range.0, n.range.1),
-                start: n.range.0,
-                end: n.range.1,
-                value,
-                latent: td.latent,
-            }),
-            _ => None,
-        })
-        .collect()
+    RULES.with(|rules| {
+        let nodes = engine::parse_string(rules, &doc);
+        nodes
+            .iter()
+            .filter_map(|n| match &n.token {
+                Token::Time(td) => resolve::resolve_time(td, ctx).map(|value| Entity {
+                    dim: "time".to_string(),
+                    body: doc.substring(n.range.0, n.range.1),
+                    start: n.range.0,
+                    end: n.range.1,
+                    value,
+                    latent: td.latent,
+                }),
+                _ => None,
+            })
+            .collect()
+    })
 }
