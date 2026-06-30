@@ -1,1 +1,5 @@
-//! Time dimension: objects, predicates, helpers, EN rules. Implemented from Phase 1.
+//! Time dimension: objects, predicates, EN rules.
+
+pub mod object;
+pub mod predicate;
+pub mod en_rules;

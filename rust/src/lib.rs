@@ -15,10 +15,26 @@ pub mod time;
 
 pub use resolve::{Entity, ResolveContext};
 
+use document::Document;
+use types::Token;
+
 /// Parse `input` against the EN Time rules and return resolved entities.
-///
-/// Stub until Phase 1: returns empty so the corpus harness compiles and the
-/// positive fixtures fail loudly (the intended red baseline).
-pub fn parse(_input: &str, _ctx: &ResolveContext) -> Vec<Entity> {
-    Vec::new()
+pub fn parse(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
+    let doc = Document::new(input);
+    let rules = time::en_rules::en_rules();
+    let nodes = engine::parse_string(&rules, &doc);
+    nodes
+        .iter()
+        .filter_map(|n| match &n.token {
+            Token::Time(td) => resolve::resolve_time(td, ctx).map(|value| Entity {
+                dim: "time".to_string(),
+                body: doc.substring(n.range.0, n.range.1),
+                start: n.range.0,
+                end: n.range.1,
+                value,
+                latent: td.latent,
+            }),
+            _ => None,
+        })
+        .collect()
 }
