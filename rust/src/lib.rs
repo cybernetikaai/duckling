@@ -14,6 +14,7 @@ pub mod numeral;
 pub mod ordinal;
 pub mod resolve;
 pub mod time;
+pub mod timegrain;
 
 pub use resolve::{Entity, ResolveContext};
 
@@ -27,6 +28,7 @@ thread_local! {
     static RULES: Vec<Rule> = {
         let mut r = numeral::numeral_rules();
         r.extend(ordinal::ordinal_rules());
+        r.extend(timegrain::timegrain_rules());
         r.extend(time::en_rules::en_rules());
         r
     };

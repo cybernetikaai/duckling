@@ -39,6 +39,27 @@ fn is_a_month(t: &Token) -> bool {
 fn is_a_day_of_week(t: &Token) -> bool {
     matches!(t, Token::Time(td) if matches!(td.form, Some(Form::DayOfWeek)))
 }
+fn is_a_grain(t: &Token) -> bool {
+    matches!(t, Token::TimeGrain(_))
+}
+fn grain_of(t: &Token) -> Option<Grain> {
+    if let Token::TimeGrain(g) = t {
+        Some(*g)
+    } else {
+        None
+    }
+}
+fn cycle_nth_td(g: Grain, n: i64) -> TimeData {
+    TimeData {
+        pred: cycle_nth(g, n),
+        grain: g,
+        latent: false,
+        not_immediate: false,
+        form: None,
+        direction: None,
+        holiday: None,
+    }
+}
 fn is_month_or_dow(t: &Token) -> bool {
     is_a_month(t) || is_a_day_of_week(t)
 }
@@ -428,6 +449,55 @@ fn day_of_month_rules() -> Vec<Rule> {
     ]
 }
 
+/// this/next/last <cycle> and this/next <day-of-week>.
+fn cycle_and_relative_rules() -> Vec<Rule> {
+    fn cycle_rule(name: &str, re: &str, n: i64) -> Rule {
+        Rule {
+            name: name.to_string(),
+            pattern: vec![
+                PatternItem::Regex(compile(re)),
+                PatternItem::Predicate(Box::new(is_a_grain)),
+            ],
+            prod: Box::new(move |tokens| {
+                let g = grain_of(tokens.get(1)?)?;
+                Some(Token::Time(cycle_nth_td(g, n)))
+            }),
+        }
+    }
+    vec![
+        cycle_rule("this <cycle>", r"this|current|coming", 0),
+        cycle_rule("next <cycle>", r"next|the following", 1),
+        cycle_rule("last <cycle>", r"last|past|previous", -1),
+        Rule {
+            name: "this|next <day-of-week>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"(this|next|coming)")),
+                PatternItem::Predicate(Box::new(is_a_day_of_week)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::RegexMatch(g), Token::Time(td)] => {
+                    if g.first().map(|s| s.eq_ignore_ascii_case("next")).unwrap_or(false) {
+                        // the day-of-week falling in next week
+                        Some(Token::Time(TimeData {
+                            pred: intersect(td.pred.clone(), cycle_nth(Grain::Week, 1)),
+                            grain: Grain::Day,
+                            latent: false,
+                            not_immediate: false,
+                            form: td.form,
+                            direction: None,
+                            holiday: None,
+                        }))
+                    } else {
+                        // this/coming: the upcoming day-of-week (notImmediate already set)
+                        Some(Token::Time(not_latent(td.clone())))
+                    }
+                }
+                _ => None,
+            }),
+        },
+    ]
+}
+
 pub fn en_rules() -> Vec<Rule> {
     let mut rules = vec![
         instant("now", Grain::Second, 0, r"now|at\s+the\s+moment|atm"),
@@ -440,5 +510,6 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(time_of_day_rules());
     rules.extend(numeral_dependent_rules());
     rules.extend(day_of_month_rules());
+    rules.extend(cycle_and_relative_rules());
     rules
 }

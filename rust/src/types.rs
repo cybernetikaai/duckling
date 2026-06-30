@@ -51,6 +51,7 @@ pub enum Token {
     Time(TimeData),
     Numeral(NumeralData),
     Ordinal(OrdinalData),
+    TimeGrain(Grain),
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
