@@ -150,25 +150,31 @@ pub fn intersect(fine: Predicate, coarse: Predicate) -> Predicate {
         let min_t = ctx.min_time;
         let max_t = ctx.max_time;
         let ref_off = ctx.ref_offset_minutes;
+        let ref_t = ctx.ref_time;
         let f_back = fine.clone();
         let f_fwd = fine.clone();
         let back: Vec<TimeObject> = past2
             .take_while(move |t| time_starts_before_end_of(min_t, *t))
             .take(SAFE_MAX)
-            .flat_map(move |time1| compose_one(&f_back, time1, ref_off))
+            .flat_map(move |time1| compose_one(&f_back, time1, ref_t, ref_off))
             .collect();
         let fwd: Vec<TimeObject> = future2
             .take_while(move |t| time_starts_before_end_of(*t, max_t))
             .take(SAFE_MAX)
-            .flat_map(move |time1| compose_one(&f_fwd, time1, ref_off))
+            .flat_map(move |time1| compose_one(&f_fwd, time1, ref_t, ref_off))
             .collect();
         (Box::new(back.into_iter()) as BoxIter, Box::new(fwd.into_iter()) as BoxIter)
     }))
 }
 
-fn compose_one(fine: &Predicate, time1: TimeObject, ref_off: i64) -> Vec<TimeObject> {
+fn compose_one(fine: &Predicate, time1: TimeObject, ref_time: TimeObject, ref_off: i64) -> Vec<TimeObject> {
+    // Duckling's fixedRange keeps the original reference time and only clamps
+    // min/max to the segment. Preds that anchor at `now` (dow/month/dom/hour)
+    // use `time1`; preds anchored at the reference (in_duration, cycle_nth) must
+    // still use the real ref — else "today in one hour" would compute
+    // now-relative to midnight of today (01:00) instead of the true now (05:30).
     let fixed = TimeContext {
-        ref_time: time1,
+        ref_time,
         min_time: time1,
         max_time: time1,
         ref_offset_minutes: ref_off,
