@@ -12715,6 +12715,411 @@
     "grain": "day",
     "type": "value"
    }
+  },
+  {
+   "input": "3pm PST next friday",
+   "expected": {
+    "value": "2013-02-22T21:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3pm to 6pm CET",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T15:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "3pm to 6pm EST",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T21:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "3pm to 6pm GMT",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T16:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T13:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "3pm to 6pm PST",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T21:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "8 to 10 CET",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T07:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T05:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "8 to 10 EST",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T13:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T11:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "8 to 10 GMT",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T08:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T06:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "8 to 10 PST",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T16:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T14:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "8:30am to 5:30pm PST",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T23:31:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T14:30:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "9:15 - 10:45 GMT",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T08:46:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T07:15:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "9am EST on monday",
+   "expected": {
+    "value": "2013-02-18T12:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "9am to 5pm CET",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T14:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T06:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "9am to 5pm EST",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T20:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "9am to 5pm PST",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T23:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T15:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "from 10am to 2pm CET",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T11:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T07:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "from 10am to 2pm EST",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T17:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T13:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "from 10am to 2pm GMT",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T12:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T08:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "from 10am to 2pm PST",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T20:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T16:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "from 8:30 to 17:30 CET",
+   "expected": null,
+   "note": "Duckling quirk: a trailing timezone re-disambiguates bare/ambiguous-hour interval endpoints to daytime \u2014 'from 9 to 5' alone is a night interval [21:00,06:00], but 'from 9 to 5 GMT' becomes 9am-5pm GMT. The port shifts the (correctly-parsed) no-tz interval instead of re-choosing am/pm. Explicit-am/pm tz intervals (9am to 5pm GMT, from 3pm to 5pm PST) and all no-tz intervals match exactly."
+  },
+  {
+   "input": "from 9 to 5 CET",
+   "expected": null,
+   "note": "Duckling quirk: a trailing timezone re-disambiguates bare/ambiguous-hour interval endpoints to daytime \u2014 'from 9 to 5' alone is a night interval [21:00,06:00], but 'from 9 to 5 GMT' becomes 9am-5pm GMT. The port shifts the (correctly-parsed) no-tz interval instead of re-choosing am/pm. Explicit-am/pm tz intervals (9am to 5pm GMT, from 3pm to 5pm PST) and all no-tz intervals match exactly."
+  },
+  {
+   "input": "from 9 to 5 EST",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T08:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T00:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "from 9 to 5 GMT",
+   "expected": null,
+   "note": "Duckling quirk: a trailing timezone re-disambiguates bare/ambiguous-hour interval endpoints to daytime \u2014 'from 9 to 5' alone is a night interval [21:00,06:00], but 'from 9 to 5 GMT' becomes 9am-5pm GMT. The port shifts the (correctly-parsed) no-tz interval instead of re-choosing am/pm. Explicit-am/pm tz intervals (9am to 5pm GMT, from 3pm to 5pm PST) and all no-tz intervals match exactly."
+  },
+  {
+   "input": "from 9 to 5 PST",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T11:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T03:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "midnight EST",
+   "expected": {
+    "value": "2013-02-13T03:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "midnight to noon GMT",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T10:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-11T22:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "monday 9am to 5pm EST",
+   "expected": {
+    "to": {
+     "value": "2013-02-18T20:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-18T12:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "noon GMT tomorrow",
+   "expected": {
+    "value": "2013-02-13T10:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon PST tomorrow",
+   "expected": {
+    "value": "2013-02-13T18:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon to 3pm CET",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T12:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T09:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "noon to 3pm EST",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T18:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T15:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "noon to 3pm GMT",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T13:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T10:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "noon to 3pm PST",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T21:01:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "minute"
+    },
+    "type": "interval"
+   }
   }
  ]
 }
