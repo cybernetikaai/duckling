@@ -7,8 +7,8 @@ use crate::time::object::{IntervalDirection, IntervalType};
 use crate::time::predicate::{
     Ampm, Predicate, ampm_predicate, cycle_nth, day_of_month, day_of_week, hour, hour_minute,
     hour_minute_second, in_duration, intersect, merge_duration, month, season_series,
-    shift_duration, shift_timezone, take_last_of, take_nth, take_nth_after, time_cycle,
-    time_intervals, year as year_pred, cycle_n,
+    shift_duration, shift_timezone, take_last_of, take_nth, take_nth_after, take_nth_closest,
+    time_cycle, time_intervals, year as year_pred, cycle_n,
 };
 use crate::types::{Form, PatternItem, Rule, TimeData, Token};
 
@@ -1522,6 +1522,14 @@ fn pred_last_of_td(cyclic: &TimeData, base: &TimeData) -> TimeData {
     TimeData::new(take_last_of(cyclic.pred.clone(), base.pred.clone()), cyclic.grain)
 }
 
+/// The n-th closest occurrence of `td1` to `td2` (port of predNthClosest),
+/// e.g. "the closest Monday to Oct 5th". Grain/holiday come from td1.
+fn pred_nth_closest_td(n: i64, td1: &TimeData, td2: &TimeData) -> TimeData {
+    let mut td = TimeData::new(take_nth_closest(n, td1.pred.clone(), td2.pred.clone()), td1.grain);
+    td.holiday = td1.holiday.clone();
+    td
+}
+
 /// <cycle> after/before <time>, and <ordinal> <cycle> of <time>
 /// (ruleCycleAfterBeforeTime, ruleCycleOrdinalOfTime).
 /// "the day after tomorrow", "day before yesterday", "first week of october".
@@ -1669,6 +1677,39 @@ fn cycle_after_before_rules() -> Vec<Rule> {
             prod: Box::new(|tokens| match tokens {
                 [_, Token::TimeGrain(g), _, Token::Time(td)] => {
                     Some(Token::Time(cycle_nth_after_td(true, *g, 0, td)))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "the closest <day> to <time>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"the\s+closest")),
+                PatternItem::Predicate(is_grain_of_time(Grain::Day)),
+                PatternItem::Regex(compile(r"to")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(td1), _, Token::Time(td2)] => {
+                    Some(Token::Time(pred_nth_closest_td(0, td1, td2)))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "the <ordinal> closest <day> to <time>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"the")),
+                PatternItem::Predicate(Box::new(is_ordinal)),
+                PatternItem::Regex(compile(r"closest")),
+                PatternItem::Predicate(is_grain_of_time(Grain::Day)),
+                PatternItem::Regex(compile(r"to")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, ord, _, Token::Time(td1), _, Token::Time(td2)] => {
+                    let n = get_int_value(ord)?;
+                    Some(Token::Time(pred_nth_closest_td(n - 1, td1, td2)))
                 }
                 _ => None,
             }),

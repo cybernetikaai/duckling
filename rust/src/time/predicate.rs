@@ -479,6 +479,47 @@ pub fn season_series() -> Predicate {
     }))
 }
 
+/// The n-th closest occurrence of `cyclic` to each occurrence of `base`
+/// (port of takeNthClosest): merge the past/future cyclic occurrences by
+/// absolute distance, ties going to the future.
+pub fn take_nth_closest(n: i64, cyclic: Predicate, base: Predicate) -> Predicate {
+    Predicate::Series(Rc::new(move |now: TimeObject, ctx: &TimeContext| {
+        let f = |t: TimeObject| -> Option<TimeObject> {
+            let (past, future) = cyclic.run(t, ctx);
+            let pa: Vec<TimeObject> = past.take(SAFE_MAX).collect();
+            let fu: Vec<TimeObject> = future.take(SAFE_MAX).collect();
+            let dist = |o: &TimeObject| t.start.duration_until(o.start).abs();
+            let (mut pi, mut fi) = (0usize, 0usize);
+            let mut res = None;
+            for _ in 0..=n.max(0) {
+                match (pa.get(pi), fu.get(fi)) {
+                    (None, None) => break,
+                    (Some(x), None) => {
+                        res = Some(*x);
+                        pi += 1;
+                    }
+                    (None, Some(y)) => {
+                        res = Some(*y);
+                        fi += 1;
+                    }
+                    (Some(x), Some(y)) => {
+                        if dist(x) < dist(y) {
+                            res = Some(*x);
+                            pi += 1;
+                        } else {
+                            res = Some(*y);
+                            fi += 1;
+                        }
+                    }
+                }
+            }
+            res
+        };
+        let (past, future) = seq_map(false, f, &base, now, ctx);
+        (Box::new(past.into_iter()) as BoxIter, Box::new(future.into_iter()) as BoxIter)
+    }))
+}
+
 /// Shift each occurrence of `base` forward by a duration, rounding the anchor
 /// to `min(occurrence grain, duration grain)` first (port of mergeDuration).
 pub fn merge_duration(base: Predicate, value: i64, grain: Grain) -> Predicate {
