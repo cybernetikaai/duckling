@@ -100,6 +100,7 @@ Branch: `rust-port-en-time`.
 | + multi-reference differential | 1069 / 1069 | 0 | 68 / 68 | **ref_stress 1249**; ref-varied inputs across 21 references (weekdays, month/year ends, leap days); 0 gaps — reference-dependent logic + all recent fixes are ref-robust |
 | + latent-mode: "May" latent | 1069 / 1069 | 0 | 68 / 68 | bare "May" dropped in default mode (modal-verb collision); composition de-latents |
 | + token-boundary rule (major) | 1069 / 1069 | 0 | 68 / 68 | 3-letter abbrevs no longer match inside words ("money"↛Mon, "friend"↛Fri); Document::is_match_boundary |
+| + dict scan + sentence differential | 1069 / 1069 | 0 | 68 / 68 | 236k-word scan: 0 port↔oracle divergences; **sentence_stress 76** natural sentences (incl. 16 no-time false-positive guards); 0 gaps |
 
 ## How to run
 
@@ -126,6 +127,14 @@ Branch: `rust-port-en-time`.
   day/month abbreviations matched inside words ("money"→Mon, "friend"→Fri) — a
   severe false-positive class for free-text parsing, fixed with a token-boundary
   rule (a match may not split a run of same-class chars).
+- **sentence_stress** 76 — natural sentences with an embedded time ("Can we meet
+  next Tuesday afternoon?", "I need money by friday", "reschedule for thursday"),
+  incl. 16 no-time sentences asserted to yield nothing ("I have 3 dogs", "room 315",
+  "we may go later"). Tests real free-text extraction + false-positive rejection.
+- **Exhaustive dict scan** (one-off, not in CI — slow/env-dependent): all 236k words
+  of /usr/share/dict/words parsed in default mode; **0 divergences** vs the oracle
+  (every single word that resolves to a time matches Duckling's value exactly).
+  Confirms the token-boundary fix is comprehensive, not just spot-patched.
 
 ## Done
 
