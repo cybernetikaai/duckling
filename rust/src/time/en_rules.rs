@@ -562,6 +562,11 @@ fn numeral_dependent_rules() -> Vec<Rule> {
                 Some(Token::Time(hour_td(false, if noon { 12 } else { 0 })))
             }),
         },
+        Rule {
+            name: "Mid-day".into(),
+            pattern: vec![PatternItem::Regex(compile(r"(the )?mid(\s)?day"))],
+            prod: Box::new(|_| Some(Token::Time(hour_td(false, 12)))),
+        },
     ]
 }
 
@@ -1530,7 +1535,9 @@ fn is_ok_with_this_next(t: &Token) -> bool {
 }
 
 fn season_td(sm: i64, sd: i64, em: i64, ed: i64) -> Option<TimeData> {
-    let mut td = interval_td(IntervalType::Open, &month_day_td(sm, sd), &month_day_td(em, ed))?;
+    // End is a full day (its exclusive bound is the following midnight), which
+    // our Closed interval reports as the "to" value — matching Duckling.
+    let mut td = interval_td(IntervalType::Closed, &month_day_td(sm, sd), &month_day_td(em, ed))?;
     td.form = Some(Form::Season);
     Some(td)
 }
@@ -1634,6 +1641,15 @@ fn cycle_last_of_td(grain: Grain, base: &TimeData) -> TimeData {
 /// grain comes from the cyclic predicate, e.g. "last Monday of March".
 fn pred_last_of_td(cyclic: &TimeData, base: &TimeData) -> TimeData {
     TimeData::new(take_last_of(cyclic.pred.clone(), base.pred.clone()), cyclic.grain)
+}
+
+/// The n-th occurrence of a cyclic time at/after `base` (port of predNthAfter,
+/// notImmediate=true), e.g. "first monday of last month". Grain from cyclic.
+fn pred_nth_after_td(n: i64, cyclic: &TimeData, base: &TimeData) -> TimeData {
+    let mut td =
+        TimeData::new(take_nth_after(n, true, cyclic.pred.clone(), base.pred.clone()), cyclic.grain);
+    td.holiday = cyclic.holiday.clone();
+    td
 }
 
 /// The recurring weekend interval Fri 18:00 → Mon 00:00 (port of `weekend`).
@@ -1898,6 +1914,25 @@ fn is_grain_month_or_coarser(t: &Token) -> bool {
 /// e.g. "third tuesday of september 2014" = 3rd Tuesday in that September.
 fn nth_dow_of_time_rules() -> Vec<Rule> {
     vec![
+        // first|second|third|fourth|fifth <day-of-week> of <time> (any time),
+        // via predNthAfter — "first monday of last month", "3rd tue of Sep 2014".
+        Rule {
+            name: "first|second|third|fourth|fifth <day-of-week> of <time>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(|t| {
+                    is_ordinal(t) && get_int_value(t).is_some_and(|v| (1..=5).contains(&v))
+                })),
+                PatternItem::Predicate(Box::new(is_a_day_of_week)),
+                PatternItem::Regex(compile(r"(of|in)")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [ord, Token::Time(dow), _, Token::Time(td)] => {
+                    Some(Token::Time(pred_nth_after_td(get_int_value(ord)? - 1, dow, td)))
+                }
+                _ => None,
+            }),
+        },
         Rule {
             name: "nth <day-of-week> of <month-or-greater>".into(),
             pattern: vec![
