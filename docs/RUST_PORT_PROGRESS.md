@@ -97,13 +97,27 @@ Branch: `rust-port-en-time`.
 | + this-dow pinning + coming split | 1069 / 1069 | 0 | 68 / 68 | 1223 probes; "this tuesday at 3"→next Tue (predNth); "coming" stays bare-dow |
 | + weekend ∩ time-of-day | 1069 / 1069 | 0 | 68 / 68 | 1227 probes; "weekend at 3pm"→Sat 3pm (Day-grain coarse + same-day-pod sentinel) |
 | + interval + trailing timezone | 1069 / 1069 | 0 | 68 / 68 | 1279 probes; "from 3pm to 5pm PST"→both ends PST; minute-grain exclusive end |
+| + multi-reference differential | 1069 / 1069 | 0 | 68 / 68 | **ref_stress 1249**; ref-varied inputs across 21 references (weekdays, month/year ends, leap days); 0 gaps — reference-dependent logic + all recent fixes are ref-robust |
 
 ## How to run
 
 - All tests: `cd rust && cargo test`
-- Corpus only: `cargo test --test corpus`
+- Corpus only: `cargo test --test corpus` (tests: positive_corpus, negative_corpus,
+  tz_stress, differential_corpus, ref_stress)
 - Unique mode (Phase 4 bar): `DUCKLING_MATCH=unique cargo test --test corpus`
 - Oracle (for new fixtures / cross-checks): `docker start duckling-oracle` then `python3 rust/tools/oracle.py`
+
+## Validation surfaces (all oracle-cross-checked, all green)
+
+- **positive_corpus** 1069 — Duckling's own Corpus.hs inputs, fixed -02:00 ref.
+- **differential_corpus** 1309 — fuzzed *compositional* probes (rule combinations),
+  fixed ref. Found+fixed: holidayBeta-on-open-interval, directional∩pod collapse,
+  trailing-date-on-interval, interval+timezone. A few documented Duckling quirks
+  (expected:null): "by tomorrow morning", "between X and Y `<date>`", bare-hour+tz.
+- **ref_stress** 1249 — ref-*sensitive* inputs across 21 reference instants
+  (every weekday, month/year ends, leap days). Catches reference-dependent bugs
+  (the "this tuesday at 3" class). Confirms all recent fixes are ref-robust.
+- **tz_stress** 68 — DST transitions across 6 IANA zones, both hemispheres.
 
 ## Done
 
