@@ -2214,6 +2214,39 @@ fn cycle_after_before_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // "(the) 3rd week after next monday" (ruleCycleOrdinalAfterTime):
+        // cycleNthAfter True grain (n-1) — ordinal 3 = 2 cycles after the base.
+        Rule {
+            name: "<ordinal> <cycle> after <time>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"the")),
+                PatternItem::Predicate(Box::new(is_ordinal)),
+                PatternItem::Predicate(Box::new(is_a_grain)),
+                PatternItem::Regex(compile(r"after")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, ord, Token::TimeGrain(g), _, Token::Time(td)] => {
+                    Some(Token::Time(cycle_nth_after_td(true, *g, get_int_value(ord)? - 1, td)))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "<ordinal> <cycle> after <time> (no the)".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_ordinal)),
+                PatternItem::Predicate(Box::new(is_a_grain)),
+                PatternItem::Regex(compile(r"after")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [ord, Token::TimeGrain(g), _, Token::Time(td)] => {
+                    Some(Token::Time(cycle_nth_after_td(true, *g, get_int_value(ord)? - 1, td)))
+                }
+                _ => None,
+            }),
+        },
         Rule {
             name: "last <day-of-week> of <time>".into(),
             pattern: vec![
