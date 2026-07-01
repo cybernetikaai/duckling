@@ -2493,7 +2493,7 @@ fn named_month_part_rules() -> Vec<Rule> {
         Rule {
             name: "at the beginning|end of <named-month>".into(),
             pattern: vec![
-                PatternItem::Regex(compile(r"(at the )?(beginning|end) of")),
+                PatternItem::Regex(compile(r"(?:at the )?(beginning|end) of")),
                 PatternItem::Predicate(Box::new(is_a_month)),
             ],
             prod: Box::new(|tokens| match tokens {
