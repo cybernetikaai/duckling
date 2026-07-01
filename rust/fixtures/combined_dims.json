@@ -1,5 +1,5 @@
 {
- "_comment": "Combined time+duration (parse_all) cross-dimension range-domination, vs the oracle dims=[time,duration] at ref 2013-02-12 04:30. Each case lists the expected surviving entities as [dim,start,end]; the widest match per position wins, disjoint matches all surface.",
+ "_comment": "Combined time+duration (parse_all) cross-dimension range-domination, vs the oracle dims=[time,duration] at ref 2013-02-12 04:30. Each case lists the expected surviving entities as [dim,start,end]; the widest match per position wins, disjoint matches all surface. Includes single expressions and realistic multi-entity spoken sentences.",
  "cases": [
   {
    "input": "in 2 hours",
@@ -283,6 +283,421 @@
      "duration",
      6,
      13
+    ]
+   ]
+  },
+  {
+   "input": "wake me at 7am and remind me in 2 hours",
+   "expected": [
+    [
+     "time",
+     8,
+     14
+    ],
+    [
+     "time",
+     29,
+     39
+    ]
+   ]
+  },
+  {
+   "input": "the meeting is tomorrow at 3 for 2 hours",
+   "expected": [
+    [
+     "time",
+     15,
+     40
+    ]
+   ]
+  },
+  {
+   "input": "set a timer for 20 minutes then another for half an hour",
+   "expected": [
+    [
+     "duration",
+     16,
+     26
+    ],
+    [
+     "duration",
+     44,
+     56
+    ]
+   ]
+  },
+  {
+   "input": "book it from 9 to 5 on monday",
+   "expected": [
+    [
+     "time",
+     8,
+     29
+    ]
+   ]
+  },
+  {
+   "input": "call me back in 15 minutes or at noon",
+   "expected": [
+    [
+     "time",
+     13,
+     26
+    ],
+    [
+     "time",
+     30,
+     37
+    ]
+   ]
+  },
+  {
+   "input": "lunch at noon and dinner at 8",
+   "expected": [
+    [
+     "time",
+     0,
+     13
+    ],
+    [
+     "time",
+     25,
+     29
+    ]
+   ]
+  },
+  {
+   "input": "i'll be there in 10 minutes, see you at 3pm",
+   "expected": [
+    [
+     "time",
+     14,
+     27
+    ],
+    [
+     "time",
+     37,
+     43
+    ]
+   ]
+  },
+  {
+   "input": "the flight leaves at 6am and lands 5 hours later",
+   "expected": [
+    [
+     "duration",
+     35,
+     42
+    ],
+    [
+     "time",
+     18,
+     24
+    ]
+   ]
+  },
+  {
+   "input": "remind me next monday and again on friday",
+   "expected": [
+    [
+     "time",
+     10,
+     21
+    ],
+    [
+     "time",
+     32,
+     41
+    ]
+   ]
+  },
+  {
+   "input": "practice runs from 4pm to 6pm every tuesday",
+   "expected": [
+    [
+     "time",
+     14,
+     29
+    ],
+    [
+     "time",
+     36,
+     43
+    ]
+   ]
+  },
+  {
+   "input": "leave in 30 minutes to arrive by 9",
+   "expected": [
+    [
+     "time",
+     6,
+     19
+    ],
+    [
+     "time",
+     30,
+     34
+    ]
+   ]
+  },
+  {
+   "input": "we met two days ago and will meet again next week",
+   "expected": [
+    [
+     "time",
+     7,
+     19
+    ],
+    [
+     "time",
+     40,
+     49
+    ]
+   ]
+  },
+  {
+   "input": "the sale starts december 1st and ends december 24th",
+   "expected": [
+    [
+     "time",
+     16,
+     28
+    ],
+    [
+     "time",
+     38,
+     51
+    ]
+   ]
+  },
+  {
+   "input": "class is at 9am for an hour and a half",
+   "expected": [
+    [
+     "time",
+     9,
+     38
+    ]
+   ]
+  },
+  {
+   "input": "check in at 3pm on saturday and check out at 11am sunday",
+   "expected": [
+    [
+     "time",
+     9,
+     27
+    ],
+    [
+     "time",
+     42,
+     56
+    ]
+   ]
+  },
+  {
+   "input": "it takes 2 hours to get there so leave at 5",
+   "expected": [
+    [
+     "duration",
+     9,
+     16
+    ],
+    [
+     "time",
+     39,
+     43
+    ]
+   ]
+  },
+  {
+   "input": "my birthday is march 3rd and hers is in april",
+   "expected": [
+    [
+     "time",
+     15,
+     24
+    ],
+    [
+     "time",
+     37,
+     45
+    ]
+   ]
+  },
+  {
+   "input": "call at half past nine or a quarter to ten",
+   "expected": [
+    [
+     "time",
+     5,
+     22
+    ],
+    [
+     "time",
+     26,
+     42
+    ]
+   ]
+  },
+  {
+   "input": "wait 5 minutes then try again in an hour",
+   "expected": [
+    [
+     "duration",
+     5,
+     14
+    ],
+    [
+     "time",
+     30,
+     40
+    ]
+   ]
+  },
+  {
+   "input": "from monday to friday i work nine to five",
+   "expected": [
+    [
+     "time",
+     0,
+     21
+    ],
+    [
+     "time",
+     29,
+     41
+    ]
+   ]
+  },
+  {
+   "input": "the movie is at 7 and runs for two and a half hours",
+   "expected": [
+    [
+     "duration",
+     31,
+     51
+    ],
+    [
+     "time",
+     13,
+     17
+    ]
+   ]
+  },
+  {
+   "input": "set an alarm for 6:30am and a reminder for 8pm tonight",
+   "expected": [
+    [
+     "time",
+     17,
+     23
+    ],
+    [
+     "time",
+     43,
+     54
+    ]
+   ]
+  },
+  {
+   "input": "in 3 days at 5pm we have the review",
+   "expected": [
+    [
+     "time",
+     0,
+     16
+    ]
+   ]
+  },
+  {
+   "input": "he arrives tomorrow morning and leaves sunday evening",
+   "expected": [
+    [
+     "time",
+     11,
+     27
+    ],
+    [
+     "time",
+     39,
+     53
+    ]
+   ]
+  },
+  {
+   "input": "take the medicine every 4 hours for 3 days",
+   "expected": [
+    [
+     "duration",
+     24,
+     31
+    ],
+    [
+     "duration",
+     36,
+     42
+    ]
+   ]
+  },
+  {
+   "input": "the deadline is friday at 5pm sharp",
+   "expected": [
+    [
+     "time",
+     16,
+     35
+    ]
+   ]
+  },
+  {
+   "input": "i slept for 8 hours and woke up at 7",
+   "expected": [
+    [
+     "duration",
+     12,
+     19
+    ],
+    [
+     "time",
+     32,
+     36
+    ]
+   ]
+  },
+  {
+   "input": "meet me at the cafe at 2 or 3 o'clock",
+   "expected": [
+    [
+     "time",
+     20,
+     24
+    ],
+    [
+     "time",
+     28,
+     37
+    ]
+   ]
+  },
+  {
+   "input": "the call is scheduled for 30 minutes starting at noon",
+   "expected": [
+    [
+     "time",
+     22,
+     53
+    ]
+   ]
+  },
+  {
+   "input": "vacation from july 1st through july 15th",
+   "expected": [
+    [
+     "time",
+     9,
+     40
     ]
    ]
   }

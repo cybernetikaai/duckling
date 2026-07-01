@@ -127,6 +127,7 @@ Branch: `rust-port-en-time`.
 | + Duration dimension (new output) | 1069 / 1069 | 0 | 68 / 68 | **duration_corpus 83** (all of Duckling/Duration/EN/Corpus.hs + 5 negatives); new `parse_duration` emits `dim:"duration"` JSON ({value,unit,`<unit>`,normalized}); ported the DurationData Semigroup + composite rules ("2 years and 3 months"→27mo, "an hour and 45 minutes"→105min, "1 year 2 days 3 hours and 4 seconds"). **Bonus Time fix:** the composites also fixed "2 hours and 30 minutes from now" (was dropping "2 hours"→05:00, now 07:00). Kept separate from `parse` (Time), so Time ranker untouched |
 | + Duration differential vs oracle | 1069 / 1069 | 0 | 68 / 68 | **duration_corpus 135** (+47 oracle-verified cases, +5 genuine negatives); 64-input differential (abbreviations, fractions, composites, colloquial, more/less, precision) → **0 divergences** incl. partial-match parity ("3.5 weeks"→both drop "3." and yield partial "5 weeks", since decimal-durations only apply to hours/minutes). New dimension validated against the live oracle, not just the transcribed corpus |
 | + combined Time+Duration (parse_all) | 1069 / 1069 | 0 | 68 / 68 | **combined_dims 28**; new `parse_all` = the `dims:["time","duration"]` surface, ranking both in one pool by dimension-agnostic range domination. **0 divergences** vs oracle: "in 2 hours"→Time (contained Duration dominated), "…20 minutes and wake me at 7am"→Duration+Time (disjoint), "at 3pm for 2 hours"→one Time. `parse` (Time-only) unchanged → Time corpus untouched |
+| + multi-entity sentence differential | 1069 / 1069 | 0 | 68 / 68 | **combined_dims 58**; +30 realistic full-sentence utterances (53 entities) — "wake me at 7am and remind me in 2 hours"→2 Time, "take the medicine every 4 hours for 3 days"→2 Duration, "book it from 9 to 5 on monday". **0 divergences** — `parse_all` extracts the exact oracle entity set (dim+span) from multi-mention speech, the realistic product input |
 
 ## Rule-level coverage audit
 
@@ -351,6 +352,16 @@ utterances: "in 2 hours"→Time (the contained "2 hours" Duration is dominated),
 <duration>` rule spans it, dominating the inner Duration), "set a timer for 20
 minutes and wake me at 7am"→Duration[16,26]+Time[39,45] (disjoint, both surface).
 0 divergences; locked as **combined_dims 28**.
+
+**Multi-entity sentence differential (this iteration → 0 divergences).** Tested
+`parse_all` on the realistic product input: 30 full spoken sentences each carrying
+2+ time/duration mentions (53 entities total) — "wake me at 7am and remind me in
+2 hours" (2 Time), "set a timer for 20 minutes then another for half an hour" (2
+Duration), "take the medicine every 4 hours for 3 days", "book it from 9 to 5 on
+monday", "set an alarm for 6:30am and a reminder for 8pm tonight". `parse_all`
+returned the *exact* oracle entity set (dim+span) for all 30 — the ranker
+correctly surfaces every non-dominated entity across a sentence, not just one.
+Merged into **combined_dims** (28→58 cases).
 
 **Composition fuzz (this iteration).** Beyond the curated corpus, generated
 ~770 compositional probes (deep nestings, directionals, interval+date, duration
