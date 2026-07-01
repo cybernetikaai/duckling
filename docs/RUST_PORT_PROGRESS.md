@@ -105,6 +105,7 @@ Branch: `rust-port-en-time`.
 | + tz ground-truth (vs IANA tzdata) | 1069 / 1069 | 0 | 68 / 68 | **tz_truth 270** (9 zones × all dates) + **tz_gapfold 12** (PEP-495 fold=0); offsets correct vs authoritative tzdata, not just Duckling |
 | + engine perf (chart parser) | 1069 / 1069 | 0 | 68 / 68 | per-parse latency −42–53% (regex-hit cache + skip regex-only rules + no per-round stash clone); behavior unchanged |
 | + rule-level coverage audit (2 gaps) | 1069 / 1069 | 0 | 68 / 68 | diff vs Duckling/Time/EN/Rules.hs; fixed "N dow from <time>" (was only "from now") + added "<ordinal> <cycle> after <time>" |
+| + holiday-years audit (1 fix) | 1069 / 1069 | 0 | 68 / 68 | **holiday_years 2730** (183 holidays × 2013–2027); fixed ongoing interval holidays ("Ramadan" during Ramadan→current, not next year) |
 
 ## Rule-level coverage audit
 
@@ -159,6 +160,11 @@ nodes) for diminishing return; current latency is well within the use case's bud
 - **ref_stress** 1249 — ref-*sensitive* inputs across 21 reference instants
   (every weekday, month/year ends, leap days). Catches reference-dependent bugs
   (the "this tuesday at 3" class). Confirms all recent fixes are ref-robust.
+- **holiday_years** 2730 — every holiday (183) resolved at reference = Jan 1 of each
+  year 2013–2027, vs the oracle. Validates the computed/lunar holiday tables
+  (Easter-relative, Islamic/Hindu/Jewish) year-by-year, and guards the ongoing-
+  interval-holiday resolution (Hanukkah spanning a year boundary). Found the
+  "asked during the holiday → returns next year" bug (fixed).
 - **tz_stress** 68 — DST transitions across 6 IANA zones, both hemispheres (vs oracle).
 - **tz_truth** 270 + **tz_gapfold** 12 — timezone correctness vs *authoritative IANA
   tzdata* (Python zoneinfo), not Duckling. tz_truth: "3pm" resolved in 9 real zones
