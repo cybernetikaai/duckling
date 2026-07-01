@@ -116,6 +116,7 @@ Branch: `rust-port-en-time`.
 | + all-region date conventions | 1069 / 1069 | 0 | 68 / 68 | **region_dates 120**; 12 English regions × 3 conventions (month-first/day-first/ZA-hybrid); Locale enum + per-locale rule cache |
 | + regional holidays (11 regions) | 1069 / 1069 | 0 | 68 / 68 | **region_holidays 405**; Guy Fawkes/ANZAC/Melbourne Cup/Heritage Day… ported from per-region Rules.hs (subagent), oracle-verified across 3 years |
 | + US-region holidays (gap fix) | 1069 / 1069 | 0 | 68 / 68 | **region_holidays 726**; Independence/Memorial/Labor/Columbus Day, Cinco de Mayo, Juneteenth… (~96) were missing from base (Corpus.hs tests "4th of July" the date, not the holiday); now resolve |
+| + tractable "other" holidays | 1069 / 1069 | 0 | 68 / 68 | **region_holidays 753**; +9 relative-date holidays: Election Day, Cyber Monday (days-after-nth-DOW) + Victoria Day, Reconciliation Day (nth-DOW-rel-date, predLastOf vs predNthAfter distinguished) |
 
 ## Rule-level coverage audit
 
@@ -179,12 +180,19 @@ nodes) for diminishing return; current latency is well within the use case's bud
   US-region holidays (Independence/Memorial/Labor/Columbus Day, Cinco de Mayo,
   Juneteenth, …) — ~96 that were absent from the base (Corpus.hs tests "4th of July"
   the date, not "Independence Day" the holiday) — now resolve.
-  **Known gap:** ~26 "other"-kind holidays are skipped (their verbatim Haskell is
-  kept in the fixture): nth-weekday-relative-to-a-*date* (Election Day = 1st Tue
-  after 1st Mon Nov; Cyber Monday = Mon after Thanksgiving; Victoria Day; Tax Day),
-  long-weekend intervals (Memorial/Labor Day weekend), calendar-computed (Hosay,
-  Hazrat Ali), and fixed single-year (Super Tuesday 2008). They need per-holiday
-  relative-date logic — a documented follow-up.
+  Six date kinds now supported: month/day, nth (or last) weekday of month, fixed
+  interval, easter offset, **days-after-nth-weekday** (Election Day = 1st Tue after
+  1st Mon Nov; Cyber Monday = Mon after Thanksgiving; +Native American Heritage,
+  Carl Garner, Grandparents, Military Spouse Day), and **nth-weekday-relative-to-a-
+  date** (Victoria Day = last Mon on/before May 25; National Patriots' Day;
+  Reconciliation Day — predLastOf inclusive vs predNthAfter strict distinguished).
+  **Known gap:** ~20 remaining "other" holidays are skipped (verbatim Haskell kept
+  in the fixture), all needing bespoke machinery for rarely-spoken holidays:
+  long-weekend intervals (Memorial/Labor Day weekend), predNthClosest-to-a-weekday
+  (Emancipation/Tax Day), compound offset-of-relative-date (Admin Professionals'
+  Day), multi-day week intervals (NAIDOC/EMS Week), calendar-computed
+  (Hosay/Hazrat Ali = Islamic), conditional (Royal Queensland Show), and
+  fixed single-year (Super Tuesday 2008). Diminishing value; documented follow-up.
 - **gb_locale** 19 — EN_GB day-first numeric dates via `parse_locale(_, _, EnGb)`,
   vs the oracle with locale=en_GB. Day-first positives ("13/12/2013"→Dec 13,
   "3/4/2015"→Apr 3) + out-of-range-month rejections. The US default (`parse`) and
