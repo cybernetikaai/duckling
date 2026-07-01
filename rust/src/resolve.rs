@@ -39,6 +39,19 @@ pub struct Entity {
 /// (the corpus harness strips the "values" alternatives array, so we emit only
 /// the primary value here). Picks the first future occurrence, else the first
 /// past one. notImmediate / intervals / directions arrive in later phases.
+/// The offset a wall-clock time carries in `zone`. For a DST gap or fold the
+/// local time is invalid/ambiguous; Duckling keeps the pre-transition offset
+/// (e.g. 2:30am on a spring-forward day stays at the earlier -05:00, reported
+/// against the unchanged wall clock), so pick `before` rather than letting the
+/// default `Compatible` disambiguation shift the instant across the gap.
+fn zone_offset(dt: jiff::civil::DateTime, zone: &jiff::tz::TimeZone) -> jiff::tz::Offset {
+    use jiff::tz::AmbiguousOffset::*;
+    match zone.to_ambiguous_timestamp(dt).offset() {
+        Unambiguous { offset } => offset,
+        Gap { before, .. } | Fold { before, .. } => before,
+    }
+}
+
 pub fn resolve_time(td: &TimeData, ctx: &ResolveContext) -> Option<serde_json::Value> {
     if td.latent && !ctx.with_latent {
         return None;
@@ -66,7 +79,7 @@ pub fn resolve_time(td: &TimeData, ctx: &ResolveContext) -> Option<serde_json::V
         }
     };
     // Offset for this resolved local instant, from the zone (DST-correct).
-    let off = chosen.start.to_zoned(ctx.zone.clone()).ok()?.offset();
+    let off = zone_offset(chosen.start, &ctx.zone);
     if let Some(dir) = td.direction {
         return Some(open_interval_value(
             chosen.start,
@@ -77,7 +90,7 @@ pub fn resolve_time(td: &TimeData, ctx: &ResolveContext) -> Option<serde_json::V
     }
     let mut value = match chosen.end {
         Some(end) => {
-            let off_end = end.to_zoned(ctx.zone.clone()).ok()?.offset();
+            let off_end = zone_offset(end, &ctx.zone);
             interval_value(chosen.start, off, end, off_end, chosen.grain)
         }
         None => simple_value(chosen.start, off, chosen.grain),
