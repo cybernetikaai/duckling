@@ -2253,6 +2253,23 @@ fn is_grain_month_or_coarser(t: &Token) -> bool {
 /// e.g. "third tuesday of september 2014" = 3rd Tuesday in that September.
 fn nth_dow_of_time_rules() -> Vec<Rule> {
     vec![
+        // "third tuesday after christmas 2014" (ruleNthTimeAfterTime):
+        // predNthAfter(n-1, td1, td2).
+        Rule {
+            name: "nth <time> after <time>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_ordinal)),
+                PatternItem::Predicate(Box::new(is_a_time)),
+                PatternItem::Regex(compile(r"after")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [ord, Token::Time(a), _, Token::Time(b)] => {
+                    Some(Token::Time(pred_nth_after_td(get_int_value(ord)? - 1, a, b)))
+                }
+                _ => None,
+            }),
+        },
         // first|second|third|fourth|fifth <day-of-week> of <time> (any time),
         // via predNthAfter — "first monday of last month", "3rd tue of Sep 2014".
         Rule {
