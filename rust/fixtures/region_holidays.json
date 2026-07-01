@@ -1,302 +1,2062 @@
 {
-  "GB": [
-    {"name": "Mothering Sunday", "regex": "mothering sunday|mother'?s?'? day", "kind": "easter_offset", "days": -21},
-    {"name": "Bank Holiday", "regex": "bank holiday", "kind": "month_day", "month": 12, "day": 28},
-    {"name": "Battle of the Boyne", "regex": "battle of the boyne", "kind": "month_day", "month": 7, "day": 12},
-    {"name": "Burns Night", "regex": "burns night", "kind": "month_day", "month": 1, "day": 25},
-    {"name": "Guy Fawkes Day", "regex": "guy fawkes day", "kind": "month_day", "month": 11, "day": 5},
-    {"name": "Shakespeare Day", "regex": "shakespeare day", "kind": "month_day", "month": 4, "day": 23},
-    {"name": "St Andrew's Day", "regex": "st\\.? andrew'?s day", "kind": "month_day", "month": 11, "day": 30},
-    {"name": "St. David's Day", "regex": "st\\.? david'?s day", "kind": "month_day", "month": 3, "day": 1},
-    {"name": "Victory in Europe Day", "regex": "victory in europe day", "kind": "month_day", "month": 5, "day": 8},
-    {"name": "August Bank Holiday", "regex": "(august|(late )?summer) bank holiday", "kind": "nth_dow_of_month", "n": -1, "dow": 1, "month": 8},
-    {"name": "Early May Bank Holiday", "regex": "early may bank holiday", "kind": "nth_dow_of_month", "n": 1, "dow": 1, "month": 5},
-    {"name": "Father's Day", "regex": "father'?s?'? day", "kind": "nth_dow_of_month", "n": 3, "dow": 7, "month": 6},
-    {"name": "Remembrance Sunday", "regex": "remembrance sunday", "kind": "nth_dow_of_month", "n": 2, "dow": 7, "month": 11},
-    {"name": "Spring Bank Holiday", "regex": "(sprint|late may) bank holiday", "kind": "nth_dow_of_month", "n": -1, "dow": 1, "month": 5},
-    {"name": "Thanksgiving Day", "regex": "thanks?giving( day)?", "kind": "nth_dow_of_month", "n": 4, "dow": 4, "month": 11}
-  ],
-  "CA": [
-    {"name": "Anniversary of the Statute of Westminster", "regex": "anniversary of the statute of westminster", "kind": "month_day", "month": 12, "day": 11},
-    {"name": "Memorial Day", "regex": "(canada|dominion|memorial) day", "kind": "month_day", "month": 7, "day": 1},
-    {"name": "Groundhog Day", "regex": "groundhogs? day", "kind": "month_day", "month": 2, "day": 2},
-    {"name": "Healthcare Aide Day", "regex": "healthcare aide day", "kind": "month_day", "month": 10, "day": 18},
-    {"name": "National Aboriginal Day", "regex": "national aboriginal day", "kind": "month_day", "month": 6, "day": 21},
-    {"name": "National Flag of Canada Day", "regex": "national flag of canada day", "kind": "month_day", "month": 2, "day": 15},
-    {"name": "National Tartan Day", "regex": "national tartan day", "kind": "month_day", "month": 4, "day": 6},
-    {"name": "Nunavut Day", "regex": "nunavut day", "kind": "month_day", "month": 7, "day": 9},
-    {"name": "Remembrance Day", "regex": "remembrance day", "kind": "month_day", "month": 11, "day": 11},
-    {"name": "St David's Day", "regex": "st\\.? david'?s day", "kind": "month_day", "month": 3, "day": 1},
-    {"name": "St. Jean Baptiste Day", "regex": "st\\.? jean baptiste day", "kind": "month_day", "month": 6, "day": 24},
-    {"name": "The Twelfth", "regex": "orangemen's day|the (glorious )?twelfth", "kind": "month_day", "month": 7, "day": 12},
-    {"name": "Victoria Day", "regex": "sovereign's birthday|victoria day", "kind": "other", "haskell": "predLastOf (dayOfWeek 1) (monthDay 5 25)"},
-    {"name": "Vimy Ridge Day", "regex": "vimy ridge day", "kind": "month_day", "month": 4, "day": 9},
-    {"name": "Civic Holiday", "regex": "british columbia day|civic holiday|natal day|new brunswick day|Saskatchewan Day|terry fox day", "kind": "nth_dow_of_month", "n": 1, "dow": 1, "month": 8},
-    {"name": "Family Day", "regex": "(family|islander|louis riel|nova scotia heritage) day", "kind": "nth_dow_of_month", "n": 3, "dow": 1, "month": 2},
-    {"name": "Father's Day", "regex": "father'?s?'? day", "kind": "nth_dow_of_month", "n": 3, "dow": 7, "month": 6},
-    {"name": "Gold Cup Parade", "regex": "gold cup parade", "kind": "nth_dow_of_month", "n": 3, "dow": 5, "month": 8},
-    {"name": "Heritage Day in Alberta", "regex": "heritage day in alberta", "kind": "nth_dow_of_month", "n": 1, "dow": 1, "month": 8},
-    {"name": "Labour Day", "regex": "labou?r day", "kind": "nth_dow_of_month", "n": 1, "dow": 1, "month": 9},
-    {"name": "Labour Day weekend", "regex": "labou?r day week(\\s|-)?ends?", "kind": "other", "haskell": "longWEBefore $ nthDOWOfMonth 1 1 9"},
-    {"name": "Mother's Day", "regex": "mother'?s?'? day", "kind": "nth_dow_of_month", "n": 2, "dow": 7, "month": 5},
-    {"name": "Royal St. John's Regatta", "regex": "regatta day|royal st\\.? john's regatta", "kind": "nth_dow_of_month", "n": 1, "dow": 3, "month": 8},
-    {"name": "Take our Daughters and Sons to Work Day", "regex": "take our daughters and sons to work day", "kind": "nth_dow_of_month", "n": 1, "dow": 3, "month": 11},
-    {"name": "Thanksgiving Day", "regex": "thanks?giving( day)?", "kind": "nth_dow_of_month", "n": 2, "dow": 1, "month": 10},
-    {"name": "Yukon's Discovery Day", "regex": "(klondike gold|yukon's) discovery day", "kind": "nth_dow_of_month", "n": 3, "dow": 1, "month": 8},
-    {"name": "National Patriots' Day", "regex": "national patriot'?s'? day", "kind": "other", "haskell": "predNthAfter (-1) (dayOfWeek 1) (monthDay 5 25)"},
-    {"name": "Discovery Day", "regex": "discovery\\s+day", "kind": "other", "haskell": "predNthClosest 0 (dayOfWeek 1) (monthDay 6 24)"},
-    {"name": "Administrative Professionals' Day", "regex": "(administrative professional|secretarie|admin)('?s'?)? day", "kind": "other", "haskell": "cycleNthAfter False TG.Day (-3) $ predNthAfter (-1) (dayOfWeek 6) (monthDay 5 1)"}
-  ],
-  "AU": [
-    {"name": "Easter Tuesday", "regex": "easter\\s+tue(sday)?", "kind": "easter_offset", "days": 2},
-    {"name": "ANZAC Day", "regex": "anzac day", "kind": "month_day", "month": 4, "day": 25},
-    {"name": "Australia Day", "regex": "(ana|anniversary|australia|foundation) day", "kind": "month_day", "month": 1, "day": 26},
-    {"name": "Harmony Day", "regex": "harmony day", "kind": "month_day", "month": 3, "day": 21},
-    {"name": "National Sorry Day", "regex": "national sorry day", "kind": "month_day", "month": 5, "day": 26},
-    {"name": "Queensland Day", "regex": "queensland day", "kind": "month_day", "month": 6, "day": 6},
-    {"name": "Remembrance Day", "regex": "remembrance day", "kind": "month_day", "month": 11, "day": 11},
-    {"name": "Take our Daughters and Sons to Work Day", "regex": "take our daughters and sons to work day", "kind": "month_day", "month": 1, "day": 5},
-    {"name": "Adelaide Cup", "regex": "adelaide cup", "kind": "nth_dow_of_month", "n": 2, "dow": 1, "month": 3},
-    {"name": "Administrative Professionals' Day", "regex": "(administrative professional|secretarie|admin)('?s'?)? day", "kind": "nth_dow_of_month", "n": 1, "dow": 5, "month": 5},
-    {"name": "Canberra Day", "regex": "canberra day", "kind": "nth_dow_of_month", "n": 2, "dow": 1, "month": 3},
-    {"name": "Eight Hours Day", "regex": "eight hours day", "kind": "nth_dow_of_month", "n": 2, "dow": 1, "month": 3},
-    {"name": "Father's Day", "regex": "father'?s?'? day", "kind": "nth_dow_of_month", "n": 1, "dow": 7, "month": 9},
-    {"name": "Labour Day", "regex": "labour day", "kind": "nth_dow_of_month", "n": 1, "dow": 1, "month": 10},
-    {"name": "Melbourne Cup Day", "regex": "melbourne cup day", "kind": "nth_dow_of_month", "n": 1, "dow": 2, "month": 11},
-    {"name": "Mother's Day", "regex": "mother'?s?'? day", "kind": "nth_dow_of_month", "n": 2, "dow": 7, "month": 5},
-    {"name": "National Close the Gap Day", "regex": "national close the gap day", "kind": "nth_dow_of_month", "n": 3, "dow": 4, "month": 3},
-    {"name": "National Tree Day", "regex": "(arbor|national tree) day", "kind": "nth_dow_of_month", "n": -1, "dow": 7, "month": 6},
-    {"name": "National Schools Tree Day", "regex": "national schools tree day", "kind": "nth_dow_of_month", "n": -1, "dow": 5, "month": 6},
-    {"name": "New South Wales Bank Holiday", "regex": "new south wales bank holiday", "kind": "nth_dow_of_month", "n": 1, "dow": 1, "month": 8},
-    {"name": "Picnic Day", "regex": "(northern territory )?picnic day", "kind": "nth_dow_of_month", "n": 1, "dow": 1, "month": 8},
-    {"name": "Recreation Day", "regex": "recreation day", "kind": "nth_dow_of_month", "n": 1, "dow": 1, "month": 10},
-    {"name": "Thanksgiving Day", "regex": "thanks?giving( day)?", "kind": "nth_dow_of_month", "n": 4, "dow": 4, "month": 11},
-    {"name": "Western Australia Day", "regex": "western australia day", "kind": "nth_dow_of_month", "n": 1, "dow": 1, "month": 6},
-    {"name": "Reconciliation Day", "regex": "reconciliation\\s+day", "kind": "other", "haskell": "predNthAfter 0 (dayOfWeek 1) (monthDay 5 26)"},
-    {"name": "NAIDOC Week", "regex": "(naidoc|national aboriginal and islander day observance committee) week", "kind": "other", "haskell": "let fri = nthDOWOfMonth 2 5 7; start = cycleNthAfter False TG.Day (-5) fri; end = cycleNthAfter False TG.Day 2 fri in interval TTime.Open start end"},
-    {"name": "Royal Hobart Regatta", "regex": "royal hobart regatta", "kind": "other", "haskell": "let end = nthDOWOfMonth 2 1 2 in interval TTime.Open (cycleNthAfter False TG.Day (-2) end) end"},
-    {"name": "Royal Queensland Show Day", "regex": "(royal (national agricultural|queensland)|rna) show day|ekka day", "kind": "other", "haskell": "let tentative = nthDOWOfMonth 1 5 8; alternative = nthDOWOfMonth 2 5 8 in do forbidden <- interval TTime.Open (monthDay 8 1) (monthDay 8 4); start <- intersectWithReplacement forbidden tentative alternative; return $ cycleNthAfter False TG.Day 5 start"},
-    {"name": "Royal Queensland Show", "regex": "ekka|(royal (national agricultural|queensland)|rna) show", "kind": "other", "haskell": "let tentative = nthDOWOfMonth 1 5 8; alternative = nthDOWOfMonth 2 5 8 in do forbidden <- interval TTime.Open (monthDay 8 1) (monthDay 8 4); start <- intersectWithReplacement forbidden tentative alternative; interval TTime.Open start $ cycleNthAfter False TG.Day 9 start"}
-  ],
-  "NZ": [
-    {"name": "Easter Tuesday", "regex": "easter\\s+tue(sday)?", "kind": "easter_offset", "days": 2},
-    {"name": "ANZAC Day", "regex": "anzac day", "kind": "month_day", "month": 4, "day": 25},
-    {"name": "Guy Fawkes Night", "regex": "guy fawkes night", "kind": "month_day", "month": 11, "day": 5},
-    {"name": "Waitangi Day", "regex": "waitangi day", "kind": "month_day", "month": 2, "day": 6},
-    {"name": "Administrative Professionals' Day", "regex": "(administrative professional|secretarie|admin)('?s'?)? day", "kind": "nth_dow_of_month", "n": 3, "dow": 3, "month": 4},
-    {"name": "Father's Day", "regex": "father'?s?'? day", "kind": "nth_dow_of_month", "n": 1, "dow": 7, "month": 9},
-    {"name": "Labour Day", "regex": "labour day", "kind": "nth_dow_of_month", "n": 4, "dow": 1, "month": 10},
-    {"name": "Mother's Day", "regex": "mother'?s?'? day", "kind": "nth_dow_of_month", "n": 2, "dow": 7, "month": 5},
-    {"name": "Queen's birthday", "regex": "queen's birthday", "kind": "nth_dow_of_month", "n": 1, "dow": 1, "month": 6},
-    {"name": "Thanksgiving Day", "regex": "thanks?giving( day)?", "kind": "nth_dow_of_month", "n": 4, "dow": 4, "month": 11}
-  ],
-  "IN": [
-    {"name": "Guru Tegh Bahadur's Martyrdom Day", "regex": "guru tegh bahadur'?s martyrdom day", "kind": "month_day", "month": 11, "day": 24},
-    {"name": "Independence Day", "regex": "independence day", "kind": "month_day", "month": 8, "day": 15},
-    {"name": "Labour Day", "regex": "labour day", "kind": "month_day", "month": 5, "day": 1},
-    {"name": "Mahatma Gandhi Jayanti", "regex": "mahatma gandhi jayanti", "kind": "month_day", "month": 10, "day": 2},
-    {"name": "Republic Day", "regex": "republic day", "kind": "month_day", "month": 1, "day": 26},
-    {"name": "Shivaji Jayanti", "regex": "shivaji jayanti", "kind": "month_day", "month": 2, "day": 19},
-    {"name": "Father's Day", "regex": "father'?s?'? day", "kind": "nth_dow_of_month", "n": 3, "dow": 7, "month": 6},
-    {"name": "Friendship Day", "regex": "friendship day", "kind": "nth_dow_of_month", "n": 1, "dow": 7, "month": 8},
-    {"name": "Mother's Day", "regex": "mother'?s?'? day", "kind": "nth_dow_of_month", "n": 2, "dow": 7, "month": 5},
-    {"name": "Thanksgiving Day", "regex": "thanks?giving( day)?", "kind": "nth_dow_of_month", "n": 4, "dow": 4, "month": 11},
-    {"name": "Hazarat Ali's Birthday", "regex": "hazarat ali's birthday", "kind": "other", "haskell": "cycleNthAfter False TG.Day 12 rajab (Islamic-calendar computed: 13th of Rajab)"}
-  ],
-  "IE": [
-    {"name": "August Bank Holiday", "regex": "(august|summer) bank holiday", "kind": "nth_dow_of_month", "n": 1, "dow": 1, "month": 8},
-    {"name": "Early May Bank Holiday", "regex": "early may bank holiday", "kind": "nth_dow_of_month", "n": 1, "dow": 1, "month": 5},
-    {"name": "Father's Day", "regex": "father'?s?'? day", "kind": "nth_dow_of_month", "n": 3, "dow": 7, "month": 6},
-    {"name": "Mother's Day", "regex": "mother'?s?'? day", "kind": "nth_dow_of_month", "n": 2, "dow": 7, "month": 5},
-    {"name": "June Bank Holiday", "regex": "june bank holiday", "kind": "nth_dow_of_month", "n": 1, "dow": 1, "month": 6},
-    {"name": "Labour Day", "regex": "labour day", "kind": "nth_dow_of_month", "n": 1, "dow": 1, "month": 5},
-    {"name": "October Bank Holiday", "regex": "october (bank )?holiday", "kind": "nth_dow_of_month", "n": -1, "dow": 1, "month": 10},
-    {"name": "Thanksgiving Day", "regex": "thanks?giving( day)?", "kind": "nth_dow_of_month", "n": 4, "dow": 4, "month": 11}
-  ],
-  "ZA": [
-    {"name": "Day of Goodwill", "regex": "day of goodwill", "kind": "month_day", "month": 12, "day": 26},
-    {"name": "Day of Reconciliation", "regex": "day of( the)? (covenant|reconciliation|vow)", "kind": "month_day", "month": 12, "day": 16},
-    {"name": "Heritage Day", "regex": "heritage day", "kind": "month_day", "month": 9, "day": 24},
-    {"name": "Heroes' Day", "regex": "(heroes'|kruger) day", "kind": "month_day", "month": 10, "day": 10},
-    {"name": "Labour Day", "regex": "labour day", "kind": "month_day", "month": 5, "day": 1},
-    {"name": "National Women's Day", "regex": "national women'?s day", "kind": "month_day", "month": 8, "day": 9},
-    {"name": "Workers' Day", "regex": "workers'? day", "kind": "month_day", "month": 5, "day": 1},
-    {"name": "Administrative Professionals' Day", "regex": "(administrative professional|secretarie|admin)('?s'?)? day", "kind": "nth_dow_of_month", "n": 1, "dow": 3, "month": 9},
-    {"name": "Father's Day", "regex": "father'?s?'? day", "kind": "nth_dow_of_month", "n": 3, "dow": 7, "month": 6},
-    {"name": "Mother's Day", "regex": "mother'?s?'? day", "kind": "nth_dow_of_month", "n": 2, "dow": 7, "month": 5},
-    {"name": "Thanksgiving Day", "regex": "thanks?giving( day)?", "kind": "nth_dow_of_month", "n": 4, "dow": 4, "month": 11},
-    {"name": "National Arbor Week", "regex": "national arbor week", "kind": "interval", "from": [9, 1], "to": [9, 7]}
-  ],
-  "PH": [
-    {"name": "Arbor Day", "regex": "arbor day", "kind": "month_day", "month": 6, "day": 25},
-    {"name": "Bonifacio Day", "regex": "bonifacio day", "kind": "month_day", "month": 11, "day": 30},
-    {"name": "Independence Day", "regex": "independence day", "kind": "month_day", "month": 6, "day": 12},
-    {"name": "Labour Day", "regex": "labour day", "kind": "month_day", "month": 5, "day": 1},
-    {"name": "Ninoy Aquino Day", "regex": "ninoy aquino day", "kind": "month_day", "month": 8, "day": 21},
-    {"name": "People Power Anniversary", "regex": "(edsa revolution|people power) anniversary", "kind": "month_day", "month": 2, "day": 25},
-    {"name": "Rizal Day", "regex": "rizal day", "kind": "month_day", "month": 12, "day": 30},
-    {"name": "The Day of Valor", "regex": "the day of valor", "kind": "month_day", "month": 4, "day": 9},
-    {"name": "Father's Day", "regex": "father'?s?'? day", "kind": "nth_dow_of_month", "n": 3, "dow": 7, "month": 6},
-    {"name": "Mother's Day", "regex": "mother'?s?'? day", "kind": "nth_dow_of_month", "n": 2, "dow": 7, "month": 5},
-    {"name": "National Elections Day", "regex": "national elections day", "kind": "nth_dow_of_month", "n": 2, "dow": 1, "month": 5},
-    {"name": "National Heroes' Day", "regex": "(national )?heroes' day", "kind": "nth_dow_of_month", "n": -1, "dow": 1, "month": 8},
-    {"name": "Parents' Day", "regex": "parents' day", "kind": "nth_dow_of_month", "n": 1, "dow": 1, "month": 12},
-    {"name": "Thanksgiving Day", "regex": "thanks?giving( day)?", "kind": "nth_dow_of_month", "n": 4, "dow": 4, "month": 11}
-  ],
-  "BZ": [
-    {"name": "Garifuna Settlement Day", "regex": "garifuna settlement day", "kind": "month_day", "month": 11, "day": 19},
-    {"name": "Labour Day", "regex": "labour day", "kind": "month_day", "month": 5, "day": 1},
-    {"name": "National Heroes and Benefactors Day", "regex": "national heroes and benefactors day", "kind": "month_day", "month": 3, "day": 9},
-    {"name": "Pan American Day", "regex": "pan american day", "kind": "month_day", "month": 10, "day": 12},
-    {"name": "St. George's Caye Day", "regex": "st\\.? george'?s caye day", "kind": "month_day", "month": 9, "day": 10},
-    {"name": "Father's Day", "regex": "father'?s?'? day", "kind": "nth_dow_of_month", "n": 3, "dow": 7, "month": 6},
-    {"name": "Mother's Day", "regex": "mother'?s?'? day", "kind": "nth_dow_of_month", "n": 2, "dow": 7, "month": 5},
-    {"name": "Thanksgiving Day", "regex": "thanks?giving( day)?", "kind": "nth_dow_of_month", "n": 4, "dow": 4, "month": 11}
-  ],
-  "JM": [
-    {"name": "Labour Day", "regex": "labour day", "kind": "month_day", "month": 5, "day": 23},
-    {"name": "Father's Day", "regex": "father'?s?'? day", "kind": "nth_dow_of_month", "n": 3, "dow": 7, "month": 6},
-    {"name": "Heroes' Day", "regex": "heroes' day", "kind": "nth_dow_of_month", "n": 3, "dow": 1, "month": 10},
-    {"name": "Mother's Day", "regex": "mother'?s?'? day", "kind": "nth_dow_of_month", "n": 2, "dow": 7, "month": 5},
-    {"name": "Thanksgiving Day", "regex": "thanks?giving( day)?", "kind": "nth_dow_of_month", "n": 4, "dow": 4, "month": 11}
-  ],
-  "TT": [
-    {"name": "Indian Arrival Day", "regex": "indian arrival day", "kind": "month_day", "month": 5, "day": 30},
-    {"name": "Labour Day", "regex": "labour day", "kind": "month_day", "month": 6, "day": 19},
-    {"name": "Spiritual Baptist Liberation Day", "regex": "spiritual baptist liberation day", "kind": "month_day", "month": 3, "day": 30},
-    {"name": "Father's Day", "regex": "father'?s?'? day", "kind": "nth_dow_of_month", "n": 3, "dow": 7, "month": 6},
-    {"name": "Mother's Day", "regex": "mother'?s?'? day", "kind": "nth_dow_of_month", "n": 2, "dow": 7, "month": 5},
-    {"name": "Thanksgiving Day", "regex": "thanks?giving( day)?", "kind": "nth_dow_of_month", "n": 4, "dow": 4, "month": 11},
-    {"name": "Hosay", "regex": "hosay", "kind": "other", "haskell": "cycleNthAfter False TG.Day 9 muharram (Islamic-calendar computed: 10th of Muharram)"}
-  ],
-  "US": [
-    {"name": "Thanksgiving Day", "regex": "thanks?giving( day)?", "kind": "nth_dow_of_month", "n": 4, "dow": 4, "month": 11},
-    {"name": "Father's Day", "regex": "father'?s?'? day", "kind": "nth_dow_of_month", "n": 3, "dow": 7, "month": 6},
-    {"name": "African Liberation Day", "regex": "african liberation day", "kind": "month_day", "month": 5, "day": 25},
-    {"name": "Air Force Birthday", "regex": "air force birthday", "kind": "month_day", "month": 9, "day": 18},
-    {"name": "Alaska Day", "regex": "alaska day", "kind": "month_day", "month": 10, "day": 18},
-    {"name": "American Eagle Day", "regex": "american eagle day", "kind": "month_day", "month": 6, "day": 20},
-    {"name": "Army Birthday", "regex": "army birthday", "kind": "month_day", "month": 6, "day": 14},
-    {"name": "Bennington Battle Day", "regex": "bennington battle day", "kind": "month_day", "month": 8, "day": 16},
-    {"name": "Bunker Hill Day", "regex": "bunker hill day", "kind": "month_day", "month": 6, "day": 17},
-    {"name": "California Admission Day", "regex": "california admission day", "kind": "month_day", "month": 9, "day": 9},
-    {"name": "Cinco de Mayo", "regex": "cinco de mayo", "kind": "month_day", "month": 5, "day": 5},
-    {"name": "Citizenship Day", "regex": "citizenship day|i am an american day", "kind": "month_day", "month": 9, "day": 17},
-    {"name": "Coast Guard Birthday", "regex": "coast guard (birth)?day", "kind": "month_day", "month": 8, "day": 4},
-    {"name": "Colorado Day", "regex": "colorado day", "kind": "month_day", "month": 8, "day": 1},
-    {"name": "Constitution Day and Citizenship Day", "regex": "constitution day and citizenship day", "kind": "month_day", "month": 9, "day": 17},
-    {"name": "César Chávez Day", "regex": "c[ée]sar ch[áa]vez day", "kind": "month_day", "month": 3, "day": 31},
-    {"name": "D-Day", "regex": "d\\-day", "kind": "month_day", "month": 6, "day": 6},
-    {"name": "Day After Christmas Day", "regex": "day after christmas day", "kind": "month_day", "month": 12, "day": 26},
-    {"name": "Elizabeth Peratrovich Day", "regex": "elizabeth peratrovich day", "kind": "month_day", "month": 2, "day": 16},
-    {"name": "Evacuation Day", "regex": "evacuation day", "kind": "month_day", "month": 3, "day": 17},
-    {"name": "Father Damien Day", "regex": "father damien day", "kind": "month_day", "month": 4, "day": 15},
-    {"name": "Feast of Our Lady of Guadalupe", "regex": "feast of our lady of guadalupe", "kind": "month_day", "month": 12, "day": 12},
-    {"name": "Flag Day", "regex": "flag day", "kind": "month_day", "month": 6, "day": 14},
-    {"name": "Groundhog Day", "regex": "groundhogs? day", "kind": "month_day", "month": 2, "day": 2},
-    {"name": "Harvey Milk Day", "regex": "harvey milk day", "kind": "month_day", "month": 5, "day": 22},
-    {"name": "Inauguration Day", "regex": "inauguration day", "kind": "month_day", "month": 1, "day": 20},
-    {"name": "Independence Day", "regex": "independence day", "kind": "month_day", "month": 7, "day": 4},
-    {"name": "Juneteenth", "regex": "juneteenth", "kind": "month_day", "month": 6, "day": 19},
-    {"name": "Kamehameha Day", "regex": "kamehameha day", "kind": "month_day", "month": 6, "day": 11},
-    {"name": "Kansas Day", "regex": "kansas day", "kind": "month_day", "month": 1, "day": 29},
-    {"name": "Kent State Shootings Remembrance", "regex": "kent state shootings remembrance", "kind": "month_day", "month": 5, "day": 4},
-    {"name": "Loyalty Day", "regex": "l(aw|ei|oyalty) day", "kind": "month_day", "month": 5, "day": 1},
-    {"name": "Leif Erikson Day", "regex": "leif erikson day", "kind": "month_day", "month": 10, "day": 9},
-    {"name": "Lincoln's Birthday", "regex": "(abraham )?lincoln'?s?'? birthday", "kind": "month_day", "month": 2, "day": 12},
-    {"name": "Linus Pauling Day", "regex": "linus pauling day", "kind": "month_day", "month": 2, "day": 28},
-    {"name": "Lyndon Baines Johnson Day", "regex": "lyndon baines johnson day", "kind": "month_day", "month": 8, "day": 27},
-    {"name": "Marine Corps Birthday", "regex": "marine corps (birth)?day", "kind": "month_day", "month": 11, "day": 10},
-    {"name": "Maryland Day", "regex": "maryland day", "kind": "month_day", "month": 3, "day": 25},
-    {"name": "National Aviation Day", "regex": "national aviation day", "kind": "month_day", "month": 8, "day": 19},
-    {"name": "National Freedom Day", "regex": "national freedom day", "kind": "month_day", "month": 2, "day": 1},
-    {"name": "National Guard Birthday", "regex": "national guard (birth)?day", "kind": "month_day", "month": 12, "day": 13},
-    {"name": "National Korean War Veterans Armistice Day", "regex": "national korean war veterans armistice day", "kind": "month_day", "month": 7, "day": 27},
-    {"name": "National Maritime Day", "regex": "national maritime day", "kind": "month_day", "month": 5, "day": 22},
-    {"name": "National Missing Children's Day", "regex": "national missing children'?s day", "kind": "month_day", "month": 5, "day": 25},
-    {"name": "National Nurses Day", "regex": "national nurses day", "kind": "month_day", "month": 5, "day": 6},
-    {"name": "National Tartan Day", "regex": "national tartan day", "kind": "month_day", "month": 4, "day": 6},
-    {"name": "Navy Birthday", "regex": "(u\\.?s\\.? )?navy (birth)?day", "kind": "month_day", "month": 10, "day": 13},
-    {"name": "Oklahoma Day", "regex": "oklahoma day", "kind": "month_day", "month": 4, "day": 22},
-    {"name": "Pan American Aviation Day", "regex": "pan american aviation day", "kind": "month_day", "month": 12, "day": 17},
-    {"name": "Pascua Florida Day", "regex": "pascua florida day", "kind": "month_day", "month": 4, "day": 2},
-    {"name": "Patriot Day", "regex": "patriot day", "kind": "month_day", "month": 9, "day": 11},
-    {"name": "Peace Officers Memorial Day", "regex": "peace officers memorial day", "kind": "month_day", "month": 5, "day": 15},
-    {"name": "Pearl Harbor Remembrance Day", "regex": "pearl harbor remembrance day", "kind": "month_day", "month": 12, "day": 7},
-    {"name": "Pioneer Day", "regex": "pioneer day", "kind": "month_day", "month": 7, "day": 24},
-    {"name": "Prince Jonah Kuhio Kalanianaole Day", "regex": "prince jonah kuhio kalanianaole day", "kind": "month_day", "month": 3, "day": 26},
-    {"name": "Purple Heart Day", "regex": "purple heart day", "kind": "month_day", "month": 8, "day": 7},
-    {"name": "Read Across America Day", "regex": "read across america day", "kind": "month_day", "month": 3, "day": 2},
-    {"name": "Rhode Island Independence Day", "regex": "rhode island independence day", "kind": "month_day", "month": 5, "day": 4},
-    {"name": "Rosa Parks Day", "regex": "rosa parks day", "kind": "month_day", "month": 2, "day": 4},
-    {"name": "San Jacinto Day", "regex": "san jacinto day", "kind": "month_day", "month": 4, "day": 21},
-    {"name": "Self-Injury Awareness Day", "regex": "self\\-injury awareness day", "kind": "month_day", "month": 3, "day": 1},
-    {"name": "Senior Citizens Day", "regex": "senior citizens day", "kind": "month_day", "month": 8, "day": 21},
-    {"name": "Siblings Day", "regex": "(national )?sibling'?s?'? day", "kind": "month_day", "month": 4, "day": 10},
-    {"name": "St Nicholas' Day", "regex": "st\\.? nicholas'? day", "kind": "month_day", "month": 12, "day": 6},
-    {"name": "St. David's Day", "regex": "st\\.? david'?s day", "kind": "month_day", "month": 3, "day": 1},
-    {"name": "Statehood Day", "regex": "statehood day", "kind": "month_day", "month": 6, "day": 1},
-    {"name": "Statehood Day in Arizona", "regex": "statehood day in arizona", "kind": "month_day", "month": 2, "day": 14},
-    {"name": "Stephen Foster Memorial Day", "regex": "stephen foster memorial day", "kind": "month_day", "month": 1, "day": 13},
-    {"name": "Susan B Anthony's Birthday", "regex": "susan b\\.? anthony'?s birthday", "kind": "month_day", "month": 2, "day": 15},
-    {"name": "Texas Independence Day", "regex": "texas independence day", "kind": "month_day", "month": 3, "day": 2},
-    {"name": "Thomas Jefferson's Birthday", "regex": "thomas jefferson'?s birthday", "kind": "month_day", "month": 4, "day": 13},
-    {"name": "Truman Day", "regex": "truman day", "kind": "month_day", "month": 5, "day": 8},
-    {"name": "Veterans Day", "regex": "veterans? day", "kind": "month_day", "month": 11, "day": 11},
-    {"name": "West Virginia Day", "regex": "west virginia day", "kind": "month_day", "month": 6, "day": 20},
-    {"name": "White Cane Safety Day", "regex": "white cane safety day", "kind": "month_day", "month": 10, "day": 15},
-    {"name": "Women's Equality Day", "regex": "women'?s equality day", "kind": "month_day", "month": 8, "day": 26},
-    {"name": "Wright Brothers Day", "regex": "wright brothers day", "kind": "month_day", "month": 12, "day": 17},
-    {"name": "Arbor Day", "regex": "arbor day", "kind": "nth_dow_of_month", "n": -1, "dow": 5, "month": 4},
-    {"name": "Armed Forces Day", "regex": "armed forces day", "kind": "nth_dow_of_month", "n": 3, "dow": 6, "month": 5},
-    {"name": "Casimir Pulaski Day", "regex": "casimir pulaski day", "kind": "nth_dow_of_month", "n": 1, "dow": 1, "month": 3},
-    {"name": "Child Health Day", "regex": "child health day", "kind": "nth_dow_of_month", "n": 1, "dow": 1, "month": 10},
-    {"name": "Columbus Day", "regex": "columbus day", "kind": "nth_dow_of_month", "n": 2, "dow": 1, "month": 10},
-    {"name": "Daylight Saving Start Day", "regex": "daylight savings? start( day)?", "kind": "nth_dow_of_month", "n": 2, "dow": 7, "month": 3},
-    {"name": "Daylight Saving End Day", "regex": "daylight savings? end( day)?", "kind": "nth_dow_of_month", "n": 1, "dow": 7, "month": 11},
-    {"name": "Carl Garner Federal Lands Cleanup Day", "regex": "carl garner federal lands cleanup day", "kind": "other", "haskell": "cycleNthAfter False TG.Day 5 $ nthDOWOfMonth 1 1 9 (Saturday after Labor Day)"},
-    {"name": "Cyber Monday", "regex": "cyber monday", "kind": "other", "haskell": "cycleNthAfter False TG.Day 4 $ nthDOWOfMonth 4 4 11 (Monday after Thanksgiving)"},
-    {"name": "Election Day", "regex": "election day", "kind": "other", "haskell": "cycleNthAfter False TG.Day 1 $ nthDOWOfMonth 1 1 11 (Tuesday after first Monday of November)"},
-    {"name": "Employee Appreciation Day", "regex": "employee appreciation day", "kind": "nth_dow_of_month", "n": 1, "dow": 5, "month": 3},
-    {"name": "Friendship Day", "regex": "friendship day", "kind": "nth_dow_of_month", "n": 1, "dow": 7, "month": 8},
-    {"name": "Gold Star Mother's Day", "regex": "gold star mother's day", "kind": "nth_dow_of_month", "n": -1, "dow": 7, "month": 9},
-    {"name": "Indigenous People's Day", "regex": "indigenous people's day", "kind": "nth_dow_of_month", "n": 2, "dow": 1, "month": 10},
-    {"name": "Labor Day", "regex": "labor day", "kind": "nth_dow_of_month", "n": 1, "dow": 1, "month": 9},
-    {"name": "Labor Day weekend", "regex": "labor day week(\\s|-)?ends?", "kind": "other", "haskell": "longWEBefore $ nthDOWOfMonth 1 1 9"},
-    {"name": "Lee Jackson Day", "regex": "lee jackson day", "kind": "nth_dow_of_month", "n": 2, "dow": 5, "month": 1},
-    {"name": "Memorial Day", "regex": "(decoration|memorial) day", "kind": "nth_dow_of_month", "n": -1, "dow": 1, "month": 5},
-    {"name": "Memorial Day weekend", "regex": "(decoration|memorial) day week(\\s|-)?ends?", "kind": "other", "haskell": "longWEBefore $ predLastOf (dayOfWeek 1) (month 5)"},
-    {"name": "Military Spouse Day", "regex": "military spouse (appreciation )?day", "kind": "other", "haskell": "cycleNthAfter False TG.Day (-2) $ nthDOWOfMonth 2 7 5 (2 days before Mother's Day)"},
-    {"name": "Mother's Day", "regex": "mother'?s?'? day", "kind": "nth_dow_of_month", "n": 2, "dow": 7, "month": 5},
-    {"name": "National CleanUp Day", "regex": "national clean\\-?up day", "kind": "nth_dow_of_month", "n": 3, "dow": 6, "month": 9},
-    {"name": "National Day of Prayer", "regex": "national day of prayer", "kind": "nth_dow_of_month", "n": 1, "dow": 4, "month": 5},
-    {"name": "National Defense Transportation Day", "regex": "national defense transportation day", "kind": "nth_dow_of_month", "n": 3, "dow": 5, "month": 5},
-    {"name": "National Explosive Ordnance Disposal Day", "regex": "national (eod|explosive ordnance disosal) day", "kind": "nth_dow_of_month", "n": 1, "dow": 6, "month": 5},
-    {"name": "National Grandparents Day", "regex": "national grandparents day", "kind": "other", "haskell": "cycleNthAfter False TG.Day 6 $ nthDOWOfMonth 1 1 9 (First Sunday after Labor Day)"},
-    {"name": "National POW/MIA Recognition Day", "regex": "national pow/mia recognition day", "kind": "nth_dow_of_month", "n": 3, "dow": 5, "month": 9},
-    {"name": "National Wear Red Day", "regex": "national wear red day", "kind": "nth_dow_of_month", "n": 1, "dow": 5, "month": 2},
-    {"name": "Native American Heritage Day", "regex": "(american indian|native american) heritage day", "kind": "other", "haskell": "cycleNthAfter False TG.Day 1 $ nthDOWOfMonth 4 4 11 (Day after Thanksgiving)"},
-    {"name": "Native Americans' Day", "regex": "native americans' day", "kind": "nth_dow_of_month", "n": 4, "dow": 1, "month": 9},
-    {"name": "Nevada Day", "regex": "nevada day", "kind": "nth_dow_of_month", "n": -1, "dow": 5, "month": 10},
-    {"name": "Parents' Day", "regex": "parents' day", "kind": "nth_dow_of_month", "n": 4, "dow": 7, "month": 7},
-    {"name": "Patriots' Day", "regex": "patriot'?s'? day", "kind": "nth_dow_of_month", "n": 3, "dow": 1, "month": 4},
-    {"name": "Robert E. Lee Day", "regex": "robert e\\. lee day|lee's (birth)?day", "kind": "nth_dow_of_month", "n": 3, "dow": 1, "month": 1},
-    {"name": "Seward's Day", "regex": "seward's day", "kind": "nth_dow_of_month", "n": -1, "dow": 1, "month": 3},
-    {"name": "Statehood Day", "regex": "(admission|statehood) day", "kind": "nth_dow_of_month", "n": 3, "dow": 5, "month": 8},
-    {"name": "Sweetest Day", "regex": "sweetest day", "kind": "nth_dow_of_month", "n": 3, "dow": 6, "month": 10},
-    {"name": "Take our Daughters and Sons to Work Day", "regex": "take our daughters and sons to work day", "kind": "nth_dow_of_month", "n": 4, "dow": 4, "month": 4},
-    {"name": "Town Meeting Day", "regex": "town meeting day", "kind": "nth_dow_of_month", "n": 1, "dow": 2, "month": 3},
-    {"name": "Victory Day", "regex": "victory day", "kind": "nth_dow_of_month", "n": 2, "dow": 1, "month": 8},
-    {"name": "President's Day", "regex": "(george )?washington'?s? (birth)?day|president'?s?'? day|daisy gatson bates'? day", "kind": "nth_dow_of_month", "n": 3, "dow": 1, "month": 2},
-    {"name": "Administrative Professionals' Day", "regex": "(administrative professional|secretarie|admin)('?s'?)? day", "kind": "other", "haskell": "cycleNthAfter False TG.Day (-3) $ predNthAfter (-1) (dayOfWeek 6) (monthDay 5 1) (Wednesday of last full Sun-Sat week of April)"},
-    {"name": "Emergency Medical Services for Children Day", "regex": "(national )?(emsc|emergency medical services for children) day", "kind": "other", "haskell": "cycleNthAfter False TG.Day 3 $ predNthAfter 2 (dayOfWeek 7) (monthDay 5 1) (Wednesday of 3rd full Sun-start week of May)"},
-    {"name": "Emancipation Day", "regex": "emancipation day", "kind": "other", "haskell": "predNthClosest 0 weekday $ monthDay 4 16 (closest weekday to April 16)"},
-    {"name": "Kwanzaa", "regex": "kwanzaa", "kind": "interval", "from": [12, 26], "to": [1, 1]},
-    {"name": "Emergency Medical Services Week", "regex": "(national )?(ems|emergency medical services) week", "kind": "other", "haskell": "let start = predNthAfter 2 (dayOfWeek 7) (monthDay 5 1); end = cycleNthAfter False TG.Day 6 start in interval TTime.Open start end (3rd full Sun-start week of May)"},
-    {"name": "Tax Day", "regex": "tax day", "kind": "other", "haskell": "let emancipationDay = predNthClosest 0 weekday $ monthDay 4 16; tentative = predNthAfter 0 weekday $ monthDay 4 15; alternative = predNthAfter 1 weekday emancipationDay in intersectWithReplacement emancipationDay tentative alternative"},
-    {"name": "Super Tuesday", "regex": "super\\s+(tuesdays?|tue?\\.?)", "kind": "other", "haskell": "superTuesday (computed: first Tuesday of March in US presidential primary years)"},
-    {"name": "Mini-Tuesday", "regex": "mini(\\s*\\-\\s*|\\s+)(tuesdays?|tue?\\.?)", "kind": "other", "haskell": "yearMonthDay 2004 2 3 (fixed single date 2004-02-03)"},
-    {"name": "Super Tuesday", "regex": "((mega\\s+)?giga|tsunami|super\\s+duper)\\s+(tuesdays?|tue?\\.?)", "kind": "other", "haskell": "yearMonthDay 2008 2 5 (fixed single date 2008-02-05)"},
-    {"name": "Global Youth Service Day", "regex": "national youth service day", "kind": "other", "haskell": "let start = globalYouthServiceDay; end = cycleNthAfter False TG.Day 2 globalYouthServiceDay in interval TTime.Open start end (computed multi-day)"}
-  ]
+ "GB": [
+  {
+   "name": "Mothering Sunday",
+   "regex": "mothering sunday|mother'?s?'? day",
+   "kind": "easter_offset",
+   "days": -21
+  },
+  {
+   "name": "Bank Holiday",
+   "regex": "bank holiday",
+   "kind": "month_day",
+   "month": 12,
+   "day": 28
+  },
+  {
+   "name": "Battle of the Boyne",
+   "regex": "battle of the boyne",
+   "kind": "month_day",
+   "month": 7,
+   "day": 12
+  },
+  {
+   "name": "Burns Night",
+   "regex": "burns night",
+   "kind": "month_day",
+   "month": 1,
+   "day": 25
+  },
+  {
+   "name": "Guy Fawkes Day",
+   "regex": "guy fawkes day",
+   "kind": "month_day",
+   "month": 11,
+   "day": 5
+  },
+  {
+   "name": "Shakespeare Day",
+   "regex": "shakespeare day",
+   "kind": "month_day",
+   "month": 4,
+   "day": 23
+  },
+  {
+   "name": "St Andrew's Day",
+   "regex": "st\\.? andrew'?s day",
+   "kind": "month_day",
+   "month": 11,
+   "day": 30
+  },
+  {
+   "name": "St. David's Day",
+   "regex": "st\\.? david'?s day",
+   "kind": "month_day",
+   "month": 3,
+   "day": 1
+  },
+  {
+   "name": "Victory in Europe Day",
+   "regex": "victory in europe day",
+   "kind": "month_day",
+   "month": 5,
+   "day": 8
+  },
+  {
+   "name": "August Bank Holiday",
+   "regex": "(august|(late )?summer) bank holiday",
+   "kind": "nth_dow_of_month",
+   "n": -1,
+   "dow": 1,
+   "month": 8
+  },
+  {
+   "name": "Early May Bank Holiday",
+   "regex": "early may bank holiday",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 1,
+   "month": 5
+  },
+  {
+   "name": "Father's Day",
+   "regex": "father'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 7,
+   "month": 6
+  },
+  {
+   "name": "Remembrance Sunday",
+   "regex": "remembrance sunday",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 7,
+   "month": 11
+  },
+  {
+   "name": "Spring Bank Holiday",
+   "regex": "(sprint|late may) bank holiday",
+   "kind": "nth_dow_of_month",
+   "n": -1,
+   "dow": 1,
+   "month": 5
+  },
+  {
+   "name": "Thanksgiving Day",
+   "regex": "thanks?giving( day)?",
+   "kind": "nth_dow_of_month",
+   "n": 4,
+   "dow": 4,
+   "month": 11
+  }
+ ],
+ "CA": [
+  {
+   "name": "Anniversary of the Statute of Westminster",
+   "regex": "anniversary of the statute of westminster",
+   "kind": "month_day",
+   "month": 12,
+   "day": 11
+  },
+  {
+   "name": "Memorial Day",
+   "regex": "(canada|dominion|memorial) day",
+   "kind": "month_day",
+   "month": 7,
+   "day": 1
+  },
+  {
+   "name": "Groundhog Day",
+   "regex": "groundhogs? day",
+   "kind": "month_day",
+   "month": 2,
+   "day": 2
+  },
+  {
+   "name": "Healthcare Aide Day",
+   "regex": "healthcare aide day",
+   "kind": "month_day",
+   "month": 10,
+   "day": 18
+  },
+  {
+   "name": "National Aboriginal Day",
+   "regex": "national aboriginal day",
+   "kind": "month_day",
+   "month": 6,
+   "day": 21
+  },
+  {
+   "name": "National Flag of Canada Day",
+   "regex": "national flag of canada day",
+   "kind": "month_day",
+   "month": 2,
+   "day": 15
+  },
+  {
+   "name": "National Tartan Day",
+   "regex": "national tartan day",
+   "kind": "month_day",
+   "month": 4,
+   "day": 6
+  },
+  {
+   "name": "Nunavut Day",
+   "regex": "nunavut day",
+   "kind": "month_day",
+   "month": 7,
+   "day": 9
+  },
+  {
+   "name": "Remembrance Day",
+   "regex": "remembrance day",
+   "kind": "month_day",
+   "month": 11,
+   "day": 11
+  },
+  {
+   "name": "St David's Day",
+   "regex": "st\\.? david'?s day",
+   "kind": "month_day",
+   "month": 3,
+   "day": 1
+  },
+  {
+   "name": "St. Jean Baptiste Day",
+   "regex": "st\\.? jean baptiste day",
+   "kind": "month_day",
+   "month": 6,
+   "day": 24
+  },
+  {
+   "name": "The Twelfth",
+   "regex": "orangemen's day|the (glorious )?twelfth",
+   "kind": "month_day",
+   "month": 7,
+   "day": 12
+  },
+  {
+   "name": "Victoria Day",
+   "regex": "sovereign's birthday|victoria day",
+   "kind": "other",
+   "haskell": "predLastOf (dayOfWeek 1) (monthDay 5 25)"
+  },
+  {
+   "name": "Vimy Ridge Day",
+   "regex": "vimy ridge day",
+   "kind": "month_day",
+   "month": 4,
+   "day": 9
+  },
+  {
+   "name": "Civic Holiday",
+   "regex": "british columbia day|civic holiday|natal day|new brunswick day|Saskatchewan Day|terry fox day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 1,
+   "month": 8
+  },
+  {
+   "name": "Family Day",
+   "regex": "(family|islander|louis riel|nova scotia heritage) day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 1,
+   "month": 2
+  },
+  {
+   "name": "Father's Day",
+   "regex": "father'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 7,
+   "month": 6
+  },
+  {
+   "name": "Gold Cup Parade",
+   "regex": "gold cup parade",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 5,
+   "month": 8
+  },
+  {
+   "name": "Heritage Day in Alberta",
+   "regex": "heritage day in alberta",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 1,
+   "month": 8
+  },
+  {
+   "name": "Labour Day",
+   "regex": "labou?r day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 1,
+   "month": 9
+  },
+  {
+   "name": "Labour Day weekend",
+   "regex": "labou?r day week(\\s|-)?ends?",
+   "kind": "other",
+   "haskell": "longWEBefore $ nthDOWOfMonth 1 1 9"
+  },
+  {
+   "name": "Mother's Day",
+   "regex": "mother'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 7,
+   "month": 5
+  },
+  {
+   "name": "Royal St. John's Regatta",
+   "regex": "regatta day|royal st\\.? john's regatta",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 3,
+   "month": 8
+  },
+  {
+   "name": "Take our Daughters and Sons to Work Day",
+   "regex": "take our daughters and sons to work day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 3,
+   "month": 11
+  },
+  {
+   "name": "Thanksgiving Day",
+   "regex": "thanks?giving( day)?",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 1,
+   "month": 10
+  },
+  {
+   "name": "Yukon's Discovery Day",
+   "regex": "(klondike gold|yukon's) discovery day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 1,
+   "month": 8
+  },
+  {
+   "name": "National Patriots' Day",
+   "regex": "national patriot'?s'? day",
+   "kind": "other",
+   "haskell": "predNthAfter (-1) (dayOfWeek 1) (monthDay 5 25)"
+  },
+  {
+   "name": "Discovery Day",
+   "regex": "discovery\\s+day",
+   "kind": "other",
+   "haskell": "predNthClosest 0 (dayOfWeek 1) (monthDay 6 24)"
+  },
+  {
+   "name": "Administrative Professionals' Day",
+   "regex": "(administrative professional|secretarie|admin)('?s'?)? day",
+   "kind": "other",
+   "haskell": "cycleNthAfter False TG.Day (-3) $ predNthAfter (-1) (dayOfWeek 6) (monthDay 5 1)"
+  }
+ ],
+ "AU": [
+  {
+   "name": "Easter Tuesday",
+   "regex": "easter\\s+tue(sday)?",
+   "kind": "easter_offset",
+   "days": 2
+  },
+  {
+   "name": "ANZAC Day",
+   "regex": "anzac day",
+   "kind": "month_day",
+   "month": 4,
+   "day": 25
+  },
+  {
+   "name": "Australia Day",
+   "regex": "(ana|anniversary|australia|foundation) day",
+   "kind": "month_day",
+   "month": 1,
+   "day": 26
+  },
+  {
+   "name": "Harmony Day",
+   "regex": "harmony day",
+   "kind": "month_day",
+   "month": 3,
+   "day": 21
+  },
+  {
+   "name": "National Sorry Day",
+   "regex": "national sorry day",
+   "kind": "month_day",
+   "month": 5,
+   "day": 26
+  },
+  {
+   "name": "Queensland Day",
+   "regex": "queensland day",
+   "kind": "month_day",
+   "month": 6,
+   "day": 6
+  },
+  {
+   "name": "Remembrance Day",
+   "regex": "remembrance day",
+   "kind": "month_day",
+   "month": 11,
+   "day": 11
+  },
+  {
+   "name": "Take our Daughters and Sons to Work Day",
+   "regex": "take our daughters and sons to work day",
+   "kind": "month_day",
+   "month": 1,
+   "day": 5
+  },
+  {
+   "name": "Adelaide Cup",
+   "regex": "adelaide cup",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 1,
+   "month": 3
+  },
+  {
+   "name": "Administrative Professionals' Day",
+   "regex": "(administrative professional|secretarie|admin)('?s'?)? day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 5,
+   "month": 5
+  },
+  {
+   "name": "Canberra Day",
+   "regex": "canberra day",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 1,
+   "month": 3
+  },
+  {
+   "name": "Eight Hours Day",
+   "regex": "eight hours day",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 1,
+   "month": 3
+  },
+  {
+   "name": "Father's Day",
+   "regex": "father'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 7,
+   "month": 9
+  },
+  {
+   "name": "Labour Day",
+   "regex": "labour day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 1,
+   "month": 10
+  },
+  {
+   "name": "Melbourne Cup Day",
+   "regex": "melbourne cup day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 2,
+   "month": 11
+  },
+  {
+   "name": "Mother's Day",
+   "regex": "mother'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 7,
+   "month": 5
+  },
+  {
+   "name": "National Close the Gap Day",
+   "regex": "national close the gap day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 4,
+   "month": 3
+  },
+  {
+   "name": "National Tree Day",
+   "regex": "(arbor|national tree) day",
+   "kind": "nth_dow_of_month",
+   "n": -1,
+   "dow": 7,
+   "month": 6
+  },
+  {
+   "name": "National Schools Tree Day",
+   "regex": "national schools tree day",
+   "kind": "nth_dow_of_month",
+   "n": -1,
+   "dow": 5,
+   "month": 6
+  },
+  {
+   "name": "New South Wales Bank Holiday",
+   "regex": "new south wales bank holiday",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 1,
+   "month": 8
+  },
+  {
+   "name": "Picnic Day",
+   "regex": "(northern territory )?picnic day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 1,
+   "month": 8
+  },
+  {
+   "name": "Recreation Day",
+   "regex": "recreation day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 1,
+   "month": 10
+  },
+  {
+   "name": "Thanksgiving Day",
+   "regex": "thanks?giving( day)?",
+   "kind": "nth_dow_of_month",
+   "n": 4,
+   "dow": 4,
+   "month": 11
+  },
+  {
+   "name": "Western Australia Day",
+   "regex": "western australia day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 1,
+   "month": 6
+  },
+  {
+   "name": "Reconciliation Day",
+   "regex": "reconciliation\\s+day",
+   "kind": "other",
+   "haskell": "predNthAfter 0 (dayOfWeek 1) (monthDay 5 26)"
+  },
+  {
+   "name": "NAIDOC Week",
+   "regex": "(naidoc|national aboriginal and islander day observance committee) week",
+   "kind": "other",
+   "haskell": "let fri = nthDOWOfMonth 2 5 7; start = cycleNthAfter False TG.Day (-5) fri; end = cycleNthAfter False TG.Day 2 fri in interval TTime.Open start end"
+  },
+  {
+   "name": "Royal Hobart Regatta",
+   "regex": "royal hobart regatta",
+   "kind": "other",
+   "haskell": "let end = nthDOWOfMonth 2 1 2 in interval TTime.Open (cycleNthAfter False TG.Day (-2) end) end"
+  },
+  {
+   "name": "Royal Queensland Show Day",
+   "regex": "(royal (national agricultural|queensland)|rna) show day|ekka day",
+   "kind": "other",
+   "haskell": "let tentative = nthDOWOfMonth 1 5 8; alternative = nthDOWOfMonth 2 5 8 in do forbidden <- interval TTime.Open (monthDay 8 1) (monthDay 8 4); start <- intersectWithReplacement forbidden tentative alternative; return $ cycleNthAfter False TG.Day 5 start"
+  },
+  {
+   "name": "Royal Queensland Show",
+   "regex": "ekka|(royal (national agricultural|queensland)|rna) show",
+   "kind": "other",
+   "haskell": "let tentative = nthDOWOfMonth 1 5 8; alternative = nthDOWOfMonth 2 5 8 in do forbidden <- interval TTime.Open (monthDay 8 1) (monthDay 8 4); start <- intersectWithReplacement forbidden tentative alternative; interval TTime.Open start $ cycleNthAfter False TG.Day 9 start"
+  }
+ ],
+ "NZ": [
+  {
+   "name": "Easter Tuesday",
+   "regex": "easter\\s+tue(sday)?",
+   "kind": "easter_offset",
+   "days": 2
+  },
+  {
+   "name": "ANZAC Day",
+   "regex": "anzac day",
+   "kind": "month_day",
+   "month": 4,
+   "day": 25
+  },
+  {
+   "name": "Guy Fawkes Night",
+   "regex": "guy fawkes night",
+   "kind": "month_day",
+   "month": 11,
+   "day": 5
+  },
+  {
+   "name": "Waitangi Day",
+   "regex": "waitangi day",
+   "kind": "month_day",
+   "month": 2,
+   "day": 6
+  },
+  {
+   "name": "Administrative Professionals' Day",
+   "regex": "(administrative professional|secretarie|admin)('?s'?)? day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 3,
+   "month": 4
+  },
+  {
+   "name": "Father's Day",
+   "regex": "father'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 7,
+   "month": 9
+  },
+  {
+   "name": "Labour Day",
+   "regex": "labour day",
+   "kind": "nth_dow_of_month",
+   "n": 4,
+   "dow": 1,
+   "month": 10
+  },
+  {
+   "name": "Mother's Day",
+   "regex": "mother'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 7,
+   "month": 5
+  },
+  {
+   "name": "Queen's birthday",
+   "regex": "queen's birthday",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 1,
+   "month": 6
+  },
+  {
+   "name": "Thanksgiving Day",
+   "regex": "thanks?giving( day)?",
+   "kind": "nth_dow_of_month",
+   "n": 4,
+   "dow": 4,
+   "month": 11
+  }
+ ],
+ "IN": [
+  {
+   "name": "Guru Tegh Bahadur's Martyrdom Day",
+   "regex": "guru tegh bahadur'?s martyrdom day",
+   "kind": "month_day",
+   "month": 11,
+   "day": 24
+  },
+  {
+   "name": "Independence Day",
+   "regex": "independence day",
+   "kind": "month_day",
+   "month": 8,
+   "day": 15
+  },
+  {
+   "name": "Labour Day",
+   "regex": "labour day",
+   "kind": "month_day",
+   "month": 5,
+   "day": 1
+  },
+  {
+   "name": "Mahatma Gandhi Jayanti",
+   "regex": "mahatma gandhi jayanti",
+   "kind": "month_day",
+   "month": 10,
+   "day": 2
+  },
+  {
+   "name": "Republic Day",
+   "regex": "republic day",
+   "kind": "month_day",
+   "month": 1,
+   "day": 26
+  },
+  {
+   "name": "Shivaji Jayanti",
+   "regex": "shivaji jayanti",
+   "kind": "month_day",
+   "month": 2,
+   "day": 19
+  },
+  {
+   "name": "Father's Day",
+   "regex": "father'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 7,
+   "month": 6
+  },
+  {
+   "name": "Friendship Day",
+   "regex": "friendship day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 7,
+   "month": 8
+  },
+  {
+   "name": "Mother's Day",
+   "regex": "mother'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 7,
+   "month": 5
+  },
+  {
+   "name": "Thanksgiving Day",
+   "regex": "thanks?giving( day)?",
+   "kind": "nth_dow_of_month",
+   "n": 4,
+   "dow": 4,
+   "month": 11
+  },
+  {
+   "name": "Hazarat Ali's Birthday",
+   "regex": "hazarat ali's birthday",
+   "kind": "other",
+   "haskell": "cycleNthAfter False TG.Day 12 rajab (Islamic-calendar computed: 13th of Rajab)"
+  }
+ ],
+ "IE": [
+  {
+   "name": "August Bank Holiday",
+   "regex": "(august|summer) bank holiday",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 1,
+   "month": 8
+  },
+  {
+   "name": "Early May Bank Holiday",
+   "regex": "early may bank holiday",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 1,
+   "month": 5
+  },
+  {
+   "name": "Father's Day",
+   "regex": "father'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 7,
+   "month": 6
+  },
+  {
+   "name": "Mother's Day",
+   "regex": "mother'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 7,
+   "month": 5
+  },
+  {
+   "name": "June Bank Holiday",
+   "regex": "june bank holiday",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 1,
+   "month": 6
+  },
+  {
+   "name": "Labour Day",
+   "regex": "labour day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 1,
+   "month": 5
+  },
+  {
+   "name": "October Bank Holiday",
+   "regex": "october (bank )?holiday",
+   "kind": "nth_dow_of_month",
+   "n": -1,
+   "dow": 1,
+   "month": 10
+  },
+  {
+   "name": "Thanksgiving Day",
+   "regex": "thanks?giving( day)?",
+   "kind": "nth_dow_of_month",
+   "n": 4,
+   "dow": 4,
+   "month": 11
+  }
+ ],
+ "ZA": [
+  {
+   "name": "Day of Goodwill",
+   "regex": "day of goodwill",
+   "kind": "month_day",
+   "month": 12,
+   "day": 26
+  },
+  {
+   "name": "Day of Reconciliation",
+   "regex": "day of( the)? (covenant|reconciliation|vow)",
+   "kind": "month_day",
+   "month": 12,
+   "day": 16
+  },
+  {
+   "name": "Heritage Day",
+   "regex": "heritage day",
+   "kind": "month_day",
+   "month": 9,
+   "day": 24
+  },
+  {
+   "name": "Heroes' Day",
+   "regex": "(heroes'|kruger) day",
+   "kind": "month_day",
+   "month": 10,
+   "day": 10
+  },
+  {
+   "name": "Labour Day",
+   "regex": "labour day",
+   "kind": "month_day",
+   "month": 5,
+   "day": 1
+  },
+  {
+   "name": "National Women's Day",
+   "regex": "national women'?s day",
+   "kind": "month_day",
+   "month": 8,
+   "day": 9
+  },
+  {
+   "name": "Workers' Day",
+   "regex": "workers'? day",
+   "kind": "month_day",
+   "month": 5,
+   "day": 1
+  },
+  {
+   "name": "Administrative Professionals' Day",
+   "regex": "(administrative professional|secretarie|admin)('?s'?)? day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 3,
+   "month": 9
+  },
+  {
+   "name": "Father's Day",
+   "regex": "father'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 7,
+   "month": 6
+  },
+  {
+   "name": "Mother's Day",
+   "regex": "mother'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 7,
+   "month": 5
+  },
+  {
+   "name": "Thanksgiving Day",
+   "regex": "thanks?giving( day)?",
+   "kind": "nth_dow_of_month",
+   "n": 4,
+   "dow": 4,
+   "month": 11
+  },
+  {
+   "name": "National Arbor Week",
+   "regex": "national arbor week",
+   "kind": "interval",
+   "from": [
+    9,
+    1
+   ],
+   "to": [
+    9,
+    7
+   ]
+  }
+ ],
+ "PH": [
+  {
+   "name": "Arbor Day",
+   "regex": "arbor day",
+   "kind": "month_day",
+   "month": 6,
+   "day": 25
+  },
+  {
+   "name": "Bonifacio Day",
+   "regex": "bonifacio day",
+   "kind": "month_day",
+   "month": 11,
+   "day": 30
+  },
+  {
+   "name": "Independence Day",
+   "regex": "independence day",
+   "kind": "month_day",
+   "month": 6,
+   "day": 12
+  },
+  {
+   "name": "Labour Day",
+   "regex": "labour day",
+   "kind": "month_day",
+   "month": 5,
+   "day": 1
+  },
+  {
+   "name": "Ninoy Aquino Day",
+   "regex": "ninoy aquino day",
+   "kind": "month_day",
+   "month": 8,
+   "day": 21
+  },
+  {
+   "name": "People Power Anniversary",
+   "regex": "(edsa revolution|people power) anniversary",
+   "kind": "month_day",
+   "month": 2,
+   "day": 25
+  },
+  {
+   "name": "Rizal Day",
+   "regex": "rizal day",
+   "kind": "month_day",
+   "month": 12,
+   "day": 30
+  },
+  {
+   "name": "The Day of Valor",
+   "regex": "the day of valor",
+   "kind": "month_day",
+   "month": 4,
+   "day": 9
+  },
+  {
+   "name": "Father's Day",
+   "regex": "father'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 7,
+   "month": 6
+  },
+  {
+   "name": "Mother's Day",
+   "regex": "mother'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 7,
+   "month": 5
+  },
+  {
+   "name": "National Elections Day",
+   "regex": "national elections day",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 1,
+   "month": 5
+  },
+  {
+   "name": "National Heroes' Day",
+   "regex": "(national )?heroes' day",
+   "kind": "nth_dow_of_month",
+   "n": -1,
+   "dow": 1,
+   "month": 8
+  },
+  {
+   "name": "Parents' Day",
+   "regex": "parents' day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 1,
+   "month": 12
+  },
+  {
+   "name": "Thanksgiving Day",
+   "regex": "thanks?giving( day)?",
+   "kind": "nth_dow_of_month",
+   "n": 4,
+   "dow": 4,
+   "month": 11
+  }
+ ],
+ "BZ": [
+  {
+   "name": "Garifuna Settlement Day",
+   "regex": "garifuna settlement day",
+   "kind": "month_day",
+   "month": 11,
+   "day": 19
+  },
+  {
+   "name": "Labour Day",
+   "regex": "labour day",
+   "kind": "month_day",
+   "month": 5,
+   "day": 1
+  },
+  {
+   "name": "National Heroes and Benefactors Day",
+   "regex": "national heroes and benefactors day",
+   "kind": "month_day",
+   "month": 3,
+   "day": 9
+  },
+  {
+   "name": "Pan American Day",
+   "regex": "pan american day",
+   "kind": "month_day",
+   "month": 10,
+   "day": 12
+  },
+  {
+   "name": "St. George's Caye Day",
+   "regex": "st\\.? george'?s caye day",
+   "kind": "month_day",
+   "month": 9,
+   "day": 10
+  },
+  {
+   "name": "Father's Day",
+   "regex": "father'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 7,
+   "month": 6
+  },
+  {
+   "name": "Mother's Day",
+   "regex": "mother'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 7,
+   "month": 5
+  },
+  {
+   "name": "Thanksgiving Day",
+   "regex": "thanks?giving( day)?",
+   "kind": "nth_dow_of_month",
+   "n": 4,
+   "dow": 4,
+   "month": 11
+  }
+ ],
+ "JM": [
+  {
+   "name": "Labour Day",
+   "regex": "labour day",
+   "kind": "month_day",
+   "month": 5,
+   "day": 23
+  },
+  {
+   "name": "Father's Day",
+   "regex": "father'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 7,
+   "month": 6
+  },
+  {
+   "name": "Heroes' Day",
+   "regex": "heroes' day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 1,
+   "month": 10
+  },
+  {
+   "name": "Mother's Day",
+   "regex": "mother'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 7,
+   "month": 5
+  },
+  {
+   "name": "Thanksgiving Day",
+   "regex": "thanks?giving( day)?",
+   "kind": "nth_dow_of_month",
+   "n": 4,
+   "dow": 4,
+   "month": 11
+  }
+ ],
+ "TT": [
+  {
+   "name": "Indian Arrival Day",
+   "regex": "indian arrival day",
+   "kind": "month_day",
+   "month": 5,
+   "day": 30
+  },
+  {
+   "name": "Labour Day",
+   "regex": "labour day",
+   "kind": "month_day",
+   "month": 6,
+   "day": 19
+  },
+  {
+   "name": "Spiritual Baptist Liberation Day",
+   "regex": "spiritual baptist liberation day",
+   "kind": "month_day",
+   "month": 3,
+   "day": 30
+  },
+  {
+   "name": "Father's Day",
+   "regex": "father'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 7,
+   "month": 6
+  },
+  {
+   "name": "Mother's Day",
+   "regex": "mother'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 7,
+   "month": 5
+  },
+  {
+   "name": "Thanksgiving Day",
+   "regex": "thanks?giving( day)?",
+   "kind": "nth_dow_of_month",
+   "n": 4,
+   "dow": 4,
+   "month": 11
+  },
+  {
+   "name": "Hosay",
+   "regex": "hosay",
+   "kind": "other",
+   "haskell": "cycleNthAfter False TG.Day 9 muharram (Islamic-calendar computed: 10th of Muharram)"
+  }
+ ],
+ "US": [
+  {
+   "name": "Thanksgiving Day",
+   "regex": "thanks?giving( day)?",
+   "kind": "nth_dow_of_month",
+   "n": 4,
+   "dow": 4,
+   "month": 11
+  },
+  {
+   "name": "Father's Day",
+   "regex": "father'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 7,
+   "month": 6
+  },
+  {
+   "name": "African Liberation Day",
+   "regex": "african liberation day",
+   "kind": "month_day",
+   "month": 5,
+   "day": 25
+  },
+  {
+   "name": "Air Force Birthday",
+   "regex": "air force birthday",
+   "kind": "month_day",
+   "month": 9,
+   "day": 18
+  },
+  {
+   "name": "Alaska Day",
+   "regex": "alaska day",
+   "kind": "month_day",
+   "month": 10,
+   "day": 18
+  },
+  {
+   "name": "American Eagle Day",
+   "regex": "american eagle day",
+   "kind": "month_day",
+   "month": 6,
+   "day": 20
+  },
+  {
+   "name": "Army Birthday",
+   "regex": "army birthday",
+   "kind": "month_day",
+   "month": 6,
+   "day": 14
+  },
+  {
+   "name": "Bennington Battle Day",
+   "regex": "bennington battle day",
+   "kind": "month_day",
+   "month": 8,
+   "day": 16
+  },
+  {
+   "name": "Bunker Hill Day",
+   "regex": "bunker hill day",
+   "kind": "month_day",
+   "month": 6,
+   "day": 17
+  },
+  {
+   "name": "California Admission Day",
+   "regex": "california admission day",
+   "kind": "month_day",
+   "month": 9,
+   "day": 9
+  },
+  {
+   "name": "Cinco de Mayo",
+   "regex": "cinco de mayo",
+   "kind": "month_day",
+   "month": 5,
+   "day": 5
+  },
+  {
+   "name": "Citizenship Day",
+   "regex": "citizenship day|i am an american day",
+   "kind": "month_day",
+   "month": 9,
+   "day": 17
+  },
+  {
+   "name": "Coast Guard Birthday",
+   "regex": "coast guard (birth)?day",
+   "kind": "month_day",
+   "month": 8,
+   "day": 4
+  },
+  {
+   "name": "Colorado Day",
+   "regex": "colorado day",
+   "kind": "month_day",
+   "month": 8,
+   "day": 1
+  },
+  {
+   "name": "Constitution Day and Citizenship Day",
+   "regex": "constitution day and citizenship day",
+   "kind": "month_day",
+   "month": 9,
+   "day": 17
+  },
+  {
+   "name": "C\u00e9sar Ch\u00e1vez Day",
+   "regex": "c[\u00e9e]sar ch[\u00e1a]vez day",
+   "kind": "month_day",
+   "month": 3,
+   "day": 31
+  },
+  {
+   "name": "D-Day",
+   "regex": "d\\-day",
+   "kind": "month_day",
+   "month": 6,
+   "day": 6
+  },
+  {
+   "name": "Day After Christmas Day",
+   "regex": "day after christmas day",
+   "kind": "month_day",
+   "month": 12,
+   "day": 26
+  },
+  {
+   "name": "Elizabeth Peratrovich Day",
+   "regex": "elizabeth peratrovich day",
+   "kind": "month_day",
+   "month": 2,
+   "day": 16
+  },
+  {
+   "name": "Evacuation Day",
+   "regex": "evacuation day",
+   "kind": "month_day",
+   "month": 3,
+   "day": 17
+  },
+  {
+   "name": "Father Damien Day",
+   "regex": "father damien day",
+   "kind": "month_day",
+   "month": 4,
+   "day": 15
+  },
+  {
+   "name": "Feast of Our Lady of Guadalupe",
+   "regex": "feast of our lady of guadalupe",
+   "kind": "month_day",
+   "month": 12,
+   "day": 12
+  },
+  {
+   "name": "Flag Day",
+   "regex": "flag day",
+   "kind": "month_day",
+   "month": 6,
+   "day": 14
+  },
+  {
+   "name": "Groundhog Day",
+   "regex": "groundhogs? day",
+   "kind": "month_day",
+   "month": 2,
+   "day": 2
+  },
+  {
+   "name": "Harvey Milk Day",
+   "regex": "harvey milk day",
+   "kind": "month_day",
+   "month": 5,
+   "day": 22
+  },
+  {
+   "name": "Inauguration Day",
+   "regex": "inauguration day",
+   "kind": "month_day",
+   "month": 1,
+   "day": 20
+  },
+  {
+   "name": "Independence Day",
+   "regex": "independence day",
+   "kind": "month_day",
+   "month": 7,
+   "day": 4
+  },
+  {
+   "name": "Juneteenth",
+   "regex": "juneteenth",
+   "kind": "month_day",
+   "month": 6,
+   "day": 19
+  },
+  {
+   "name": "Kamehameha Day",
+   "regex": "kamehameha day",
+   "kind": "month_day",
+   "month": 6,
+   "day": 11
+  },
+  {
+   "name": "Kansas Day",
+   "regex": "kansas day",
+   "kind": "month_day",
+   "month": 1,
+   "day": 29
+  },
+  {
+   "name": "Kent State Shootings Remembrance",
+   "regex": "kent state shootings remembrance",
+   "kind": "month_day",
+   "month": 5,
+   "day": 4
+  },
+  {
+   "name": "Loyalty Day",
+   "regex": "l(aw|ei|oyalty) day",
+   "kind": "month_day",
+   "month": 5,
+   "day": 1
+  },
+  {
+   "name": "Leif Erikson Day",
+   "regex": "leif erikson day",
+   "kind": "month_day",
+   "month": 10,
+   "day": 9
+  },
+  {
+   "name": "Lincoln's Birthday",
+   "regex": "(abraham )?lincoln'?s?'? birthday",
+   "kind": "month_day",
+   "month": 2,
+   "day": 12
+  },
+  {
+   "name": "Linus Pauling Day",
+   "regex": "linus pauling day",
+   "kind": "month_day",
+   "month": 2,
+   "day": 28
+  },
+  {
+   "name": "Lyndon Baines Johnson Day",
+   "regex": "lyndon baines johnson day",
+   "kind": "month_day",
+   "month": 8,
+   "day": 27
+  },
+  {
+   "name": "Marine Corps Birthday",
+   "regex": "marine corps (birth)?day",
+   "kind": "month_day",
+   "month": 11,
+   "day": 10
+  },
+  {
+   "name": "Maryland Day",
+   "regex": "maryland day",
+   "kind": "month_day",
+   "month": 3,
+   "day": 25
+  },
+  {
+   "name": "National Aviation Day",
+   "regex": "national aviation day",
+   "kind": "month_day",
+   "month": 8,
+   "day": 19
+  },
+  {
+   "name": "National Freedom Day",
+   "regex": "national freedom day",
+   "kind": "month_day",
+   "month": 2,
+   "day": 1
+  },
+  {
+   "name": "National Guard Birthday",
+   "regex": "national guard (birth)?day",
+   "kind": "month_day",
+   "month": 12,
+   "day": 13
+  },
+  {
+   "name": "National Korean War Veterans Armistice Day",
+   "regex": "national korean war veterans armistice day",
+   "kind": "month_day",
+   "month": 7,
+   "day": 27
+  },
+  {
+   "name": "National Maritime Day",
+   "regex": "national maritime day",
+   "kind": "month_day",
+   "month": 5,
+   "day": 22
+  },
+  {
+   "name": "National Missing Children's Day",
+   "regex": "national missing children'?s day",
+   "kind": "month_day",
+   "month": 5,
+   "day": 25
+  },
+  {
+   "name": "National Nurses Day",
+   "regex": "national nurses day",
+   "kind": "month_day",
+   "month": 5,
+   "day": 6
+  },
+  {
+   "name": "National Tartan Day",
+   "regex": "national tartan day",
+   "kind": "month_day",
+   "month": 4,
+   "day": 6
+  },
+  {
+   "name": "Navy Birthday",
+   "regex": "(u\\.?s\\.? )?navy (birth)?day",
+   "kind": "month_day",
+   "month": 10,
+   "day": 13
+  },
+  {
+   "name": "Oklahoma Day",
+   "regex": "oklahoma day",
+   "kind": "month_day",
+   "month": 4,
+   "day": 22
+  },
+  {
+   "name": "Pan American Aviation Day",
+   "regex": "pan american aviation day",
+   "kind": "month_day",
+   "month": 12,
+   "day": 17
+  },
+  {
+   "name": "Pascua Florida Day",
+   "regex": "pascua florida day",
+   "kind": "month_day",
+   "month": 4,
+   "day": 2
+  },
+  {
+   "name": "Patriot Day",
+   "regex": "patriot day",
+   "kind": "month_day",
+   "month": 9,
+   "day": 11
+  },
+  {
+   "name": "Peace Officers Memorial Day",
+   "regex": "peace officers memorial day",
+   "kind": "month_day",
+   "month": 5,
+   "day": 15
+  },
+  {
+   "name": "Pearl Harbor Remembrance Day",
+   "regex": "pearl harbor remembrance day",
+   "kind": "month_day",
+   "month": 12,
+   "day": 7
+  },
+  {
+   "name": "Pioneer Day",
+   "regex": "pioneer day",
+   "kind": "month_day",
+   "month": 7,
+   "day": 24
+  },
+  {
+   "name": "Prince Jonah Kuhio Kalanianaole Day",
+   "regex": "prince jonah kuhio kalanianaole day",
+   "kind": "month_day",
+   "month": 3,
+   "day": 26
+  },
+  {
+   "name": "Purple Heart Day",
+   "regex": "purple heart day",
+   "kind": "month_day",
+   "month": 8,
+   "day": 7
+  },
+  {
+   "name": "Read Across America Day",
+   "regex": "read across america day",
+   "kind": "month_day",
+   "month": 3,
+   "day": 2
+  },
+  {
+   "name": "Rhode Island Independence Day",
+   "regex": "rhode island independence day",
+   "kind": "month_day",
+   "month": 5,
+   "day": 4
+  },
+  {
+   "name": "Rosa Parks Day",
+   "regex": "rosa parks day",
+   "kind": "month_day",
+   "month": 2,
+   "day": 4
+  },
+  {
+   "name": "San Jacinto Day",
+   "regex": "san jacinto day",
+   "kind": "month_day",
+   "month": 4,
+   "day": 21
+  },
+  {
+   "name": "Self-Injury Awareness Day",
+   "regex": "self\\-injury awareness day",
+   "kind": "month_day",
+   "month": 3,
+   "day": 1
+  },
+  {
+   "name": "Senior Citizens Day",
+   "regex": "senior citizens day",
+   "kind": "month_day",
+   "month": 8,
+   "day": 21
+  },
+  {
+   "name": "Siblings Day",
+   "regex": "(national )?sibling'?s?'? day",
+   "kind": "month_day",
+   "month": 4,
+   "day": 10
+  },
+  {
+   "name": "St Nicholas' Day",
+   "regex": "st\\.? nicholas'? day",
+   "kind": "month_day",
+   "month": 12,
+   "day": 6
+  },
+  {
+   "name": "St. David's Day",
+   "regex": "st\\.? david'?s day",
+   "kind": "month_day",
+   "month": 3,
+   "day": 1
+  },
+  {
+   "name": "Statehood Day",
+   "regex": "statehood day",
+   "kind": "month_day",
+   "month": 6,
+   "day": 1
+  },
+  {
+   "name": "Statehood Day in Arizona",
+   "regex": "statehood day in arizona",
+   "kind": "month_day",
+   "month": 2,
+   "day": 14
+  },
+  {
+   "name": "Stephen Foster Memorial Day",
+   "regex": "stephen foster memorial day",
+   "kind": "month_day",
+   "month": 1,
+   "day": 13
+  },
+  {
+   "name": "Susan B Anthony's Birthday",
+   "regex": "susan b\\.? anthony'?s birthday",
+   "kind": "month_day",
+   "month": 2,
+   "day": 15
+  },
+  {
+   "name": "Texas Independence Day",
+   "regex": "texas independence day",
+   "kind": "month_day",
+   "month": 3,
+   "day": 2
+  },
+  {
+   "name": "Thomas Jefferson's Birthday",
+   "regex": "thomas jefferson'?s birthday",
+   "kind": "month_day",
+   "month": 4,
+   "day": 13
+  },
+  {
+   "name": "Truman Day",
+   "regex": "truman day",
+   "kind": "month_day",
+   "month": 5,
+   "day": 8
+  },
+  {
+   "name": "Veterans Day",
+   "regex": "veterans? day",
+   "kind": "month_day",
+   "month": 11,
+   "day": 11
+  },
+  {
+   "name": "West Virginia Day",
+   "regex": "west virginia day",
+   "kind": "month_day",
+   "month": 6,
+   "day": 20
+  },
+  {
+   "name": "White Cane Safety Day",
+   "regex": "white cane safety day",
+   "kind": "month_day",
+   "month": 10,
+   "day": 15
+  },
+  {
+   "name": "Women's Equality Day",
+   "regex": "women'?s equality day",
+   "kind": "month_day",
+   "month": 8,
+   "day": 26
+  },
+  {
+   "name": "Wright Brothers Day",
+   "regex": "wright brothers day",
+   "kind": "month_day",
+   "month": 12,
+   "day": 17
+  },
+  {
+   "name": "Arbor Day",
+   "regex": "arbor day",
+   "kind": "nth_dow_of_month",
+   "n": -1,
+   "dow": 5,
+   "month": 4
+  },
+  {
+   "name": "Armed Forces Day",
+   "regex": "armed forces day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 6,
+   "month": 5
+  },
+  {
+   "name": "Casimir Pulaski Day",
+   "regex": "casimir pulaski day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 1,
+   "month": 3
+  },
+  {
+   "name": "Child Health Day",
+   "regex": "child health day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 1,
+   "month": 10
+  },
+  {
+   "name": "Columbus Day",
+   "regex": "columbus day",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 1,
+   "month": 10
+  },
+  {
+   "name": "Daylight Saving Start Day",
+   "regex": "daylight savings? start( day)?",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 7,
+   "month": 3
+  },
+  {
+   "name": "Daylight Saving End Day",
+   "regex": "daylight savings? end( day)?",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 7,
+   "month": 11
+  },
+  {
+   "name": "Carl Garner Federal Lands Cleanup Day",
+   "regex": "carl garner federal lands cleanup day",
+   "kind": "days_after_nth_dow",
+   "days": 5,
+   "n": 1,
+   "dow": 1,
+   "month": 9
+  },
+  {
+   "name": "Cyber Monday",
+   "regex": "cyber monday",
+   "kind": "days_after_nth_dow",
+   "days": 4,
+   "n": 4,
+   "dow": 4,
+   "month": 11
+  },
+  {
+   "name": "Election Day",
+   "regex": "election day",
+   "kind": "days_after_nth_dow",
+   "days": 1,
+   "n": 1,
+   "dow": 1,
+   "month": 11
+  },
+  {
+   "name": "Employee Appreciation Day",
+   "regex": "employee appreciation day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 5,
+   "month": 3
+  },
+  {
+   "name": "Friendship Day",
+   "regex": "friendship day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 7,
+   "month": 8
+  },
+  {
+   "name": "Gold Star Mother's Day",
+   "regex": "gold star mother's day",
+   "kind": "nth_dow_of_month",
+   "n": -1,
+   "dow": 7,
+   "month": 9
+  },
+  {
+   "name": "Indigenous People's Day",
+   "regex": "indigenous people's day",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 1,
+   "month": 10
+  },
+  {
+   "name": "Labor Day",
+   "regex": "labor day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 1,
+   "month": 9
+  },
+  {
+   "name": "Labor Day weekend",
+   "regex": "labor day week(\\s|-)?ends?",
+   "kind": "other",
+   "haskell": "longWEBefore $ nthDOWOfMonth 1 1 9"
+  },
+  {
+   "name": "Lee Jackson Day",
+   "regex": "lee jackson day",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 5,
+   "month": 1
+  },
+  {
+   "name": "Memorial Day",
+   "regex": "(decoration|memorial) day",
+   "kind": "nth_dow_of_month",
+   "n": -1,
+   "dow": 1,
+   "month": 5
+  },
+  {
+   "name": "Memorial Day weekend",
+   "regex": "(decoration|memorial) day week(\\s|-)?ends?",
+   "kind": "other",
+   "haskell": "longWEBefore $ predLastOf (dayOfWeek 1) (month 5)"
+  },
+  {
+   "name": "Military Spouse Day",
+   "regex": "military spouse (appreciation )?day",
+   "kind": "days_after_nth_dow",
+   "days": -2,
+   "n": 2,
+   "dow": 7,
+   "month": 5
+  },
+  {
+   "name": "Mother's Day",
+   "regex": "mother'?s?'? day",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 7,
+   "month": 5
+  },
+  {
+   "name": "National CleanUp Day",
+   "regex": "national clean\\-?up day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 6,
+   "month": 9
+  },
+  {
+   "name": "National Day of Prayer",
+   "regex": "national day of prayer",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 4,
+   "month": 5
+  },
+  {
+   "name": "National Defense Transportation Day",
+   "regex": "national defense transportation day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 5,
+   "month": 5
+  },
+  {
+   "name": "National Explosive Ordnance Disposal Day",
+   "regex": "national (eod|explosive ordnance disosal) day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 6,
+   "month": 5
+  },
+  {
+   "name": "National Grandparents Day",
+   "regex": "national grandparents day",
+   "kind": "days_after_nth_dow",
+   "days": 6,
+   "n": 1,
+   "dow": 1,
+   "month": 9
+  },
+  {
+   "name": "National POW/MIA Recognition Day",
+   "regex": "national pow/mia recognition day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 5,
+   "month": 9
+  },
+  {
+   "name": "National Wear Red Day",
+   "regex": "national wear red day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 5,
+   "month": 2
+  },
+  {
+   "name": "Native American Heritage Day",
+   "regex": "(american indian|native american) heritage day",
+   "kind": "days_after_nth_dow",
+   "days": 1,
+   "n": 4,
+   "dow": 4,
+   "month": 11
+  },
+  {
+   "name": "Native Americans' Day",
+   "regex": "native americans' day",
+   "kind": "nth_dow_of_month",
+   "n": 4,
+   "dow": 1,
+   "month": 9
+  },
+  {
+   "name": "Nevada Day",
+   "regex": "nevada day",
+   "kind": "nth_dow_of_month",
+   "n": -1,
+   "dow": 5,
+   "month": 10
+  },
+  {
+   "name": "Parents' Day",
+   "regex": "parents' day",
+   "kind": "nth_dow_of_month",
+   "n": 4,
+   "dow": 7,
+   "month": 7
+  },
+  {
+   "name": "Patriots' Day",
+   "regex": "patriot'?s'? day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 1,
+   "month": 4
+  },
+  {
+   "name": "Robert E. Lee Day",
+   "regex": "robert e\\. lee day|lee's (birth)?day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 1,
+   "month": 1
+  },
+  {
+   "name": "Seward's Day",
+   "regex": "seward's day",
+   "kind": "nth_dow_of_month",
+   "n": -1,
+   "dow": 1,
+   "month": 3
+  },
+  {
+   "name": "Statehood Day",
+   "regex": "(admission|statehood) day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 5,
+   "month": 8
+  },
+  {
+   "name": "Sweetest Day",
+   "regex": "sweetest day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 6,
+   "month": 10
+  },
+  {
+   "name": "Take our Daughters and Sons to Work Day",
+   "regex": "take our daughters and sons to work day",
+   "kind": "nth_dow_of_month",
+   "n": 4,
+   "dow": 4,
+   "month": 4
+  },
+  {
+   "name": "Town Meeting Day",
+   "regex": "town meeting day",
+   "kind": "nth_dow_of_month",
+   "n": 1,
+   "dow": 2,
+   "month": 3
+  },
+  {
+   "name": "Victory Day",
+   "regex": "victory day",
+   "kind": "nth_dow_of_month",
+   "n": 2,
+   "dow": 1,
+   "month": 8
+  },
+  {
+   "name": "President's Day",
+   "regex": "(george )?washington'?s? (birth)?day|president'?s?'? day|daisy gatson bates'? day",
+   "kind": "nth_dow_of_month",
+   "n": 3,
+   "dow": 1,
+   "month": 2
+  },
+  {
+   "name": "Administrative Professionals' Day",
+   "regex": "(administrative professional|secretarie|admin)('?s'?)? day",
+   "kind": "other",
+   "haskell": "cycleNthAfter False TG.Day (-3) $ predNthAfter (-1) (dayOfWeek 6) (monthDay 5 1) (Wednesday of last full Sun-Sat week of April)"
+  },
+  {
+   "name": "Emergency Medical Services for Children Day",
+   "regex": "(national )?(emsc|emergency medical services for children) day",
+   "kind": "other",
+   "haskell": "cycleNthAfter False TG.Day 3 $ predNthAfter 2 (dayOfWeek 7) (monthDay 5 1) (Wednesday of 3rd full Sun-start week of May)"
+  },
+  {
+   "name": "Emancipation Day",
+   "regex": "emancipation day",
+   "kind": "other",
+   "haskell": "predNthClosest 0 weekday $ monthDay 4 16 (closest weekday to April 16)"
+  },
+  {
+   "name": "Kwanzaa",
+   "regex": "kwanzaa",
+   "kind": "interval",
+   "from": [
+    12,
+    26
+   ],
+   "to": [
+    1,
+    1
+   ]
+  },
+  {
+   "name": "Emergency Medical Services Week",
+   "regex": "(national )?(ems|emergency medical services) week",
+   "kind": "other",
+   "haskell": "let start = predNthAfter 2 (dayOfWeek 7) (monthDay 5 1); end = cycleNthAfter False TG.Day 6 start in interval TTime.Open start end (3rd full Sun-start week of May)"
+  },
+  {
+   "name": "Tax Day",
+   "regex": "tax day",
+   "kind": "other",
+   "haskell": "let emancipationDay = predNthClosest 0 weekday $ monthDay 4 16; tentative = predNthAfter 0 weekday $ monthDay 4 15; alternative = predNthAfter 1 weekday emancipationDay in intersectWithReplacement emancipationDay tentative alternative"
+  },
+  {
+   "name": "Super Tuesday",
+   "regex": "super\\s+(tuesdays?|tue?\\.?)",
+   "kind": "other",
+   "haskell": "superTuesday (computed: first Tuesday of March in US presidential primary years)"
+  },
+  {
+   "name": "Mini-Tuesday",
+   "regex": "mini(\\s*\\-\\s*|\\s+)(tuesdays?|tue?\\.?)",
+   "kind": "other",
+   "haskell": "yearMonthDay 2004 2 3 (fixed single date 2004-02-03)"
+  },
+  {
+   "name": "Super Tuesday",
+   "regex": "((mega\\s+)?giga|tsunami|super\\s+duper)\\s+(tuesdays?|tue?\\.?)",
+   "kind": "other",
+   "haskell": "yearMonthDay 2008 2 5 (fixed single date 2008-02-05)"
+  },
+  {
+   "name": "Global Youth Service Day",
+   "regex": "national youth service day",
+   "kind": "other",
+   "haskell": "let start = globalYouthServiceDay; end = cycleNthAfter False TG.Day 2 globalYouthServiceDay in interval TTime.Open start end (computed multi-day)"
+  }
+ ]
 }

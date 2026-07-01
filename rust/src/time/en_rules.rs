@@ -1063,7 +1063,15 @@ fn region_holiday_rules(locale: Locale) -> Vec<Rule> {
                 let days = i("days");
                 Box::new(move || Some(crate::time::computed::easter_shift_td(days)))
             }
-            _ => continue, // "other": Islamic-calendar / conditional — skipped
+            "days_after_nth_dow" => {
+                // N days from an nth-weekday-of-month anchor: Election Day = 1 day
+                // after 1st Mon Nov; Cyber Monday = 4 days after Thanksgiving.
+                let (days, n, dow, m) = (i("days"), i("n"), i("dow"), i("month"));
+                Box::new(move || {
+                    Some(cycle_nth_after_td(false, Grain::Day, days, &nth_dow_of_month_td(n, dow, m)))
+                })
+            }
+            _ => continue, // remaining "other": intervals / calendar-computed / etc.
         };
         rules.push(Rule {
             name: format!("holiday[{region}]: {name}"),
