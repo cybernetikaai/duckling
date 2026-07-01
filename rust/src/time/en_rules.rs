@@ -879,6 +879,13 @@ fn intersect_td(a: &TimeData, b: &TimeData) -> Option<TimeData> {
     if matches!(a.pred, Predicate::Empty) || matches!(b.pred, Predicate::Empty) {
         return None;
     }
+    // An open-ended interval ("after 8", "before 3pm") is a half-line, not a
+    // point-set to intersect with a part-of-day/date. The directional wrapper
+    // must stay outermost, so refuse to intersect a directional operand —
+    // otherwise "after 8 in the evening" wrongly collapses to a plain 20:00.
+    if a.direction.is_some() || b.direction.is_some() {
+        return None;
+    }
     // `intersect(fine, coarse)` iterates the coarse predicate (bounded by
     // SAFE_MAX), composing the fine one within each occurrence. Normally the
     // finer grain is the inner predicate. But a day-of-week is high-frequency

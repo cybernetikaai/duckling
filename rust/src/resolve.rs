@@ -80,20 +80,18 @@ pub fn resolve_time(td: &TimeData, ctx: &ResolveContext) -> Option<serde_json::V
     };
     // Offset for this resolved local instant, from the zone (DST-correct).
     let off = zone_offset(chosen.start, &ctx.zone);
-    if let Some(dir) = td.direction {
-        return Some(open_interval_value(
-            chosen.start,
-            off,
-            chosen.grain,
-            matches!(dir, IntervalDirection::After),
-        ));
-    }
-    let mut value = match chosen.end {
-        Some(end) => {
-            let off_end = zone_offset(end, &ctx.zone);
-            interval_value(chosen.start, off, end, off_end, chosen.grain)
+    let mut value = if let Some(dir) = td.direction {
+        // Open-ended interval ("after christmas", "before 3pm"). Duckling keeps
+        // the holidayBeta tag on these, so fall through to the attach below.
+        open_interval_value(chosen.start, off, chosen.grain, matches!(dir, IntervalDirection::After))
+    } else {
+        match chosen.end {
+            Some(end) => {
+                let off_end = zone_offset(end, &ctx.zone);
+                interval_value(chosen.start, off, end, off_end, chosen.grain)
+            }
+            None => simple_value(chosen.start, off, chosen.grain),
         }
-        None => simple_value(chosen.start, off, chosen.grain),
     };
     if let Some(h) = &td.holiday {
         if let serde_json::Value::Object(o) = &mut value {

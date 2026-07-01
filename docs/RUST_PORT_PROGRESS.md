@@ -92,6 +92,7 @@ Branch: `rust-port-en-time`.
 | + the <dom> of <named-month> | **984 / 984 (100%)** | **0** | 10 / 10 | "the second of march"; contains-mode complete |
 | + tz_stress expansion (oracle, 6 zones) | 984 / 984 | 0 | **68 / 68** | DST transitions US/EU/AU/NZ; port per-instant correct vs Duckling boundary quirk |
 | + 85 more Duckling corpus inputs + year interval | **1069 / 1069 (100%)** | 0 | 68 / 68 | transcribed missing Corpus.hs inputs; "1960 - 1961"; port handled 84/85 |
+| + differential fuzz vs live oracle | 1069 / 1069 | 0 | 68 / 68 | **124/124** compositional probes match oracle; 0 gaps found |
 
 ## How to run
 
