@@ -63,6 +63,11 @@ Branch: `rust-port-en-time`.
 | + the (nth) closest <day> to <time> | 785 / 984 | 199 | 10 / 10 | predNthClosest; "closest Monday to Oct 5th" |
 | + <duration> after/before/from/past + ago/after-next | 803 / 984 | 181 | 10 / 10 | "15 minutes past 3pm", "2 thursdays ago", "friday after next" |
 | + last weekend of <named-month> | 808 / 984 | 176 | 10 / 10 | weekend predicate (Fri 18:00->Mon 00:00); predLastOf |
+| + holiday cluster (subagent) | 874 / 984 | 110 | 10 / 10 | Islamic/Hindu/Jewish/Orthodox computed + Black Friday, King's Day, Ramadan, Earth Hour |
+| + timegrain regex/name alignment | 884 / 984 | 100 | 10 / 10 | "yr"/"hr"/bare h/m; grain names feed ranking features |
+| + beginning/end/early/mid/late of <named-month> | 889 / 984 | 95 | 10 / 10 | dom-range intervals within a month |
+| + <hour> <integer> / o'clock / half <integer> | 901 / 984 | 83 | 10 / 10 | "ten thirty", "3 oclock am", "half three" |
+| + season Closed, Mid-day, first..fifth <dow> of <time> | 909 / 984 | 75 | 10 / 10 | "this Summer", "midday", "first monday of last month" |
 
 ## How to run
 
