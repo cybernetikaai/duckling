@@ -75,6 +75,8 @@ Branch: `rust-port-en-time`.
 | + week (all/rest of the/the) | 943 / 984 | 41 | 10 / 10 | "all week", "rest of the week" |
 | + in <dur> at <tod>, last night, week-end (this/last) | 947 / 984 | 37 | 10 / 10 | "in 7 days at 5pm", "late last night", "this past weekend" |
 | + number.number-hours fix + by the end of <time> | 949 / 984 | 35 | 10 / 10 | "in 2.5 hours" (group-index bug), "by the end of next month" |
+| + spelled compound numerals (powers/multiply/sum) | 952 / 984 | 32 | 10 / 10 | "two thousand ten"->2010; spelled-year holidays |
+| + intersect ... for year (latent year) | 953 / 984 | 31 | 10 / 10 | "April 14, 2015" |
 
 ## How to run
 
@@ -96,15 +98,16 @@ Cumulative thru N-dow-from-now. contains **929/984 (94%)**, unique **926/984**, 
 
 Remaining **35** failures (the hard tail; each needs new infra or is a harness artifact):
 - **harness-strictness artifacts** (~7, NOT rule gaps): "right now"/"just now" (entity is "now" [substring]), "for a quarter past 3pm"×5 (entity is "a quarter past 3pm"). Duckling's corpus checks the best-entity value; our `full_range_time_values` requires the entity to span the whole input. Could relax the harness to "expected value among any entity" but that risks masking real gaps — leaving as-is.
-- **spelled-out year numerals** (~4): "two thousand ten"→2010, "two thousand eighteen/nineteen" — needs thousand/hundred compound numerals (intersect-2-numbers / powers-of-ten machinery). Unblocks "Easter Sunday two thousand ten", "orthodox shrove monday ...", "choti diwali ...".
-- **datetime combos** (~5): "Fri, Jul 18, 2014 07:00 PM", "Jul 18, Fri", "April 14, 2015", "Thu 15th", "the second of march" — named-day + comma-absorb + date + time composition.
+- **intersect-ordering (rare date ∩ frequent weekday)** (~4): "Thu 15th", "Jul 18, Fri", "Fri, Jul 18, 2014 07:00 PM" (+2 tz/hh variants) — intersecting a yearly date with a weekday iterates the weekday (frequent) and hits SAFE_MAX (10) before finding the match. Duckling merges TimeDatePredicate fields and orders the composition coarsest-first; my port runCompose-intersects and bounds each side at SAFE_MAX. Fix = reorder equal-grain intersect operands by frequency (or raise the outer bound), but it's broad/risky — deferred.
+- **"the second of march"** (1): ranking picks "the <cycle> of <time>" (second=grain) over the correct dom(2); model/ranking nuance.
+- **datetime combos** (remainder): "Fri, Jul 18, 2014 07:00 PM" (+19h00/19h) — deep multi-level named-day+comma+date+year+time composition (also blocked by intersect-ordering).
 - **timezone-tagged intervals** (~3): "9:30 - 11:00 CST" — needs `<datetime>-<datetime> (interval) timezone` with a `hasNoTimezone` guard (my attempt double-applied tz to already-tz'd ends like "15:00 GMT - 18:00 GMT" and regressed 3 — reverted). Requires adding a `has_timezone` flag to TimeData.
 - **hh:mm + am/pm roll** (~2): "3:18am"/"3:18a" resolve to today 3:18 not tomorrow — the am/pm fold is only done for pure hours; hh:mm uses the intersect path (today-leak). Needs folding ampm into the minute-composed time (store minute in the form, or a general compose-classification fix).
 - **free-form intervals** (~3): "later than 9:30 but before 11:00 on Thursday", "later than 3:30pm but before 6pm", "tomorrow in between 1-2:30 ish".
 - **interval ranking** (~2): "July 13 - July 15", "Aug 8 - Aug 12" — a spurious dd/mon/yyyy parse ("13 - July 15"→2015) outscores the correct interval.
 - **misc**: "the ides of march", "first week of october 2014", "third tuesday after christmas 2014", "a day from right now", "today in one hour", "after 5 days", "Thursday 9 am (BST)", "2015-03-28 17:00:00/2015-03-29 21:00:00".
 
-Next best targets: spelled-out year numerals (thousand-compounds — biggest coherent cluster, ~4 + composition); then datetime combos; then the `has_timezone` flag for interval-tz. `375/375`-style micro-gains remain but most need real infra.
+Next best targets: intersect-ordering for rare-date ∩ weekday (unblocks ~4 + the datetime combos) — the biggest remaining lever, but needs care to reorder equal-grain intersect operands by frequency without regressing working composes; then the `has_timezone` flag for interval-tz (~3 CST cases). Most remaining need real infra or are harness artifacts (~7).
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
