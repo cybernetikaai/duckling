@@ -738,7 +738,7 @@ fn with_direction(dir: IntervalDirection, mut td: TimeData) -> TimeData {
 fn direction_rules() -> Vec<Rule> {
     vec![
         Rule {
-            name: "until|before <time>".into(),
+            name: "until <time>".into(),
             pattern: vec![
                 PatternItem::Regex(compile(
                     r"(anytime |sometimes? )?(before|(un)?til(l)?|through|up to)",
@@ -753,9 +753,9 @@ fn direction_rules() -> Vec<Rule> {
             }),
         },
         Rule {
-            name: "after|from <time>".into(),
+            name: "from|since|after <time>".into(),
             pattern: vec![
-                PatternItem::Regex(compile(r"after|from")),
+                PatternItem::Regex(compile(r"from|since|(anytime |sometimes? )?after")),
                 PatternItem::Predicate(Box::new(is_a_time)),
             ],
             prod: Box::new(|tokens| match tokens {
