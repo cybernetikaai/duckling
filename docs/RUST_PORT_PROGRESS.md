@@ -98,6 +98,8 @@ Branch: `rust-port-en-time`.
 | + weekend ∩ time-of-day | 1069 / 1069 | 0 | 68 / 68 | 1227 probes; "weekend at 3pm"→Sat 3pm (Day-grain coarse + same-day-pod sentinel) |
 | + interval + trailing timezone | 1069 / 1069 | 0 | 68 / 68 | 1279 probes; "from 3pm to 5pm PST"→both ends PST; minute-grain exclusive end |
 | + multi-reference differential | 1069 / 1069 | 0 | 68 / 68 | **ref_stress 1249**; ref-varied inputs across 21 references (weekdays, month/year ends, leap days); 0 gaps — reference-dependent logic + all recent fixes are ref-robust |
+| + latent-mode: "May" latent | 1069 / 1069 | 0 | 68 / 68 | bare "May" dropped in default mode (modal-verb collision); composition de-latents |
+| + token-boundary rule (major) | 1069 / 1069 | 0 | 68 / 68 | 3-letter abbrevs no longer match inside words ("money"↛Mon, "friend"↛Fri); Document::is_match_boundary |
 
 ## How to run
 
@@ -118,6 +120,12 @@ Branch: `rust-port-en-time`.
   (every weekday, month/year ends, leap days). Catches reference-dependent bugs
   (the "this tuesday at 3" class). Confirms all recent fixes are ref-robust.
 - **tz_stress** 68 — DST transitions across 6 IANA zones, both hemispheres.
+- **may_is_latent** + **no_subword_matches** — latent/default-mode guards from the
+  latent-mode differential (comparing default-mode output vs the oracle). Found two
+  real bugs: bare "May" wasn't latent (modal-verb false positives), and 3-letter
+  day/month abbreviations matched inside words ("money"→Mon, "friend"→Fri) — a
+  severe false-positive class for free-text parsing, fixed with a token-boundary
+  rule (a match may not split a run of same-class chars).
 
 ## Done
 
