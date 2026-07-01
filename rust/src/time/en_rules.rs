@@ -710,6 +710,21 @@ fn day_of_month_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // With a leading "the" (ruleTheDOMOfMonth) — a full-span dom parse for
+        // "the second of march" that outranks the-cycle-of-<second> by score.
+        Rule {
+            name: "the <day-of-month> (ordinal or number) of <named-month>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"the")),
+                PatternItem::Predicate(Box::new(is_dom_value)),
+                PatternItem::Regex(compile(r"of|in")),
+                PatternItem::Predicate(Box::new(is_a_month)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, dom, _, Token::Time(td)] => intersect_dom(td, dom).map(Token::Time),
+                _ => None,
+            }),
+        },
         // Grain-based variant (ruleDOMOfTimeMonth): accepts any month-grained
         // time, e.g. "20 of next month", "20th of the previous month".
         Rule {
