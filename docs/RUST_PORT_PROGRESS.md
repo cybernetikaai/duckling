@@ -79,6 +79,9 @@ Branch: `rust-port-en-time`.
 | + intersect ... for year (latent year) | 953 / 984 | 31 | 10 / 10 | "April 14, 2015" |
 | + frequency-aware intersect (dow ∩ rare date) | 955 / 984 | 29 | 10 / 10 | "Thu 15th"->Aug 15, "Jul 18, Fri"->2014 |
 | + fold am/pm into hh:mm (Form minutes) | 957 / 984 | 27 | 10 / 10 | "3:18am"->tomorrow; hh:mm+am/pm composes with pinned dates |
+| + the ides of <named-month> | 958 / 984 | 26 | 10 / 10 | "the ides of march" -> Mar 15 |
+| + interval timezone (has_timezone flag) | 961 / 984 | 23 | 10 / 10 | "9:30 - 11:00 CST"; guard prevents double-tz on "15:00 GMT - 18:00 GMT" |
+| + after <duration> interval + <time> (timezone) | 963 / 984 | 21 | 10 / 10 | "after 5 days" open interval; "9 am (BST)" bracketed tz |
 
 ## How to run
 
