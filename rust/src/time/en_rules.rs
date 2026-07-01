@@ -6,7 +6,7 @@ use crate::regex::compile;
 use crate::time::object::{IntervalDirection, IntervalType};
 use crate::time::predicate::{
     Ampm, Predicate, ampm_predicate, cycle_nth, day_of_month, day_of_week, hour, hour_minute,
-    hour_minute_second, in_duration, intersect, merge_duration, month, season_series,
+    hour_minute_second, in_duration, intersect, merge_duration, minute, month, season_series,
     shift_duration, shift_timezone, take_last_of, take_nth, take_nth_after, take_nth_closest,
     time_cycle, time_intervals, year as year_pred, cycle_n,
 };
@@ -133,7 +133,7 @@ fn hour_td(is12h: bool, n: i64) -> TimeData {
         grain: Grain::Hour,
         latent: false,
         not_immediate: false,
-        form: Some(Form::TimeOfDay { hours: Some(n as i8), is12h }),
+        form: Some(Form::TimeOfDay { hours: Some(n as i8), minutes: None, is12h }),
         direction: None,
         holiday: None,
     }
@@ -161,37 +161,53 @@ fn year_td(n: i64) -> TimeData {
 /// pure hours; hh:mm etc. fall back to the interval intersect.
 fn time_of_day_ampm(is_am: bool, td: &TimeData) -> TimeData {
     let ampm = if is_am { Ampm::Am } else { Ampm::Pm };
-    if td.grain == Grain::Hour {
-        if let Some(Form::TimeOfDay { hours: Some(h), is12h }) = td.form {
+    // Fold ampm into the hour predicate (Duckling merges tdAMPM) for both a
+    // pure hour and an hh:mm, so the resolved time rolls to the next matching
+    // occurrence rather than leaking today's already-past one — and composes
+    // cleanly when a specific date pins the day ("Jul 18, 2014 07:00 PM").
+    // Only a pure hour (grain Hour) or an hh:mm (minutes set) is folded; hh:mm:ss
+    // keeps its seconds via the fallback.
+    if let Some(Form::TimeOfDay { hours: Some(h), minutes, is12h }) = td.form {
+        if minutes.is_some() || td.grain == Grain::Hour {
+            let hp = hour(is12h, Some(ampm), h as i64);
+            let (pred, grain) = match minutes {
+                Some(m) => (intersect(minute(m as i64), hp), Grain::Minute),
+                None => (hp, Grain::Hour),
+            };
             return TimeData {
-                pred: hour(is12h, Some(ampm), h as i64),
-                grain: Grain::Hour,
+                pred,
+                grain,
                 latent: false,
                 not_immediate: false,
-                form: Some(Form::TimeOfDay { hours: None, is12h: false }),
+                form: Some(Form::TimeOfDay { hours: None, minutes: None, is12h: false }),
                 direction: None,
                 holiday: td.holiday.clone(),
             };
         }
     }
+    // Fallback (hh:mm:ss, or no known hour): intersect the am/pm half-day.
     TimeData {
         pred: intersect(td.pred.clone(), ampm_predicate(is_am)),
         grain: td.grain,
         latent: false,
         not_immediate: false,
-        form: Some(Form::TimeOfDay { hours: None, is12h: false }),
+        form: Some(Form::TimeOfDay { hours: None, minutes: None, is12h: false }),
         direction: None,
         holiday: td.holiday.clone(),
     }
 }
 
-fn tod(pred: Predicate, grain: Grain, hours: Option<i64>, is12h: bool) -> TimeData {
+fn tod(pred: Predicate, grain: Grain, hours: Option<i64>, minutes: Option<i64>, is12h: bool) -> TimeData {
     TimeData {
         pred,
         grain,
         latent: false,
         not_immediate: false,
-        form: Some(Form::TimeOfDay { hours: hours.map(|h| h as i8), is12h }),
+        form: Some(Form::TimeOfDay {
+            hours: hours.map(|h| h as i8),
+            minutes: minutes.map(|m| m as i8),
+            is12h,
+        }),
         direction: None,
         holiday: None,
     }
@@ -279,17 +295,17 @@ fn is_an_hour_of_day(t: &Token) -> bool {
         if matches!(td.form, Some(Form::TimeOfDay { hours: Some(_), .. })) && td.grain > Grain::Minute)
 }
 fn hour_minute_td(is12h: bool, h: i64, m: i64) -> TimeData {
-    tod(hour_minute(is12h, h, m), Grain::Minute, Some(h), is12h)
+    tod(hour_minute(is12h, h, m), Grain::Minute, Some(h), Some(m), is12h)
 }
 fn minutes_after(n: i64, td: &TimeData) -> Option<TimeData> {
-    if let Some(Form::TimeOfDay { hours: Some(h), is12h }) = td.form {
+    if let Some(Form::TimeOfDay { hours: Some(h), is12h, .. }) = td.form {
         Some(hour_minute_td(is12h, h as i64, n))
     } else {
         None
     }
 }
 fn minutes_before(n: i64, td: &TimeData) -> Option<TimeData> {
-    if let Some(Form::TimeOfDay { hours: Some(h), is12h }) = td.form {
+    if let Some(Form::TimeOfDay { hours: Some(h), is12h, .. }) = td.form {
         let h = h as i64;
         let (hh, i12) = if h == 0 {
             (23, is12h)
@@ -344,7 +360,7 @@ fn past_to_rules() -> Vec<Rule> {
             prod: Box::new(|tokens| match tokens {
                 [Token::Time(hod), num] => {
                     let (h, is12h) = match hod.form {
-                        Some(Form::TimeOfDay { hours: Some(h), is12h }) => (h as i64, is12h),
+                        Some(Form::TimeOfDay { hours: Some(h), is12h, .. }) => (h as i64, is12h),
                         _ => return None,
                     };
                     let td = hour_minute_td(is12h, h, get_int_value(num)?);
@@ -455,7 +471,7 @@ fn time_of_day_rules() -> Vec<Rule> {
                 let h: i64 = g.first()?.parse().ok()?;
                 let m: i64 = g.get(1)?.parse().ok()?;
                 let is12h = h != 0 && h < 12;
-                Some(Token::Time(tod(hour_minute(is12h, h, m), Grain::Minute, Some(h), is12h)))
+                Some(Token::Time(tod(hour_minute(is12h, h, m), Grain::Minute, Some(h), Some(m), is12h)))
             }),
         },
         Rule {
@@ -467,7 +483,7 @@ fn time_of_day_rules() -> Vec<Rule> {
                 let g = regex_groups(tokens)?;
                 let h: i64 = g.first()?.parse().ok()?;
                 let m: i64 = g.get(1).and_then(|s| s.parse().ok()).unwrap_or(0);
-                Some(Token::Time(tod(hour_minute(false, h, m), Grain::Minute, Some(h), false)))
+                Some(Token::Time(tod(hour_minute(false, h, m), Grain::Minute, Some(h), Some(m), false)))
             }),
         },
         Rule {
@@ -483,6 +499,7 @@ fn time_of_day_rules() -> Vec<Rule> {
                     hour_minute(h < 12, h, m),
                     Grain::Minute,
                     Some(h),
+                    Some(m),
                     h < 12,
                 ))))
             }),
@@ -502,6 +519,7 @@ fn time_of_day_rules() -> Vec<Rule> {
                     hour_minute_second(is12h, h, m, s),
                     Grain::Second,
                     Some(h),
+                    None,
                     is12h,
                 )))
             }),
@@ -1456,7 +1474,7 @@ fn part_of_day_rules() -> Vec<Rule> {
                 [Token::Time(pod), _, Token::Time(tod)] => {
                     let start = pod_start_hour(pod)?;
                     let hours = match tod.form {
-                        Some(Form::TimeOfDay { hours: Some(h), is12h: true }) => h as i64,
+                        Some(Form::TimeOfDay { hours: Some(h), is12h: true, .. }) => h as i64,
                         _ => return None,
                     };
                     let is_am = start < 12 || hours == 12;

@@ -14,7 +14,7 @@ use crate::time::predicate::Predicate;
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Form {
     DayOfWeek,
-    TimeOfDay { hours: Option<i8>, is12h: bool },
+    TimeOfDay { hours: Option<i8>, minutes: Option<i8>, is12h: bool },
     Month { month: i8 },
     /// A part of day; `start_hour` is the interval's opening hour, used to
     /// disambiguate am/pm for "<part-of-day> at <time-of-day>".
