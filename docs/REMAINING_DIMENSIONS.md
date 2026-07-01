@@ -12,29 +12,24 @@ per-milestone log of what's already done.
 | **Duration** (`parse_duration`) | emitted | full `Duration/EN/Corpus.hs` + oracle differential (135 checks) |
 | **Ordinal** (`parse_ordinal`) | emitted | full `Ordinal/EN/Corpus.hs` (32) |
 | **Time + Duration** (`parse_all`) | emitted | cross-dimension range domination vs oracle (96 cases) |
-| **Numeral** | **foundational** (no standalone `parse_numeral` yet) | ported to the forms Time/Duration need — integers, written numbers, informal quantifiers ("a couple"/"a few"), and composition ("5 thousand", "one hundred thousand"); emitted via `parse_numeral`. **Not corpus-complete**: standalone decimals ("1.5"), negatives ("-504"), fractions ("1/5"), magnitude suffixes (`3M`/`100K`), and "a/two dozen" are deferred (they were only ever handled inline for Time/Duration). |
+| **Numeral** (`parse_numeral`) | emitted (partial) | integers, written numbers, informal quantifiers ("a couple"/"a few"), composition ("5 thousand", "one hundred thousand") — numeral_corpus (18). **Not corpus-complete**: standalone decimals ("1.5"), negatives ("-504"), fractions ("1/5"), magnitude suffixes (`3M`/`100K`), and "a/two dozen" remain deferred (only ever handled inline for Time/Duration). |
+| **Email** (`parse_email`) | emitted ✅ | full `Email/EN/Corpus.hs` — email_corpus (8 + 8 neg) |
+| **Url** (`parse_url`) | emitted ✅ | `Url/Rules.hs` + Corpus negatives — url_corpus (7 + 6 neg) |
+| **CreditCardNumber** (`parse_creditcard`) | emitted ✅ | full `CreditCardNumber/Corpus.hs` (Luhn) — creditcard_corpus (12 + 11 neg) |
+| **PhoneNumber** (`parse_phonenumber`) | emitted ✅ | full `PhoneNumber/Corpus.hs` — phonenumber_corpus (16 + 3 neg) |
 
-## The remaining nine — two buckets
+## Remaining work
 
-Duckling's other English dimensions split cleanly by difficulty, which tracks one
-axis: **does the dimension consume Numeral?**
+### Bucket A — standalone regex dimensions — ✅ DONE
 
-### Bucket A — standalone regex, no Numeral (the easy wins)
+Email, Url, CreditCardNumber, and PhoneNumber are ported and corpus-verified
+(see the table above). Language-agnostic ones live at the crate root
+(`src/url.rs`, `src/creditcard.rs`, `src/phonenumber.rs`); Email is under
+`src/email/en.rs` (its " at "/" dot " forms are English). All are separate
+`parse_*` entry points sharing a `dim_rules` cache + `emit_entities` helper, so
+they never touch the Time ranker.
 
-These are **language-agnostic** in Duckling (defined in a top-level `Rules.hs`, not
-under `EN/`), so in this crate they'd live at the root (`src/url.rs`,
-`src/creditcard.rs`, …), touch nothing existing, and can't perturb the Time ranker.
-
-| Dimension | Haskell | Shape | Estimate |
-|---|---|---|---|
-| Email | 41 L | one regex → `{value}` | ~½ day |
-| Url | 63 L | one regex → `{value, domain, path, …}` | ~½ day |
-| CreditCardNumber | 72 L | regex + **Luhn** checksum + issuer detection | ~½ day |
-| PhoneNumber | 53 L | regex (country code / extension) → `{value}` | ~½ day |
-
-**~2 days for all four**, fully parallel, near-zero risk.
-
-### Bucket B — value/unit dimensions, all Numeral-dependent
+### Bucket B — value/unit dimensions, all Numeral-dependent (remaining)
 
 | Dimension | Haskell | Numeral refs | Estimate |
 |---|---|---|---|
@@ -86,9 +81,8 @@ product actually needs to extract those quantities.
 
 ## Suggested order
 
-1. `parse_numeral` (close the Ordinal asymmetry) — ~15 min.
-2. Email → Url → CreditCardNumber → PhoneNumber (quick wins, one commit each,
-   corpus + oracle-verified).
-3. Finish Numeral (K/M/G/lakh + remaining fractions), validated vs
-   `Numeral/EN/Corpus.hs`.
+1. ~~`parse_numeral` (close the Ordinal asymmetry)~~ — ✅ done.
+2. ~~Email → Url → CreditCardNumber → PhoneNumber (quick wins)~~ — ✅ done.
+3. **Finish Numeral** (standalone decimals/negatives/fractions + K/M/G/lakh),
+   validated vs `Numeral/EN/Corpus.hs` — the prerequisite for Bucket B.
 4. Temperature → Volume → Distance → Quantity → AmountOfMoney.

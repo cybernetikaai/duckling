@@ -124,9 +124,14 @@ fn main() {
 |---|---|---|
 | `parse(input, ctx)` | Time | US English (`en_US`). |
 | `parse_locale(input, ctx, locale)` | Time | Pick the English locale. |
+| `parse_all(input, ctx)` | Time + Duration | One pool, ranked by range domination (widest match wins; disjoint matches all surface). |
 | `parse_duration(input)` | Duration | Context-free. |
 | `parse_ordinal(input)` | Ordinal | Context-free. |
-| `parse_all(input, ctx)` | Time + Duration | One pool, ranked by range domination (widest match wins; disjoint matches all surface). |
+| `parse_numeral(input)` | Numeral | Context-free (partial — see docs/REMAINING_DIMENSIONS.md). |
+| `parse_email(input)` | Email | Context-free. Literal + spelled-out (`a at b dot com`). |
+| `parse_url(input)` | Url | Context-free. `{value, domain}`. |
+| `parse_creditcard(input)` | CreditCardNumber | Context-free. Luhn-validated; `{value, issuer}`. |
+| `parse_phonenumber(input)` | PhoneNumber | Context-free. Normalized `{value}`. |
 
 ### `ResolveContext`
 
