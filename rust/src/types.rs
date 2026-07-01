@@ -11,6 +11,7 @@ use crate::numeral::NumeralData;
 use crate::ordinal::OrdinalData;
 use crate::phonenumber::PhoneNumberData;
 use crate::regex::Re;
+use crate::temperature::TemperatureData;
 use crate::time::object::IntervalDirection;
 use crate::time::predicate::Predicate;
 use crate::url::UrlData;
@@ -120,6 +121,7 @@ pub enum Token {
     Url(UrlData),
     CreditCard(CreditCardData),
     Phone(PhoneNumberData),
+    Temperature(TemperatureData),
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]

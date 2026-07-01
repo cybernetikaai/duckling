@@ -20,6 +20,7 @@ pub mod phonenumber;
 pub mod ranking;
 pub mod regex;
 pub mod resolve;
+pub mod temperature;
 pub mod time;
 pub mod timegrain;
 pub mod types;
@@ -338,6 +339,21 @@ pub fn parse_phonenumber(input: &str) -> Vec<Entity> {
     let rules = dim_rules("phone-number", phonenumber::phonenumber_rules);
     emit_entities(&rules, input, |t| match t {
         Token::Phone(p) => Some(("phone-number", resolve::phonenumber_value(p))),
+        _ => None,
+    })
+}
+
+/// Parse `input` and return resolved **Temperature** entities (dim
+/// `"temperature"`). Runs its own rule set (numerals + temperature rules), so it
+/// never touches the Time ranker.
+pub fn parse_temperature(input: &str) -> Vec<Entity> {
+    let rules = dim_rules("temperature", || {
+        let mut r = numeral::en::numeral_rules();
+        r.extend(temperature::en::temperature_rules());
+        r
+    });
+    emit_entities(&rules, input, |t| match t {
+        Token::Temperature(td) => resolve::temperature_value(td).map(|v| ("temperature", v)),
         _ => None,
     })
 }

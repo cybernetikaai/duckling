@@ -69,6 +69,31 @@ pub fn phonenumber_value(p: &crate::phonenumber::PhoneNumberData) -> serde_json:
     serde_json::json!({"value": format!("{prefix}{}{ext}", p.number), "type": "value"})
 }
 
+/// A number as JSON: integer when whole (Duckling renders `37`, not `37.0`).
+fn num(v: f64) -> serde_json::Value {
+    if v.fract() == 0.0 {
+        serde_json::json!(v as i64)
+    } else {
+        serde_json::json!(v)
+    }
+}
+
+/// Resolve a Temperature (port of the TemperatureData Resolve instance). None
+/// when there is no unit (a latent value-only temperature is never emitted).
+pub fn temperature_value(t: &crate::temperature::TemperatureData) -> Option<serde_json::Value> {
+    let u = t.unit?.as_str();
+    Some(match (t.value, t.min, t.max) {
+        (Some(v), _, _) => serde_json::json!({"value": num(v), "type": "value", "unit": u}),
+        (None, Some(from), Some(to)) => serde_json::json!({
+            "from": {"value": num(from), "unit": u}, "to": {"value": num(to), "unit": u}, "type": "interval"}),
+        (None, Some(from), None) => serde_json::json!({
+            "from": {"value": num(from), "unit": u}, "type": "interval"}),
+        (None, None, Some(to)) => serde_json::json!({
+            "to": {"value": num(to), "unit": u}, "type": "interval"}),
+        _ => return None,
+    })
+}
+
 /// Resolve a CreditCardNumber to Duckling's JSON: `{value, issuer}` (no `type`).
 pub fn creditcard_value(c: &crate::creditcard::CreditCardData) -> serde_json::Value {
     serde_json::json!({"value": c.number, "issuer": c.issuer})

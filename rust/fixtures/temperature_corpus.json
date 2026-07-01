@@ -1,0 +1,312 @@
+{
+ "_comment": "Duckling/Temperature/EN/Corpus.hs. parse_temperature must produce an entity whose value equals expected. negatives produce none.",
+ "cases": [
+  {
+   "input": "37\u00b0C",
+   "expected": {
+    "value": 37,
+    "type": "value",
+    "unit": "celsius"
+   }
+  },
+  {
+   "input": "37 \u00b0 celsius",
+   "expected": {
+    "value": 37,
+    "type": "value",
+    "unit": "celsius"
+   }
+  },
+  {
+   "input": "37 degrees Celsius",
+   "expected": {
+    "value": 37,
+    "type": "value",
+    "unit": "celsius"
+   }
+  },
+  {
+   "input": "thirty seven celsius",
+   "expected": {
+    "value": 37,
+    "type": "value",
+    "unit": "celsius"
+   }
+  },
+  {
+   "input": "70\u00b0F",
+   "expected": {
+    "value": 70,
+    "type": "value",
+    "unit": "fahrenheit"
+   }
+  },
+  {
+   "input": "70 \u00b0 Fahrenheit",
+   "expected": {
+    "value": 70,
+    "type": "value",
+    "unit": "fahrenheit"
+   }
+  },
+  {
+   "input": "70 degrees F",
+   "expected": {
+    "value": 70,
+    "type": "value",
+    "unit": "fahrenheit"
+   }
+  },
+  {
+   "input": "seventy Fahrenheit",
+   "expected": {
+    "value": 70,
+    "type": "value",
+    "unit": "fahrenheit"
+   }
+  },
+  {
+   "input": "98.6\u00b0F",
+   "expected": {
+    "value": 98.6,
+    "type": "value",
+    "unit": "fahrenheit"
+   }
+  },
+  {
+   "input": "98.6 \u00b0 Fahrenheit",
+   "expected": {
+    "value": 98.6,
+    "type": "value",
+    "unit": "fahrenheit"
+   }
+  },
+  {
+   "input": "98.6 degrees F",
+   "expected": {
+    "value": 98.6,
+    "type": "value",
+    "unit": "fahrenheit"
+   }
+  },
+  {
+   "input": "45\u00b0",
+   "expected": {
+    "value": 45,
+    "type": "value",
+    "unit": "degree"
+   }
+  },
+  {
+   "input": "45 degrees",
+   "expected": {
+    "value": 45,
+    "type": "value",
+    "unit": "degree"
+   }
+  },
+  {
+   "input": "45 deg.",
+   "expected": {
+    "value": 45,
+    "type": "value",
+    "unit": "degree"
+   }
+  },
+  {
+   "input": "-2\u00b0",
+   "expected": {
+    "value": -2,
+    "type": "value",
+    "unit": "degree"
+   }
+  },
+  {
+   "input": "- 2 degrees",
+   "expected": {
+    "value": -2,
+    "type": "value",
+    "unit": "degree"
+   }
+  },
+  {
+   "input": "2 degrees below zero",
+   "expected": {
+    "value": -2,
+    "type": "value",
+    "unit": "degree"
+   }
+  },
+  {
+   "input": "2 below zero",
+   "expected": {
+    "value": -2,
+    "type": "value",
+    "unit": "degree"
+   }
+  },
+  {
+   "input": "between 30 and 40 degrees",
+   "expected": {
+    "from": {
+     "value": 30,
+     "unit": "degree"
+    },
+    "to": {
+     "value": 40,
+     "unit": "degree"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "from 30 degrees to 40 degrees",
+   "expected": {
+    "from": {
+     "value": 30,
+     "unit": "degree"
+    },
+    "to": {
+     "value": 40,
+     "unit": "degree"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "between 30 and 40 celsius",
+   "expected": {
+    "from": {
+     "value": 30,
+     "unit": "celsius"
+    },
+    "to": {
+     "value": 40,
+     "unit": "celsius"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "from 30 celsius and 40 celsius",
+   "expected": {
+    "from": {
+     "value": 30,
+     "unit": "celsius"
+    },
+    "to": {
+     "value": 40,
+     "unit": "celsius"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "between 30 and 40 degrees celsius",
+   "expected": {
+    "from": {
+     "value": 30,
+     "unit": "celsius"
+    },
+    "to": {
+     "value": 40,
+     "unit": "celsius"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "from 30 degrees celsius to 40 degrees celsius",
+   "expected": {
+    "from": {
+     "value": 30,
+     "unit": "celsius"
+    },
+    "to": {
+     "value": 40,
+     "unit": "celsius"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "30-40 degrees celsius",
+   "expected": {
+    "from": {
+     "value": 30,
+     "unit": "celsius"
+    },
+    "to": {
+     "value": 40,
+     "unit": "celsius"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "over 40 degrees",
+   "expected": {
+    "from": {
+     "value": 40,
+     "unit": "degree"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "at least 40 degrees",
+   "expected": {
+    "from": {
+     "value": 40,
+     "unit": "degree"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "more than 40 degrees",
+   "expected": {
+    "from": {
+     "value": 40,
+     "unit": "degree"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "under 40 degrees",
+   "expected": {
+    "to": {
+     "value": 40,
+     "unit": "degree"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "less than 40 degrees",
+   "expected": {
+    "to": {
+     "value": 40,
+     "unit": "degree"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "lower than 40 degrees",
+   "expected": {
+    "to": {
+     "value": 40,
+     "unit": "degree"
+    },
+    "type": "interval"
+   }
+  }
+ ],
+ "negatives": [
+  "37",
+  "hello",
+  "below zero"
+ ]
+}

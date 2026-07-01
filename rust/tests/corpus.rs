@@ -1027,6 +1027,47 @@ fn phonenumber_corpus() {
     );
 }
 
+/// Temperature dimension (`parse_temperature`) — port of
+/// Duckling/Temperature/EN/Corpus.hs. A positive must produce an entity whose
+/// value equals the expected JSON (simple / interval / above / under); negatives
+/// (no unit) produce none.
+#[test]
+fn temperature_corpus() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/temperature_corpus.json")).unwrap();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let want = &c["expected"];
+        let got: Vec<Value> = duckling::parse_temperature(input)
+            .into_iter()
+            .map(|e| e.value)
+            .collect();
+        if !got.iter().any(|g| g == want) {
+            failures.push(format!("{input:?}\n  expected {want}\n  got      {got:?}"));
+        }
+    }
+    for neg in data["negatives"].as_array().unwrap() {
+        checked += 1;
+        let input = neg.as_str().unwrap();
+        if !duckling::parse_temperature(input).is_empty() {
+            failures.push(format!("[negative] {input:?} parsed a temperature"));
+        }
+    }
+    eprintln!(
+        "temperature_corpus checked {checked}, {} failing",
+        failures.len()
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
+}
+
 /// Combined Time+Duration (`parse_all`) — the `dims:["time","duration"]` surface.
 /// Time and Duration compete in one pool by dimension-agnostic range domination,
 /// exactly as Duckling: the widest match per position wins, disjoint matches all
