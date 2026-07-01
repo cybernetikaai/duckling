@@ -329,13 +329,13 @@ fn past_to_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
-        before_rule("half to <hod>", r"half (to|till|before|of)", 30),
-        before_rule("quarter to <hod>", r"(a|one)? ?quarter (to|till|before|of)", 15),
-        after_rule("half past <hod>", r"half (after|past)", 30),
-        after_rule("quarter past <hod>", r"(a|one)? ?quarter (after|past)", 15),
+        before_rule("half to|till|before <hour-of-day>", r"half (to|till|before|of)", 30),
+        before_rule("quarter to|till|before <hour-of-day>", r"(a|one)? ?quarter (to|till|before|of)", 15),
+        after_rule("half after|past <hour-of-day>", r"half (after|past)", 30),
+        after_rule("quarter after|past <hour-of-day>", r"(a|one)? ?quarter (after|past)", 15),
         // <integer> to|past <hour-of-day>
         Rule {
-            name: "<integer> to <hour-of-day>".into(),
+            name: "<integer> to|till|before <hour-of-day>".into(),
             pattern: vec![
                 PatternItem::Predicate(is_integer_between(1, 59)),
                 PatternItem::Regex(compile(r"to|till|before|of")),
@@ -347,7 +347,7 @@ fn past_to_rules() -> Vec<Rule> {
             }),
         },
         Rule {
-            name: "<integer> past <hour-of-day>".into(),
+            name: "integer after|past <hour-of-day>".into(),
             pattern: vec![
                 PatternItem::Predicate(is_integer_between(1, 59)),
                 PatternItem::Regex(compile(r"after|past")),
@@ -476,7 +476,7 @@ fn numeral_dependent_rules() -> Vec<Rule> {
             }),
         },
         Rule {
-            name: "noon|midnight|EOD".into(),
+            name: "noon|midnight|EOD|end of day".into(),
             pattern: vec![PatternItem::Regex(compile(
                 r"(noon|midni(ght|te)|(the )?(EOD|end of (the )?day))",
             ))],
@@ -587,9 +587,9 @@ fn cycle_and_relative_rules() -> Vec<Rule> {
         }
     }
     vec![
-        cycle_rule("this <cycle>", r"this|current|coming", 0),
-        cycle_rule("next <cycle>", r"next|the following", 1),
-        cycle_rule("last <cycle>", r"last|past|previous", -1),
+        cycle_rule("this|last|next <cycle>", r"this|current|coming", 0),
+        cycle_rule("this|last|next <cycle>", r"next|the following", 1),
+        cycle_rule("this|last|next <cycle>", r"last|past|previous", -1),
         Rule {
             name: "this|next <day-of-week>".into(),
             pattern: vec![
@@ -1074,7 +1074,7 @@ fn in_timezone_td(provided: i64, td: &TimeData) -> TimeData {
 fn timezone_rules() -> Vec<Rule> {
     let alt = TZ.iter().map(|(n, _)| *n).collect::<Vec<_>>().join("|");
     vec![Rule {
-        name: "<time-of-day> timezone".into(),
+        name: "<time> timezone".into(),
         pattern: vec![
             PatternItem::Predicate(Box::new(|t| is_not_latent(t) && is_a_time_of_day(t))),
             PatternItem::Regex(compile(&format!(r"\b({alt})\b"))),
@@ -1107,7 +1107,7 @@ fn intersect_rules() -> Vec<Rule> {
             }),
         },
         Rule {
-            name: "intersect by ',', 'of', 'from', 's".into(),
+            name: "intersect by \",\", \"of\", \"from\", \"'s\"".into(),
             pattern: vec![
                 PatternItem::Predicate(Box::new(is_not_latent)),
                 PatternItem::Regex(compile(r"of|from|for|'s|,|@")),
@@ -1181,7 +1181,7 @@ fn duration_rules() -> Vec<Rule> {
             }),
         },
         Rule {
-            name: "<duration> from now|hence|ago".into(),
+            name: "<duration> hence|ago".into(),
             pattern: vec![
                 PatternItem::Predicate(Box::new(is_a_duration)),
                 PatternItem::Regex(compile(r"(from now|hence|ago)")),
@@ -1196,7 +1196,7 @@ fn duration_rules() -> Vec<Rule> {
             }),
         },
         Rule {
-            name: "last|past|next|upcoming <duration>".into(),
+            name: "last|past|next <duration>".into(),
             pattern: vec![
                 PatternItem::Regex(compile(r"([lp]ast|next|upcoming|coming)")),
                 PatternItem::Predicate(Box::new(is_a_duration)),
@@ -1426,22 +1426,42 @@ fn is_grain_month_or_coarser(t: &Token) -> bool {
 /// "<ordinal> <day-of-week> of <month-or-greater>" (ruleNthTimeOfTime).
 /// e.g. "third tuesday of september 2014" = 3rd Tuesday in that September.
 fn nth_dow_of_time_rules() -> Vec<Rule> {
-    vec![Rule {
-        name: "nth <day-of-week> of <month-or-greater>".into(),
-        pattern: vec![
-            PatternItem::Predicate(Box::new(is_ordinal)),
-            PatternItem::Predicate(Box::new(is_a_day_of_week)),
-            PatternItem::Regex(compile(r"of|in")),
-            PatternItem::Predicate(Box::new(is_grain_month_or_coarser)),
-        ],
-        prod: Box::new(|tokens| match tokens {
-            [Token::Ordinal(od), Token::Time(dow), _, Token::Time(td2)] => {
-                let inter = intersect_td(td2, dow)?;
-                Some(Token::Time(pred_nth_td(od.value - 1, false, &inter)))
-            }
-            _ => None,
-        }),
-    }]
+    vec![
+        Rule {
+            name: "nth <day-of-week> of <month-or-greater>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_ordinal)),
+                PatternItem::Predicate(Box::new(is_a_day_of_week)),
+                PatternItem::Regex(compile(r"of|in")),
+                PatternItem::Predicate(Box::new(is_grain_month_or_coarser)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Ordinal(od), Token::Time(dow), _, Token::Time(td2)] => {
+                    let inter = intersect_td(td2, dow)?;
+                    Some(Token::Time(pred_nth_td(od.value - 1, false, &inter)))
+                }
+                _ => None,
+            }),
+        },
+        // Same, consuming a leading "the" (ruleTheNthTimeOfTime).
+        Rule {
+            name: "the nth <day-of-week> of <month-or-greater>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"the")),
+                PatternItem::Predicate(Box::new(is_ordinal)),
+                PatternItem::Predicate(Box::new(is_a_day_of_week)),
+                PatternItem::Regex(compile(r"of|in")),
+                PatternItem::Predicate(Box::new(is_grain_month_or_coarser)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Ordinal(od), Token::Time(dow), _, Token::Time(td2)] => {
+                    let inter = intersect_td(td2, dow)?;
+                    Some(Token::Time(pred_nth_td(od.value - 1, false, &inter)))
+                }
+                _ => None,
+            }),
+        },
+    ]
 }
 
 /// this/next/last <time> (ports of ruleThisTime / ruleNextTime / ruleLastTime).
@@ -1520,7 +1540,7 @@ fn end_beginning_year_week_rules() -> Vec<Rule> {
             }),
         },
         Rule {
-            name: "beginning|end of <year>".into(),
+            name: "at the beginning|end of <year>".into(),
             pattern: vec![
                 PatternItem::Regex(compile(r"(?:at the )?(beginning|end) of")),
                 PatternItem::Predicate(is_grain_of_time(Grain::Year)),
@@ -1537,7 +1557,7 @@ fn end_beginning_year_week_rules() -> Vec<Rule> {
             }),
         },
         Rule {
-            name: "beginning|end of <week>".into(),
+            name: "at the beginning|end of <week>".into(),
             pattern: vec![
                 PatternItem::Regex(compile(r"(?:at the )?(beginning|end) of")),
                 PatternItem::Predicate(is_grain_of_time(Grain::Week)),

@@ -66,3 +66,34 @@ pub fn parse(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
         CLASSIFIERS.with(|cl| ranking::rank(cl, scored))
     })
 }
+
+/// Debug: every Time candidate (unranked) as "rule | range | score | value".
+pub fn parse_all_debug(input: &str, ctx: &ResolveContext) -> Vec<String> {
+    let doc = Document::new(input);
+    RULES.with(|rules| {
+        let nodes = engine::parse_string(rules, &doc);
+        CLASSIFIERS.with(|cl| {
+            let mut out = Vec::new();
+            for n in &nodes {
+                let td = match &n.token {
+                    Token::Time(td) => td.clone(),
+                    _ => continue,
+                };
+                let value = match resolve::resolve_time(&td, ctx) {
+                    Some(v) => v,
+                    None => continue,
+                };
+                let sc = ranking::score(cl, n);
+                out.push(format!(
+                    "{:<44} [{:>2},{:>2}] score={:>10.4}  {}",
+                    n.rule.clone().unwrap_or_default(),
+                    n.range.0,
+                    n.range.1,
+                    sc,
+                    serde_json::to_string(&value).unwrap_or_default()
+                ));
+            }
+            out
+        })
+    })
+}
