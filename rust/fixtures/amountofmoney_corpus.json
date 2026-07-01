@@ -176,7 +176,23 @@
 
   { "input": "UAH3.04",          "expected": {"value": 3.04, "unit": "UAH", "type": "value"} },
   { "input": "UAH 3.04",         "expected": {"value": 3.04, "unit": "UAH", "type": "value"} },
-  { "input": "3 UAH 4 kopiykas", "expected": {"value": 3.04, "unit": "UAH", "type": "value"} }
+  { "input": "3 UAH 4 kopiykas", "expected": {"value": 3.04, "unit": "UAH", "type": "value"} },
+
+  { "input": "a grand", "expected": {"value": 1000, "unit": "USD", "type": "value"} },
+  { "input": "1 grand", "expected": {"value": 1000, "unit": "USD", "type": "value"} },
+  { "input": "10 grand", "expected": {"value": 10000, "unit": "USD", "type": "value"} },
+  { "input": "two hundred thousand nickels", "expected": {"value": 10000, "unit": "USD", "type": "value"} },
+  { "input": "four quarters", "expected": {"value": 1, "unit": "USD", "type": "value"} },
+  { "input": "ten dimes", "expected": {"value": 1, "unit": "USD", "type": "value"} },
+  { "input": "twenty nickels", "expected": {"value": 1, "unit": "USD", "type": "value"} },
+  { "input": "dime", "expected": {"value": 0.1, "unit": "USD", "type": "value"} },
+  { "input": "a dime", "expected": {"value": 0.1, "unit": "USD", "type": "value"} },
+  { "input": "two nickels", "expected": {"value": 0.1, "unit": "USD", "type": "value"} },
+  { "input": "quarter", "expected": {"value": 0.25, "unit": "USD", "type": "value"} },
+  { "input": "a quarter", "expected": {"value": 0.25, "unit": "USD", "type": "value"} },
+  { "input": "five nickels", "expected": {"value": 0.25, "unit": "USD", "type": "value"} },
+  { "input": "nickel", "expected": {"value": 0.05, "unit": "USD", "type": "value"} },
+  { "input": "a nickel", "expected": {"value": 0.05, "unit": "USD", "type": "value"} }
  ],
  "latent": [
   { "input": "five",   "expected": {"value": 5, "unit": "unknown", "type": "value"} },
@@ -187,6 +203,7 @@
  ],
  "negatives": [
   "exactly dollars",
+  "grand",
   "5",
   "hello world"
  ]

@@ -174,6 +174,16 @@ fn open_max(to: f64, c: Currency) -> Token {
     })
 }
 
+/// Duckling `dollarCoins` (US region): a coin name -> its USD value.
+fn dollar_coin_value(m: &str) -> Option<f64> {
+    Some(match m {
+        "nickel" | "nickels" => 0.05,
+        "dime" | "dimes" => 0.1,
+        "quarter" | "quarters" => 0.25,
+        _ => return None,
+    })
+}
+
 /// A simple regex-word -> currency-only rule (pounds, dirham, ringgit, …).
 fn word_currency_rule(name: &'static str, re: &str, c: Currency) -> Rule {
     Rule {
@@ -513,6 +523,49 @@ pub fn rules() -> Vec<Rule> {
         word_currency_rule("cent", r"cents?|penn(y|ies)|pence|sens?", Currency::Cent),
         word_currency_rule("kopiyka", r"kopiy(ok|kas?)", Currency::Cent),
         word_currency_rule("bucks", r"bucks?", Currency::Unnamed),
+        // ===== EN/US region (Duckling/AmountOfMoney/EN/US/Rules.hs) =====
+        // The port targets en_US region behavior for money (matching the default
+        // oracle): "grand" -> USD*1000, and coin names -> their USD value (which
+        // then compose with the shared dollar-coin rules: "a quarter" -> $0.25,
+        // "four quarters" -> $1).
+        // "a grand" -> USD 1000.
+        Rule {
+            name: "a grand".into(),
+            pattern: vec![PatternItem::Regex(compile(r"a grand"))],
+            prod: Box::new(|_| {
+                Some(Token::AmountOfMoney(AmountOfMoneyData {
+                    value: Some(1000.0),
+                    ..currency_only(Currency::Usd)
+                }))
+            }),
+        },
+        // "<amount> grand" -> USD value*1000.
+        Rule {
+            name: "<amount> grand".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_positive)),
+                PatternItem::Regex(compile(r"grand")),
+            ],
+            prod: Box::new(|tokens| match tokens.first()? {
+                Token::Numeral(n) => Some(Token::AmountOfMoney(AmountOfMoneyData {
+                    value: Some(n.value * 1000.0),
+                    ..currency_only(Currency::Usd)
+                })),
+                _ => None,
+            }),
+        },
+        // "nickel/dime/quarter(s)" -> a USD dollar coin.
+        Rule {
+            name: "dollar coin".into(),
+            pattern: vec![PatternItem::Regex(compile(r"(nickel|dime|quarter)s?"))],
+            prod: Box::new(|tokens| match tokens.first()? {
+                Token::RegexMatch(g) => Some(Token::AmountOfMoney(AmountOfMoneyData {
+                    value: Some(dollar_coin_value(&g.first()?.to_lowercase())?),
+                    ..currency_only(Currency::Usd)
+                })),
+                _ => None,
+            }),
+        },
     ];
 
     rules.shrink_to_fit();
