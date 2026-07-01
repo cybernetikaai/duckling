@@ -56,6 +56,8 @@ Branch: `rust-port-en-time`.
 | + <year> (bc\|ad) + about/sharp precision | 743 / 984 | 241 | 10 / 10 | era years; precision markers mark time non-latent (around/about/exactly/sharp) |
 | + season cycle predicate + this/last/next | 749 / 984 | 235 | 10 / 10 | seasonPredicate (seasonOf + iterate); "this/last/next season" |
 | + from-the dd-to-dd month + <n> minutes to hod | 756 / 984 | 228 | 10 / 10 | "from the 13 to 15 July"; "20 minutes to 2pm" |
+| + <part-of-day> at <time-of-day> am/pm disambig | 764 / 984 | 220 | 10 / 10 | "this evening at 2"->2pm; Form::PartOfDay{start_hour} |
+| + <dom> of <month> (grain, relative months) | 769 / 984 | 215 | 10 / 10 | "20 of next month", "20th of the previous month" |
 
 ## How to run
 
@@ -73,9 +75,9 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru from/minutes intervals. contains **756/984**, unique **754/984**, tz_stress **10/10** (timezone/DST fully green — the hard constraint).
+Cumulative thru <dom> of <month>. contains **769/984**, unique **767/984**, tz_stress **10/10** (timezone/DST fully green — the hard constraint).
 
-Remaining ~228 failures cluster as: **holidays ~42** (computed/niche: Ramadan/Eid/Diwali, Christmas-relative, King's Day, ides — long-tail infra); **part-of-day + time ~16** ("this evening at 2" needs the hour disambiguated to PM by the part-of-day); **`<time> for <duration>` ~4** (needs durationAfter/mergeDuration infra); **closest ~5** ("the closest Monday to Oct 5th" — predNthClosest); **quarter past <hod> ~5**; long tail. Next best targets: part-of-day hour disambiguation (16, systematic), then durationAfter for "<time> for <duration>", then predNthClosest.
+Remaining ~215 failures cluster as: **holidays ~42** (computed/niche: Ramadan/Eid/Diwali two-table, Christmas-relative, King's Day, ides — long-tail, mostly needs per-holiday date infra); **`<time> for <duration>` ~8** (needs durationAfter/mergeDuration: shift a time by a duration — "from 4pm for 30 mins", "for 10 days from 18th Dec"); **numeric-date variants ~8** (yyyy-mm "2014-10", yyyy-mm-dd single-digit "2015-3-3", yyyyqq "2018Q4"); **closest ~5** ("the closest Monday to Oct 5th" — needs predNthClosest); **o'clock am/pm ~4** ("3 oclock am"); long tail (spurious "mon" in "month" partial-match; "for a quarter past 3pm" filler-for). Next best targets: durationAfter -> "<time> for <duration>" (8, systematic); yyyy-mm / yyyyqq numeric dates (8); predNthClosest (5).
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
