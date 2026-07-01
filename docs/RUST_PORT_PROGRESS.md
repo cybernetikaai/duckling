@@ -106,6 +106,7 @@ Branch: `rust-port-en-time`.
 | + engine perf (chart parser) | 1069 / 1069 | 0 | 68 / 68 | per-parse latency −42–53% (regex-hit cache + skip regex-only rules + no per-round stash clone); behavior unchanged |
 | + rule-level coverage audit (2 gaps) | 1069 / 1069 | 0 | 68 / 68 | diff vs Duckling/Time/EN/Rules.hs; fixed "N dow from <time>" (was only "from now") + added "<ordinal> <cycle> after <time>" |
 | + holiday-years audit (1 fix) | 1069 / 1069 | 0 | 68 / 68 | **holiday_years 2730** (183 holidays × 2013–2027); fixed ongoing interval holidays ("Ramadan" during Ramadan→current, not next year) |
+| + reference-time-of-day audit | 1069 / 1069 | 0 | 68 / 68 | **tod_ref 406** (time-sensitive inputs × 10 ref-times, 00:30→23:45) + format-variant spot-check; 0 gaps — past/future/rollover across the day is correct |
 
 ## Rule-level coverage audit
 
@@ -160,6 +161,13 @@ nodes) for diminishing return; current latency is well within the use case's bud
 - **ref_stress** 1249 — ref-*sensitive* inputs across 21 reference instants
   (every weekday, month/year ends, leap days). Catches reference-dependent bugs
   (the "this tuesday at 3" class). Confirms all recent fixes are ref-robust.
+- **tod_ref** 406 — time-of-day-sensitive inputs ("3pm", "this morning", "in 6 hours",
+  "tonight", "at midnight") resolved at 10 reference times across a day (00:30→23:45)
+  vs the oracle. Covers already-passed times ("9am" at 15:00→tomorrow), crossing-
+  midnight durations ("in 6 hours" at 22:00→next-day 04:00), and end-of-day edges —
+  the reference-time dimension every other test fixes at 04:30. Also spot-checked
+  input format variants (case, spacing, punctuation, "o'clock" spellings, "Mon.",
+  "3 p.m.", "9.30") against the oracle: all match.
 - **holiday_years** 2730 — every holiday (183) resolved at reference = Jan 1 of each
   year 2013–2027, vs the oracle. Validates the computed/lunar holiday tables
   (Easter-relative, Islamic/Hindu/Jewish) year-by-year, and guards the ongoing-
