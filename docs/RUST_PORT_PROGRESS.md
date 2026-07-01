@@ -95,6 +95,7 @@ Branch: `rust-port-en-time`.
 | + differential fuzz vs live oracle | 1069 / 1069 | 0 | 68 / 68 | **124/124** compositional probes match oracle; 0 gaps found |
 | + composition fuzz → 3 real fixes | 1069 / 1069 | 0 | 68 / 68 | 771 probes; fixed holidayBeta-on-open-interval, directional∩pod collapse, trailing-date-on-interval |
 | + this-dow pinning + coming split | 1069 / 1069 | 0 | 68 / 68 | 1223 probes; "this tuesday at 3"→next Tue (predNth); "coming" stays bare-dow |
+| + weekend ∩ time-of-day | 1069 / 1069 | 0 | 68 / 68 | 1227 probes; "weekend at 3pm"→Sat 3pm (Day-grain coarse + same-day-pod sentinel) |
 
 ## How to run
 
@@ -157,23 +158,18 @@ and is dropped when composed with a time; Duckling's ruleThisDOW uses
 must *not* pin (Duckling has no "coming <dow>" rule → behaves like the bare dow,
 so "coming tuesday at 3" = today), so only "this" pins.
 
-**NEXT TARGET — weekend ∩ time-of-day.** "weekend at 3pm" resolves to today's 3pm
-instead of Saturday 3pm (oracle: 2013-02-16T15:00). Diagnosis (attempted + reverted
-this iteration, needs care): weekend is tagged `Form::PartOfDay` so this/next/last
-compose it (removing the tag breaks "this/next/this-past weekend" — they rely on it).
-Two coupled problems: (a) the same-day "<part-of-day> at <time-of-day>" am/pm rule
-grabs the weekend and returns a bare tod — fixable by excluding a multi-day pod
-(sentinel start_hour + `is_same_day_part_of_day`); (b) with that fixed, the generic
-intersect still fails because weekend and the tod are *both* grain Hour, so
-`intersect_td`'s tie-break picks the weekend as the *fine* (inner) operand — it must
-be the coarse one. A naive "PartOfDay is coarse when grains tie" tie-break fixes
-"weekend at 3pm" (→ Sat 3pm) but **regresses** "3 in the morning" (→ today instead of
-tomorrow) via ranking side-effects. The correct fix must make the weekend interval
-coarse *without* changing same-day pod∩tod ordering — likely by giving weekend a
-coarser effective grain, or a narrower tie-break keyed on the multi-day sentinel.
-Also unresolved: "this weekend at 3pm" (the intersected "this weekend" loses PartOfDay
-form, so nothing composes the trailing tod). Left green via expected:null + in-fixture
-note.
+**Weekend ∩ time-of-day (this iteration — FIXED).** "weekend at 3pm" resolved to
+today's 3pm instead of Saturday 3pm. Two coupled problems, both now fixed:
+(a) the same-day "<part-of-day> at <time-of-day>" am/pm rule grabbed the weekend and
+returned a bare tod — the weekend now carries a sentinel `start_hour`
+(`WEEKEND_POD_HOUR`) so `is_same_day_part_of_day` excludes it (keeps this/next/last
+composition working, which needs the PartOfDay tag); (b) the generic intersect picked
+the wrong fine/coarse operand because weekend and the tod were both grain Hour — the
+weekend's `TimeData.grain` is now Day, so it is the coarse (iterated) operand and 3pm
+is placed within it (→ Sat 3pm). Crucially the resolved interval still reports Hour
+grain (it comes from the Fri 18:00 / Mon 00:00 endpoint TimeObjects, not `td.grain`),
+so bare "weekend"/"this past weekend"/"last weekend of October" are unchanged. This
+avoids the tie-break approach that regressed "3 in the morning". differential 1227/1227.
 
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 

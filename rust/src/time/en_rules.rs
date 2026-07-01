@@ -885,6 +885,16 @@ fn today_td() -> TimeData {
 fn is_a_part_of_day(t: &Token) -> bool {
     matches!(t, Token::Time(td) if matches!(td.form, Some(Form::PartOfDay { .. })))
 }
+/// Sentinel start_hour marking a multi-day part-of-day (the weekend). Out of the
+/// 0..24 real-hour range so `is_same_day_part_of_day` can exclude it.
+const WEEKEND_POD_HOUR: i8 = 24;
+/// A part-of-day confined to a single day (morning/evening/…), excluding the
+/// multi-day weekend. The "<part-of-day> at <time-of-day>" am/pm rule applies only
+/// to these — for the weekend, "at 3pm" must intersect (→ Sat 3pm), not disambiguate.
+fn is_same_day_part_of_day(t: &Token) -> bool {
+    matches!(t, Token::Time(td)
+        if matches!(td.form, Some(Form::PartOfDay { start_hour }) if start_hour != WEEKEND_POD_HOUR))
+}
 fn part_of_day(start_hour: i64, mut td: TimeData) -> TimeData {
     td.form = Some(Form::PartOfDay { start_hour: start_hour as i8 });
     td
@@ -1513,10 +1523,11 @@ fn part_of_day_rules() -> Vec<Rule> {
             name: "week-end".into(),
             pattern: vec![PatternItem::Regex(compile(r"(week(\s|-)?end|wkend)s?"))],
             prod: Box::new(|_| {
-                // Tag as a part-of-day (opens Fri 18:00) so this/last/next <time>
-                // will wrap it (Duckling's mkOkForThisNext); resolution unchanged.
+                // Tag as a part-of-day (sentinel start_hour) so this/last/next <time>
+                // compose it (Duckling's mkOkForThisNext), while marking it multi-day
+                // so the same-day am/pm rule skips it. Resolution unchanged.
                 let mut td = weekend_td();
-                td.form = Some(Form::PartOfDay { start_hour: 18 });
+                td.form = Some(Form::PartOfDay { start_hour: WEEKEND_POD_HOUR });
                 Some(Token::Time(td))
             }),
         },
@@ -1601,7 +1612,7 @@ fn part_of_day_rules() -> Vec<Rule> {
         Rule {
             name: "<part-of-day> at <time-of-day>".into(),
             pattern: vec![
-                PatternItem::Predicate(Box::new(is_a_part_of_day)),
+                PatternItem::Predicate(Box::new(is_same_day_part_of_day)),
                 PatternItem::Regex(compile(r"at|@")),
                 PatternItem::Predicate(Box::new(is_a_time_of_day)),
             ],
@@ -2069,10 +2080,14 @@ fn pred_nth_after_td(n: i64, cyclic: &TimeData, base: &TimeData) -> TimeData {
 }
 
 /// The recurring weekend interval Fri 18:00 → Mon 00:00 (port of `weekend`).
+/// Day-grain (not Hour) so that intersecting with a time-of-day treats the
+/// weekend as the *coarse* operand — "weekend at 3pm" iterates the weekend and
+/// places 3pm within it (→ Sat 3pm). The resolved interval still reports Hour
+/// grain, taken from the Fri 18:00 / Mon 00:00 endpoints, not this TimeData grain.
 fn weekend_td() -> TimeData {
     let fri = intersect(hour(false, None, 18), day_of_week(5));
     let mon = intersect(hour(false, None, 0), day_of_week(1));
-    TimeData::new(time_intervals(IntervalType::Open, fri, mon), Grain::Hour)
+    TimeData::new(time_intervals(IntervalType::Open, fri, mon), Grain::Day)
 }
 
 /// The n-th closest occurrence of `td1` to `td2` (port of predNthClosest),

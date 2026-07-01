@@ -11243,8 +11243,11 @@
   },
   {
    "input": "last weekend at 3pm",
-   "expected": null,
-   "note": "KNOWN GAP (next target): weekend + <time-of-day>. weekend is tagged Form::PartOfDay so 'this/next/last weekend' compose; that makes 'weekend at 3pm' hit the '<part-of-day> at <time-of-day>' rule (built for same-day am/pm disambiguation, e.g. 'this evening at 2'), which returns a bare tod (today) instead of intersect(weekend, tod) = Sat 3pm. Fix must not regress the corpus case 'this evening at 2' -> today 2pm."
+   "expected": {
+    "value": "2013-02-09T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
   },
   {
    "input": "next friday at 3",
@@ -11694,13 +11697,19 @@
   },
   {
    "input": "next weekend at 3pm",
-   "expected": null,
-   "note": "KNOWN GAP (next target): weekend + <time-of-day>. weekend is tagged Form::PartOfDay so 'this/next/last weekend' compose; that makes 'weekend at 3pm' hit the '<part-of-day> at <time-of-day>' rule (built for same-day am/pm disambiguation, e.g. 'this evening at 2'), which returns a bare tod (today) instead of intersect(weekend, tod) = Sat 3pm. Fix must not regress the corpus case 'this evening at 2' -> today 2pm."
+   "expected": {
+    "value": "2013-02-16T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
   },
   {
    "input": "next weekend at noon",
-   "expected": null,
-   "note": "KNOWN GAP (next target): weekend + <time-of-day>. weekend is tagged Form::PartOfDay so 'this/next/last weekend' compose; that makes 'weekend at 3pm' hit the '<part-of-day> at <time-of-day>' rule (built for same-day am/pm disambiguation, e.g. 'this evening at 2'), which returns a bare tod (today) instead of intersect(weekend, tod) = Sat 3pm. Fix must not regress the corpus case 'this evening at 2' -> today 2pm."
+   "expected": {
+    "value": "2013-02-16T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
   },
   {
    "input": "this friday at 3",
@@ -12236,8 +12245,11 @@
   },
   {
    "input": "this weekend at 3pm",
-   "expected": null,
-   "note": "KNOWN GAP (next target): weekend + <time-of-day>. weekend is tagged Form::PartOfDay so 'this/next/last weekend' compose; that makes 'weekend at 3pm' hit the '<part-of-day> at <time-of-day>' rule (built for same-day am/pm disambiguation, e.g. 'this evening at 2'), which returns a bare tod (today) instead of intersect(weekend, tod) = Sat 3pm. Fix must not regress the corpus case 'this evening at 2' -> today 2pm."
+   "expected": {
+    "value": "2013-02-16T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
   }
  ]
 }
