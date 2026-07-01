@@ -1370,6 +1370,17 @@ fn cycle_nth_after_td(not_immediate: bool, grain: Grain, n: i64, base: &TimeData
     }
 }
 
+/// The last occurrence of a cycle grain within `base` (port of cycleLastOf).
+fn cycle_last_of_td(grain: Grain, base: &TimeData) -> TimeData {
+    TimeData::new(take_last_of(time_cycle(grain), base.pred.clone()), grain)
+}
+
+/// The last occurrence of a cyclic time within `base` (port of predLastOf);
+/// grain comes from the cyclic predicate, e.g. "last Monday of March".
+fn pred_last_of_td(cyclic: &TimeData, base: &TimeData) -> TimeData {
+    TimeData::new(take_last_of(cyclic.pred.clone(), base.pred.clone()), cyclic.grain)
+}
+
 /// <cycle> after/before <time>, and <ordinal> <cycle> of <time>
 /// (ruleCycleAfterBeforeTime, ruleCycleOrdinalOfTime).
 /// "the day after tomorrow", "day before yesterday", "first week of october".
@@ -1418,6 +1429,105 @@ fn cycle_after_before_rules() -> Vec<Rule> {
                 [ord, Token::TimeGrain(g), _, Token::Time(td)] => {
                     let n = get_int_value(ord)?;
                     Some(Token::Time(cycle_nth_after_td(false, *g, n - 1, td)))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "last <day-of-week> of <time>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"last")),
+                PatternItem::Predicate(Box::new(is_a_day_of_week)),
+                PatternItem::Regex(compile(r"(of|in)")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(dow), _, Token::Time(td)] => {
+                    Some(Token::Time(pred_last_of_td(dow, td)))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "last <cycle> of <time>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"last")),
+                PatternItem::Predicate(Box::new(is_a_grain)),
+                PatternItem::Regex(compile(r"of|in")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::TimeGrain(g), _, Token::Time(td)] => {
+                    Some(Token::Time(cycle_last_of_td(*g, td)))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "<ordinal> last <cycle> of <time>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_ordinal)),
+                PatternItem::Regex(compile(r"last")),
+                PatternItem::Predicate(Box::new(is_a_grain)),
+                PatternItem::Regex(compile(r"of|in|from")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [ord, _, Token::TimeGrain(g), _, Token::Time(td)] => {
+                    let n = get_int_value(ord)?;
+                    let inner = cycle_nth_after_td(true, td.grain, 1, td);
+                    Some(Token::Time(cycle_nth_after_td(true, *g, -n, &inner)))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "the <ordinal> <cycle> of <time>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"the")),
+                PatternItem::Predicate(Box::new(is_ordinal)),
+                PatternItem::Predicate(Box::new(is_a_grain)),
+                PatternItem::Regex(compile(r"of|in|from")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, ord, Token::TimeGrain(g), _, Token::Time(td)] => {
+                    let n = get_int_value(ord)?;
+                    Some(Token::Time(cycle_nth_after_td(true, *g, n - 1, td)))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "the <ordinal> last <cycle> of <time>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"the")),
+                PatternItem::Predicate(Box::new(is_ordinal)),
+                PatternItem::Regex(compile(r"last")),
+                PatternItem::Predicate(Box::new(is_a_grain)),
+                PatternItem::Regex(compile(r"of|in|from")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, ord, _, Token::TimeGrain(g), _, Token::Time(td)] => {
+                    let n = get_int_value(ord)?;
+                    let inner = cycle_nth_after_td(true, td.grain, 1, td);
+                    Some(Token::Time(cycle_nth_after_td(true, *g, -n, &inner)))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "the <cycle> of <time>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"the")),
+                PatternItem::Predicate(Box::new(is_a_grain)),
+                PatternItem::Regex(compile(r"of")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::TimeGrain(g), _, Token::Time(td)] => {
+                    Some(Token::Time(cycle_nth_after_td(true, *g, 0, td)))
                 }
                 _ => None,
             }),
