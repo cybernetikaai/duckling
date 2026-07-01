@@ -9715,6 +9715,841 @@
     "value": "2013-02-18T00:00:00.000-02:00",
     "grain": "day"
    }
+  },
+  {
+   "input": "1960 - 1961",
+   "expected": {
+    "to": {
+     "value": "1962-01-01T00:00:00.000-02:00",
+     "grain": "year"
+    },
+    "from": {
+     "value": "1960-01-01T00:00:00.000-02:00",
+     "grain": "year"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "Ashura",
+   "expected": {
+    "value": "2013-11-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Ashura",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Bhai Dooj",
+   "expected": {
+    "value": "2013-11-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Bhai Dooj",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Black Friday",
+   "expected": {
+    "value": "2013-11-29T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Black Friday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Boghi",
+   "expected": {
+    "value": "2014-01-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Boghi",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Boss's Day",
+   "expected": {
+    "value": "2013-10-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Boss's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Chhath",
+   "expected": {
+    "value": "2013-11-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Chhath",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Chinese New Year",
+   "expected": {
+    "value": "2014-01-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Chinese New Year",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Christmas",
+   "expected": {
+    "value": "2013-12-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Christmas",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Clean Monday",
+   "expected": {
+    "value": "2013-03-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Clean Monday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Dayananda Saraswati Jayanti",
+   "expected": {
+    "value": "2013-03-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Dayananda Saraswati Jayanti",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Dhanteras",
+   "expected": {
+    "value": "2013-11-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Dhanteras",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Diwali",
+   "expected": {
+    "value": "2013-11-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Diwali",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Earth Hour",
+   "expected": {
+    "to": {
+     "value": "2013-03-23T21:31:00.000-02:00",
+     "grain": "minute"
+    },
+    "from": {
+     "value": "2013-03-23T20:30:00.000-02:00",
+     "grain": "minute"
+    },
+    "holidayBeta": "Earth Hour",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "Easter Monday",
+   "expected": {
+    "value": "2013-04-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Easter Monday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Easter Sunday",
+   "expected": {
+    "value": "2013-03-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Easter Sunday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Eid al-Adha",
+   "expected": {
+    "value": "2013-10-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Eid al-Adha",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Eid al-Fitr",
+   "expected": {
+    "value": "2013-08-08T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Eid al-Fitr",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Ganesh Chaturthi",
+   "expected": {
+    "value": "2013-09-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Ganesh Chaturthi",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Global Youth Service Day",
+   "expected": {
+    "to": {
+     "value": "2013-04-29T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-04-26T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Global Youth Service Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "Great Lent",
+   "expected": {
+    "to": {
+     "value": "2013-04-27T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-03-18T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Great Lent",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "Guru Gobind Singh Jayanti",
+   "expected": {
+    "value": "2014-01-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Guru Gobind Singh Jayanti",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Guru Ravidass Jayanti",
+   "expected": {
+    "value": "2013-02-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Guru Ravidass Jayanti",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Halloween",
+   "expected": {
+    "value": "2013-10-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Halloween",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Hanukkah",
+   "expected": {
+    "to": {
+     "value": "2013-12-05T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-11-27T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Hanukkah",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "Holi",
+   "expected": {
+    "value": "2013-03-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Holi",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Holika Dahan",
+   "expected": {
+    "value": "2013-03-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Holika Dahan",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Islamic New Year",
+   "expected": {
+    "value": "2013-11-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Islamic New Year",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Isra and Mi'raj",
+   "expected": {
+    "value": "2013-06-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Isra and Mi'raj",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Jumu'atul-Wida",
+   "expected": {
+    "value": "2013-08-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Jumu'atul-Wida",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Kaanum Pongal",
+   "expected": {
+    "value": "2014-01-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Kaanum Pongal",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Karva Chauth",
+   "expected": {
+    "value": "2013-10-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Karva Chauth",
+    "type": "value"
+   }
+  },
+  {
+   "input": "King's Day",
+   "expected": {
+    "value": "2013-04-27T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "King's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Krishna Janmashtami",
+   "expected": {
+    "value": "2013-08-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Krishna Janmashtami",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Lag BaOmer",
+   "expected": {
+    "value": "2013-04-27T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Lag BaOmer",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Laylat al-Qadr",
+   "expected": {
+    "value": "2013-08-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Laylat al-Qadr",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Lazarus Saturday",
+   "expected": {
+    "value": "2013-04-27T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Lazarus Saturday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Lent",
+   "expected": {
+    "to": {
+     "value": "2013-03-31T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Lent",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "Maha Saptami",
+   "expected": {
+    "value": "2013-10-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Maha Saptami",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Maha Shivaratri",
+   "expected": {
+    "value": "2013-03-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Maha Shivaratri",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Mahavir Jayanti",
+   "expected": {
+    "value": "2013-04-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mahavir Jayanti",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Martin Luther King's Day",
+   "expected": {
+    "value": "2014-01-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Martin Luther King's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Mattu Pongal",
+   "expected": {
+    "value": "2014-01-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mattu Pongal",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Mawlid",
+   "expected": {
+    "value": "2014-01-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mawlid",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Naraka Chaturdashi",
+   "expected": {
+    "value": "2013-11-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Naraka Chaturdashi",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Navaratri",
+   "expected": {
+    "to": {
+     "value": "2013-10-15T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-10-05T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Navaratri",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "New Year's Day",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "New Year's Eve",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Orthodox Easter Sunday",
+   "expected": {
+    "value": "2013-05-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Orthodox Easter Sunday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Orthodox Good Friday",
+   "expected": {
+    "value": "2013-05-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Orthodox Good Friday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Palm Sunday",
+   "expected": {
+    "value": "2013-03-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Palm Sunday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Pargat Diwas",
+   "expected": {
+    "value": "2013-10-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Pargat Diwas",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Parsi New Year",
+   "expected": {
+    "value": "2013-08-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Parsi New Year",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Passover",
+   "expected": {
+    "to": {
+     "value": "2013-04-03T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-03-25T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Passover",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "Purim",
+   "expected": {
+    "value": "2013-02-23T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Purim",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Rabindra Jayanti",
+   "expected": {
+    "value": "2013-05-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Rabindra Jayanti",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Raksha Bandhan",
+   "expected": {
+    "value": "2013-08-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Raksha Bandhan",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Rama Navami",
+   "expected": {
+    "value": "2013-04-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Rama Navami",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Ramadan",
+   "expected": {
+    "to": {
+     "value": "2013-08-08T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-07-09T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Ramadan",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "Ratha-Yatra",
+   "expected": {
+    "value": "2013-07-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Ratha-Yatra",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Rosh Hashanah",
+   "expected": {
+    "to": {
+     "value": "2013-09-07T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-09-04T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Rosh Hashanah",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "Shavuot",
+   "expected": {
+    "to": {
+     "value": "2013-05-17T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-05-14T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Shavuot",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "Shemini Atzeret",
+   "expected": {
+    "value": "2013-09-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Shemini Atzeret",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Shrove Tuesday",
+   "expected": {
+    "value": "2013-02-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Shrove Tuesday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Simchat Torah",
+   "expected": {
+    "value": "2013-09-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Simchat Torah",
+    "type": "value"
+   }
+  },
+  {
+   "input": "St Patrick's Day",
+   "expected": {
+    "value": "2013-03-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St Patrick's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Sukkot",
+   "expected": {
+    "to": {
+     "value": "2013-09-27T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-09-18T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Sukkot",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "Thai Pongal",
+   "expected": {
+    "value": "2014-01-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thai Pongal",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Thanksgiving Day",
+   "expected": {
+    "value": "2013-11-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Thiru Onam",
+   "expected": {
+    "value": "2013-08-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thiru Onam",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Tisha B'Av",
+   "expected": {
+    "value": "2013-07-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Tisha B'Av",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Trinity Sunday",
+   "expected": {
+    "value": "2013-05-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Trinity Sunday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Tu BiShvat",
+   "expected": {
+    "value": "2014-01-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Tu BiShvat",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Ugadi",
+   "expected": {
+    "value": "2013-04-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Ugadi",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Vaisakhi",
+   "expected": {
+    "value": "2013-04-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Vaisakhi",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Valentine's Day",
+   "expected": {
+    "value": "2013-02-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Valentine's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Vasant Panchami",
+   "expected": {
+    "value": "2013-02-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Vasant Panchami",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Vesak",
+   "expected": {
+    "value": "2013-05-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Vesak",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Vijayadashami",
+   "expected": {
+    "value": "2013-10-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Vijayadashami",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Whit Monday",
+   "expected": {
+    "value": "2013-05-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Whit Monday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "World Vegan Day",
+   "expected": {
+    "value": "2013-11-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "World Vegan Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Yom Ha'atzmaut",
+   "expected": {
+    "value": "2013-04-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Yom Ha'atzmaut",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Yom HaShoah",
+   "expected": {
+    "value": "2013-04-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Yom HaShoah",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Yom Kippur",
+   "expected": {
+    "value": "2013-09-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Yom Kippur",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the week",
+   "expected": {
+    "value": "2013-02-11T00:00:00.000-02:00",
+    "grain": "week",
+    "type": "value"
+   }
   }
  ],
  "negative": [

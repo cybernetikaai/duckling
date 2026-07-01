@@ -1100,6 +1100,25 @@ fn dom_interval_rules() -> Vec<Rule> {
 fn interval_rules() -> Vec<Rule> {
     let sep = r"\-|to|th?ru|through|(un)?til(l)?";
     vec![
+        // "1960 - 1961" (ruleIntervalYearLatent): two bare 4-digit years, y1<y2.
+        Rule {
+            name: "<year> (latent) - <year> (latent) (interval)".into(),
+            pattern: vec![
+                PatternItem::Predicate(is_integer_between(1000, 10000)),
+                PatternItem::Regex(compile(sep)),
+                PatternItem::Predicate(is_integer_between(1000, 10000)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [a, _, b] => {
+                    let (y1, y2) = (get_int_value(a)?, get_int_value(b)?);
+                    (y1 < y2)
+                        .then(|| interval_td(IntervalType::Closed, &year_td(y1), &year_td(y2)))
+                        .flatten()
+                        .map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
         Rule {
             name: "<datetime> - <datetime> (interval)".into(),
             pattern: vec![
