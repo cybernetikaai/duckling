@@ -91,6 +91,7 @@ Branch: `rust-port-en-time`.
 | + compose keeps original ref (fixedRange) | 983 / 984 | 1 | 10 / 10 | "today in one hour" -> 05:30 (was 01:00) |
 | + the <dom> of <named-month> | **984 / 984 (100%)** | **0** | 10 / 10 | "the second of march"; contains-mode complete |
 | + tz_stress expansion (oracle, 6 zones) | 984 / 984 | 0 | **68 / 68** | DST transitions US/EU/AU/NZ; port per-instant correct vs Duckling boundary quirk |
+| + 85 more Duckling corpus inputs + year interval | **1069 / 1069 (100%)** | 0 | 68 / 68 | transcribed missing Corpus.hs inputs; "1960 - 1961"; port handled 84/85 |
 
 ## How to run
 
@@ -108,11 +109,13 @@ Branch: `rust-port-en-time`.
 
 ## Status: contains-mode complete
 
-**contains 984/984 (100%)**, **unique 976/984**, **tz_stress 68/68** (6 zones, both hemispheres), negatives green. The English-time port matches Duckling's corpus behavior on every positive example, with timezone/DST correctness fully green throughout (the hard constraint set at the outset).
+**contains 1069/1069 (100%)**, **unique 1061/1069**, **tz_stress 68/68** (6 zones, both hemispheres), negatives green. The English-time port matches Duckling's corpus behavior on every positive example, with timezone/DST correctness fully green throughout (the hard constraint set at the outset).
 
 The corpus harness now mirrors Duckling's real test semantics: `contains` mode checks the expected value against the best *ranked* entity (range-dominated), not one spanning the whole input — because Duckling does the same (e.g. "for a quarter past 3pm" resolves via "a quarter past 3pm"; the "for" is noise). This is safe: a *wrong* full-input parse dominates contained sub-ranges and still surfaces, so it can't mask a regression — proven when the switch dropped contains 10→2 and left exactly the 2 genuine bugs, which were then fixed (`the <dom> of <named-month>`, and `compose` keeping the original reference time).
 
 The 8 remaining `unique`-mode gaps ("for a quarter past 3pm"×5, "Fri, Jul 18, 2014 ..."×3) are inputs with leading/trailing noise that have **no full-span parse** — so the stricter "exactly one full-span answer" bar is structurally unsatisfiable, exactly as it is in Duckling. These are not behavior gaps; `contains` (the Duckling-faithful metric) passes them.
+
+**Corpus expansion (this iteration).** Diffed Duckling's own Corpus.hs against the fixture and found 106 inputs I'd never transcribed; added the 85 with a single full-range oracle value (bare holiday names, "1960 - 1961", etc.). The port already handled 84 — the one gap was the year interval (`<year> (latent) - <year> (latent) (interval)`, now added). The 49 skipped are Duckling negatives (already covered) or latent-only inputs. Spot-checked latent mode: "May"->latent month, "afternoon"->[12:00,19:00], "7pm"->19:00 all match the oracle. Corpus now **1069/1069 (100%) contains**.
 
 **Timezone validation (this iteration).** Cross-checked the port against live rasa/duckling across 6 IANA zones and both hemispheres on DST transition days; tz_stress grew 10 -> 68 verified cases (port == Duckling == authoritative IANA tzdata). The check surfaced that on transition-boundary hours (spring-forward gap, fall-back fold, the transition hour itself) Duckling attaches an offset that does NOT match the real per-instant IANA offset (e.g. "3am" on a spring-forward day -> Duckling -05:00, which is actually 4am EDT), whereas the port uses the correct per-instant offset (-04:00). Those 22 boundary cases are intentionally excluded from tz_stress: the port favors timezone correctness (the stated priority) over byte-fidelity to Duckling's DST quirk. Full-corpus oracle cross-check: 981/984 fixtures match live Duckling (99.7%; the 3 diffs are real-zone LMT artifacts of America/Noronha vs the fixed -02:00 test context).
 
