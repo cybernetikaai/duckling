@@ -7,7 +7,7 @@ use crate::time::object::IntervalType;
 use crate::time::predicate::{
     Predicate, ampm_predicate, cycle_nth, day_of_month, day_of_week, hour, hour_minute,
     hour_minute_second, in_duration, intersect, month, take_last_of, take_nth, take_nth_after,
-    time_intervals, year as year_pred,
+    time_intervals, year as year_pred, cycle_n,
 };
 use crate::types::{Form, PatternItem, Rule, TimeData, Token};
 
@@ -964,6 +964,18 @@ fn duration_of(t: &Token) -> Option<(i64, Grain)> {
         None
     }
 }
+fn cycle_n_td(grain: Grain, n: i64) -> TimeData {
+    TimeData {
+        pred: cycle_n(true, grain, n),
+        grain,
+        latent: false,
+        not_immediate: false,
+        form: None,
+        direction: None,
+        holiday: None,
+    }
+}
+
 fn in_duration_td(value: i64, grain: Grain) -> TimeData {
     TimeData {
         pred: in_duration(value, grain),
@@ -1010,6 +1022,22 @@ fn duration_rules() -> Vec<Rule> {
                     let (v, gr) = duration_of(dur)?;
                     let signed = if g.first()?.eq_ignore_ascii_case("ago") { -v } else { v };
                     Some(Token::Time(in_duration_td(signed, gr)))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "last|past|next|upcoming <duration>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"([lp]ast|next|upcoming|coming)")),
+                PatternItem::Predicate(Box::new(is_a_duration)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::RegexMatch(g), dur] => {
+                    let (v, gr) = duration_of(dur)?;
+                    let w = g.first()?.to_lowercase();
+                    let n = if w == "last" || w == "past" { -v } else { v };
+                    Some(Token::Time(cycle_n_td(gr, n)))
                 }
                 _ => None,
             }),

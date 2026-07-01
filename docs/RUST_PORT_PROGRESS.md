@@ -35,6 +35,7 @@ Branch: `rust-port-en-time`.
 | + interval computed holidays (subagent) | 465 / 984 | 519 | 3 / 10 | Hanukkah/Passover/Sukkot/Shavuot/Rosh Hashanah (subagent c85aecd8) |
 | + quarter/half/N past-to <hour> | 478 / 984 | 506 | 3 / 10 | minutesAfter/Before; chains through am/pm (a quarter past 1pm) |
 | + absorb (on <day>, <dow>,) | 493 / 984 | 491 | 3 / 10 | **crossed 50%**; unlocks <time> on <day> via intersect |
+| + next/last/past/upcoming N <unit> | 524 / 984 | 460 | 3 / 10 | cycle_n/takeN interval span; +31 |
 
 ## How to run
 
@@ -52,7 +53,7 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru absorb rules. **493/984 (50%)**. Next: interval TOD-AMPM (3-4pm), day before/after, week/year end-beginning, this/last/next <cycle> variants, then ranking (unique gap).
+Cumulative thru next/last N cycle. **524/984 (53%)**. Next: interval TOD-AMPM (3-4pm), day before/after, end/beginning of week/year, o'clock, then ranking (unique gap).
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &

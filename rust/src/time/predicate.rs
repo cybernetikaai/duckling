@@ -266,6 +266,45 @@ pub fn time_computed(dates: Vec<TimeObject>) -> Predicate {
     }))
 }
 
+/// An interval spanning n grain-cycles from the reference (port of cycleN/takeN).
+/// n>=0: [start, end) over the next n cycles (skipping the current if
+/// not_immediate); n<0: the last |n| cycles, ending at the current cycle.
+pub fn cycle_n(not_immediate: bool, grain: Grain, n: i64) -> Predicate {
+    Predicate::Series(Rc::new(move |t: TimeObject, ctx: &TimeContext| {
+        let base = ctx.ref_time;
+        let anchor = time_round(base, grain);
+        let (past, future) = time_sequence(grain, 1, anchor);
+        let slot: Option<TimeObject> = if n >= 0 {
+            let mut fut: Vec<TimeObject> = future.take(n as usize + 2).collect();
+            if not_immediate
+                && fut.first().is_some_and(|a| time_intersect(*a, base).is_some())
+                && !fut.is_empty()
+            {
+                fut.remove(0);
+            }
+            match (fut.first(), fut.get(n as usize)) {
+                (Some(&start), Some(&end)) => Some(time_interval(IntervalType::Open, start, end)),
+                _ => None,
+            }
+        } else {
+            let p: Vec<TimeObject> = past.take((-n) as usize + 1).collect();
+            match (p.get(((-n) - 1) as usize), p.first()) {
+                (Some(&start), Some(&end)) => Some(time_interval(IntervalType::Closed, start, end)),
+                _ => None,
+            }
+        };
+        match slot {
+            Some(nth) if time_starts_before_end_of(t, nth) => {
+                (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::once(nth)) as BoxIter)
+            }
+            Some(nth) => {
+                (Box::new(std::iter::once(nth)) as BoxIter, Box::new(std::iter::empty()) as BoxIter)
+            }
+            None => (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::empty()) as BoxIter),
+        }
+    }))
+}
+
 const SAFE_MAX_INTERVAL: usize = 12;
 
 /// Generic timeSeqMap: apply `f` to each occurrence of `g` (bounded), then
