@@ -204,6 +204,54 @@
   {
    "input": "ONE TwentY tWO",
    "value": 122
+  },
+  {
+   "input": "-504",
+   "value": -504
+  },
+  {
+   "input": "negative five hundred and four",
+   "value": -504
+  },
+  {
+   "input": "- 1,200,000",
+   "value": -1200000
+  },
+  {
+   "input": "-1200000",
+   "value": -1200000
+  },
+  {
+   "input": "minus 1,200,000",
+   "value": -1200000
+  },
+  {
+   "input": "negative 1200000",
+   "value": -1200000
+  },
+  {
+   "input": "-1.2M",
+   "value": -1200000
+  },
+  {
+   "input": "-1200K",
+   "value": -1200000
+  },
+  {
+   "input": "-.0012G",
+   "value": -1200000
+  },
+  {
+   "input": "-3,200,000",
+   "value": -3200000
+  },
+  {
+   "input": "-3200000",
+   "value": -3200000
+  },
+  {
+   "input": "minus three million two hundred thousand",
+   "value": -3200000
   }
  ]
 }

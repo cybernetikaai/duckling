@@ -296,6 +296,18 @@ pub fn numeral_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // "-504", "minus 1,200,000" (ruleNegative): (-|minus|negative) <positive>.
+        Rule {
+            name: "negative numbers".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"(-|minus|negative)(?!\s*-)")),
+                PatternItem::Predicate(Box::new(is_positive)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Numeral(n)] => Some(Token::Numeral(NumeralData::new(-n.value, true))),
+                _ => None,
+            }),
+        },
         // "1.1", ".77" (ruleDecimals).
         Rule {
             name: "decimal number".into(),
