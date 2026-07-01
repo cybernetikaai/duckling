@@ -1,0 +1,649 @@
+{
+ "positive": [
+  {
+   "input": "Can we meet next Tuesday afternoon?",
+   "expected": {
+    "to": {
+     "value": "2013-02-19T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-19T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "I'll be out of office from the 3rd to the 10th",
+   "expected": {
+    "to": {
+     "value": "2013-03-11T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-03-03T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "Remind me in 2 hours",
+   "expected": {
+    "value": "2013-02-12T06:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "The deadline is end of month",
+   "expected": {
+    "to": {
+     "value": "2013-03-01T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-02-21T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "Let's schedule it for March 15th",
+   "expected": {
+    "value": "2013-03-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "I'll call you tomorrow at 3pm",
+   "expected": {
+    "value": "2013-02-13T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "See you next week",
+   "expected": {
+    "value": "2013-02-18T00:00:00.000-02:00",
+    "grain": "week",
+    "type": "value"
+   }
+  },
+  {
+   "input": "The meeting is on Friday at noon",
+   "expected": {
+    "value": "2013-02-15T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Can you do it by end of day?",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "second"
+    },
+    "from": {
+     "value": "2013-02-12T04:30:00.000-02:00",
+     "grain": "second"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "I need this done before Monday",
+   "expected": {
+    "to": {
+     "value": "2013-02-18T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "Let's grab lunch at 12:30",
+   "expected": {
+    "value": "2013-02-12T12:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "The party is this weekend",
+   "expected": {
+    "to": {
+     "value": "2013-02-18T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-15T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "I'm free after 5pm today",
+   "expected": {
+    "from": {
+     "value": "2013-02-12T17:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "Book a flight for next Monday morning",
+   "expected": {
+    "to": {
+     "value": "2013-02-18T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-18T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "The event runs from 9am to 5pm",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T09:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "Call me back in 30 minutes",
+   "expected": {
+    "value": "2013-02-12T05:00:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "We arrive on the 22nd",
+   "expected": {
+    "value": "2013-02-22T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Christmas is coming up",
+   "expected": {
+    "value": "2013-12-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Christmas",
+    "type": "value"
+   }
+  },
+  {
+   "input": "My birthday is in May",
+   "expected": {
+    "value": "2013-05-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "The report is due next Friday",
+   "expected": {
+    "value": "2013-02-22T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "I woke up at 6 this morning",
+   "expected": {
+    "value": "2013-02-12T06:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Let's meet at half past 3",
+   "expected": {
+    "value": "2013-02-12T15:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "The store opens at 8am tomorrow",
+   "expected": {
+    "value": "2013-02-13T08:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "It happened three days ago",
+   "expected": {
+    "value": "2013-02-09T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "We'll reconvene in the new year",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Payment is due on the 1st",
+   "expected": {
+    "value": "2013-03-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Set an alarm for 7am",
+   "expected": {
+    "value": "2013-02-12T07:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "I'll see you a week from now",
+   "expected": {
+    "value": "2013-02-19T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "The sale starts Black Friday",
+   "expected": {
+    "value": "2013-11-29T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Black Friday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Meet me at the stroke of midnight",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Due by cob friday",
+   "expected": {
+    "value": "2013-02-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "Let's talk early next week",
+   "expected": {
+    "value": "2013-02-18T00:00:00.000-02:00",
+    "grain": "week",
+    "type": "value"
+   }
+  },
+  {
+   "input": "The flight leaves at 14:30",
+   "expected": {
+    "value": "2013-02-12T14:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "I need money by friday",
+   "expected": {
+    "to": {
+     "value": "2013-02-15T00:00:00.000-02:00",
+     "grain": "second"
+    },
+    "from": {
+     "value": "2013-02-12T04:30:00.000-02:00",
+     "grain": "second"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "I have 3 dogs",
+   "expected": null,
+   "note": "oracle: no time"
+  },
+  {
+   "input": "I'm 25 years old",
+   "expected": null,
+   "note": "oracle: no time"
+  },
+  {
+   "input": "room 315",
+   "expected": null,
+   "note": "oracle: no time"
+  },
+  {
+   "input": "chapter 7",
+   "expected": null,
+   "note": "oracle: no time"
+  },
+  {
+   "input": "he scored 12 points",
+   "expected": null,
+   "note": "oracle: no time"
+  },
+  {
+   "input": "flight 815",
+   "expected": null,
+   "note": "oracle: no time"
+  },
+  {
+   "input": "route 66",
+   "expected": null,
+   "note": "oracle: no time"
+  },
+  {
+   "input": "I need 5 apples",
+   "expected": null,
+   "note": "oracle: no time"
+  },
+  {
+   "input": "page 42",
+   "expected": null,
+   "note": "oracle: no time"
+  },
+  {
+   "input": "the answer is 7",
+   "expected": null,
+   "note": "oracle: no time"
+  },
+  {
+   "input": "I sat on the bench",
+   "expected": {
+    "value": "2013-02-16T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "we may go later",
+   "expected": null,
+   "note": "oracle: no time"
+  },
+  {
+   "input": "march forward",
+   "expected": {
+    "value": "2013-03-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "spring into action",
+   "expected": {
+    "to": {
+     "value": "2013-06-22T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-03-20T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "fall down the stairs",
+   "expected": {
+    "to": {
+     "value": "2013-12-22T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-09-23T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "the sun is bright",
+   "expected": {
+    "value": "2013-02-17T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "my friend called",
+   "expected": null,
+   "note": "oracle: no time"
+  },
+  {
+   "input": "I need money now",
+   "expected": {
+    "value": "2013-02-12T04:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "let it fall",
+   "expected": {
+    "to": {
+     "value": "2013-12-22T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-09-23T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "wed to her job",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "give me a minute",
+   "expected": null,
+   "note": "oracle: no time"
+  },
+  {
+   "input": "second thoughts",
+   "expected": null,
+   "note": "oracle: no time"
+  },
+  {
+   "input": "in a second",
+   "expected": {
+    "value": "2013-02-12T04:30:01.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the fifth element",
+   "expected": {
+    "value": "2013-03-05T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "for the third time",
+   "expected": {
+    "value": "2013-03-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "once upon a time",
+   "expected": null,
+   "note": "oracle: no time"
+  },
+  {
+   "input": "back in the day",
+   "expected": {
+    "value": "2013-02-12T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at the end of the day",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "any day now",
+   "expected": {
+    "value": "2013-02-12T04:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "one of these days",
+   "expected": null,
+   "note": "oracle: no time"
+  },
+  {
+   "input": "push it to next week",
+   "expected": {
+    "value": "2013-02-18T00:00:00.000-02:00",
+    "grain": "week",
+    "type": "value"
+   }
+  },
+  {
+   "input": "move the 3pm to 4pm",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T17:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T15:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "reschedule for thursday",
+   "expected": {
+    "value": "2013-02-14T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "not this friday but next",
+   "expected": {
+    "value": "2013-02-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "sometime around noon",
+   "expected": {
+    "value": "2013-02-12T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "ish 3pm",
+   "expected": {
+    "value": "2013-02-12T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "like maybe tuesday",
+   "expected": {
+    "value": "2013-02-19T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the meeting got moved to the 20th",
+   "expected": {
+    "value": "2013-02-20T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "let's say 2ish",
+   "expected": {
+    "value": "2013-02-12T14:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "first thing monday morning",
+   "expected": {
+    "to": {
+     "value": "2013-02-18T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-18T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "eod today",
+   "expected": {
+    "value": "2013-02-12T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "close of play wednesday",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  }
+ ]
+}

@@ -237,6 +237,40 @@ fn may_is_latent() {
     assert!(!full_range_time_values("March", &default).is_empty(), "March must not be latent");
 }
 
+/// Sentence-level differential: natural sentences with an embedded time expression
+/// ("Can we meet next Tuesday afternoon?", "I need money by friday"), cross-checked
+/// against the oracle. Tests span extraction + ranking within surrounding words —
+/// the realistic free-text case the bare-input corpus doesn't cover. Best-entity.
+#[test]
+fn sentence_stress() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/sentence_stress.json")).unwrap();
+    let ctx = ctx();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for ex in data["positive"].as_array().unwrap() {
+        let input = ex["input"].as_str().unwrap();
+        let expected = &ex["expected"];
+        checked += 1;
+        if expected.is_null() {
+            // Oracle finds no time in this sentence — the port must not either
+            // (false-positive guard: "I have 3 dogs", "we may go later").
+            let got = best_time_values(input, &ctx);
+            if !got.is_empty() {
+                failures.push(format!("{input:?}\n  expected NO time\n  got      {got:?}"));
+            }
+            continue;
+        }
+        let exp = strip_values(expected.clone());
+        if !best_time_values(input, &ctx).iter().any(|g| g == &exp) {
+            failures.push(format!("{input:?}\n  expected {exp}\n  got      {:?}", best_time_values(input, &ctx)));
+        }
+    }
+    eprintln!("sentence_stress checked {checked}, {} failing", failures.len());
+    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
+        failures.iter().take(5000).cloned().collect::<Vec<_>>().join("\n"));
+}
+
 /// Reference-time differential: ref-sensitive inputs ("next tuesday", "end of the
 /// month", "in 3 days") cross-checked against the oracle across many reference
 /// instants (varied weekdays, month/year boundaries, leap days), all in the fixed
