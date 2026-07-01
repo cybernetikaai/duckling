@@ -573,23 +573,62 @@ fn day_of_month_rules() -> Vec<Rule> {
 
 /// this/next/last <cycle> and this/next <day-of-week>.
 fn cycle_and_relative_rules() -> Vec<Rule> {
-    fn cycle_rule(name: &str, re: &str, n: i64) -> Rule {
+    vec![
+        // One rule (ruleCycleThisLastNext): the matched word selects the offset.
+        // Single alternation so "upcoming" matches wholly rather than letting
+        // "coming" partial-match at offset 2. coming/upcoming/next -> +1.
         Rule {
-            name: name.to_string(),
+            name: "this|last|next <cycle>".into(),
             pattern: vec![
-                PatternItem::Regex(compile(re)),
+                PatternItem::Regex(compile(
+                    r"(this|current|coming|next|(the( following)?)|last|past|previous|upcoming)",
+                )),
                 PatternItem::Predicate(Box::new(is_a_grain)),
             ],
-            prod: Box::new(move |tokens| {
+            prod: Box::new(|tokens| {
                 let g = grain_of(tokens.get(1)?)?;
+                let word = match &tokens[0] {
+                    Token::RegexMatch(m) => m.first()?.to_lowercase(),
+                    _ => return None,
+                };
+                let n = match word.as_str() {
+                    "this" | "current" | "the" => 0,
+                    "coming" | "next" | "upcoming" | "the following" => 1,
+                    "last" | "past" | "previous" => -1,
+                    _ => return None,
+                };
                 Some(Token::Time(cycle_nth_td(g, n)))
             }),
-        }
-    }
-    vec![
-        cycle_rule("this|last|next <cycle>", r"this|current|coming", 0),
-        cycle_rule("this|last|next <cycle>", r"next|the following", 1),
-        cycle_rule("this|last|next <cycle>", r"last|past|previous", -1),
+        },
+        // "upcoming 2 weeks" -> cycleNth(week, 2) (a single cycle, not an interval).
+        Rule {
+            name: "upcoming <integer> <cycle>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"upcoming")),
+                PatternItem::Predicate(Box::new(|t| get_int_value(t).is_some_and(|v| v >= 0))),
+                PatternItem::Predicate(Box::new(is_a_grain)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, num, grain] => {
+                    Some(Token::Time(cycle_nth_td(grain_of(grain)?, get_int_value(num)?)))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "<integer> upcoming <cycle>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(|t| get_int_value(t).is_some_and(|v| v >= 0))),
+                PatternItem::Regex(compile(r"upcoming")),
+                PatternItem::Predicate(Box::new(is_a_grain)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [num, _, grain] => {
+                    Some(Token::Time(cycle_nth_td(grain_of(grain)?, get_int_value(num)?)))
+                }
+                _ => None,
+            }),
+        },
         Rule {
             name: "this|next <day-of-week>".into(),
             pattern: vec![
@@ -1198,7 +1237,7 @@ fn duration_rules() -> Vec<Rule> {
         Rule {
             name: "last|past|next <duration>".into(),
             pattern: vec![
-                PatternItem::Regex(compile(r"([lp]ast|next|upcoming|coming)")),
+                PatternItem::Regex(compile(r"([lp]ast|next)")),
                 PatternItem::Predicate(Box::new(is_a_duration)),
             ],
             prod: Box::new(|tokens| match tokens {

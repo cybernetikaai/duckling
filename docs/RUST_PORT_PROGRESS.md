@@ -48,6 +48,7 @@ Branch: `rust-port-en-time`.
 | + rule-name audit + `the nth <dow> of <month>` | 628 / 984 | 356 | 2 / 10 | 15 misnamed rules scored 0 & won spuriously; fixed README example |
 | + shiftTimezone grain floor (min Minute) | 634 / 984 | 350 | 1 / 10 | timePlus floors grain; fixed 6 corpus + EST grain |
 | + DST gap/fold offset (pick `before`) | 634 / 984 | 350 | **10 / 10** | spring-forward gap keeps pre-transition offset; tz harness fully green |
+| + cycle this/last/next single-rule + upcoming | 682 / 984 | 302 | 10 / 10 | coming/upcoming->next; upcoming <int> <cycle>; -48 |
 
 ## How to run
 
@@ -65,7 +66,7 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru DST gap/fold offset. contains **634/984**, unique **632/984**, **tz_stress 10/10** (timezone/DST correctness fully green — the hard constraint). Next: fraction/half durations; long-tail computed holidays; chip away at remaining contains.
+Cumulative thru cycle-rule rewrite. contains **682/984**, unique **680/984**, tz_stress 10/10. Next: time-of-day past->tomorrow roll ("at 3am"); fraction/half durations ("a quarter of an hour", "a few/couple"); year-with-era ("in 2014 AD"); last <dow>/<cycle> of <time>.
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &

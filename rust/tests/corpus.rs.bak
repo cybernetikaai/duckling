@@ -75,7 +75,7 @@ fn positive_corpus() {
         failures.is_empty(),
         "{} failures:\n{}",
         failures.len(),
-        failures.iter().take(5000).cloned().collect::<Vec<_>>().join("\n")
+        failures.iter().take(40).cloned().collect::<Vec<_>>().join("\n")
     );
 }
 
