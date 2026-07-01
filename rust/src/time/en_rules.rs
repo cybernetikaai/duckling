@@ -1952,6 +1952,38 @@ fn parse_i(g: &[String], i: usize) -> Option<i64> {
 fn numeric_date_rules() -> Vec<Rule> {
     vec![
         Rule {
+            name: "yyyy-mm-dd".into(),
+            pattern: vec![PatternItem::Regex(compile(
+                r"(\d{2,4})-(0?[1-9]|1[0-2])-(3[01]|[12]\d|0?[1-9])",
+            ))],
+            prod: Box::new(|tokens| {
+                let g = regex_groups(tokens)?;
+                year_month_day_td(parse_i(g, 0)?, parse_i(g, 1)?, parse_i(g, 2)?).map(Token::Time)
+            }),
+        },
+        Rule {
+            name: "yyyy-mm".into(),
+            pattern: vec![PatternItem::Regex(compile(r"(\d{4})\s*[/-]\s*(1[0-2]|0?[1-9])"))],
+            prod: Box::new(|tokens| {
+                let g = regex_groups(tokens)?;
+                year_month_td(parse_i(g, 0)?, parse_i(g, 1)?).map(Token::Time)
+            }),
+        },
+        Rule {
+            name: "yyyyqq".into(),
+            pattern: vec![PatternItem::Regex(compile(r"(\d{2,4})q([1-4])"))],
+            prod: Box::new(|tokens| {
+                let g = regex_groups(tokens)?;
+                let q = parse_i(g, 1)?;
+                Some(Token::Time(cycle_nth_after_td(
+                    true,
+                    Grain::Quarter,
+                    q - 1,
+                    &year_td(parse_i(g, 0)?),
+                )))
+            }),
+        },
+        Rule {
             name: "mm/dd/yyyy".into(),
             pattern: vec![PatternItem::Regex(compile(
                 r"(\d{1,2})[-/.](\d{1,2})[-/.](\d{2,4})",
