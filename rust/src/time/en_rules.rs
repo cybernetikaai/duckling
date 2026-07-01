@@ -1542,6 +1542,21 @@ fn timezone_rules() -> Vec<Rule> {
 /// ruleIntersectOf). Composes dates+years, dow+month-day, time-on-day, etc.
 fn intersect_rules() -> Vec<Rule> {
     vec![
+        // "April 14, 2015": intersect a non-latent time with a (latent) year.
+        Rule {
+            name: "intersect by \",\", \"of\", \"from\" for year".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_not_latent)),
+                PatternItem::Regex(compile(r"of|from|,")),
+                PatternItem::Predicate(is_grain_of_time(Grain::Year)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(a), _, Token::Time(b)] => {
+                    intersect_td(a, b).map(|t| Token::Time(not_latent(t)))
+                }
+                _ => None,
+            }),
+        },
         Rule {
             name: "intersect".into(),
             pattern: vec![
