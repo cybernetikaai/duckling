@@ -252,12 +252,61 @@ pub(crate) fn computed_interval_holiday(
     }
 }
 
+/// Interval whose start comes from `start_ymd` and whose (exclusive) end is the
+/// first `end_ymd` occurrence strictly after that start — used by Ramadan, whose
+/// end is the day before Eid al-Fitr (rendered as the Eid date itself). Ports
+/// `interval Open ramadan (cycleNthAfter (-1) eidalFitr)`.
+fn paired_interval_days(
+    start_ymd: &[(i16, i8, i8)],
+    end_ymd: &[(i16, i8, i8)],
+) -> Vec<TimeObject> {
+    let ends = days(end_ymd);
+    days(start_ymd)
+        .into_iter()
+        .filter_map(|s| {
+            let e = ends.iter().find(|e| e.start > s.start)?;
+            Some(TimeObject { start: s.start, grain: Grain::Day, end: Some(e.start) })
+        })
+        .collect()
+}
+
+fn paired_interval_holiday(
+    name: &'static str,
+    re: &str,
+    start_ymd: &'static [(i16, i8, i8)],
+    end_ymd: &'static [(i16, i8, i8)],
+) -> Rule {
+    let pred = time_computed(paired_interval_days(start_ymd, end_ymd));
+    let make = move || TimeData {
+        pred: pred.clone(),
+        grain: Grain::Day,
+        latent: false,
+        not_immediate: false,
+        form: None,
+        direction: None,
+        holiday: Some(name.to_string()),
+    };
+    Rule {
+        name: format!("holiday: {name}"),
+        pattern: vec![PatternItem::Regex(compile(re))],
+        prod: Box::new(move |_| Some(Token::Time(make()))),
+    }
+}
+
 /// Interval-based computed holidays (multi-day spans). Ports of
 /// ruleComputedHolidays'. Those reusing already-ported easter tables are here;
 /// the rest (needing new base tables) are appended by a follow-up.
 pub fn computed_interval_holiday_rules() -> Vec<Rule> {
     vec![
         computed_interval_holiday("Lent", r"lent", EASTER_SUNDAY, -46, -1),
+        computed_interval_holiday(
+            "Global Youth Service Day",
+            r"global youth service day|gysd",
+            GLOBAL_YOUTH_SERVICE_DAY,
+            0,
+            2,
+        ),
+        paired_interval_holiday("Ramadan", r"rama[dt]h?an|ramzaa?n", RAMADAN, EID_AL_FITR),
         computed_interval_holiday("Great Lent", r"great\s+(fast|lent)", ORTHODOX_EASTER, -48, -9),
         computed_interval_holiday("Hanukkah", r"c?hann?ukk?ah", CHANUKAH, 0, 7),
         computed_interval_holiday(
