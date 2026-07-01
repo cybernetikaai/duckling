@@ -791,6 +791,31 @@ fn interval_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // "hh(:mm) - <tod> am|pm": am/pm on the trailing time applies to both.
+        Rule {
+            name: "hh(:mm) - <time-of-day> am|pm".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"(?:from )?((?:[01]?\d)|(?:2[0-3]))([:.]([0-5]\d))?")),
+                PatternItem::Regex(compile(r"\-|to|th?ru|through|(un)?til(l)?")),
+                PatternItem::Predicate(Box::new(is_a_time_of_day)),
+                PatternItem::Regex(compile(r"(in the )?([ap])(\s|\.)?m?\.?")),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::RegexMatch(g1), _, Token::Time(td2), Token::RegexMatch(g4)] => {
+                    let h: i64 = g1.first()?.parse().ok()?;
+                    let m = g1.get(2).and_then(|s| s.parse::<i64>().ok());
+                    let is_am = g4.get(1).map(|s| s.eq_ignore_ascii_case("a")).unwrap_or(false);
+                    let td1 = match m {
+                        Some(mm) => hour_minute_td(true, h, mm),
+                        None => hour_td(true, h),
+                    };
+                    let a = time_of_day_ampm(is_am, &td1);
+                    let b = time_of_day_ampm(is_am, td2);
+                    interval_td(IntervalType::Closed, &a, &b).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
         Rule {
             name: "by <time>".into(),
             pattern: vec![

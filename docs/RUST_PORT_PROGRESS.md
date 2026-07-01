@@ -37,6 +37,7 @@ Branch: `rust-port-en-time`.
 | + absorb (on <day>, <dow>,) | 493 / 984 | 491 | 3 / 10 | **crossed 50%**; unlocks <time> on <day> via intersect |
 | + next/last/past/upcoming N <unit> | 524 / 984 | 460 | 3 / 10 | cycle_n/takeN interval span; +31 |
 | + end/beginning of year & week | 570 / 984 | 414 | 3 / 10 | EOY/BOY + of <year>/<week>; composes w/ this/next week; +46 |
+| + interval TOD am/pm (3-4pm) | 578 / 984 | 406 | 3 / 10 | trailing am/pm applied to both endpoints |
 
 ## How to run
 
@@ -54,7 +55,7 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru end/beginning of year & week. **570/984 (58%)**. Next: interval TOD-AMPM (3-4pm), ordinal quarter/Q1, day before/after, o'clock, then ranking (unique gap).
+Cumulative thru interval TOD am/pm. **578/984 (59%)**. Next: ordinal quarter/Q1, at/before/after <tod>, DOM-interval (13 to 15 July), day before/after, then ranking (unique gap).
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
