@@ -46,6 +46,19 @@ fn full_range_time_values(input: &str, ctx: &duckling::ResolveContext) -> Vec<Va
         .collect()
 }
 
+/// All resolved Time values from the ranked (range-dominated) entities. This is
+/// what Duckling's corpus test checks — the best entity, not necessarily one
+/// spanning the whole input (e.g. "for a quarter past 3pm" -> "a quarter past
+/// 3pm"). Safe: a full-input parse dominates contained sub-ranges, so a *wrong*
+/// full parse still surfaces here and fails the check (can't mask a regression).
+fn best_time_values(input: &str, ctx: &duckling::ResolveContext) -> Vec<Value> {
+    duckling::parse(input, ctx)
+        .into_iter()
+        .filter(|e| e.dim == "time")
+        .map(|e| strip_values(e.value))
+        .collect()
+}
+
 #[test]
 fn positive_corpus() {
     let data = load();
@@ -62,8 +75,10 @@ fn positive_corpus() {
         let got = full_range_time_values(input, &ctx);
         let exp = strip_values(expected.clone());
         let ok = if contains_mode() {
-            got.iter().any(|g| g == &exp)
+            // Duckling's semantics: expected value among the best (ranked) entities.
+            best_time_values(input, &ctx).iter().any(|g| g == &exp)
         } else {
+            // unique mode stays strict: exactly one full-span result.
             got.len() == 1 && got[0] == exp
         };
         if !ok {
