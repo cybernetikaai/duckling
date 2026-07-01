@@ -12,7 +12,7 @@ per-milestone log of what's already done.
 | **Duration** (`parse_duration`) | emitted | full `Duration/EN/Corpus.hs` + oracle differential (135 checks) |
 | **Ordinal** (`parse_ordinal`) | emitted | full `Ordinal/EN/Corpus.hs` (32) |
 | **Time + Duration** (`parse_all`) | emitted | cross-dimension range domination vs oracle (96 cases) |
-| **Numeral** (`parse_numeral`) | emitted (partial) | integers, written numbers, informal quantifiers ("a couple"/"a few"), composition ("5 thousand", "one hundred thousand") — numeral_corpus (18). **Not corpus-complete**: standalone decimals ("1.5"), negatives ("-504"), fractions ("1/5"), magnitude suffixes (`3M`/`100K`), and "a/two dozen" remain deferred (only ever handled inline for Time/Duration). |
+| **Numeral** (`parse_numeral`) | emitted (in progress) | integers, written numbers, informal quantifiers, composition, **decimals, comma-groups, K/M/G suffixes, fractions** (numeral_corpus, 39). **Still deferred**: negatives ("-504"), zero-words ("naught"/"nil"), dozen-as-multiplier ("two dozen"), big spelled compounds ("one twenty two", "three billions"), Indian numbering ("three crore twelve lakh"), parentheticals ("forty-five (45)"). |
 | **Email** (`parse_email`) | emitted ✅ | full `Email/EN/Corpus.hs` — email_corpus (8 + 8 neg) |
 | **Url** (`parse_url`) | emitted ✅ | `Url/Rules.hs` + Corpus negatives — url_corpus (7 + 6 neg) |
 | **CreditCardNumber** (`parse_creditcard`) | emitted ✅ | full `CreditCardNumber/Corpus.hs` (Luhn) — creditcard_corpus (12 + 11 neg) |
@@ -83,6 +83,8 @@ product actually needs to extract those quantities.
 
 1. ~~`parse_numeral` (close the Ordinal asymmetry)~~ — ✅ done.
 2. ~~Email → Url → CreditCardNumber → PhoneNumber (quick wins)~~ — ✅ done.
-3. **Finish Numeral** (standalone decimals/negatives/fractions + K/M/G/lakh),
-   validated vs `Numeral/EN/Corpus.hs` — the prerequisite for Bucket B.
+3. **Finish Numeral** (prerequisite for Bucket B), red→green per family vs
+   `Numeral/EN/Corpus.hs`: ~~decimals~~ ✅, ~~commas~~ ✅, ~~K/M/G suffixes~~ ✅,
+   ~~fractions~~ ✅; remaining: negatives, zero-words, dozen-multiplier, big
+   spelled compounds, Indian numbering, parentheticals.
 4. Temperature → Volume → Distance → Quantity → AmountOfMoney.
