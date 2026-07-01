@@ -51,6 +51,11 @@ pub fn numeral_value(n: &crate::numeral::NumeralData) -> serde_json::Value {
     }
 }
 
+/// Resolve an Email to Duckling's JSON: `{type:"value", value:"a@b.com"}`.
+pub fn email_value(e: &crate::email::EmailData) -> serde_json::Value {
+    serde_json::json!({"type": "value", "value": e.value})
+}
+
 /// Resolve a Duration to Duckling's JSON: `{value, unit, <unit>: value, type,
 /// normalized: {value: <seconds>, unit: "second"}}` (port of the DurationData
 /// ToJSON instance). The `<unit>` key is dynamic — e.g. `"minute": 30`.

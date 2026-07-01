@@ -4,6 +4,7 @@
 //! (Numeral, Ordinal, Duration, TimeGrain) are added as dependencies land.
 
 use crate::duration::DurationData;
+use crate::email::EmailData;
 use crate::grain::Grain;
 use crate::numeral::NumeralData;
 use crate::ordinal::OrdinalData;
@@ -112,6 +113,7 @@ pub enum Token {
     Ordinal(OrdinalData),
     TimeGrain(Grain),
     Duration(DurationData),
+    Email(EmailData),
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]

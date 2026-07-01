@@ -857,6 +857,48 @@ fn numeral_corpus() {
     );
 }
 
+/// Email dimension (`parse_email`) — port of Duckling/Email/EN/Corpus.hs. A
+/// positive must produce an entity whose value equals the expected address
+/// (literal and spelled-out "a at b dot com" forms); negatives produce none.
+#[test]
+fn email_corpus() {
+    let data: Value = serde_json::from_str(include_str!("../fixtures/email_corpus.json")).unwrap();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let want = c["value"].as_str().unwrap();
+        let got: Vec<String> = duckling::parse_email(input)
+            .into_iter()
+            .filter_map(|e| e.value["value"].as_str().map(str::to_string))
+            .collect();
+        if !got.iter().any(|g| g == want) {
+            failures.push(format!("{input:?}\n  expected {want}\n  got      {got:?}"));
+        }
+    }
+    for neg in data["negatives"].as_array().unwrap() {
+        checked += 1;
+        let input = neg.as_str().unwrap();
+        let hit = duckling::parse_email(input);
+        if !hit.is_empty() {
+            failures.push(format!(
+                "[negative] {input:?} parsed: {:?}",
+                hit.iter()
+                    .map(|e| e.value["value"].clone())
+                    .collect::<Vec<_>>()
+            ));
+        }
+    }
+    eprintln!("email_corpus checked {checked}, {} failing", failures.len());
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
+}
+
 /// Combined Time+Duration (`parse_all`) — the `dims:["time","duration"]` surface.
 /// Time and Duration compete in one pool by dimension-agnostic range domination,
 /// exactly as Duckling: the widest match per position wins, disjoint matches all
