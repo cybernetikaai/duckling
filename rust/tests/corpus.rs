@@ -154,3 +154,31 @@ fn negative_corpus() {
         failures.join("\n")
     );
 }
+
+/// Differential test: compositional inputs generated and cross-checked against
+/// the live rasa/duckling oracle (DST-free -02:00 context, so oracle values are
+/// ground truth). Complements the Corpus.hs-derived positive_corpus by probing
+/// rule *combinations* the curated corpus may under-cover. Best-entity semantics.
+#[test]
+fn differential_corpus() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/differential.json")).unwrap();
+    let ctx = ctx();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for ex in data["positive"].as_array().unwrap() {
+        let expected = &ex["expected"];
+        if expected.is_null() {
+            continue;
+        }
+        checked += 1;
+        let input = ex["input"].as_str().unwrap();
+        let exp = strip_values(expected.clone());
+        if !best_time_values(input, &ctx).iter().any(|g| g == &exp) {
+            failures.push(format!("{input:?}\n  expected {exp}\n  got      {:?}", best_time_values(input, &ctx)));
+        }
+    }
+    eprintln!("differential checked {checked}, {} failing", failures.len());
+    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
+        failures.iter().take(5000).cloned().collect::<Vec<_>>().join("\n"));
+}
