@@ -712,11 +712,17 @@ fn today_td() -> TimeData {
     cycle_nth_td(Grain::Day, 0)
 }
 fn is_a_part_of_day(t: &Token) -> bool {
-    matches!(t, Token::Time(td) if matches!(td.form, Some(Form::PartOfDay)))
+    matches!(t, Token::Time(td) if matches!(td.form, Some(Form::PartOfDay { .. })))
 }
-fn part_of_day(mut td: TimeData) -> TimeData {
-    td.form = Some(Form::PartOfDay);
+fn part_of_day(start_hour: i64, mut td: TimeData) -> TimeData {
+    td.form = Some(Form::PartOfDay { start_hour: start_hour as i8 });
     td
+}
+fn pod_start_hour(td: &TimeData) -> Option<i64> {
+    match td.form {
+        Some(Form::PartOfDay { start_hour }) => Some(start_hour as i64),
+        _ => None,
+    }
 }
 
 /// Intersect two TimeData (finer grain drives the composition).
@@ -1044,7 +1050,7 @@ fn part_of_day_rules() -> Vec<Rule> {
                 } else {
                     (12, 19) // afternoon
                 };
-                Some(Token::Time(part_of_day(mk_latent(hour_interval(h1, h2)?))))
+                Some(Token::Time(part_of_day(h1, mk_latent(hour_interval(h1, h2)?))))
             }),
         },
         Rule {
@@ -1052,7 +1058,7 @@ fn part_of_day_rules() -> Vec<Rule> {
             pattern: vec![PatternItem::Regex(compile(
                 r"early ((in|hours of) the )?morning",
             ))],
-            prod: Box::new(|_| Some(Token::Time(part_of_day(mk_latent(hour_interval(0, 9)?))))),
+            prod: Box::new(|_| Some(Token::Time(part_of_day(0, mk_latent(hour_interval(0, 9)?))))),
         },
         Rule {
             name: "in|during the <part-of-day>".into(),
@@ -1073,7 +1079,8 @@ fn part_of_day_rules() -> Vec<Rule> {
             ],
             prod: Box::new(|tokens| match tokens {
                 [_, Token::Time(td)] => {
-                    intersect_td(&today_td(), td).map(|t| Token::Time(part_of_day(t)))
+                    let start = pod_start_hour(td)?;
+                    intersect_td(&today_td(), td).map(|t| Token::Time(part_of_day(start, t)))
                 }
                 _ => None,
             }),
@@ -1085,7 +1092,29 @@ fn part_of_day_rules() -> Vec<Rule> {
                 let m = regex_groups(tokens)?.first()?.to_lowercase();
                 let h = if m.contains("late") { 21 } else { 18 };
                 let evening = hour_interval(h, 0)?;
-                intersect_td(&today_td(), &evening).map(|t| Token::Time(part_of_day(t)))
+                intersect_td(&today_td(), &evening).map(|t| Token::Time(part_of_day(h, t)))
+            }),
+        },
+        // "this evening at 2" -> the part-of-day disambiguates the bare hour's
+        // am/pm: PM unless the pod starts before noon, or the hour is 12 (->AM).
+        Rule {
+            name: "<part-of-day> at <time-of-day>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_a_part_of_day)),
+                PatternItem::Regex(compile(r"at|@")),
+                PatternItem::Predicate(Box::new(is_a_time_of_day)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(pod), _, Token::Time(tod)] => {
+                    let start = pod_start_hour(pod)?;
+                    let hours = match tod.form {
+                        Some(Form::TimeOfDay { hours: Some(h), is12h: true }) => h as i64,
+                        _ => return None,
+                    };
+                    let is_am = start < 12 || hours == 12;
+                    Some(Token::Time(time_of_day_ampm(is_am, tod)))
+                }
+                _ => None,
             }),
         },
     ]
@@ -1323,7 +1352,7 @@ fn duration_rules() -> Vec<Rule> {
 /// "this/next/last"; bare time-of-day cannot.
 fn is_ok_with_this_next(t: &Token) -> bool {
     matches!(t, Token::Time(td) if td.holiday.is_some()
-        || matches!(td.form, Some(Form::DayOfWeek) | Some(Form::Month { .. }) | Some(Form::PartOfDay) | Some(Form::Season)))
+        || matches!(td.form, Some(Form::DayOfWeek) | Some(Form::Month { .. }) | Some(Form::PartOfDay { .. }) | Some(Form::Season)))
 }
 
 fn season_td(sm: i64, sd: i64, em: i64, ed: i64) -> Option<TimeData> {

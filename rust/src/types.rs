@@ -16,7 +16,9 @@ pub enum Form {
     DayOfWeek,
     TimeOfDay { hours: Option<i8>, is12h: bool },
     Month { month: i8 },
-    PartOfDay,
+    /// A part of day; `start_hour` is the interval's opening hour, used to
+    /// disambiguate am/pm for "<part-of-day> at <time-of-day>".
+    PartOfDay { start_hour: i8 },
     Season,
 }
 
