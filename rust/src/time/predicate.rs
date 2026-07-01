@@ -281,15 +281,18 @@ pub fn shift_timezone(provided_minutes: i64, inner: Predicate) -> Predicate {
     Predicate::Series(Rc::new(move |t: TimeObject, ctx: &TimeContext| {
         let shift = ctx.ref_offset_minutes - provided_minutes;
         let (past, future) = inner.run(t, ctx);
+        // Duckling's shiftTimezone is `timePlus x Minute`, which floors grain to
+        // min(grain, Minute) — a timezone-shifted hour reports minute grain.
+        let g = |o: Grain| o.min(Grain::Minute);
         (
             Box::new(past.map(move |o| TimeObject {
                 start: add(o.start, Grain::Minute, shift),
-                grain: o.grain,
+                grain: g(o.grain),
                 end: o.end.map(|e| add(e, Grain::Minute, shift)),
             })) as BoxIter,
             Box::new(future.map(move |o| TimeObject {
                 start: add(o.start, Grain::Minute, shift),
-                grain: o.grain,
+                grain: g(o.grain),
                 end: o.end.map(|e| add(e, Grain::Minute, shift)),
             })) as BoxIter,
         )

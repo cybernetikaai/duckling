@@ -46,6 +46,7 @@ Branch: `rust-port-en-time`.
 | + ranking machinery (stub model) | 627 / 984 | 357 | 3 / 10 | Node.children + score/rank; UNIQUE 370→512 via range-domination |
 | + EN classifier model (subagent) + name align | 626 / 984 | 358 | 4 / 10 | UNIQUE 512→622; contains≈unique — ranking works |
 | + rule-name audit + `the nth <dow> of <month>` | 628 / 984 | 356 | 2 / 10 | 15 misnamed rules scored 0 & won spuriously; fixed README example |
+| + shiftTimezone grain floor (min Minute) | 634 / 984 | 350 | 1 / 10 | timePlus floors grain; fixed 6 corpus + EST grain |
 
 ## How to run
 
@@ -63,7 +64,7 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru rule-name audit. contains **628/984**, unique **626/984**. tz_stress 2 left (both genuine DST-edge approximations: spring-forward gap offset, EST→BST grain). Next: fraction/half durations; then those 2 DST edges; long-tail holidays.
+Cumulative thru shiftTimezone grain floor. contains **634/984**, unique **632/984**. tz_stress 1 left: spring-forward gap offset (2:30am on jump day -> Duckling keeps pre-transition -05:00; jiff resolves gap forward to -04:00). Next: spring-forward gap resolution; fraction/half durations; long-tail holidays.
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
