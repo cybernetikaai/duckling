@@ -314,6 +314,34 @@ fn values_array() {
         failures.iter().take(50).cloned().collect::<Vec<_>>().join("\n"));
 }
 
+/// Large-scale randomized differential: random inputs (from parameterized
+/// templates across every rule family) paired with random references (date +
+/// time-of-day, 2010–2022), cross-checked against the oracle. All prior fuzzing
+/// varied inputs OR references; this varies both together at scale (1500 cases)
+/// to catch rare interaction bugs the separate audits couldn't. Best-entity.
+#[test]
+fn random_diff() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/random_diff.json")).unwrap();
+    let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(-2));
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let reference: jiff::Timestamp = c["ref"].as_str().unwrap().parse().expect("ref");
+        let ctx = duckling::ResolveContext { reference, zone: zone.clone(), with_latent: false };
+        let exp = strip_values(c["expected"].clone());
+        if !best_time_values(input, &ctx).iter().any(|g| g == &exp) {
+            failures.push(format!("[{}] {input:?}\n  expected {exp}\n  got      {:?}",
+                c["ref"], best_time_values(input, &ctx)));
+        }
+    }
+    eprintln!("random_diff checked {checked}, {} failing", failures.len());
+    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
+        failures.iter().take(60).cloned().collect::<Vec<_>>().join("\n"));
+}
+
 /// Robustness: adversarial / untrusted input must never panic or hang. Huge
 /// magnitudes blew up two ways — jiff's Span setters panic above their per-unit
 /// range (fixed: fallible `try_*` in grain::add), and predNth/predNthAfter walked
