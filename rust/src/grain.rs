@@ -48,20 +48,28 @@ pub fn grain_str(g: Grain) -> &'static str {
 /// adds clip day-of-month exactly like Haskell's addGregorianMonthsClip /
 /// YearsClip (Jan 31 + 1mo -> Feb 28; Feb 29 + 1yr -> Feb 28).
 pub fn add(dt: DateTime, g: Grain, n: i64) -> DateTime {
+    // The `try_*` span builders (and the checked add) must not panic on absurd
+    // magnitudes from untrusted input ("999999999999999999 days ago", "50000 years
+    // from now"): jiff's per-unit Span setters panic when the value exceeds their
+    // range, so use the fallible variants and return `dt` unchanged on overflow —
+    // such candidates then resolve to nothing useful and get filtered.
     let span = match g {
-        Grain::NoGrain | Grain::Second => Span::new().seconds(n),
-        Grain::Minute => Span::new().minutes(n),
-        Grain::Hour => Span::new().hours(n),
-        Grain::Day => Span::new().days(n),
-        Grain::Week => Span::new().weeks(n),
-        Grain::Month => Span::new().months(n),
-        Grain::Quarter => Span::new().months(3 * n),
-        Grain::Year => Span::new().years(n),
+        Grain::NoGrain | Grain::Second => Span::new().try_seconds(n),
+        Grain::Minute => Span::new().try_minutes(n),
+        Grain::Hour => Span::new().try_hours(n),
+        Grain::Day => Span::new().try_days(n),
+        Grain::Week => Span::new().try_weeks(n),
+        Grain::Month => Span::new().try_months(n),
+        Grain::Quarter => match n.checked_mul(3) {
+            Some(m) => Span::new().try_months(m),
+            None => return dt,
+        },
+        Grain::Year => Span::new().try_years(n),
     };
-    // Out-of-range results (e.g. a phone number mis-parsed as a huge year) must
-    // not panic; return dt unchanged so such candidates simply resolve to nothing
-    // useful and get filtered (never full-range for those inputs).
-    dt.checked_add(span).unwrap_or(dt)
+    match span {
+        Ok(s) => dt.checked_add(s).unwrap_or(dt),
+        Err(_) => dt,
+    }
 }
 
 pub fn round(dt: DateTime, g: Grain) -> DateTime {

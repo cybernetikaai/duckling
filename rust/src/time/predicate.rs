@@ -16,6 +16,13 @@ use jiff::civil::DateTime;
 
 const SAFE_MAX: usize = 10;
 
+/// Upper bound on the nth-occurrence index for predNth/predNthAfter. Real queries
+/// never exceed a few thousand ("500 fridays from now" is already extreme); a huge
+/// index from untrusted input ("10^19 fridays from now") would otherwise make
+/// `future.take(n+2)` walk an infinite series forever. Beyond this the predicate
+/// yields nothing (the candidate then resolves to nothing useful and is filtered).
+const MAX_NTH: u64 = 10_000;
+
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Ampm {
     Am,
@@ -429,6 +436,9 @@ pub fn time_intervals(kind: IntervalType, pred1: Predicate, pred2: Predicate) ->
 /// e.g. predNthAfter(3, Thursday, November) = the 4th Thursday = Thanksgiving.
 pub fn take_nth_after(n: i64, not_immediate: bool, cyclic: Predicate, base: Predicate) -> Predicate {
     Predicate::Series(Rc::new(move |now: TimeObject, ctx: &TimeContext| {
+        if n.unsigned_abs() > MAX_NTH {
+            return (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::empty()) as BoxIter);
+        }
         let f = |t: TimeObject| -> Option<TimeObject> {
             let (past, future) = cyclic.run(t, ctx);
             if n >= 0 {
@@ -566,6 +576,9 @@ pub fn shift_duration(base: Predicate, value: i64, grain: Grain) -> Predicate {
 
 pub fn take_nth(n: i64, not_immediate: bool, pred: Predicate) -> Predicate {
     Predicate::Series(Rc::new(move |t: TimeObject, ctx: &TimeContext| {
+        if n.unsigned_abs() > MAX_NTH {
+            return (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::empty()) as BoxIter);
+        }
         let base = ctx.ref_time;
         let (past, future) = pred.run(base, ctx);
         let nth = if n >= 0 {

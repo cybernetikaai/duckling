@@ -272,6 +272,35 @@ fn tz_truth() {
         failures.iter().take(200).cloned().collect::<Vec<_>>().join("\n"));
 }
 
+/// Robustness: adversarial / untrusted input must never panic or hang. Huge
+/// magnitudes blew up two ways — jiff's Span setters panic above their per-unit
+/// range (fixed: fallible `try_*` in grain::add), and predNth/predNthAfter walked
+/// an infinite series `take(n+2)` times for absurd n (fixed: MAX_NTH cap). A panic
+/// fails this test outright; a regression that reintroduces the hang would time out.
+#[test]
+fn robustness() {
+    let ctx = ctx();
+    let adversarial = [
+        "999999999999999999 days ago", "in 9999999999999 years", "in 99999999 months",
+        "in 2147483648 days", "9999999999 hours ago", "1000000 months from now",
+        "in 100000000 days", "50000 years from now", "in 9999999999999999 minutes",
+        "9999999999999999999 fridays from now", "in 5000000000 quarters",
+        "in 88888888888 fortnights", "the 999999999999th of january", "2222222222222-02-12",
+        "999999999th monday", "february 31", "2013-99-99", "99:99", "year 999999999999",
+        "the 32nd", "in -5 days", "in 0 days", "", "   ", "!@#$%^&*()", "\u{1f600} tomorrow",
+    ];
+    for input in adversarial {
+        // Must return (no panic); content is irrelevant.
+        let _ = duckling::parse(input, &ctx);
+    }
+    // Legitimately-large N must still resolve (the cap is generous, not restrictive).
+    assert!(
+        best_time_values("500 fridays from now", &ctx).iter()
+            .any(|v| v["value"] == "2022-09-09T00:00:00.000-02:00"),
+        "500 fridays from now should still resolve"
+    );
+}
+
 /// Reference time-of-day: time-sensitive inputs ("3pm", "this morning", "in 2
 /// hours", "tonight") resolved at 10 reference times across a single day (00:30 →
 /// 23:30), vs the oracle. Every other test fixes the reference at 04:30, so the
