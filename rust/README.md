@@ -33,6 +33,8 @@ Every Duckling EN dimension that has a corpus is ported and green against it:
   container (distroless, `scratch`, slimmed Alpine/Ubuntu) must either install
   `tzdata` or build `jiff` with `features = ["tzdb-bundle-always"]` to compile the
   database into the binary. Without either, `TimeZone::get(...)` fails at runtime.
+  A reference container image (Ubuntu 24.04 + `tzdata`) is at
+  [`rust/Dockerfile`](Dockerfile) — `docker build -t duckling rust/`.
 
 ## Build
 

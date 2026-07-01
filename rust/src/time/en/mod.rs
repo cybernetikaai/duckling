@@ -222,32 +222,33 @@ fn time_of_day_ampm(is_am: bool, td: &TimeData) -> TimeData {
     // cleanly when a specific date pins the day ("Jul 18, 2014 07:00 PM").
     // Only a pure hour (grain Hour) or an hh:mm (minutes set) is folded; hh:mm:ss
     // keeps its seconds via the fallback.
-    if let Some(Form::TimeOfDay {
-        hours: Some(h),
-        minutes,
-        is12h,
-    }) = td.form
-        && (minutes.is_some() || td.grain == Grain::Hour)
-    {
-        let hp = hour(is12h, Some(ampm), h as i64);
-        let (pred, grain) = match minutes {
-            Some(m) => (intersect(minute(m as i64), hp), Grain::Minute),
-            None => (hp, Grain::Hour),
-        };
-        return TimeData {
-            pred,
-            grain,
-            latent: false,
-            not_immediate: false,
-            form: Some(Form::TimeOfDay {
-                hours: None,
-                minutes: None,
-                is12h: false,
-            }),
-            direction: None,
-            holiday: td.holiday.clone(),
-            has_timezone: false,
-        };
+    match td.form {
+        Some(Form::TimeOfDay {
+            hours: Some(h),
+            minutes,
+            is12h,
+        }) if minutes.is_some() || td.grain == Grain::Hour => {
+            let hp = hour(is12h, Some(ampm), h as i64);
+            let (pred, grain) = match minutes {
+                Some(m) => (intersect(minute(m as i64), hp), Grain::Minute),
+                None => (hp, Grain::Hour),
+            };
+            return TimeData {
+                pred,
+                grain,
+                latent: false,
+                not_immediate: false,
+                form: Some(Form::TimeOfDay {
+                    hours: None,
+                    minutes: None,
+                    is12h: false,
+                }),
+                direction: None,
+                holiday: td.holiday.clone(),
+                has_timezone: false,
+            };
+        }
+        _ => {}
     }
     // Fallback (hh:mm:ss, or no known hour): intersect the am/pm half-day.
     TimeData {
