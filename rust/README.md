@@ -142,6 +142,43 @@ To coerce parsed times into a user's zone, set `zone` to that zone here — the
 resolver derives each value's offset per-instant (DST-correct), so you never
 convert after the fact.
 
+## Project layout & adding a language
+
+The crate is organized **by dimension, then by language** (mirroring Duckling's
+`Dimension/LANG` layout). Each dimension keeps its language-agnostic value type
+and shared math in `mod.rs`, and its language-specific rules in a `<lang>` module:
+
+```
+src/
+  types.rs, engine.rs, ranking.rs, resolve.rs, document.rs, regex.rs   # core (language-agnostic)
+  grain.rs                                                             # Grain + calendar math
+  numeral/   { mod.rs = NumeralData + accessors,  en.rs = English rules }
+  ordinal/   { mod.rs = OrdinalData,               en.rs = English rules }
+  duration/  { mod.rs = DurationData + Semigroup,  en.rs = English rules }
+  timegrain/ { mod.rs = shim,                      en.rs = English grain words }
+  time/
+    object.rs, predicate.rs, computed.rs           # language-agnostic time machinery
+    en/  { mod.rs = helpers + en_rules(locale);  dates.rs timeofday.rs intervals.rs
+           cycles.rs holidays.rs modifiers.rs }    # English Time rules, split by concern
+```
+
+**To add a language** (e.g. Spanish), add sibling `<lang>` modules and wire them
+into `build_rules` in `lib.rs`:
+
+```rust
+r.extend(numeral::es::numeral_rules());
+r.extend(ordinal::es::ordinal_rules());
+r.extend(timegrain::es::timegrain_rules());
+r.extend(duration::es::duration_rules());
+r.extend(time::es::es_rules(locale));   // time/es/ mirrors time/en/
+```
+
+The agnostic pieces (value types, the Semigroup, calendar math, the engine and
+ranker) are reused as-is; only the words/regexes are new. **Region** differences
+(e.g. en_US vs en_GB date order, regional holidays) stay *data-driven* — a
+`Locale` enum threaded through the builders plus region-keyed JSON fixtures — so
+they don't need per-region modules.
+
 ## Notes
 
 - **Faithful to Duckling**, with a few deliberate, documented divergences (e.g.

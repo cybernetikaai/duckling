@@ -29,10 +29,10 @@ use types::{Node, Rule, Token};
 pub use types::Locale;
 
 fn build_rules(locale: Locale) -> Vec<Rule> {
-    let mut r = numeral::numeral_rules();
-    r.extend(ordinal::ordinal_rules());
-    r.extend(timegrain::timegrain_rules());
-    r.extend(duration::duration_rules());
+    let mut r = numeral::en::numeral_rules();
+    r.extend(ordinal::en::ordinal_rules());
+    r.extend(timegrain::en::timegrain_rules());
+    r.extend(duration::en::duration_rules());
     r.extend(time::en::en_rules(locale));
     r
 }

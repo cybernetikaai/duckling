@@ -1,45 +1,10 @@
-//! Minimal Numeral dimension — just what EN Time needs so far.
-//! Phase: integer (numeric). Written numbers / composition added when a Time
-//! rule (durations, spelled times) requires them.
+//! English (`en`) Numeral rules — integers, written numbers, informal
+//! quantifiers ("a couple", "a dozen"), and composition. Produces
+//! `super::NumeralData` (the language-agnostic value type).
 
+use super::NumeralData;
 use crate::regex::compile;
 use crate::types::{PatternItem, Rule, Token};
-
-#[derive(Clone, Debug)]
-pub struct NumeralData {
-    pub value: f64,
-    /// false for informal numerals (couple/few/dozen/single/pair) which Duckling
-    /// marks notOkForAnyTime — they can't be a time-of-day/year/day-of-month.
-    pub ok_for_time: bool,
-    /// Power-of-ten exponent for "hundred"/"thousand"/... (Duckling's grain).
-    pub grain: Option<i64>,
-    /// True for powers of ten (multiplicands like "thousand").
-    pub multipliable: bool,
-}
-
-impl NumeralData {
-    pub fn new(value: f64, ok_for_time: bool) -> Self {
-        NumeralData {
-            value,
-            ok_for_time,
-            grain: None,
-            multipliable: false,
-        }
-    }
-}
-
-/// Integer value if the numeral is a whole number.
-pub fn int_value(n: &NumeralData) -> Option<i64> {
-    if n.value.fract() == 0.0 {
-        Some(n.value as i64)
-    } else {
-        None
-    }
-}
-
-pub fn ok_for_time(n: &NumeralData) -> bool {
-    n.ok_for_time
-}
 
 const INFORMAL: &[&str] = &["single", "couple", "pair", "few", "dozen"];
 

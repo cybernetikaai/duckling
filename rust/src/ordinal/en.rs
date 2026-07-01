@@ -1,14 +1,10 @@
-//! Ordinal dimension — port of `Duckling/Ordinal/EN/Rules.hs`: digit ordinals
-//! (1st, 19th, 31st), base words (first..twentieth, thirtieth..ninetieth), and
-//! composite words (twenty-first..ninety-ninth, incl. spaced "twenty fifth").
+//! English (`en`) Ordinal rules — port of `Duckling/Ordinal/EN/Rules.hs`: digit
+//! ordinals (1st, 19th, 31st), base words (first..twentieth, thirtieth..ninetieth),
+//! and composite words (twenty-first..ninety-ninth, incl. spaced "twenty fifth").
 
+use super::OrdinalData;
 use crate::regex::compile;
 use crate::types::{PatternItem, Rule, Token};
-
-#[derive(Clone, Debug)]
-pub struct OrdinalData {
-    pub value: i64,
-}
 
 /// `ordinalsMap` (first..ninetieth). Also the units table for composites.
 fn base_ordinal(w: &str) -> Option<i64> {
