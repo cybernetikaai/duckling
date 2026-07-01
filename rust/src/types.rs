@@ -33,6 +33,9 @@ pub struct TimeData {
     pub form: Option<Form>,
     pub direction: Option<IntervalDirection>,
     pub holiday: Option<String>,
+    /// True once a timezone has been applied (port of Duckling's hasTimezone),
+    /// so an interval-timezone rule won't double-apply to an already-tz'd end.
+    pub has_timezone: bool,
 }
 
 impl TimeData {
@@ -45,6 +48,7 @@ impl TimeData {
             form: None,
             direction: None,
             holiday: None,
+            has_timezone: false,
         }
     }
 }

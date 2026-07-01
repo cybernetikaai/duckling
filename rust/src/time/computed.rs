@@ -34,6 +34,7 @@ fn computed_holiday(name: &'static str, re: &str, ymd: &'static [(i16, i8, i8)])
         form: None,
         direction: None,
         holiday: Some(name.to_string()),
+        has_timezone: false,
     };
     Rule {
         name: format!("holiday: {name}"),
@@ -78,6 +79,7 @@ fn computed_holiday_shift(
         form: None,
         direction: None,
         holiday: Some(name.to_string()),
+        has_timezone: false,
     };
     Rule {
         name: format!("holiday: {name}"),
@@ -244,6 +246,7 @@ pub(crate) fn computed_interval_holiday(
         form: None,
         direction: None,
         holiday: Some(name.to_string()),
+        has_timezone: false,
     };
     Rule {
         name: format!("holiday: {name}"),
@@ -285,6 +288,7 @@ fn paired_interval_holiday(
         form: None,
         direction: None,
         holiday: Some(name.to_string()),
+        has_timezone: false,
     };
     Rule {
         name: format!("holiday: {name}"),
@@ -1126,6 +1130,7 @@ pub fn earth_hour_rule() -> Rule {
         form: None,
         direction: None,
         holiday: Some("Earth Hour".to_string()),
+        has_timezone: false,
     };
     Rule {
         name: "holiday: Earth Hour".to_string(),

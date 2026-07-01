@@ -61,6 +61,7 @@ fn cycle_nth_td(g: Grain, n: i64) -> TimeData {
         form: None,
         direction: None,
         holiday: None,
+        has_timezone: false,
     }
 }
 fn is_month_or_dow(t: &Token) -> bool {
@@ -86,6 +87,7 @@ fn day_of_month_td(n: i64) -> TimeData {
         form: None,
         direction: None,
         holiday: None,
+        has_timezone: false,
     }
 }
 
@@ -108,6 +110,7 @@ fn intersect_dom(td: &TimeData, dom_token: &Token) -> Option<TimeData> {
         form: None,
         direction: None,
         holiday: td.holiday.clone(),
+        has_timezone: false,
     })
 }
 
@@ -136,6 +139,7 @@ fn hour_td(is12h: bool, n: i64) -> TimeData {
         form: Some(Form::TimeOfDay { hours: Some(n as i8), minutes: None, is12h }),
         direction: None,
         holiday: None,
+        has_timezone: false,
     }
 }
 
@@ -150,6 +154,7 @@ fn year_td(n: i64) -> TimeData {
         form: None,
         direction: None,
         holiday: None,
+        has_timezone: false,
     }
 }
 
@@ -182,6 +187,7 @@ fn time_of_day_ampm(is_am: bool, td: &TimeData) -> TimeData {
                 form: Some(Form::TimeOfDay { hours: None, minutes: None, is12h: false }),
                 direction: None,
                 holiday: td.holiday.clone(),
+                has_timezone: false,
             };
         }
     }
@@ -194,6 +200,7 @@ fn time_of_day_ampm(is_am: bool, td: &TimeData) -> TimeData {
         form: Some(Form::TimeOfDay { hours: None, minutes: None, is12h: false }),
         direction: None,
         holiday: td.holiday.clone(),
+        has_timezone: false,
     }
 }
 
@@ -210,6 +217,7 @@ fn tod(pred: Predicate, grain: Grain, hours: Option<i64>, minutes: Option<i64>, 
         }),
         direction: None,
         holiday: None,
+        has_timezone: false,
     }
 }
 
@@ -255,6 +263,7 @@ fn days_of_week() -> Vec<Rule> {
                 form: Some(Form::DayOfWeek),
                 direction: None,
                 holiday: None,
+                has_timezone: false,
             })
         })
         .collect()
@@ -285,6 +294,7 @@ fn months() -> Vec<Rule> {
                 form: Some(Form::Month { month: n as i8 }),
                 direction: None,
                 holiday: None,
+                has_timezone: false,
             })
         })
         .collect()
@@ -804,6 +814,7 @@ fn cycle_and_relative_rules() -> Vec<Rule> {
                             form: td.form,
                             direction: None,
                             holiday: None,
+                            has_timezone: false,
                         }))
                     } else {
                         // this/coming: the upcoming day-of-week (notImmediate already set)
@@ -881,6 +892,7 @@ fn intersect_td(a: &TimeData, b: &TimeData) -> Option<TimeData> {
         form: None,
         direction: None,
         holiday: a.holiday.clone().or_else(|| b.holiday.clone()),
+        has_timezone: false,
     })
 }
 
@@ -893,6 +905,7 @@ fn month_td(n: i64) -> TimeData {
         form: Some(Form::Month { month: n as i8 }),
         direction: None,
         holiday: None,
+        has_timezone: false,
     }
 }
 fn month_day_td(m: i64, d: i64) -> TimeData {
@@ -908,6 +921,7 @@ fn nth_dow_of_month_td(n: i64, dow: i64, m: i64) -> TimeData {
         form: None,
         direction: None,
         holiday: None,
+        has_timezone: false,
     }
 }
 fn last_dow_of_month_td(dow: i64, m: i64) -> TimeData {
@@ -919,6 +933,7 @@ fn last_dow_of_month_td(dow: i64, m: i64) -> TimeData {
         form: None,
         direction: None,
         holiday: None,
+        has_timezone: false,
     }
 }
 fn mk_holiday(name: &str, mut td: TimeData) -> TimeData {
@@ -946,6 +961,7 @@ fn interval_td(kind: IntervalType, td1: &TimeData, td2: &TimeData) -> Option<Tim
         form: None,
         direction: None,
         holiday: None,
+        has_timezone: false,
     })
 }
 
@@ -1580,26 +1596,57 @@ fn in_timezone_td(provided: i64, td: &TimeData) -> TimeData {
         form: td.form,
         direction: td.direction,
         holiday: td.holiday.clone(),
+        has_timezone: true,
     }
+}
+
+fn has_no_timezone(t: &Token) -> bool {
+    matches!(t, Token::Time(td) if !td.has_timezone)
 }
 
 /// "<time-of-day> <timezone>" (ruleTimezone): shift the time into the frame.
 fn timezone_rules() -> Vec<Rule> {
     let alt = TZ.iter().map(|(n, _)| *n).collect::<Vec<_>>().join("|");
-    vec![Rule {
-        name: "<time> timezone".into(),
-        pattern: vec![
-            PatternItem::Predicate(Box::new(|t| is_not_latent(t) && is_a_time_of_day(t))),
-            PatternItem::Regex(compile(&format!(r"\b({alt})\b"))),
-        ],
-        prod: Box::new(|tokens| match tokens {
-            [Token::Time(td), Token::RegexMatch(g)] => {
-                let off = tz_offset(g.first()?)?;
-                Some(Token::Time(in_timezone_td(off, td)))
-            }
-            _ => None,
-        }),
-    }]
+    let tz_re = format!(r"\b({alt})\b");
+    vec![
+        Rule {
+            name: "<time> timezone".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(|t| is_not_latent(t) && is_a_time_of_day(t))),
+                PatternItem::Regex(compile(&tz_re)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(td), Token::RegexMatch(g)] => {
+                    let off = tz_offset(g.first()?)?;
+                    Some(Token::Time(in_timezone_td(off, td)))
+                }
+                _ => None,
+            }),
+        },
+        // "9:30 - 11:00 CST": one trailing timezone applies to both ends. The
+        // hasNoTimezone guards skip already-tz'd ends ("15:00 GMT - 18:00 GMT",
+        // handled per-end) so the tz isn't applied twice.
+        Rule {
+            name: "<datetime> - <datetime> (interval) timezone".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(|t| is_a_time_of_day(t) && has_no_timezone(t))),
+                PatternItem::Regex(compile(r"\-|to|th?ru|through|(un)?til(l)?")),
+                PatternItem::Predicate(Box::new(|t| is_a_time_of_day(t) && has_no_timezone(t))),
+                PatternItem::Regex(compile(&tz_re)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(a), _, Token::Time(b), Token::RegexMatch(g)] => {
+                    let off = tz_offset(g.first()?)?;
+                    // Build the interval from the raw ends first (resolves the
+                    // 12h hh:mm ambiguity to the daytime occurrence), then shift
+                    // the whole interval into the timezone.
+                    let iv = interval_td(IntervalType::Closed, a, b)?;
+                    Some(Token::Time(in_timezone_td(off, &iv)))
+                }
+                _ => None,
+            }),
+        },
+    ]
 }
 
 /// Generic intersection of two adjacent times (ports of ruleIntersect /
@@ -1682,6 +1729,7 @@ fn cycle_n_td(grain: Grain, n: i64) -> TimeData {
         form: None,
         direction: None,
         holiday: None,
+        has_timezone: false,
     }
 }
 
@@ -1694,6 +1742,7 @@ fn in_duration_td(value: i64, grain: Grain) -> TimeData {
         form: None,
         direction: None,
         holiday: None,
+        has_timezone: false,
     }
 }
 
@@ -1860,6 +1909,7 @@ fn pred_nth_td(n: i64, not_immediate: bool, td: &TimeData) -> TimeData {
         form: td.form,
         direction: None,
         holiday: td.holiday.clone(),
+        has_timezone: false,
     }
 }
 
@@ -1878,6 +1928,7 @@ fn cycle_nth_after_td(not_immediate: bool, grain: Grain, n: i64, base: &TimeData
         form: None,
         direction: None,
         holiday: None,
+        has_timezone: false,
     }
 }
 
@@ -2257,6 +2308,7 @@ fn day_of_week_td(n: i64) -> TimeData {
         form: Some(Form::DayOfWeek),
         direction: None,
         holiday: None,
+        has_timezone: false,
     }
 }
 fn is_grain_of_time(g: Grain) -> Box<dyn Fn(&Token) -> bool> {
