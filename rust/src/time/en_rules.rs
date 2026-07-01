@@ -844,8 +844,12 @@ fn cycle_and_relative_rules() -> Vec<Rule> {
                             has_timezone: false,
                         }))
                     } else {
-                        // this/coming: the upcoming day-of-week (notImmediate already set)
-                        Some(Token::Time(not_latent(td.clone())))
+                        // this/coming: predNth 0 notImmediate — a *single* pinned
+                        // occurrence (the upcoming dow), so it survives intersection
+                        // with a time-of-day. A bare dow's notImmediate lives in the
+                        // series and is dropped when composed, which would let "this
+                        // tuesday at 3" fall back to today when today is Tuesday.
+                        Some(Token::Time(pred_nth_td(0, true, td)))
                     }
                 }
                 _ => None,
