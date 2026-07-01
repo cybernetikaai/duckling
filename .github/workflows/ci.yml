@@ -1,10 +1,29 @@
 name: CI
 
-# Trigger the workflow on push or pull request, but only for the master branch
+# Legacy Haskell CI. Scoped to Haskell sources so it does not gate Rust/docs
+# PRs (the Rust port has its own gate, rust-ci.yml). Note: this only clears the
+# retired-action hard-fail; the GHC 8.6.5–9.0.1 matrix may still need broader
+# modernization to build on current runners.
 on:
   pull_request:
+    paths:
+      - "Duckling/**"
+      - "exe/**"
+      - "tests/**"
+      - "**/*.hs"
+      - "duckling.cabal"
+      - "stack.yaml"
+      - "package.yaml"
   push:
     branches: [master]
+    paths:
+      - "Duckling/**"
+      - "exe/**"
+      - "tests/**"
+      - "**/*.hs"
+      - "duckling.cabal"
+      - "stack.yaml"
+      - "package.yaml"
 
 jobs:
   stack:
@@ -17,7 +36,7 @@ jobs:
         ghc: ["8.6.5", "8.8.4", "8.10.3", "9.0.1"]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       if: github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.ref == 'refs/heads/master'
 
     - uses: haskell/actions/setup@v1
@@ -26,7 +45,7 @@ jobs:
         ghc-version: ${{ matrix.ghc }}
         stack-version: ${{ matrix.stack }}
 
-    - uses: actions/cache@v2.1.4
+    - uses: actions/cache@v4
       name: Cache ~/.stack
       with:
         path: ~/.stack
