@@ -12,7 +12,7 @@ per-milestone log of what's already done.
 | **Duration** (`parse_duration`) | emitted | full `Duration/EN/Corpus.hs` + oracle differential (135 checks) |
 | **Ordinal** (`parse_ordinal`) | emitted | full `Ordinal/EN/Corpus.hs` (32) |
 | **Time + Duration** (`parse_all`) | emitted | cross-dimension range domination vs oracle (96 cases) |
-| **Numeral** (`parse_numeral`) | emitted (in progress) | integers, written numbers, informal quantifiers, composition, **decimals, comma-groups, K/M/G suffixes, fractions** (numeral_corpus, 39). **Still deferred**: negatives ("-504"), zero-words ("naught"/"nil"), dozen-as-multiplier ("two dozen"), big spelled compounds ("one twenty two", "three billions"), Indian numbering ("three crore twelve lakh"), parentheticals ("forty-five (45)"). |
+| **Numeral** (`parse_numeral`) | emitted (corpus-complete) | full Numeral/EN/Corpus.hs (105 inputs) — integers/written/composition, decimals, comma-groups, K/M/G suffixes, fractions, zero-words, dozen, negatives, skip-hundreds, parentheticals, big compounds, Indian numbering (numeral_corpus). Only ruleSkipHundreds1 ("nine thirty"->930) omitted — collides with time-of-day in the shared rule set (documented). |
 | **Email** (`parse_email`) | emitted ✅ | full `Email/EN/Corpus.hs` — email_corpus (8 + 8 neg) |
 | **Url** (`parse_url`) | emitted ✅ | `Url/Rules.hs` + Corpus negatives — url_corpus (7 + 6 neg) |
 | **CreditCardNumber** (`parse_creditcard`) | emitted ✅ | full `CreditCardNumber/Corpus.hs` (Luhn) — creditcard_corpus (12 + 11 neg) |
@@ -83,8 +83,6 @@ product actually needs to extract those quantities.
 
 1. ~~`parse_numeral` (close the Ordinal asymmetry)~~ — ✅ done.
 2. ~~Email → Url → CreditCardNumber → PhoneNumber (quick wins)~~ — ✅ done.
-3. **Finish Numeral** (prerequisite for Bucket B), red→green per family vs
-   `Numeral/EN/Corpus.hs`: ~~decimals~~ ✅, ~~commas~~ ✅, ~~K/M/G suffixes~~ ✅,
-   ~~fractions~~ ✅; remaining: negatives, zero-words, dozen-multiplier, big
-   spelled compounds, Indian numbering, parentheticals.
+3. ~~Finish Numeral~~ ✅ — corpus-complete (105/105); one documented omission
+   (ruleSkipHundreds1). Prerequisite for Bucket B now cleared.
 4. Temperature → Volume → Distance → Quantity → AmountOfMoney.
