@@ -56,6 +56,36 @@ fn numeral(v: i64) -> Option<Token> {
     Some(Token::Numeral(NumeralData::new(v as f64, true)))
 }
 
+fn is_numeral(t: &Token) -> bool {
+    matches!(t, Token::Numeral(_))
+}
+/// A numeral without a (powers-of-ten) grain — the fractional operand of a
+/// spelled-out decimal (`not . hasGrain` in Duckling).
+fn is_numeral_no_grain(t: &Token) -> bool {
+    matches!(t, Token::Numeral(n) if n.grain.is_none_or(|g| g <= 1))
+}
+/// `77 -> 0.77`: divide by the smallest power of ten strictly greater than x
+/// (port of `decimalsToDouble`).
+fn decimals_to_double(x: f64) -> f64 {
+    let mut m = 1.0;
+    for _ in 0..10 {
+        if x - m < 0.0 {
+            return x / m;
+        }
+        m *= 10.0;
+    }
+    0.0
+}
+/// Parse a decimal string; a leading "." gets a "0" prepended (`parseDouble`).
+fn parse_double(s: &str) -> Option<f64> {
+    let s = if s.starts_with('.') {
+        format!("0{s}")
+    } else {
+        s.to_string()
+    };
+    s.parse::<f64>().ok()
+}
+
 fn is_positive(t: &Token) -> bool {
     matches!(t, Token::Numeral(n) if n.value >= 0.0)
 }
@@ -217,6 +247,51 @@ pub fn numeral_rules() -> Vec<Rule> {
                     (10f64.powi(g as i32) > b.value)
                         .then(|| Token::Numeral(NumeralData::new(a.value + b.value, true)))
                 }
+                _ => None,
+            }),
+        },
+        // "1.1", ".77" (ruleDecimals).
+        Rule {
+            name: "decimal number".into(),
+            pattern: vec![PatternItem::Regex(compile(r"(\d*\.\d+)"))],
+            prod: Box::new(|tokens| {
+                let g = match tokens.first() {
+                    Some(Token::RegexMatch(g)) => g,
+                    _ => return None,
+                };
+                Some(Token::Numeral(NumeralData::new(
+                    parse_double(g.first()?)?,
+                    true,
+                )))
+            }),
+        },
+        // "1 point 1" -> 1.1 (ruleDotSpelledOut).
+        Rule {
+            name: "one point 2".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_numeral)),
+                PatternItem::Regex(compile(r"point|dot")),
+                PatternItem::Predicate(Box::new(is_numeral_no_grain)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Numeral(a), _, Token::Numeral(b)] => Some(Token::Numeral(
+                    NumeralData::new(a.value + decimals_to_double(b.value), true),
+                )),
+                _ => None,
+            }),
+        },
+        // "point 77" -> 0.77 (ruleLeadingDotSpelledOut).
+        Rule {
+            name: "point 77".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"point|dot")),
+                PatternItem::Predicate(Box::new(is_numeral_no_grain)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Numeral(b)] => Some(Token::Numeral(NumeralData::new(
+                    decimals_to_double(b.value),
+                    true,
+                ))),
                 _ => None,
             }),
         },

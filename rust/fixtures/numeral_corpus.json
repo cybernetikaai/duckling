@@ -1,5 +1,5 @@
 {
- "_comment": "Supported standalone Numeral forms (subset of Numeral/EN/Corpus.hs). parse_numeral must emit dim=number with this value on a full-span parse. Deferred (not asserted): decimals, negatives, fractions, K/M/G/lakh-abbrev suffixes, a/two dozen, nil.",
+ "_comment": "Subset of Numeral/EN/Corpus.hs, grown per red->green cycle. parse_numeral must emit dim=number with this value on a full-span parse. Values may be int or float.",
  "cases": [
   {
    "input": "zero",
@@ -72,6 +72,34 @@
   {
    "input": "two thousand",
    "value": 2000
+  },
+  {
+   "input": "1.1",
+   "value": 1.1
+  },
+  {
+   "input": "1.10",
+   "value": 1.1
+  },
+  {
+   "input": "01.10",
+   "value": 1.1
+  },
+  {
+   "input": ".77",
+   "value": 0.77
+  },
+  {
+   "input": "0.77",
+   "value": 0.77
+  },
+  {
+   "input": "1 point 1",
+   "value": 1.1
+  },
+  {
+   "input": "point 77",
+   "value": 0.77
   }
  ]
 }
