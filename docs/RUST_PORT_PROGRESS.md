@@ -102,6 +102,7 @@ Branch: `rust-port-en-time`.
 | + token-boundary rule (major) | 1069 / 1069 | 0 | 68 / 68 | 3-letter abbrevs no longer match inside words ("money"↛Mon, "friend"↛Fri); Document::is_match_boundary |
 | + dict scan + sentence differential | 1069 / 1069 | 0 | 68 / 68 | 236k-word scan: 0 port↔oracle divergences; **sentence_stress 76** natural sentences (incl. 16 no-time false-positive guards); 0 gaps |
 | + reverse scan + multi-entity | 1069 / 1069 | 0 | 68 / 68 | reverse dict scan (false negatives): 0; **multi_entity 24** full-entity-set matches (ranker multi-select); 0 gaps — single-word surface bidirectionally clean |
+| + tz ground-truth (vs IANA tzdata) | 1069 / 1069 | 0 | 68 / 68 | **tz_truth 270** (9 zones × all dates) + **tz_gapfold 12** (PEP-495 fold=0); offsets correct vs authoritative tzdata, not just Duckling |
 
 ## How to run
 
@@ -121,7 +122,15 @@ Branch: `rust-port-en-time`.
 - **ref_stress** 1249 — ref-*sensitive* inputs across 21 reference instants
   (every weekday, month/year ends, leap days). Catches reference-dependent bugs
   (the "this tuesday at 3" class). Confirms all recent fixes are ref-robust.
-- **tz_stress** 68 — DST transitions across 6 IANA zones, both hemispheres.
+- **tz_stress** 68 — DST transitions across 6 IANA zones, both hemispheres (vs oracle).
+- **tz_truth** 270 + **tz_gapfold** 12 — timezone correctness vs *authoritative IANA
+  tzdata* (Python zoneinfo), not Duckling. tz_truth: "3pm" resolved in 9 real zones
+  across every 2013 month + DST-transition days, offset checked against zoneinfo
+  (catches the day-level DST switch). tz_gapfold: spring-forward gap (2:30am) and
+  fall-back fold (1:30am) times, the port's pre-transition ("before") pick verified
+  against zoneinfo's PEP-495 fold=0 convention across 12 real transitions. This is
+  the direct answer to the recorded "corpus is DST-blind / useless if tz is wrong"
+  concern — tz correctness is proven against ground truth, independent of Duckling.
 - **may_is_latent** + **no_subword_matches** — latent/default-mode guards from the
   latent-mode differential (comparing default-mode output vs the oracle). Found two
   real bugs: bare "May" wasn't latent (modal-verb false positives), and 3-letter
