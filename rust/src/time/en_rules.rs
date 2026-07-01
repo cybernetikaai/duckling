@@ -1182,6 +1182,90 @@ fn dom_of_next_month(d: i64) -> Option<TimeData> {
     intersect_td(&day_of_month_td(d), &cycle_nth_td(Grain::Month, 1))
 }
 
+fn day_of_week_td(n: i64) -> TimeData {
+    TimeData {
+        pred: day_of_week(n),
+        grain: Grain::Day,
+        latent: false,
+        not_immediate: false,
+        form: Some(Form::DayOfWeek),
+        direction: None,
+        holiday: None,
+    }
+}
+fn is_grain_of_time(g: Grain) -> Box<dyn Fn(&Token) -> bool> {
+    Box::new(move |t| matches!(t, Token::Time(td) if td.grain == g))
+}
+
+/// end/beginning of year & week (ports of ruleEndOfYear/BeginningOfYear,
+/// ruleEndOrBeginningOfYear/Week). Bounds oracle-verified.
+fn end_beginning_year_week_rules() -> Vec<Rule> {
+    fn cy(n: i64) -> TimeData {
+        cycle_nth_td(Grain::Year, n)
+    }
+    fn mo_of(y: &TimeData, m: i64) -> TimeData {
+        intersect_td(&month_td(m), y).expect("month-of-year")
+    }
+    vec![
+        Rule {
+            name: "by end of year".into(),
+            pattern: vec![PatternItem::Regex(compile(r"by (?:the )?(?:eoy|end of (?:the )?year)"))],
+            prod: Box::new(|_| {
+                interval_td(IntervalType::Open, &now_td(), &mo_of(&cy(1), 1)).map(Token::Time)
+            }),
+        },
+        Rule {
+            name: "end of year".into(),
+            pattern: vec![PatternItem::Regex(compile(r"(?:(?:at )?the )?(?:eoy|end of (?:the )?year)"))],
+            prod: Box::new(|_| {
+                interval_td(IntervalType::Closed, &mo_of(&cy(0), 9), &mo_of(&cy(0), 12)).map(Token::Time)
+            }),
+        },
+        Rule {
+            name: "beginning of year".into(),
+            pattern: vec![PatternItem::Regex(compile(r"(?:(?:at )?the )?(?:boy|beginning of (?:the )?year)"))],
+            prod: Box::new(|_| {
+                interval_td(IntervalType::Open, &mo_of(&cy(0), 1), &mo_of(&cy(0), 4)).map(Token::Time)
+            }),
+        },
+        Rule {
+            name: "beginning|end of <year>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"(?:at the )?(beginning|end) of")),
+                PatternItem::Predicate(is_grain_of_time(Grain::Year)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::RegexMatch(g), Token::Time(td)] => {
+                    if g.first()?.eq_ignore_ascii_case("beginning") {
+                        interval_td(IntervalType::Open, &intersect_td(&month_td(1), td)?, &intersect_td(&month_td(4), td)?).map(Token::Time)
+                    } else {
+                        interval_td(IntervalType::Closed, &intersect_td(&month_td(9), td)?, &intersect_td(&month_td(12), td)?).map(Token::Time)
+                    }
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "beginning|end of <week>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"(?:at the )?(beginning|end) of")),
+                PatternItem::Predicate(is_grain_of_time(Grain::Week)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::RegexMatch(g), Token::Time(td)] => {
+                    let (sd, ed) = if g.first()?.eq_ignore_ascii_case("beginning") {
+                        (1, 3)
+                    } else {
+                        (5, 7)
+                    };
+                    interval_td(IntervalType::Closed, &intersect_td(&day_of_week_td(sd), td)?, &intersect_td(&day_of_week_td(ed), td)?).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
+    ]
+}
+
 /// end-of-month / beginning-of-month (ports of ruleEndOfMonth/ruleBeginningOfMonth).
 fn end_beginning_of_month_rules() -> Vec<Rule> {
     vec![
@@ -1506,6 +1590,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(season_rules());
     rules.extend(numeric_date_rules());
     rules.extend(end_beginning_of_month_rules());
+    rules.extend(end_beginning_year_week_rules());
     rules.extend(this_next_last_time_rules());
     rules.extend(nth_dow_of_time_rules());
     rules.extend(time_pod_rules());
