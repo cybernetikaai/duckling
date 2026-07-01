@@ -246,6 +246,121 @@ fn months() -> Vec<Rule> {
         .collect()
 }
 
+fn is_an_hour_of_day(t: &Token) -> bool {
+    matches!(t, Token::Time(td)
+        if matches!(td.form, Some(Form::TimeOfDay { hours: Some(_), .. })) && td.grain > Grain::Minute)
+}
+fn hour_minute_td(is12h: bool, h: i64, m: i64) -> TimeData {
+    tod(hour_minute(is12h, h, m), Grain::Minute, Some(h), is12h)
+}
+fn minutes_after(n: i64, td: &TimeData) -> Option<TimeData> {
+    if let Some(Form::TimeOfDay { hours: Some(h), is12h }) = td.form {
+        Some(hour_minute_td(is12h, h as i64, n))
+    } else {
+        None
+    }
+}
+fn minutes_before(n: i64, td: &TimeData) -> Option<TimeData> {
+    if let Some(Form::TimeOfDay { hours: Some(h), is12h }) = td.form {
+        let h = h as i64;
+        let (hh, i12) = if h == 0 {
+            (23, is12h)
+        } else if h == 1 && is12h {
+            (12, true)
+        } else {
+            (h - 1, is12h)
+        };
+        Some(hour_minute_td(i12, hh, 60 - n))
+    } else {
+        None
+    }
+}
+
+/// quarter/half/N past|to <hour-of-day> (ruleHODHalf/Quarter, ruleNumeral/Half/
+/// Quarter To/After HOD). e.g. "half past 3", "quarter to 3", "20 past 3".
+fn past_to_rules() -> Vec<Rule> {
+    fn after_rule(name: &str, re: &str, n: i64) -> Rule {
+        Rule {
+            name: name.into(),
+            pattern: vec![
+                PatternItem::Regex(compile(re)),
+                PatternItem::Predicate(Box::new(is_an_hour_of_day)),
+            ],
+            prod: Box::new(move |tokens| match tokens {
+                [_, Token::Time(td)] => minutes_after(n, td).map(Token::Time),
+                _ => None,
+            }),
+        }
+    }
+    fn before_rule(name: &str, re: &str, n: i64) -> Rule {
+        Rule {
+            name: name.into(),
+            pattern: vec![
+                PatternItem::Regex(compile(re)),
+                PatternItem::Predicate(Box::new(is_an_hour_of_day)),
+            ],
+            prod: Box::new(move |tokens| match tokens {
+                [_, Token::Time(td)] => minutes_before(n, td).map(Token::Time),
+                _ => None,
+            }),
+        }
+    }
+    vec![
+        // <hour> half / <hour> quarter
+        Rule {
+            name: "<hour-of-day> half".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_an_hour_of_day)),
+                PatternItem::Regex(compile(r"half")),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(td), _] => minutes_after(30, td).map(Token::Time),
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "<hour-of-day> quarter".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_an_hour_of_day)),
+                PatternItem::Regex(compile(r"(a|one)? ?quarter")),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(td), _] => minutes_after(15, td).map(Token::Time),
+                _ => None,
+            }),
+        },
+        before_rule("half to <hod>", r"half (to|till|before|of)", 30),
+        before_rule("quarter to <hod>", r"(a|one)? ?quarter (to|till|before|of)", 15),
+        after_rule("half past <hod>", r"half (after|past)", 30),
+        after_rule("quarter past <hod>", r"(a|one)? ?quarter (after|past)", 15),
+        // <integer> to|past <hour-of-day>
+        Rule {
+            name: "<integer> to <hour-of-day>".into(),
+            pattern: vec![
+                PatternItem::Predicate(is_integer_between(1, 59)),
+                PatternItem::Regex(compile(r"to|till|before|of")),
+                PatternItem::Predicate(Box::new(is_an_hour_of_day)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [num, _, Token::Time(td)] => minutes_before(get_int_value(num)?, td).map(Token::Time),
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "<integer> past <hour-of-day>".into(),
+            pattern: vec![
+                PatternItem::Predicate(is_integer_between(1, 59)),
+                PatternItem::Regex(compile(r"after|past")),
+                PatternItem::Predicate(Box::new(is_an_hour_of_day)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [num, _, Token::Time(td)] => minutes_after(get_int_value(num)?, td).map(Token::Time),
+                _ => None,
+            }),
+        },
+    ]
+}
+
 fn time_of_day_rules() -> Vec<Rule> {
     vec![
         Rule {
@@ -1308,6 +1423,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(days_of_week());
     rules.extend(months());
     rules.extend(time_of_day_rules());
+    rules.extend(past_to_rules());
     rules.extend(numeral_dependent_rules());
     rules.extend(day_of_month_rules());
     rules.extend(cycle_and_relative_rules());

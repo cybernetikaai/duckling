@@ -33,6 +33,7 @@ Branch: `rust-port-en-time`.
 | + easter-relative holidays | 451 / 984 | 533 | 3 / 10 | Good Friday/Ascension/Pentecost... = easter±N days |
 | + interval-holiday infra + Lent | 453 / 984 | 531 | 3 / 10 | interval_days [base+s, base+e+1); Lent/Great Lent |
 | + interval computed holidays (subagent) | 465 / 984 | 519 | 3 / 10 | Hanukkah/Passover/Sukkot/Shavuot/Rosh Hashanah (subagent c85aecd8) |
+| + quarter/half/N past-to <hour> | 478 / 984 | 506 | 3 / 10 | minutesAfter/Before; chains through am/pm (a quarter past 1pm) |
 
 ## How to run
 
@@ -50,7 +51,7 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru interval holidays. **465/984** (47%). Holiday surface complete. Next: interval TOD-AMPM (3-4pm), <time> on <day>, day-before/after, then ranking (unique-mode gap ~66).
+Cumulative thru past/to times. **478/984** (49%). Next: interval TOD-AMPM (3-4pm), <time> on <day>, day before/after, week/year end-beginning, then ranking (unique gap ~66).
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
