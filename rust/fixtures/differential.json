@@ -7511,6 +7511,2009 @@
     },
     "type": "interval"
    }
+  },
+  {
+   "input": "2 days before black friday",
+   "expected": {
+    "value": "2013-11-27T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 days before boxing day",
+   "expected": {
+    "value": "2013-12-24T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 days before christmas eve",
+   "expected": {
+    "value": "2013-12-22T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 days before easter",
+   "expected": {
+    "value": "2013-03-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 days before halloween",
+   "expected": {
+    "value": "2013-10-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 days before new year's day",
+   "expected": {
+    "value": "2013-12-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 days before new year's eve",
+   "expected": {
+    "value": "2013-12-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 days before st patrick's day",
+   "expected": {
+    "value": "2013-03-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 days before thanksgiving",
+   "expected": {
+    "value": "2013-11-26T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 days before valentine's day",
+   "expected": {
+    "value": "2013-02-12T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 days after black friday",
+   "expected": {
+    "value": "2013-12-02T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 days after boxing day",
+   "expected": {
+    "value": "2013-12-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 days after christmas eve",
+   "expected": {
+    "value": "2013-12-27T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 days after easter",
+   "expected": {
+    "value": "2013-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 days after halloween",
+   "expected": {
+    "value": "2013-11-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 days after new year's day",
+   "expected": {
+    "value": "2014-01-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 days after new year's eve",
+   "expected": {
+    "value": "2014-01-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 days after st patrick's day",
+   "expected": {
+    "value": "2013-03-20T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 days after thanksgiving",
+   "expected": {
+    "value": "2013-12-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 days after valentine's day",
+   "expected": {
+    "value": "2013-02-17T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "after black friday",
+   "expected": {
+    "from": {
+     "value": "2013-11-29T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Black Friday",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "after boxing day",
+   "expected": {
+    "from": {
+     "value": "2013-12-26T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Boxing Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "after christmas eve",
+   "expected": {
+    "from": {
+     "value": "2013-12-24T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Christmas Eve",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "after halloween",
+   "expected": {
+    "from": {
+     "value": "2013-10-31T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Halloween",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "after st patrick's day",
+   "expected": {
+    "from": {
+     "value": "2013-03-17T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "St Patrick's Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "after valentine's day",
+   "expected": {
+    "from": {
+     "value": "2013-02-14T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Valentine's Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "before black friday",
+   "expected": {
+    "to": {
+     "value": "2013-11-29T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Black Friday",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "before boxing day",
+   "expected": {
+    "to": {
+     "value": "2013-12-26T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Boxing Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "before christmas eve",
+   "expected": {
+    "to": {
+     "value": "2013-12-24T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Christmas Eve",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "before halloween",
+   "expected": {
+    "to": {
+     "value": "2013-10-31T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Halloween",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "before st patrick's day",
+   "expected": {
+    "to": {
+     "value": "2013-03-17T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "St Patrick's Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "before valentine's day",
+   "expected": {
+    "to": {
+     "value": "2013-02-14T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Valentine's Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "black friday afternoon",
+   "expected": {
+    "to": {
+     "value": "2013-11-29T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-11-29T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Black Friday",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "black friday at 3pm",
+   "expected": {
+    "value": "2013-11-29T15:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Black Friday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "black friday at 9am",
+   "expected": {
+    "value": "2013-11-29T09:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Black Friday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "black friday at midnight",
+   "expected": {
+    "value": "2013-11-29T00:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Black Friday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "black friday at noon",
+   "expected": {
+    "value": "2013-11-29T12:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Black Friday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "black friday evening",
+   "expected": {
+    "to": {
+     "value": "2013-11-30T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-11-29T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Black Friday",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "black friday morning",
+   "expected": {
+    "to": {
+     "value": "2013-11-29T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-11-29T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Black Friday",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "black friday night",
+   "expected": {
+    "to": {
+     "value": "2013-11-30T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-11-29T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Black Friday",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "boxing day afternoon",
+   "expected": {
+    "to": {
+     "value": "2013-12-26T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-12-26T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Boxing Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "boxing day at 3pm",
+   "expected": {
+    "value": "2013-12-26T15:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Boxing Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "boxing day at 9am",
+   "expected": {
+    "value": "2013-12-26T09:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Boxing Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "boxing day at midnight",
+   "expected": {
+    "value": "2013-12-26T00:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Boxing Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "boxing day at noon",
+   "expected": {
+    "value": "2013-12-26T12:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Boxing Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "boxing day evening",
+   "expected": {
+    "to": {
+     "value": "2013-12-27T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-12-26T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Boxing Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "boxing day morning",
+   "expected": {
+    "to": {
+     "value": "2013-12-26T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-12-26T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Boxing Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "boxing day night",
+   "expected": {
+    "to": {
+     "value": "2013-12-27T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-12-26T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Boxing Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "christmas afternoon",
+   "expected": {
+    "to": {
+     "value": "2013-12-25T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-12-25T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Christmas",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "christmas eve afternoon",
+   "expected": {
+    "to": {
+     "value": "2013-12-24T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-12-24T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Christmas Eve",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "christmas eve at 3pm",
+   "expected": {
+    "value": "2013-12-24T15:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Christmas Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "christmas eve at 9am",
+   "expected": {
+    "value": "2013-12-24T09:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Christmas Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "christmas eve at noon",
+   "expected": {
+    "value": "2013-12-24T12:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Christmas Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "christmas eve evening",
+   "expected": {
+    "to": {
+     "value": "2013-12-25T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-12-24T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Christmas Eve",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "christmas eve morning",
+   "expected": {
+    "to": {
+     "value": "2013-12-24T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-12-24T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Christmas Eve",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "christmas eve night",
+   "expected": {
+    "to": {
+     "value": "2013-12-25T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-12-24T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Christmas Eve",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "christmas evening",
+   "expected": {
+    "to": {
+     "value": "2013-12-26T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-12-25T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Christmas",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "christmas morning",
+   "expected": {
+    "to": {
+     "value": "2013-12-25T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-12-25T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Christmas",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "christmas night",
+   "expected": {
+    "to": {
+     "value": "2013-12-26T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-12-25T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Christmas",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "easter afternoon",
+   "expected": {
+    "to": {
+     "value": "2013-03-31T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-03-31T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Easter Sunday",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "easter evening",
+   "expected": {
+    "to": {
+     "value": "2013-04-01T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-03-31T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Easter Sunday",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "easter morning",
+   "expected": {
+    "to": {
+     "value": "2013-03-31T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-03-31T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Easter Sunday",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "easter night",
+   "expected": {
+    "to": {
+     "value": "2013-04-01T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-03-31T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Easter Sunday",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "good friday afternoon",
+   "expected": {
+    "to": {
+     "value": "2013-03-29T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-03-29T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Good Friday",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "good friday at 3pm",
+   "expected": {
+    "value": "2013-03-29T15:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Good Friday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "good friday at 9am",
+   "expected": {
+    "value": "2013-03-29T09:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Good Friday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "good friday at midnight",
+   "expected": {
+    "value": "2013-03-29T00:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Good Friday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "good friday at noon",
+   "expected": {
+    "value": "2013-03-29T12:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Good Friday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "good friday evening",
+   "expected": {
+    "to": {
+     "value": "2013-03-30T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-03-29T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Good Friday",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "good friday morning",
+   "expected": {
+    "to": {
+     "value": "2013-03-29T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-03-29T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Good Friday",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "good friday night",
+   "expected": {
+    "to": {
+     "value": "2013-03-30T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-03-29T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Good Friday",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "halloween afternoon",
+   "expected": {
+    "to": {
+     "value": "2013-10-31T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-10-31T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Halloween",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "halloween at 3pm",
+   "expected": {
+    "value": "2013-10-31T15:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Halloween",
+    "type": "value"
+   }
+  },
+  {
+   "input": "halloween at 9am",
+   "expected": {
+    "value": "2013-10-31T09:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Halloween",
+    "type": "value"
+   }
+  },
+  {
+   "input": "halloween at midnight",
+   "expected": {
+    "value": "2013-10-31T00:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Halloween",
+    "type": "value"
+   }
+  },
+  {
+   "input": "halloween at noon",
+   "expected": {
+    "value": "2013-10-31T12:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Halloween",
+    "type": "value"
+   }
+  },
+  {
+   "input": "halloween evening",
+   "expected": {
+    "to": {
+     "value": "2013-11-01T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-10-31T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Halloween",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "halloween morning",
+   "expected": {
+    "to": {
+     "value": "2013-10-31T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-10-31T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Halloween",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "halloween night",
+   "expected": {
+    "to": {
+     "value": "2013-11-01T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-10-31T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Halloween",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "last black friday",
+   "expected": {
+    "value": "2012-11-23T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Black Friday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last boxing day",
+   "expected": {
+    "value": "2012-12-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Boxing Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last christmas",
+   "expected": {
+    "value": "2012-12-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Christmas",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last christmas eve",
+   "expected": {
+    "value": "2012-12-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Christmas Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last easter",
+   "expected": {
+    "value": "2012-04-08T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Easter Sunday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last good friday",
+   "expected": {
+    "value": "2012-04-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Good Friday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last halloween",
+   "expected": {
+    "value": "2012-10-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Halloween",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last new year's day",
+   "expected": {
+    "value": "2013-01-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last new year's eve",
+   "expected": {
+    "value": "2012-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last st patrick's day",
+   "expected": {
+    "value": "2012-03-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St Patrick's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last thanksgiving",
+   "expected": {
+    "value": "2012-11-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last valentine's day",
+   "expected": {
+    "value": "2012-02-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Valentine's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's day afternoon",
+   "expected": {
+    "to": {
+     "value": "2014-01-01T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2014-01-01T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "New Year's Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "new year's day evening",
+   "expected": {
+    "to": {
+     "value": "2014-01-02T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2014-01-01T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "New Year's Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "new year's day morning",
+   "expected": {
+    "to": {
+     "value": "2014-01-01T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2014-01-01T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "New Year's Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "new year's day night",
+   "expected": {
+    "to": {
+     "value": "2014-01-02T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2014-01-01T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "New Year's Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "new year's eve afternoon",
+   "expected": {
+    "to": {
+     "value": "2013-12-31T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-12-31T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "New Year's Eve",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "new year's eve at 3pm",
+   "expected": {
+    "value": "2013-12-31T15:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve at 9am",
+   "expected": {
+    "value": "2013-12-31T09:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve at midnight",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve at noon",
+   "expected": {
+    "value": "2013-12-31T12:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve evening",
+   "expected": {
+    "to": {
+     "value": "2014-01-01T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-12-31T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "New Year's Eve",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "new year's eve morning",
+   "expected": {
+    "to": {
+     "value": "2013-12-31T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-12-31T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "New Year's Eve",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "new year's eve night",
+   "expected": {
+    "to": {
+     "value": "2014-01-01T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-12-31T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "New Year's Eve",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "next black friday",
+   "expected": {
+    "value": "2013-11-29T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Black Friday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next boxing day",
+   "expected": {
+    "value": "2013-12-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Boxing Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next christmas",
+   "expected": {
+    "value": "2013-12-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Christmas",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next christmas eve",
+   "expected": {
+    "value": "2013-12-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Christmas Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next easter",
+   "expected": {
+    "value": "2013-03-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Easter Sunday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next good friday",
+   "expected": {
+    "value": "2013-03-29T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Good Friday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next halloween",
+   "expected": {
+    "value": "2013-10-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Halloween",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next new year's day",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next new year's eve",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next st patrick's day",
+   "expected": {
+    "value": "2013-03-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St Patrick's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next thanksgiving",
+   "expected": {
+    "value": "2013-11-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next valentine's day",
+   "expected": {
+    "value": "2013-02-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Valentine's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "st patrick's day afternoon",
+   "expected": {
+    "to": {
+     "value": "2013-03-17T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-03-17T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "St Patrick's Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "st patrick's day at 3pm",
+   "expected": {
+    "value": "2013-03-17T15:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "St Patrick's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "st patrick's day at 9am",
+   "expected": {
+    "value": "2013-03-17T09:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "St Patrick's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "st patrick's day at midnight",
+   "expected": {
+    "value": "2013-03-17T00:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "St Patrick's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "st patrick's day at noon",
+   "expected": {
+    "value": "2013-03-17T12:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "St Patrick's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "st patrick's day evening",
+   "expected": {
+    "to": {
+     "value": "2013-03-18T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-03-17T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "St Patrick's Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "st patrick's day morning",
+   "expected": {
+    "to": {
+     "value": "2013-03-17T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-03-17T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "St Patrick's Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "st patrick's day night",
+   "expected": {
+    "to": {
+     "value": "2013-03-18T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-03-17T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "St Patrick's Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "thanksgiving afternoon",
+   "expected": {
+    "to": {
+     "value": "2013-11-28T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-11-28T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Thanksgiving Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "thanksgiving at 3pm",
+   "expected": {
+    "value": "2013-11-28T15:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "thanksgiving at 9am",
+   "expected": {
+    "value": "2013-11-28T09:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "thanksgiving at midnight",
+   "expected": {
+    "value": "2013-11-28T00:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "thanksgiving at noon",
+   "expected": {
+    "value": "2013-11-28T12:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "thanksgiving evening",
+   "expected": {
+    "to": {
+     "value": "2013-11-29T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-11-28T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Thanksgiving Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "thanksgiving morning",
+   "expected": {
+    "to": {
+     "value": "2013-11-28T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-11-28T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Thanksgiving Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "thanksgiving night",
+   "expected": {
+    "to": {
+     "value": "2013-11-29T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-11-28T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Thanksgiving Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "the day after black friday",
+   "expected": {
+    "value": "2013-11-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day after boxing day",
+   "expected": {
+    "value": "2013-12-27T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day after christmas",
+   "expected": {
+    "value": "2013-12-26T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day after christmas eve",
+   "expected": {
+    "value": "2013-12-25T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day after easter",
+   "expected": {
+    "value": "2013-04-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day after good friday",
+   "expected": {
+    "value": "2013-03-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day after halloween",
+   "expected": {
+    "value": "2013-11-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day after new year's day",
+   "expected": {
+    "value": "2014-01-02T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day after new year's eve",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day after st patrick's day",
+   "expected": {
+    "value": "2013-03-18T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day after valentine's day",
+   "expected": {
+    "value": "2013-02-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day before black friday",
+   "expected": {
+    "value": "2013-11-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day before boxing day",
+   "expected": {
+    "value": "2013-12-25T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day before christmas eve",
+   "expected": {
+    "value": "2013-12-23T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day before easter",
+   "expected": {
+    "value": "2013-03-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day before good friday",
+   "expected": {
+    "value": "2013-03-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day before halloween",
+   "expected": {
+    "value": "2013-10-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day before new year's day",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day before new year's eve",
+   "expected": {
+    "value": "2013-12-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day before st patrick's day",
+   "expected": {
+    "value": "2013-03-16T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day before thanksgiving",
+   "expected": {
+    "value": "2013-11-27T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the day before valentine's day",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the week of black friday",
+   "expected": {
+    "value": "2013-12-02T00:00:00.000-02:00",
+    "grain": "week",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the week of boxing day",
+   "expected": {
+    "value": "2013-12-30T00:00:00.000-02:00",
+    "grain": "week",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the week of christmas",
+   "expected": {
+    "value": "2013-12-30T00:00:00.000-02:00",
+    "grain": "week",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the week of christmas eve",
+   "expected": {
+    "value": "2013-12-30T00:00:00.000-02:00",
+    "grain": "week",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the week of easter",
+   "expected": {
+    "value": "2013-04-01T00:00:00.000-02:00",
+    "grain": "week",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the week of good friday",
+   "expected": {
+    "value": "2013-04-01T00:00:00.000-02:00",
+    "grain": "week",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the week of halloween",
+   "expected": {
+    "value": "2013-11-04T00:00:00.000-02:00",
+    "grain": "week",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the week of new year's day",
+   "expected": {
+    "value": "2014-01-06T00:00:00.000-02:00",
+    "grain": "week",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the week of new year's eve",
+   "expected": {
+    "value": "2014-01-06T00:00:00.000-02:00",
+    "grain": "week",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the week of st patrick's day",
+   "expected": {
+    "value": "2013-03-18T00:00:00.000-02:00",
+    "grain": "week",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the week of valentine's day",
+   "expected": {
+    "value": "2013-02-18T00:00:00.000-02:00",
+    "grain": "week",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this black friday",
+   "expected": {
+    "value": "2013-11-29T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Black Friday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this boxing day",
+   "expected": {
+    "value": "2013-12-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Boxing Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this christmas",
+   "expected": {
+    "value": "2013-12-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Christmas",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this christmas eve",
+   "expected": {
+    "value": "2013-12-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Christmas Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this easter",
+   "expected": {
+    "value": "2013-03-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Easter Sunday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this good friday",
+   "expected": {
+    "value": "2013-03-29T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Good Friday",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this halloween",
+   "expected": {
+    "value": "2013-10-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Halloween",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this new year's day",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this new year's eve",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this st patrick's day",
+   "expected": {
+    "value": "2013-03-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St Patrick's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this thanksgiving",
+   "expected": {
+    "value": "2013-11-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this valentine's day",
+   "expected": {
+    "value": "2013-02-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Valentine's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "until black friday",
+   "expected": {
+    "to": {
+     "value": "2013-11-29T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Black Friday",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "until boxing day",
+   "expected": {
+    "to": {
+     "value": "2013-12-26T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Boxing Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "until christmas eve",
+   "expected": {
+    "to": {
+     "value": "2013-12-24T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Christmas Eve",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "until easter",
+   "expected": {
+    "to": {
+     "value": "2013-03-31T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Easter Sunday",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "until halloween",
+   "expected": {
+    "to": {
+     "value": "2013-10-31T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Halloween",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "until new year's day",
+   "expected": {
+    "to": {
+     "value": "2014-01-01T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "New Year's Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "until st patrick's day",
+   "expected": {
+    "to": {
+     "value": "2013-03-17T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "St Patrick's Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "until valentine's day",
+   "expected": {
+    "to": {
+     "value": "2013-02-14T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Valentine's Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "valentine's day afternoon",
+   "expected": {
+    "to": {
+     "value": "2013-02-14T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-14T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Valentine's Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "valentine's day at 3pm",
+   "expected": {
+    "value": "2013-02-14T15:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Valentine's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "valentine's day at 9am",
+   "expected": {
+    "value": "2013-02-14T09:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Valentine's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "valentine's day at midnight",
+   "expected": {
+    "value": "2013-02-14T00:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Valentine's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "valentine's day at noon",
+   "expected": {
+    "value": "2013-02-14T12:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "Valentine's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "valentine's day evening",
+   "expected": {
+    "to": {
+     "value": "2013-02-15T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-14T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Valentine's Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "valentine's day morning",
+   "expected": {
+    "to": {
+     "value": "2013-02-14T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-14T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Valentine's Day",
+    "type": "interval"
+   }
+  },
+  {
+   "input": "valentine's day night",
+   "expected": {
+    "to": {
+     "value": "2013-02-15T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-14T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "holidayBeta": "Valentine's Day",
+    "type": "interval"
+   }
   }
  ]
 }
