@@ -3,7 +3,7 @@
 
 use crate::grain::Grain;
 use crate::regex::compile;
-use crate::time::object::IntervalType;
+use crate::time::object::{IntervalDirection, IntervalType};
 use crate::time::predicate::{
     Predicate, ampm_predicate, cycle_nth, day_of_month, day_of_week, hour, hour_minute,
     hour_minute_second, in_duration, intersect, month, take_last_of, take_nth, take_nth_after,
@@ -726,6 +726,46 @@ fn interval_td(kind: IntervalType, td1: &TimeData, td2: &TimeData) -> Option<Tim
         direction: None,
         holiday: None,
     })
+}
+
+fn with_direction(dir: IntervalDirection, mut td: TimeData) -> TimeData {
+    td.direction = Some(dir);
+    td.latent = false;
+    td
+}
+
+/// Open-ended intervals: "until/before <time>" (to), "after/from <time>" (from).
+fn direction_rules() -> Vec<Rule> {
+    vec![
+        Rule {
+            name: "until|before <time>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(
+                    r"(anytime |sometimes? )?(before|(un)?til(l)?|through|up to)",
+                )),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(td)] => {
+                    Some(Token::Time(with_direction(IntervalDirection::Before, td.clone())))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "after|from <time>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"after|from")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(td)] => {
+                    Some(Token::Time(with_direction(IntervalDirection::After, td.clone())))
+                }
+                _ => None,
+            }),
+        },
+    ]
 }
 
 fn interval_rules() -> Vec<Rule> {
@@ -1623,6 +1663,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(crate::time::computed::computed_holiday_shift_rules());
     rules.extend(crate::time::computed::computed_interval_holiday_rules());
     rules.extend(absorb_rules());
+    rules.extend(direction_rules());
     rules.extend(intersect_rules());
     rules
 }

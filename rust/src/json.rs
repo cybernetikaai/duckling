@@ -32,6 +32,12 @@ pub fn simple_value(dt: DateTime, off: Offset, g: Grain) -> Value {
     json!({ "type": "value", "value": rfc3339(dt, off), "grain": grain_str(g) })
 }
 
+/// Open interval: only one bound. After -> "from", Before -> "to".
+pub fn open_interval_value(dt: DateTime, off: Offset, g: Grain, is_after: bool) -> Value {
+    let bound = if is_after { "from" } else { "to" };
+    json!({ "type": "interval", bound: { "value": rfc3339(dt, off), "grain": grain_str(g) } })
+}
+
 pub fn interval_value(
     start: DateTime,
     off_start: Offset,
