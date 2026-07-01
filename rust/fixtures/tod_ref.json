@@ -1,0 +1,4460 @@
+{
+ "cases": [
+  {
+   "input": "3pm",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "9am",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "midnight",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "5 o'clock",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T05:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 5",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T05:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "half past 3",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T03:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "7pm",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T19:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "10am",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T10:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "8pm",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T20:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this morning",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this afternoon",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this evening",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "tonight",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in 2 hours",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T02:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 minutes",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T01:00:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in an hour",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T01:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 hours",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T05:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 12 hours",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T12:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next hour",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T01:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 hours ago",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-11T22:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "an hour ago",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-11T23:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this hour",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 6:30",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T06:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "quarter to 5",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T04:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3pm",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "9am",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "midnight",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "5 o'clock",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T05:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 5",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T05:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "half past 3",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T15:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "7pm",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T19:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "10am",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T10:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "8pm",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T20:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this morning",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this afternoon",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this evening",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "tonight",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in 2 hours",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T06:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 minutes",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T05:00:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in an hour",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T05:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 hours",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T09:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 12 hours",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T16:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next hour",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T05:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 hours ago",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T02:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "an hour ago",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T03:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this hour",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 6:30",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T06:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "quarter to 5",
+   "ref": "2013-02-12T06:30:00Z",
+   "refLabel": "04:30",
+   "expected": {
+    "value": "2013-02-12T04:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3pm",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "9am",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "midnight",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "5 o'clock",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 5",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "half past 3",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T15:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "7pm",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T19:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "10am",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T10:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "8pm",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T20:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this morning",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this afternoon",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this evening",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "tonight",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in 2 hours",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T11:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 minutes",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T09:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in an hour",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T10:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 hours",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T14:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 12 hours",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T21:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next hour",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T10:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 hours ago",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T07:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "an hour ago",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T08:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this hour",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 6:30",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T18:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "quarter to 5",
+   "ref": "2013-02-12T11:00:00Z",
+   "refLabel": "09:00",
+   "expected": {
+    "value": "2013-02-12T16:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3pm",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-12T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "9am",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-12T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "midnight",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "5 o'clock",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 5",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "half past 3",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-12T15:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "7pm",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-12T19:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "10am",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-13T10:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "8pm",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-12T20:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this morning",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this afternoon",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this evening",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "tonight",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in 2 hours",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-12T13:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 minutes",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-12T12:00:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in an hour",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-12T12:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 hours",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-12T16:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 12 hours",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-12T23:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next hour",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-12T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 hours ago",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-12T09:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "an hour ago",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-12T10:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this hour",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-12T11:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 6:30",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-12T18:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "quarter to 5",
+   "ref": "2013-02-12T13:30:00Z",
+   "refLabel": "11:30",
+   "expected": {
+    "value": "2013-02-12T16:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3pm",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "9am",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "midnight",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "5 o'clock",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 5",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "half past 3",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T15:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "7pm",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T19:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "10am",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-13T10:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "8pm",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T20:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this morning",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this afternoon",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this evening",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "tonight",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in 2 hours",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T14:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 minutes",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T12:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in an hour",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T13:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 hours",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 12 hours",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next hour",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T13:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 hours ago",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T10:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "an hour ago",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T11:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this hour",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 6:30",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T18:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "quarter to 5",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T16:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3pm",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-12T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "9am",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-13T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "midnight",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "5 o'clock",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 5",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "half past 3",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-12T15:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "7pm",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-12T19:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "10am",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-13T10:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "8pm",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-12T20:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this morning",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this afternoon",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this evening",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "tonight",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in 2 hours",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-12T16:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 minutes",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-12T14:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in an hour",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-12T15:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 hours",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-12T19:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 12 hours",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-13T02:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next hour",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-12T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 hours ago",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-12T12:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "an hour ago",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-12T13:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this hour",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-12T14:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 6:30",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-12T18:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "quarter to 5",
+   "ref": "2013-02-12T16:00:00Z",
+   "refLabel": "14:00",
+   "expected": {
+    "value": "2013-02-12T16:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3pm",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-12T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "9am",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-13T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "midnight",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "5 o'clock",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 5",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "half past 3",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-12T15:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "7pm",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-12T19:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "10am",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-13T10:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "8pm",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-12T20:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this morning",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this afternoon",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this evening",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "tonight",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in 2 hours",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 minutes",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-12T15:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in an hour",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-12T16:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 hours",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-12T20:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 12 hours",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-13T03:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next hour",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-12T16:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 hours ago",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-12T13:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "an hour ago",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-12T14:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this hour",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-12T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 6:30",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-12T18:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "quarter to 5",
+   "ref": "2013-02-12T17:00:00Z",
+   "refLabel": "15:00",
+   "expected": {
+    "value": "2013-02-12T16:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3pm",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-13T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "9am",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-13T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "midnight",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "5 o'clock",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-13T05:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 5",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-13T05:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "half past 3",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-13T03:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "7pm",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-12T19:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "10am",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-13T10:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "8pm",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-12T20:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this morning",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this afternoon",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this evening",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "tonight",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in 2 hours",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-12T20:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 minutes",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-12T18:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in an hour",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-12T19:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 hours",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-12T23:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 12 hours",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-13T06:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next hour",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-12T19:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 hours ago",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-12T16:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "an hour ago",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this hour",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-12T18:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 6:30",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-12T18:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "quarter to 5",
+   "ref": "2013-02-12T20:00:00Z",
+   "refLabel": "18:00",
+   "expected": {
+    "value": "2013-02-13T04:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3pm",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-13T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "9am",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-13T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "midnight",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "5 o'clock",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-13T05:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 5",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-13T05:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "half past 3",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-13T03:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "7pm",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-13T19:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "10am",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-13T10:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "8pm",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-13T20:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this morning",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this afternoon",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this evening",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "tonight",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in 2 hours",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-12T23:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 minutes",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-12T21:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in an hour",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-12T22:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 hours",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-13T02:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 12 hours",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next hour",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-12T22:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 hours ago",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-12T19:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "an hour ago",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-12T20:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this hour",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-12T21:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 6:30",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-13T06:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "quarter to 5",
+   "ref": "2013-02-12T23:00:00Z",
+   "refLabel": "21:00",
+   "expected": {
+    "value": "2013-02-13T04:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3pm",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-13T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "9am",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-13T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "midnight",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "5 o'clock",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-13T05:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 5",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-13T05:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "half past 3",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-13T03:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "7pm",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-13T19:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "10am",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-13T10:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "8pm",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-13T20:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this morning",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this afternoon",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T19:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "this evening",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "tonight",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in 2 hours",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-13T01:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 minutes",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in an hour",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-13T00:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 hours",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-13T04:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 12 hours",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-13T11:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next hour",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 hours ago",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-12T21:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "an hour ago",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-12T22:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this hour",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-12T23:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at 6:30",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-13T06:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "quarter to 5",
+   "ref": "2013-02-13T01:30:00Z",
+   "refLabel": "23:30",
+   "expected": {
+    "value": "2013-02-13T04:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 6 hours",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T06:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 25 hours",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-13T01:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 90 minutes",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T02:00:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 hours",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T03:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 45 minutes",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T01:15:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of the day",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of day",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "tomorrow morning",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "yesterday at 3pm",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-11T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "tomorrow at 9am",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 hours and 30 minutes",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T03:00:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in half an hour",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T01:00:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at midnight",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "by end of day",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T00:00:00.000-02:00",
+     "grain": "second"
+    },
+    "from": {
+     "value": "2013-02-12T00:30:00.000-02:00",
+     "grain": "second"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in a few hours",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T03:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 hours from now",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T03:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "10 minutes from now",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T00:40:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "late tonight",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T21:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in 8 hours",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T08:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "5pm today",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "9am tomorrow",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 100 minutes",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-12T02:10:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 days",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-14T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon tomorrow",
+   "ref": "2013-02-12T02:30:00Z",
+   "refLabel": "00:30",
+   "expected": {
+    "value": "2013-02-13T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 6 hours",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-12T12:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 12 hours",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-12T18:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 25 hours",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-13T07:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 90 minutes",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-12T07:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 hours",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-12T09:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 45 minutes",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-12T06:45:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of the day",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of day",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "tonight",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "tomorrow morning",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "yesterday at 3pm",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-11T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "tomorrow at 9am",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 hours and 30 minutes",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-12T08:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in half an hour",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-12T06:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at midnight",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "by end of day",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "second"
+    },
+    "from": {
+     "value": "2013-02-12T06:00:00.000-02:00",
+     "grain": "second"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in a few hours",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-12T09:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 hours from now",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-12T09:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "10 minutes from now",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-12T06:10:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this evening",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "late tonight",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T21:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in 8 hours",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-12T14:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "5pm today",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "9am tomorrow",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 100 minutes",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-12T07:40:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 days",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-14T06:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon tomorrow",
+   "ref": "2013-02-12T08:00:00Z",
+   "refLabel": "06:00",
+   "expected": {
+    "value": "2013-02-13T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 6 hours",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T18:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 25 hours",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-13T13:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 90 minutes",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T13:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 hours",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T15:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 45 minutes",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T12:45:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of the day",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of day",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "tomorrow morning",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "yesterday at 3pm",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-11T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "tomorrow at 9am",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 hours and 30 minutes",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T14:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in half an hour",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T12:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at midnight",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "by end of day",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "second"
+    },
+    "from": {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "second"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in a few hours",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T15:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 hours from now",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T15:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "10 minutes from now",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T12:10:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "late tonight",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T21:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in 8 hours",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T20:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "5pm today",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "9am tomorrow",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 100 minutes",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-12T13:40:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 days",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-14T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon tomorrow",
+   "ref": "2013-02-12T14:00:00Z",
+   "refLabel": "noon",
+   "expected": {
+    "value": "2013-02-13T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 6 hours",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-13T01:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 12 hours",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-13T07:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 25 hours",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-13T20:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 90 minutes",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-12T20:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 hours",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-12T22:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 45 minutes",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-12T19:45:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of the day",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of day",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "tonight",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "tomorrow morning",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "yesterday at 3pm",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-11T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "tomorrow at 9am",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 hours and 30 minutes",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-12T21:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in half an hour",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-12T19:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at midnight",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "by end of day",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "second"
+    },
+    "from": {
+     "value": "2013-02-12T19:00:00.000-02:00",
+     "grain": "second"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in a few hours",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-12T22:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 hours from now",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-12T22:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "10 minutes from now",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-12T19:10:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this evening",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "late tonight",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T21:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in 8 hours",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-13T03:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "5pm today",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "9am tomorrow",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 100 minutes",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-12T20:40:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 days",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-14T19:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon tomorrow",
+   "ref": "2013-02-12T21:00:00Z",
+   "refLabel": "19:00",
+   "expected": {
+    "value": "2013-02-13T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 6 hours",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-13T04:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 12 hours",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-13T10:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 25 hours",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-13T23:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 90 minutes",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-12T23:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 hours",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-13T01:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 45 minutes",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-12T22:45:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of the day",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of day",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "tonight",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "tomorrow morning",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "yesterday at 3pm",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-11T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "tomorrow at 9am",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 hours and 30 minutes",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-13T00:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in half an hour",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-12T22:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at midnight",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "by end of day",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "second"
+    },
+    "from": {
+     "value": "2013-02-12T22:00:00.000-02:00",
+     "grain": "second"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in a few hours",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-13T01:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 hours from now",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-13T01:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "10 minutes from now",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-12T22:10:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this evening",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "late tonight",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T21:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in 8 hours",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-13T06:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "5pm today",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "9am tomorrow",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 100 minutes",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-12T23:40:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 days",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-14T22:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon tomorrow",
+   "ref": "2013-02-13T00:00:00Z",
+   "refLabel": "22:00",
+   "expected": {
+    "value": "2013-02-13T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 6 hours",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-13T05:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 12 hours",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-13T11:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 25 hours",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-14T00:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 90 minutes",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-13T01:15:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 hours",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-13T02:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 45 minutes",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-13T00:30:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of the day",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of day",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "tonight",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "tomorrow morning",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T12:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "yesterday at 3pm",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-11T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "tomorrow at 9am",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 hours and 30 minutes",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-13T02:15:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in half an hour",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-13T00:15:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "at midnight",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-13T00:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "by end of day",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "second"
+    },
+    "from": {
+     "value": "2013-02-12T23:45:00.000-02:00",
+     "grain": "second"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in a few hours",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-13T02:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 hours from now",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-13T02:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "10 minutes from now",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-12T23:55:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "this evening",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T18:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "late tonight",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "to": {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T21:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "in 8 hours",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-13T07:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "5pm today",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-12T17:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "9am tomorrow",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-13T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 100 minutes",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-13T01:25:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 days",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-14T23:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon tomorrow",
+   "ref": "2013-02-13T01:45:00Z",
+   "refLabel": "23:45",
+   "expected": {
+    "value": "2013-02-13T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  }
+ ]
+}

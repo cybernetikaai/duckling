@@ -272,6 +272,34 @@ fn tz_truth() {
         failures.iter().take(200).cloned().collect::<Vec<_>>().join("\n"));
 }
 
+/// Reference time-of-day: time-sensitive inputs ("3pm", "this morning", "in 2
+/// hours", "tonight") resolved at 10 reference times across a single day (00:30 →
+/// 23:30), vs the oracle. Every other test fixes the reference at 04:30, so the
+/// past/future/rollover logic when a target time has already passed today (e.g.
+/// "9am" at 15:00 → tomorrow) is otherwise untested. Best-entity semantics.
+#[test]
+fn tod_ref() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/tod_ref.json")).unwrap();
+    let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(-2));
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let reference: jiff::Timestamp = c["ref"].as_str().unwrap().parse().expect("ref");
+        let ctx = duckling::ResolveContext { reference, zone: zone.clone(), with_latent: false };
+        let exp = strip_values(c["expected"].clone());
+        if !best_time_values(input, &ctx).iter().any(|g| g == &exp) {
+            failures.push(format!("[@{}] {input:?}\n  expected {exp}\n  got      {:?}",
+                c["refLabel"], best_time_values(input, &ctx)));
+        }
+    }
+    eprintln!("tod_ref checked {checked}, {} failing", failures.len());
+    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
+        failures.iter().take(200).cloned().collect::<Vec<_>>().join("\n"));
+}
+
 /// Holidays across years: every holiday the port knows, resolved at reference =
 /// Jan 1 of each year 2013–2020, checked against the oracle. The corpus only tests
 /// holidays at one reference year (2013); the *computed* holidays (Easter-relative,
