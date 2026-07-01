@@ -1167,6 +1167,21 @@ fn interval_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // "3 fridays from now" -> the 3rd upcoming friday (predNth n-1).
+        Rule {
+            name: "<integer> <named-day> from now|hence".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(|t| get_int_value(t).is_some_and(|v| v >= 1))),
+                PatternItem::Predicate(Box::new(is_a_day_of_week)),
+                PatternItem::Regex(compile(r"from now|hence")),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [num, Token::Time(td), _] => {
+                    Some(Token::Time(pred_nth_td(get_int_value(num)? - 1, false, td)))
+                }
+                _ => None,
+            }),
+        },
         Rule {
             name: "<time> before last|after next".into(),
             pattern: vec![
