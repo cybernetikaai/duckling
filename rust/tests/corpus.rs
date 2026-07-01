@@ -237,6 +237,40 @@ fn may_is_latent() {
     assert!(!full_range_time_values("March", &default).is_empty(), "March must not be latent");
 }
 
+/// Multi-entity extraction: inputs with several times ("Monday or Tuesday",
+/// "9am Monday and 5pm Friday") where the ranker must select multiple non-
+/// overlapping best entities. Prior tests only checked the single best entity;
+/// this compares the *full set* of (start, end, value) against the oracle.
+#[test]
+fn multi_entity() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/multi_entity.json")).unwrap();
+    let ctx = ctx();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        // Expected set of (start, end, value) from the oracle.
+        let mut want: Vec<(u64, u64, Value)> = c["entities"].as_array().unwrap().iter()
+            .map(|e| (e["start"].as_u64().unwrap(), e["end"].as_u64().unwrap(), strip_values(e["value"].clone())))
+            .collect();
+        want.sort_by_key(|(s, e, _)| (*s, *e));
+        // Port's set.
+        let mut got: Vec<(u64, u64, Value)> = duckling::parse(input, &ctx).into_iter()
+            .filter(|e| e.dim == "time")
+            .map(|e| (e.start as u64, e.end as u64, strip_values(e.value)))
+            .collect();
+        got.sort_by_key(|(s, e, _)| (*s, *e));
+        if got != want {
+            failures.push(format!("{input:?}\n  expected {want:?}\n  got      {got:?}"));
+        }
+    }
+    eprintln!("multi_entity checked {checked}, {} failing", failures.len());
+    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
+        failures.iter().take(5000).cloned().collect::<Vec<_>>().join("\n"));
+}
+
 /// Sentence-level differential: natural sentences with an embedded time expression
 /// ("Can we meet next Tuesday afternoon?", "I need money by friday"), cross-checked
 /// against the oracle. Tests span extraction + ranking within surrounding words —
