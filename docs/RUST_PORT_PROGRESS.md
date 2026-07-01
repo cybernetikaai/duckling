@@ -121,6 +121,7 @@ Branch: `rust-port-en-time`.
 | + AU Queen's/King's Birthday (extension) | 1069 / 1069 | 0 | 68 / 68 | **modern_holidays 11**; Australia's Queen's Birthday (2nd Mon June, majority-state convention) + King's Birthday post-2022 rename — a major AU public holiday Duckling's AU rules never included (oracle returns nothing). Faithful AU port confirmed complete (all 28 EN/AU/Rules.hs holidays present) |
 | + NZ Matariki/King's + IE St Brigid's (extension) | 1069 / 1069 | 0 | 68 / 68 | **modern_holidays 20**; region audit found 3 more post-2020 public holidays the oracle lacks: NZ **Matariki** (2022, legislated Friday date-table 2022–2052), NZ **King's Birthday** (1st Mon June rename), IE **St Brigid's Day** (2023, exact date-table incl. the 1-Feb-Friday exception). Per-case `ref` pins the table years |
 | + spoken-form audit → 2 real fixes | 1069 / 1069 | 0 | 68 / 68 | **spoken_forms 53** (ASR idioms vs oracle). Found 2 faithful-port gaps the curated corpus missed: (1) written ordinals were truncated to first..tenth — ported the full `ruleOrdinals` (…twentieth, thirtieth…ninetieth) + `ruleCompositeOrdinals` ("twenty fifth"→25), fixing "the fifteenth of august", "december twenty fifth"; (2) added `<hour> oh <integer>` ("eight oh five am"→8:05). unique 1061/1069 unchanged |
+| + spoken-form audit II (breadth) | 1069 / 1069 | 0 | 68 / 68 | **spoken_forms 105**; +52 forms across 2 refs — 24h spoken ("fourteen thirty"), American "of"=to ("ten of three"→2:50), composite ordinals in dates ("march twenty first"), spelled datetimes, this/next part-of-day, week/month relatives. **0 divergences** — pass-1 fixes generalize; port faithfully matches oracle incl. forms Duckling rejects ("fourteen thirty"/"sixteen hundred"/"twenty twenty"-as-year → [] both sides) |
 
 ## Rule-level coverage audit
 
@@ -435,6 +436,19 @@ surfaced **two genuine faithful-port gaps the curated corpus never caught**:
 Both verified across contains (1069/1069) and unique (1061/1069 — same 8
 structural artifacts as before, no regression). The 53 oracle-resolved spoken
 forms are locked as the **spoken_forms** regression test.
+
+**Spoken-form audit II — breadth (this iteration → 0 new bugs).** Broadened the
+proven surface: +52 forms not covered in pass 1, run across two references
+(04:30 and 15:00, to exercise past/future rollover). Coverage added: 24-hour
+spoken times ("fourteen thirty"), American "of"=to ("ten of three"→2:50, "quarter
+of five"→4:45), composite ordinals in date positions ("march twenty first", "the
+twenty third of march"), fully-spelled datetimes ("march third at three thirty"),
+this/next part-of-day ("this morning", "tomorrow night"), and week/month
+relatives ("next weekend", "end of the month"). **0 divergences** — the pass-1
+ordinal/oh fixes generalize, and the port faithfully matches the oracle even
+where Duckling *rejects* a form: "fourteen thirty", "sixteen hundred", and
+"twenty twenty"-as-a-year all return [] on both sides (Duckling has no 24h-spoken
+or spelled-year-by-juxtaposition rule). **spoken_forms** grew 53→105 cases.
 
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
