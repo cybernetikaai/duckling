@@ -126,6 +126,18 @@ fn is_a_time_of_day(t: &Token) -> bool {
     matches!(t, Token::Time(td) if matches!(td.form, Some(Form::TimeOfDay { .. })))
 }
 
+/// The generic (loose) interval rules pair any two times. Reject when exactly
+/// one endpoint is a bare time-of-day and the other is not: a coherent time-of-
+/// day interval has both ends as tods (handled by the dedicated tod rules), so a
+/// bare-tod paired with a *dated* time (e.g. "from 3pm to 5pm tomorrow", where
+/// "5pm tomorrow" is 5pm intersected with a day) is the trailing-date-on-interval
+/// reading — leave it to intersect(interval, date), which resolves correctly.
+fn tod_endpoint_mismatch(a: &TimeData, b: &TimeData) -> bool {
+    let a_tod = matches!(a.form, Some(Form::TimeOfDay { .. }));
+    let b_tod = matches!(b.form, Some(Form::TimeOfDay { .. }));
+    a_tod != b_tod
+}
+
 fn is_month_or_year(t: &Token) -> bool {
     matches!(t, Token::Time(td) if matches!(td.form, Some(Form::Month { .. })) || td.grain == Grain::Year)
 }
@@ -1134,7 +1146,7 @@ fn interval_rules() -> Vec<Rule> {
                 PatternItem::Predicate(Box::new(is_not_latent)),
             ],
             prod: Box::new(|tokens| match tokens {
-                [Token::Time(a), _, Token::Time(b)] => {
+                [Token::Time(a), _, Token::Time(b)] if !tod_endpoint_mismatch(a, b) => {
                     interval_td(IntervalType::Closed, a, b).map(Token::Time)
                 }
                 _ => None,
@@ -1165,7 +1177,7 @@ fn interval_rules() -> Vec<Rule> {
                 PatternItem::Predicate(Box::new(is_a_time)),
             ],
             prod: Box::new(|tokens| match tokens {
-                [_, Token::Time(a), _, Token::Time(b)] => {
+                [_, Token::Time(a), _, Token::Time(b)] if !tod_endpoint_mismatch(a, b) => {
                     interval_td(IntervalType::Closed, a, b).map(Token::Time)
                 }
                 _ => None,
@@ -1180,7 +1192,7 @@ fn interval_rules() -> Vec<Rule> {
                 PatternItem::Predicate(Box::new(is_a_time)),
             ],
             prod: Box::new(|tokens| match tokens {
-                [_, Token::Time(a), _, Token::Time(b)] => {
+                [_, Token::Time(a), _, Token::Time(b)] if !tod_endpoint_mismatch(a, b) => {
                     interval_td(IntervalType::Closed, a, b).map(Token::Time)
                 }
                 _ => None,

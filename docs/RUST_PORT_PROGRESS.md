@@ -93,6 +93,7 @@ Branch: `rust-port-en-time`.
 | + tz_stress expansion (oracle, 6 zones) | 984 / 984 | 0 | **68 / 68** | DST transitions US/EU/AU/NZ; port per-instant correct vs Duckling boundary quirk |
 | + 85 more Duckling corpus inputs + year interval | **1069 / 1069 (100%)** | 0 | 68 / 68 | transcribed missing Corpus.hs inputs; "1960 - 1961"; port handled 84/85 |
 | + differential fuzz vs live oracle | 1069 / 1069 | 0 | 68 / 68 | **124/124** compositional probes match oracle; 0 gaps found |
+| + composition fuzz → 3 real fixes | 1069 / 1069 | 0 | 68 / 68 | 771 probes; fixed holidayBeta-on-open-interval, directional∩pod collapse, trailing-date-on-interval |
 
 ## How to run
 
@@ -121,6 +122,29 @@ The 8 remaining `unique`-mode gaps ("for a quarter past 3pm"×5, "Fri, Jul 18, 2
 **Timezone validation (this iteration).** Cross-checked the port against live rasa/duckling across 6 IANA zones and both hemispheres on DST transition days; tz_stress grew 10 -> 68 verified cases (port == Duckling == authoritative IANA tzdata). The check surfaced that on transition-boundary hours (spring-forward gap, fall-back fold, the transition hour itself) Duckling attaches an offset that does NOT match the real per-instant IANA offset (e.g. "3am" on a spring-forward day -> Duckling -05:00, which is actually 4am EDT), whereas the port uses the correct per-instant offset (-04:00). Those 22 boundary cases are intentionally excluded from tz_stress: the port favors timezone correctness (the stated priority) over byte-fidelity to Duckling's DST quirk. Full-corpus oracle cross-check: 981/984 fixtures match live Duckling (99.7%; the 3 diffs are real-zone LMT artifacts of America/Noronha vs the fixed -02:00 test context).
 
 Not attempted (out of scope / disproportionate): the `TimeDatePredicate` field-merge that would let leading-"Fri," combos produce a *full-span* parse (a core-architecture rewrite for zero contains-mode gain). The opaque-Series predicate model is behavior-complete for the corpus as-is.
+
+**Composition fuzz (this iteration).** Beyond the curated corpus, generated
+~770 compositional probes (deep nestings, directionals, interval+date, duration
+nestings) and cross-checked each against the live oracle. This surfaced three
+real divergences the curated corpus missed, all now fixed + guarded by the
+`differential_corpus` test (768 oracle-verified cases):
+1. `holidayBeta` dropped on open intervals ("after christmas") — the resolver
+   returned early on `td.direction` before the holiday-tag attach.
+2. A directional time collapsed by intersect ("after 8 in the evening" → plain
+   20:00) — `intersect_td` now refuses a directional operand (the open-interval
+   wrapper must stay outermost).
+3. Trailing date on an interval ("from 3pm to 5pm tomorrow" → the whole interval
+   shifts to tomorrow) — the generic interval rules now reject a tod/non-tod
+   endpoint mismatch, so a dated endpoint routes through intersect(interval,date).
+
+Three probes are intentionally excluded (expected:null with an in-fixture note),
+being Duckling quirks the port deliberately does not replicate: "by tomorrow
+morning" (Duckling resolves `to` to *today* noon, ignoring "tomorrow"), and
+"between X and Y `<date>`" (Duckling attaches the date only to Y, a 2-day span,
+whereas `from X to Y <date>` attaches it to the whole interval — the port applies
+it to the whole interval consistently, which is both more correct and matches
+Duckling's own `from…to` behavior). Same rationale as the DST-boundary divergence:
+the port favors correctness over byte-fidelity to a Duckling bug.
 
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
