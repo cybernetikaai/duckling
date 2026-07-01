@@ -6,8 +6,9 @@ use crate::regex::compile;
 use crate::time::object::{IntervalDirection, IntervalType};
 use crate::time::predicate::{
     Ampm, Predicate, ampm_predicate, cycle_nth, day_of_month, day_of_week, hour, hour_minute,
-    hour_minute_second, in_duration, intersect, month, season_series, shift_timezone,
-    take_last_of, take_nth, take_nth_after, time_cycle, time_intervals, year as year_pred, cycle_n,
+    hour_minute_second, in_duration, intersect, merge_duration, month, season_series,
+    shift_duration, shift_timezone, take_last_of, take_nth, take_nth_after, time_cycle,
+    time_intervals, year as year_pred, cycle_n,
 };
 use crate::types::{Form, PatternItem, Rule, TimeData, Token};
 
@@ -1039,6 +1040,39 @@ fn interval_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        Rule {
+            name: "<time> for <duration>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_not_latent)),
+                PatternItem::Regex(compile(r"for")),
+                PatternItem::Predicate(Box::new(is_a_duration)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(td1), _, dur] => {
+                    let (v, g) = duration_of(dur)?;
+                    interval_td(IntervalType::Closed, td1, &duration_after_td(v, g, td1))
+                        .map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "from <time> for <duration>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"(from|starting|beginning|after|starting from)")),
+                PatternItem::Predicate(Box::new(is_not_latent)),
+                PatternItem::Regex(compile(r"for")),
+                PatternItem::Predicate(Box::new(is_a_duration)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(td1), _, dur] => {
+                    let (v, g) = duration_of(dur)?;
+                    interval_td(IntervalType::Closed, td1, &duration_after_td(v, g, td1))
+                        .map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
     ]
 }
 
@@ -1269,6 +1303,18 @@ fn duration_of(t: &Token) -> Option<(i64, Grain)> {
     } else {
         None
     }
+}
+
+/// A time shifted forward by a duration (port of durationAfter): the end of a
+/// "<time> for <duration>" interval. NoGrain times use shiftDuration, others
+/// mergeDuration; the result takes the duration's grain.
+fn duration_after_td(value: i64, grain: Grain, td: &TimeData) -> TimeData {
+    let pred = if td.grain == Grain::NoGrain {
+        shift_duration(td.pred.clone(), value, grain)
+    } else {
+        merge_duration(td.pred.clone(), value, grain)
+    };
+    TimeData::new(pred, grain)
 }
 fn cycle_n_td(grain: Grain, n: i64) -> TimeData {
     TimeData {

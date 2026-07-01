@@ -479,6 +479,32 @@ pub fn season_series() -> Predicate {
     }))
 }
 
+/// Shift each occurrence of `base` forward by a duration, rounding the anchor
+/// to `min(occurrence grain, duration grain)` first (port of mergeDuration).
+pub fn merge_duration(base: Predicate, value: i64, grain: Grain) -> Predicate {
+    Predicate::Series(Rc::new(move |now: TimeObject, ctx: &TimeContext| {
+        let f = move |x: TimeObject| -> Option<TimeObject> {
+            let gp = x.grain.min(grain);
+            let t2 = if gp == x.grain { x } else { time_round(x, gp) };
+            Some(time_plus(t2, grain, value))
+        };
+        let (past, future) = seq_map(false, f, &base, now, ctx);
+        (Box::new(past.into_iter()) as BoxIter, Box::new(future.into_iter()) as BoxIter)
+    }))
+}
+
+/// Shift each occurrence of `base` forward by a duration, rounding the anchor
+/// to the grain just below the duration's (port of shiftDuration, NoGrain case).
+pub fn shift_duration(base: Predicate, value: i64, grain: Grain) -> Predicate {
+    Predicate::Series(Rc::new(move |now: TimeObject, ctx: &TimeContext| {
+        let f = move |x: TimeObject| -> Option<TimeObject> {
+            Some(time_plus(time_round(x, lower(grain)), grain, value))
+        };
+        let (past, future) = seq_map(false, f, &base, now, ctx);
+        (Box::new(past.into_iter()) as BoxIter, Box::new(future.into_iter()) as BoxIter)
+    }))
+}
+
 pub fn take_nth(n: i64, not_immediate: bool, pred: Predicate) -> Predicate {
     Predicate::Series(Rc::new(move |t: TimeObject, ctx: &TimeContext| {
         let base = ctx.ref_time;
