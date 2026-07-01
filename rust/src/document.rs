@@ -29,6 +29,19 @@ impl Document {
         self.chars[start..end].iter().collect()
     }
 
+    /// Whether a regex match may begin or end at char boundary `i` — i.e. `i` is
+    /// not in the middle of a run of same-class characters. Duckling forbids a
+    /// rule match from splitting a maximal run of letters (or of digits): "mon"
+    /// must not match inside "monkey" (letter|letter), while "pm" may match after
+    /// "3" in "3pm" (digit|letter is a class change, so a boundary exists).
+    pub fn is_match_boundary(&self, i: usize) -> bool {
+        if i == 0 || i >= self.chars.len() {
+            return true;
+        }
+        let (a, b) = (self.chars[i - 1], self.chars[i]);
+        !((a.is_alphabetic() && b.is_alphabetic()) || (a.is_numeric() && b.is_numeric()))
+    }
+
     /// True if the gap between `prev_end` and `next_start` is separators only.
     pub fn is_adjacent(&self, prev_end: usize, next_start: usize) -> bool {
         next_start >= prev_end

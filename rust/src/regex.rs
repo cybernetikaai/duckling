@@ -25,14 +25,17 @@ impl Re {
         let mut out = Vec::new();
         for cap in self.0.captures_iter(text).flatten() {
             let whole = cap.get(0).unwrap();
+            let start = doc.char_idx_of_byte(whole.start());
+            let end = doc.char_idx_of_byte(whole.end());
+            // Reject matches that split a run of same-class chars (Duckling's
+            // token-boundary rule): "mon" inside "monkey", "201" inside "2014".
+            if !doc.is_match_boundary(start) || !doc.is_match_boundary(end) {
+                continue;
+            }
             let groups = (1..cap.len())
                 .map(|i| cap.get(i).map(|m| m.as_str().to_string()).unwrap_or_default())
                 .collect();
-            out.push(RegexHit {
-                start: doc.char_idx_of_byte(whole.start()),
-                end: doc.char_idx_of_byte(whole.end()),
-                groups,
-            });
+            out.push(RegexHit { start, end, groups });
         }
         out
     }

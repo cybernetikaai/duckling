@@ -183,6 +183,28 @@ fn differential_corpus() {
         failures.iter().take(5000).cloned().collect::<Vec<_>>().join("\n"));
 }
 
+/// Regex rules must not match inside a word: the 3-letter day/month abbreviations
+/// (mon, fri, mar, dec, …) are the first letters of many common words. Duckling's
+/// token-boundary rule rejects a match that splits a run of same-class chars, so
+/// "money"/"friend"/"monkey" yield nothing while whole-word "mon"/"fri" still work.
+#[test]
+fn no_subword_matches() {
+    let ctx = ctx();
+    for word in [
+        "money", "friend", "market", "monkey", "satisfy", "octopus", "month",
+        "augment", "apron", "novel", "decide", "sunny", "monster", "fritter",
+    ] {
+        let n = duckling::parse(word, &ctx).into_iter().filter(|e| e.dim == "time").count();
+        assert_eq!(n, 0, "{word:?} must not produce a sub-word time match, got {n}");
+    }
+    // Whole-word abbreviations still resolve.
+    for (w, want) in [("mon", "2013-02-18"), ("fri", "2013-02-15"), ("mar", "2013-03-01"),
+                      ("dec", "2013-12-01"), ("see you fri", "2013-02-15")] {
+        assert!(best_time_values(w, &ctx).iter().any(|v| v["value"].as_str().is_some_and(|s| s.starts_with(want))),
+            "{w:?} should resolve to {want}");
+    }
+}
+
 /// "May" is latent (it collides with the modal verb "may"): a bare match is
 /// dropped in default mode, so "you may go" doesn't yield a spurious May. But it
 /// resolves in latent mode, and any composition ("in May", "May 1st") de-latents
