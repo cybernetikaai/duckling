@@ -1,0 +1,47 @@
+{
+ "_comment": "Duckling/Email/EN/Corpus.hs (+ an embedded case). parse_email must produce an entity whose value equals the expected; negatives produce no email entity.",
+ "cases": [
+  {
+   "input": "alice at exAmple.io",
+   "value": "alice@exAmple.io"
+  },
+  {
+   "input": "alice@exAmple.io",
+   "value": "alice@exAmple.io"
+  },
+  {
+   "input": "yo+yo at blah.org",
+   "value": "yo+yo@blah.org"
+  },
+  {
+   "input": "1234+abc at x.net",
+   "value": "1234+abc@x.net"
+  },
+  {
+   "input": "jean-jacques at stuff.co.uk",
+   "value": "jean-jacques@stuff.co.uk"
+  },
+  {
+   "input": "asdf+ab dot c at gmail dot com",
+   "value": "asdf+ab.c@gmail.com"
+  },
+  {
+   "input": "asdf dot k@fb dot com",
+   "value": "asdf.k@fb.com"
+  },
+  {
+   "input": "email me at foo@bar.com please",
+   "value": "foo@bar.com"
+  }
+ ],
+ "negatives": [
+  "fitness at 6.40",
+  "class at 12.00",
+  "tonight at 9.15",
+  " dot 2@abci",
+  "x@ dot x",
+  "x@ x dot ",
+  "abc@x dot ",
+  "a at a"
+ ]
+}

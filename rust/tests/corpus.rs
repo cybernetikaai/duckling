@@ -821,6 +821,212 @@ fn ordinal_corpus() {
     );
 }
 
+/// Numeral dimension (`parse_numeral`) — the supported subset of
+/// Duckling/Numeral/EN/Corpus.hs (integers, written numbers, informal
+/// quantifiers, compounds). Decimals/negatives/fractions/magnitude-suffixes are
+/// deferred (see docs/REMAINING_DIMENSIONS.md), so they are not asserted here.
+#[test]
+fn numeral_corpus() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/numeral_corpus.json")).unwrap();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let n = input.chars().count();
+        let want = c["value"].as_i64().unwrap();
+        let got: Vec<i64> = duckling::parse_numeral(input)
+            .into_iter()
+            .filter(|e| e.dim == "number" && e.start == 0 && e.end == n)
+            .filter_map(|e| e.value["value"].as_i64())
+            .collect();
+        if !got.contains(&want) {
+            failures.push(format!("{input:?}\n  expected {want}\n  got      {got:?}"));
+        }
+    }
+    eprintln!(
+        "numeral_corpus checked {checked}, {} failing",
+        failures.len()
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
+}
+
+/// Email dimension (`parse_email`) — port of Duckling/Email/EN/Corpus.hs. A
+/// positive must produce an entity whose value equals the expected address
+/// (literal and spelled-out "a at b dot com" forms); negatives produce none.
+#[test]
+fn email_corpus() {
+    let data: Value = serde_json::from_str(include_str!("../fixtures/email_corpus.json")).unwrap();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let want = c["value"].as_str().unwrap();
+        let got: Vec<String> = duckling::parse_email(input)
+            .into_iter()
+            .filter_map(|e| e.value["value"].as_str().map(str::to_string))
+            .collect();
+        if !got.iter().any(|g| g == want) {
+            failures.push(format!("{input:?}\n  expected {want}\n  got      {got:?}"));
+        }
+    }
+    for neg in data["negatives"].as_array().unwrap() {
+        checked += 1;
+        let input = neg.as_str().unwrap();
+        let hit = duckling::parse_email(input);
+        if !hit.is_empty() {
+            failures.push(format!(
+                "[negative] {input:?} parsed: {:?}",
+                hit.iter()
+                    .map(|e| e.value["value"].clone())
+                    .collect::<Vec<_>>()
+            ));
+        }
+    }
+    eprintln!("email_corpus checked {checked}, {} failing", failures.len());
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
+}
+
+/// Url dimension (`parse_url`) — port of Duckling/Url/Rules.hs. A positive must
+/// produce an entity with the expected value + (lowercased) domain; negatives
+/// (bare words, "hey:42", …) produce none.
+#[test]
+fn url_corpus() {
+    let data: Value = serde_json::from_str(include_str!("../fixtures/url_corpus.json")).unwrap();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let (wv, wd) = (c["value"].as_str().unwrap(), c["domain"].as_str().unwrap());
+        let ok = duckling::parse_url(input).iter().any(|e| {
+            e.value["value"].as_str() == Some(wv) && e.value["domain"].as_str() == Some(wd)
+        });
+        if !ok {
+            let got: Vec<_> = duckling::parse_url(input)
+                .into_iter()
+                .map(|e| e.value)
+                .collect();
+            failures.push(format!(
+                "{input:?}\n  expected ({wv}, {wd})\n  got      {got:?}"
+            ));
+        }
+    }
+    for neg in data["negatives"].as_array().unwrap() {
+        checked += 1;
+        let input = neg.as_str().unwrap();
+        if !duckling::parse_url(input).is_empty() {
+            failures.push(format!("[negative] {input:?} parsed a URL"));
+        }
+    }
+    eprintln!("url_corpus checked {checked}, {} failing", failures.len());
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
+}
+
+/// CreditCardNumber dimension (`parse_creditcard`) — port of
+/// Duckling/CreditCardNumber. A positive must produce an entity with the
+/// expected digits-only value + issuer (dashed and undashed forms); negatives
+/// (Luhn/length failures, non-numbers) produce none.
+#[test]
+fn creditcard_corpus() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/creditcard_corpus.json")).unwrap();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let (wv, wi) = (c["value"].as_str().unwrap(), c["issuer"].as_str().unwrap());
+        let ok = duckling::parse_creditcard(input).iter().any(|e| {
+            e.value["value"].as_str() == Some(wv) && e.value["issuer"].as_str() == Some(wi)
+        });
+        if !ok {
+            let got: Vec<_> = duckling::parse_creditcard(input)
+                .into_iter()
+                .map(|e| e.value)
+                .collect();
+            failures.push(format!(
+                "{input:?}\n  expected ({wv}, {wi})\n  got      {got:?}"
+            ));
+        }
+    }
+    for neg in data["negatives"].as_array().unwrap() {
+        checked += 1;
+        let input = neg.as_str().unwrap();
+        if !duckling::parse_creditcard(input).is_empty() {
+            failures.push(format!("[negative] {input:?} parsed a card"));
+        }
+    }
+    eprintln!(
+        "creditcard_corpus checked {checked}, {} failing",
+        failures.len()
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
+}
+
+/// PhoneNumber dimension (`parse_phonenumber`) — port of
+/// Duckling/PhoneNumber/Corpus.hs. A positive must produce an entity whose value
+/// equals the normalized "(+<code>) <digits> ext <ext>" string; negatives
+/// (too short / too long) produce none.
+#[test]
+fn phonenumber_corpus() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/phonenumber_corpus.json")).unwrap();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let want = c["value"].as_str().unwrap();
+        let got: Vec<String> = duckling::parse_phonenumber(input)
+            .into_iter()
+            .filter_map(|e| e.value["value"].as_str().map(str::to_string))
+            .collect();
+        if !got.iter().any(|g| g == want) {
+            failures.push(format!("{input:?}\n  expected {want}\n  got      {got:?}"));
+        }
+    }
+    for neg in data["negatives"].as_array().unwrap() {
+        checked += 1;
+        let input = neg.as_str().unwrap();
+        if !duckling::parse_phonenumber(input).is_empty() {
+            failures.push(format!("[negative] {input:?} parsed a phone number"));
+        }
+    }
+    eprintln!(
+        "phonenumber_corpus checked {checked}, {} failing",
+        failures.len()
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
+}
+
 /// Combined Time+Duration (`parse_all`) — the `dims:["time","duration"]` surface.
 /// Time and Duration compete in one pool by dimension-agnostic range domination,
 /// exactly as Duckling: the widest match per position wins, disjoint matches all

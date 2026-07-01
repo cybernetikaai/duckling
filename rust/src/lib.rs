@@ -7,19 +7,23 @@
 // The port contains zero `unsafe`; forbid it so that stays true.
 #![forbid(unsafe_code)]
 
+pub mod creditcard;
 pub mod document;
 pub mod duration;
+pub mod email;
 pub mod engine;
 pub mod grain;
 pub mod json;
 pub mod numeral;
 pub mod ordinal;
+pub mod phonenumber;
 pub mod ranking;
 pub mod regex;
 pub mod resolve;
 pub mod time;
 pub mod timegrain;
 pub mod types;
+pub mod url;
 
 pub use resolve::{Entity, ResolveContext};
 
@@ -46,6 +50,11 @@ thread_local! {
     static RULES: std::cell::RefCell<std::collections::HashMap<Locale, std::rc::Rc<Vec<Rule>>>> =
         std::cell::RefCell::new(std::collections::HashMap::new());
     static CLASSIFIERS: ranking::Classifiers = ranking::classifiers();
+    // Rule sets for the standalone regex dimensions (email/url/…), compiled once
+    // per thread and keyed by dimension name. Kept out of the Time rule set so
+    // they never perturb the Time ranker.
+    static DIM_RULES: std::cell::RefCell<std::collections::HashMap<&'static str, std::rc::Rc<Vec<Rule>>>> =
+        std::cell::RefCell::new(std::collections::HashMap::new());
 }
 
 fn rules_for(locale: Locale) -> std::rc::Rc<Vec<Rule>> {
@@ -55,6 +64,49 @@ fn rules_for(locale: Locale) -> std::rc::Rc<Vec<Rule>> {
             .or_insert_with(|| std::rc::Rc::new(build_rules(locale)))
             .clone()
     })
+}
+
+fn dim_rules(name: &'static str, build: fn() -> Vec<Rule>) -> std::rc::Rc<Vec<Rule>> {
+    DIM_RULES.with(|c| {
+        c.borrow_mut()
+            .entry(name)
+            .or_insert_with(|| std::rc::Rc::new(build()))
+            .clone()
+    })
+}
+
+/// Run `rules` over `input`, resolve each produced token to a `(dim, value)` via
+/// `extract` (returning None for tokens of other dimensions), then rank by range
+/// domination and drop identical (range, value) duplicates. The shared emitter
+/// for the standalone regex dimensions.
+fn emit_entities(
+    rules: &[Rule],
+    input: &str,
+    extract: impl Fn(&Token) -> Option<(&'static str, serde_json::Value)>,
+) -> Vec<Entity> {
+    let doc = Document::new(input);
+    let nodes = engine::parse_string(rules, &doc);
+    let scored: Vec<(Node, Entity)> = nodes
+        .into_iter()
+        .filter_map(|n| {
+            let (dim, value) = extract(&n.token)?;
+            let e = Entity {
+                dim: dim.to_string(),
+                body: doc.substring(n.range.0, n.range.1),
+                start: n.range.0,
+                end: n.range.1,
+                value,
+                latent: false,
+            };
+            Some((n, e))
+        })
+        .collect();
+    let ranked = CLASSIFIERS.with(|cl| ranking::rank(cl, scored));
+    let mut seen = std::collections::HashSet::new();
+    ranked
+        .into_iter()
+        .filter(|e| seen.insert((e.start, e.end, e.value.to_string())))
+        .collect()
 }
 
 fn resolve_entities(rules: &[Rule], doc: &Document, ctx: &ResolveContext) -> Vec<Entity> {
@@ -209,6 +261,85 @@ pub fn parse_ordinal(input: &str) -> Vec<Entity> {
         .into_iter()
         .filter(|e| seen.insert((e.start, e.end, e.value.to_string())))
         .collect()
+}
+
+/// Parse `input` and return resolved **Numeral** entities (dim `"number"`,
+/// `{type:"value", value:<number>}`), ranked by range domination — the
+/// `dims:["number"]` surface. Context-free. Covers the forms the Time/Duration
+/// path needs (integers, written numbers, informal quantifiers, decimals,
+/// composition); magnitude suffixes (K/M/G/lakh) and some fractions are not yet
+/// ported — see docs/REMAINING_DIMENSIONS.md.
+pub fn parse_numeral(input: &str) -> Vec<Entity> {
+    let doc = Document::new(input);
+    let rules = rules_for(Locale::EnUs);
+    let nodes = engine::parse_string(&rules, &doc);
+    let scored: Vec<(Node, Entity)> = nodes
+        .into_iter()
+        .filter_map(|n| {
+            let nd = match &n.token {
+                Token::Numeral(nd) => nd.clone(),
+                _ => return None,
+            };
+            let e = Entity {
+                dim: "number".to_string(),
+                body: doc.substring(n.range.0, n.range.1),
+                start: n.range.0,
+                end: n.range.1,
+                value: resolve::numeral_value(&nd),
+                latent: false,
+            };
+            Some((n, e))
+        })
+        .collect();
+    let ranked = CLASSIFIERS.with(|cl| ranking::rank(cl, scored));
+    let mut seen = std::collections::HashSet::new();
+    ranked
+        .into_iter()
+        .filter(|e| seen.insert((e.start, e.end, e.value.to_string())))
+        .collect()
+}
+
+/// Parse `input` and return resolved **Email** entities (dim `"email"`,
+/// `{type:"value", value:"a@b.com"}`) — the `dims:["email"]` surface. Handles
+/// both literal (`a@b.com`) and spelled-out (`a at b dot com`) forms.
+pub fn parse_email(input: &str) -> Vec<Entity> {
+    let rules = dim_rules("email", email::en::email_rules);
+    emit_entities(&rules, input, |t| match t {
+        Token::Email(e) => Some(("email", resolve::email_value(e))),
+        _ => None,
+    })
+}
+
+/// Parse `input` and return resolved **Url** entities (dim `"url"`,
+/// `{value, domain, type:"value"}`) — the `dims:["url"]` surface. Language-agnostic.
+pub fn parse_url(input: &str) -> Vec<Entity> {
+    let rules = dim_rules("url", url::url_rules);
+    emit_entities(&rules, input, |t| match t {
+        Token::Url(u) => Some(("url", resolve::url_value(u))),
+        _ => None,
+    })
+}
+
+/// Parse `input` and return resolved **CreditCardNumber** entities (dim
+/// `"credit-card-number"`, `{value, issuer}`) — the `dims:["credit-card-number"]`
+/// surface. Language-agnostic; validated with the Luhn checksum.
+pub fn parse_creditcard(input: &str) -> Vec<Entity> {
+    let rules = dim_rules("credit-card-number", creditcard::creditcard_rules);
+    emit_entities(&rules, input, |t| match t {
+        Token::CreditCard(c) => Some(("credit-card-number", resolve::creditcard_value(c))),
+        _ => None,
+    })
+}
+
+/// Parse `input` and return resolved **PhoneNumber** entities (dim
+/// `"phone-number"`, `{value, type:"value"}`) — the `dims:["phone-number"]`
+/// surface. Language-agnostic; value is the normalized number string.
+pub fn parse_phonenumber(input: &str) -> Vec<Entity> {
+    let rules = dim_rules("phone-number", phonenumber::phonenumber_rules);
+    emit_entities(&rules, input, |t| match t {
+        Token::Phone(p) => Some(("phone-number", resolve::phonenumber_value(p))),
+        _ => None,
+    })
 }
 
 /// Debug: every Time candidate (unranked) as "rule | range | score | value".

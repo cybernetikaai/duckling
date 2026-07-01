@@ -3,13 +3,17 @@
 //! Duckling's existential GADT `Token` collapses to a Rust enum. More arms
 //! (Numeral, Ordinal, Duration, TimeGrain) are added as dependencies land.
 
+use crate::creditcard::CreditCardData;
 use crate::duration::DurationData;
+use crate::email::EmailData;
 use crate::grain::Grain;
 use crate::numeral::NumeralData;
 use crate::ordinal::OrdinalData;
+use crate::phonenumber::PhoneNumberData;
 use crate::regex::Re;
 use crate::time::object::IntervalDirection;
 use crate::time::predicate::Predicate;
+use crate::url::UrlData;
 
 /// English locale variant. Base EN is region-neutral; regions differ in numeric-
 /// date field order — US reads "3/4" as month/day (March 4), GB as day/month
@@ -112,6 +116,10 @@ pub enum Token {
     Ordinal(OrdinalData),
     TimeGrain(Grain),
     Duration(DurationData),
+    Email(EmailData),
+    Url(UrlData),
+    CreditCard(CreditCardData),
+    Phone(PhoneNumberData),
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]

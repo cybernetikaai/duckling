@@ -1,0 +1,77 @@
+{
+ "_comment": "Supported standalone Numeral forms (subset of Numeral/EN/Corpus.hs). parse_numeral must emit dim=number with this value on a full-span parse. Deferred (not asserted): decimals, negatives, fractions, K/M/G/lakh-abbrev suffixes, a/two dozen, nil.",
+ "cases": [
+  {
+   "input": "zero",
+   "value": 0
+  },
+  {
+   "input": "one",
+   "value": 1
+  },
+  {
+   "input": "single",
+   "value": 1
+  },
+  {
+   "input": "2",
+   "value": 2
+  },
+  {
+   "input": "two",
+   "value": 2
+  },
+  {
+   "input": "a pair",
+   "value": 2
+  },
+  {
+   "input": "a couple",
+   "value": 2
+  },
+  {
+   "input": "a couple of",
+   "value": 2
+  },
+  {
+   "input": "three",
+   "value": 3
+  },
+  {
+   "input": "a few",
+   "value": 3
+  },
+  {
+   "input": "ten",
+   "value": 10
+  },
+  {
+   "input": "thirty three",
+   "value": 33
+  },
+  {
+   "input": "0033",
+   "value": 33
+  },
+  {
+   "input": "one hundred thousand",
+   "value": 100000
+  },
+  {
+   "input": "100000",
+   "value": 100000
+  },
+  {
+   "input": "5 thousand",
+   "value": 5000
+  },
+  {
+   "input": "five thousand",
+   "value": 5000
+  },
+  {
+   "input": "two thousand",
+   "value": 2000
+  }
+ ]
+}

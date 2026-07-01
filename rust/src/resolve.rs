@@ -41,6 +41,39 @@ pub fn ordinal_value(o: &crate::ordinal::OrdinalData) -> serde_json::Value {
     serde_json::json!({"type": "value", "value": o.value})
 }
 
+/// Resolve a Numeral to Duckling's JSON: `{type:"value", value:<number>}`.
+/// Whole numbers emit as integers (Duckling renders `20`, not `20.0`).
+pub fn numeral_value(n: &crate::numeral::NumeralData) -> serde_json::Value {
+    if n.value.fract() == 0.0 {
+        serde_json::json!({"type": "value", "value": n.value as i64})
+    } else {
+        serde_json::json!({"type": "value", "value": n.value})
+    }
+}
+
+/// Resolve an Email to Duckling's JSON: `{type:"value", value:"a@b.com"}`.
+pub fn email_value(e: &crate::email::EmailData) -> serde_json::Value {
+    serde_json::json!({"type": "value", "value": e.value})
+}
+
+/// Resolve a Url to Duckling's JSON: `{value, domain, type:"value"}`.
+pub fn url_value(u: &crate::url::UrlData) -> serde_json::Value {
+    serde_json::json!({"value": u.value, "domain": u.domain, "type": "value"})
+}
+
+/// Resolve a PhoneNumber to Duckling's JSON: `{value, type:"value"}` — the
+/// normalized "(+<code>) <digits> ext <ext>" string.
+pub fn phonenumber_value(p: &crate::phonenumber::PhoneNumberData) -> serde_json::Value {
+    let prefix = p.prefix.map(|c| format!("(+{c}) ")).unwrap_or_default();
+    let ext = p.extension.map(|e| format!(" ext {e}")).unwrap_or_default();
+    serde_json::json!({"value": format!("{prefix}{}{ext}", p.number), "type": "value"})
+}
+
+/// Resolve a CreditCardNumber to Duckling's JSON: `{value, issuer}` (no `type`).
+pub fn creditcard_value(c: &crate::creditcard::CreditCardData) -> serde_json::Value {
+    serde_json::json!({"value": c.number, "issuer": c.issuer})
+}
+
 /// Resolve a Duration to Duckling's JSON: `{value, unit, <unit>: value, type,
 /// normalized: {value: <seconds>, unit: "second"}}` (port of the DurationData
 /// ToJSON instance). The `<unit>` key is dynamic — e.g. `"minute": 30`.

@@ -1,0 +1,48 @@
+{
+ "_comment": "Duckling/Url/Rules.hs + Corpus negatives, oracle-confirmed. parse_url must produce an entity with the expected value+domain; negatives produce none.",
+ "cases": [
+  {
+   "input": "visit https://www.example.com:8080/path?q=1 today",
+   "value": "https://www.example.com:8080/path?q=1",
+   "domain": "example.com"
+  },
+  {
+   "input": "go to localhost:3000/admin",
+   "value": "localhost:3000/admin",
+   "domain": "localhost"
+  },
+  {
+   "input": "foo.com",
+   "value": "foo.com",
+   "domain": "foo.com"
+  },
+  {
+   "input": "http://myserver/api",
+   "value": "http://myserver/api",
+   "domain": "myserver"
+  },
+  {
+   "input": "check www.google.com",
+   "value": "www.google.com",
+   "domain": "google.com"
+  },
+  {
+   "input": "http://example.com",
+   "value": "http://example.com",
+   "domain": "example.com"
+  },
+  {
+   "input": "www2.foo-bar.net/path",
+   "value": "www2.foo-bar.net/path",
+   "domain": "foo-bar.net"
+  }
+ ],
+ "negatives": [
+  "foo",
+  "MYHOST",
+  "hey:42",
+  "25",
+  "hello world",
+  "just text"
+ ]
+}
