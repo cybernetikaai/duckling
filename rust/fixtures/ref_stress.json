@@ -5683,6 +5683,4197 @@
     "grain": "day",
     "type": "value"
    }
+  },
+  {
+   "input": "the 31st",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-01-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-01-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 29th",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-01-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 28th",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "february 29th",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "feb 29",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the first of next month",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 15th of next month",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-02-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next february",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next month",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last month",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2012-12-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in a month",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "a month ago",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2012-12-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 months",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-03-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 months",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-04-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 months ago",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2012-10-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 11 months",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-12-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of the month",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "to": {
+     "value": "2013-02-01T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-01-21T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "next january",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next december",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-12-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 days",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-02-28T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 31 days",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-03-01T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 weeks",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-03-05T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 3rd tuesday of next month",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-02-19T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last day of february",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 1st monday of march",
+   "ref": "2013-01-29T06:30:00Z",
+   "refLabel": "Tue Jan29",
+   "expected": {
+    "value": "2013-03-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-01-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-01-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 29th",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-03-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 28th",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "february 29th",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "feb 29",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the first of next month",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 15th of next month",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-02-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next february",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next month",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last month",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2012-12-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in a month",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "a month ago",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2012-12-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 months",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-03-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 months",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-04-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 months ago",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2012-10-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 11 months",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-12-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of the month",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "to": {
+     "value": "2013-02-01T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-01-21T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "next january",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next december",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-12-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 days",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-03-01T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 31 days",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-03-02T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 weeks",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-03-06T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 3rd tuesday of next month",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-02-19T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last day of february",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 1st monday of march",
+   "ref": "2013-01-30T06:30:00Z",
+   "refLabel": "Wed Jan30",
+   "expected": {
+    "value": "2013-03-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2013-01-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2013-03-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 29th",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2013-03-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 28th",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "february 29th",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "feb 29",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the first of next month",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 15th of next month",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2013-02-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next february",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "a month ago",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2012-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 months",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2013-03-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 months",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2013-04-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 months ago",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2012-10-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 11 months",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next january",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next december",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2013-12-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 days",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2013-03-02T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 31 days",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2013-03-03T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 weeks",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2013-03-07T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 3rd tuesday of next month",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2013-02-19T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last day of february",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 1st monday of march",
+   "ref": "2013-01-31T06:30:00Z",
+   "refLabel": "Thu Jan31",
+   "expected": {
+    "value": "2013-03-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-03-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-04-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 29th",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-04-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 28th",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-04-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th of next month",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-04-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "february 29th",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "feb 29",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the first of next month",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-04-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 15th of next month",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-04-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next february",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2014-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next month",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-04-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last month",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in a month",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-04-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "a month ago",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 months",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-05-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 months",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-06-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 months ago",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2012-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 11 months",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2014-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of the month",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "to": {
+     "value": "2013-04-01T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-03-21T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "next january",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next december",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-12-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 days",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-04-30T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 31 days",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-05-01T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 weeks",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-05-05T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 3rd tuesday of next month",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-04-16T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last day of february",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2014-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 1st monday of march",
+   "ref": "2013-03-31T06:30:00Z",
+   "refLabel": "Sun Mar31",
+   "expected": {
+    "value": "2013-03-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-03-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-03-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 29th",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-04-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 28th",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-04-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th of next month",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-04-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "february 29th",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "feb 29",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the first of next month",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-04-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 15th of next month",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-04-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next february",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2014-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next month",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-04-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last month",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in a month",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-04-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "a month ago",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 months",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-05-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 months",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-06-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 months ago",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2012-12-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 11 months",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2014-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of the month",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "to": {
+     "value": "2013-04-01T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-03-21T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "next january",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next december",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-12-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 days",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-04-29T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 31 days",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-04-30T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 weeks",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-05-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 3rd tuesday of next month",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-04-16T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last day of february",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2014-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 1st monday of march",
+   "ref": "2013-03-30T06:30:00Z",
+   "refLabel": "Sat Mar30",
+   "expected": {
+    "value": "2013-03-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-10-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-11-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 29th",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-11-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 28th",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-11-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th of next month",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-11-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "february 29th",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "feb 29",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the first of next month",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-11-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 15th of next month",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-11-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next february",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2014-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next month",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-11-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last month",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-09-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in a month",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-11-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "a month ago",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-09-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 months",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 months",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2014-01-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 months ago",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-07-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 11 months",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2014-09-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of the month",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "to": {
+     "value": "2013-11-01T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-10-21T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "next january",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next december",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-12-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 days",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-11-30T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 31 days",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-12-01T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 weeks",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-12-05T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 3rd tuesday of next month",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2013-11-19T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last day of february",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2014-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 1st monday of march",
+   "ref": "2013-10-31T06:30:00Z",
+   "refLabel": "Thu Oct31",
+   "expected": {
+    "value": "2014-03-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2013-12-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 29th",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2013-12-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 28th",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-01-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st of next month",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-01-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th of next month",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-01-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "february 29th",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "feb 29",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 5th monday of the month",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2013-12-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the first of next month",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 15th of next month",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-01-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next february",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next month",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last month",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2013-11-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in a month",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-01-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "a month ago",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2013-11-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 months",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 months",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-03-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 months ago",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2013-09-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 11 months",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-11-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of the month",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "to": {
+     "value": "2014-01-01T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-12-21T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "next january",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next december",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-12-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 days",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-01-28T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 31 days",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-01-29T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 weeks",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-02-02T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 3rd tuesday of next month",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-01-21T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last day of february",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 1st monday of march",
+   "ref": "2013-12-29T06:30:00Z",
+   "refLabel": "Sun Dec29",
+   "expected": {
+    "value": "2014-03-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2013-12-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 29th",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-01-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 28th",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-01-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st of next month",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-01-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th of next month",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-01-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "february 29th",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "feb 29",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 5th monday of the month",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2013-12-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the first of next month",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 15th of next month",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-01-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next february",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next month",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last month",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2013-11-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in a month",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-01-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "a month ago",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2013-11-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 months",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 months",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-03-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 months ago",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2013-09-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 11 months",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-11-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of the month",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "to": {
+     "value": "2014-01-01T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-12-21T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "next january",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next december",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-12-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 days",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-01-29T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 31 days",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-01-30T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 weeks",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-02-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 3rd tuesday of next month",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-01-21T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last day of february",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 1st monday of march",
+   "ref": "2013-12-30T06:30:00Z",
+   "refLabel": "Mon Dec30",
+   "expected": {
+    "value": "2014-03-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-01-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 29th",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-01-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 28th",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-01-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st of next month",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-01-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th of next month",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-01-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "february 29th",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "feb 29",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 5th monday of the month",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2013-12-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the first of next month",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 15th of next month",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-01-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next february",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "a month ago",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2013-11-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 months",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 months",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-03-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 months ago",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2013-09-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 11 months",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-11-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next january",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next december",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-12-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 days",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-01-30T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 31 days",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-01-31T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 weeks",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-02-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 3rd tuesday of next month",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-01-21T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last day of february",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 1st monday of march",
+   "ref": "2013-12-31T06:30:00Z",
+   "refLabel": "Tue Dec31",
+   "expected": {
+    "value": "2014-03-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-03-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-03-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 29th",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 28th",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-03-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st of next month",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-03-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th of next month",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-03-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "february 29th",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "feb 29",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the first of next month",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-03-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 15th of next month",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-03-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next february",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "a month ago",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-01-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 months",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-04-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 months",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-05-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 months ago",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2011-11-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 11 months",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2013-01-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next january",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2013-01-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next december",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-12-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 days",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-03-30T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 31 days",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-03-31T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 weeks",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-04-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 3rd tuesday of next month",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-03-20T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last day of february",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 1st monday of march",
+   "ref": "2012-02-29T06:30:00Z",
+   "refLabel": "Wed leap",
+   "expected": {
+    "value": "2012-03-05T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-03-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-03-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 29th",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-03-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 28th",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st of next month",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-03-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th of next month",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-03-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "february 29th",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "feb 29",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the first of next month",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-03-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 15th of next month",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-03-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next february",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2014-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "a month ago",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-01-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 months",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-04-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 months",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-05-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 months ago",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2012-11-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 11 months",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2014-01-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next january",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next december",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-12-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 days",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-03-30T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 31 days",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-03-31T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 weeks",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-04-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 3rd tuesday of next month",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-03-19T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last day of february",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 1st monday of march",
+   "ref": "2013-02-28T06:30:00Z",
+   "refLabel": "Thu Feb28",
+   "expected": {
+    "value": "2013-03-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-08-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-09-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 29th",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-09-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 28th",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-09-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th of next month",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-09-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "february 29th",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "feb 29",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 5th monday of the month",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-08-05T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the first of next month",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-09-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 15th of next month",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-09-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next february",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2014-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next month",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-09-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last month",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-07-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in a month",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-09-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "a month ago",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-07-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 months",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-10-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 months",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-11-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 months ago",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-05-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 11 months",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2014-07-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of the month",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "to": {
+     "value": "2013-09-01T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-08-21T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "next january",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next december",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-12-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 days",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-09-30T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 31 days",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-10-01T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 weeks",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-10-05T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 3rd tuesday of next month",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2013-09-17T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last day of february",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2014-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 1st monday of march",
+   "ref": "2013-08-31T06:30:00Z",
+   "refLabel": "Sat Aug31",
+   "expected": {
+    "value": "2014-03-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-05-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-06-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 29th",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-06-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 28th",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-06-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th of next month",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-06-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "february 29th",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "feb 29",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the first of next month",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-06-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 15th of next month",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-06-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next february",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2014-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next month",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-06-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last month",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-04-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in a month",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-06-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "a month ago",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-04-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 months",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-07-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 months",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-08-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 months ago",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 11 months",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2014-04-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of the month",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "to": {
+     "value": "2013-06-01T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-05-21T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "next january",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next december",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-12-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 days",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-06-30T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 31 days",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-07-01T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 weeks",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-07-05T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 3rd tuesday of next month",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2013-06-18T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last day of february",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2014-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 1st monday of march",
+   "ref": "2013-05-31T06:30:00Z",
+   "refLabel": "Fri May31",
+   "expected": {
+    "value": "2014-03-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-05-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-04-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 29th",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-05-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 28th",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-05-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st of next month",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-05-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th of next month",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-05-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "february 29th",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "feb 29",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 5th monday of the month",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-04-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the first of next month",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 15th of next month",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-05-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next february",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2014-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next month",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-05-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last month",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-03-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in a month",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-05-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "a month ago",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-03-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 months",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-06-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 months",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-07-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 months ago",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-01-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 11 months",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2014-03-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of the month",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "to": {
+     "value": "2013-05-01T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-04-21T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "next january",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next december",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-12-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 days",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-05-30T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 31 days",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-05-31T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 weeks",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-06-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 3rd tuesday of next month",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2013-05-21T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last day of february",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2014-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 1st monday of march",
+   "ref": "2013-04-30T06:30:00Z",
+   "refLabel": "Tue Apr30",
+   "expected": {
+    "value": "2014-03-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 31st",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-01-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 30th",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-01-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 29th",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-01-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 28th",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-01-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "february 29th",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "feb 29",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the first of next month",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 15th of next month",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-02-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next february",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next month",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-02-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last month",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2013-12-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in a month",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "a month ago",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2013-12-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 2 months",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-03-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 3 months",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-04-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 months ago",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2013-10-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 11 months",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-12-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of the month",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "to": {
+     "value": "2014-02-01T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2014-01-21T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "next january",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2015-01-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next december",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-12-01T00:00:00.000-02:00",
+    "grain": "month",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 30 days",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-01-31T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 31 days",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-02-01T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new year's eve",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-12-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New Year's Eve",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in 5 weeks",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-02-05T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 3rd tuesday of next month",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-02-18T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "last day of february",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 1st monday of march",
+   "ref": "2014-01-01T06:30:00Z",
+   "refLabel": "Wed NewYear",
+   "expected": {
+    "value": "2014-03-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
   }
  ]
 }
