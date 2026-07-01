@@ -113,6 +113,11 @@ pub fn rank<T: Clone>(cl: &Classifiers, items: Vec<(Node, T)>) -> Vec<T> {
 /// Duckling/Ranking/Classifiers/EN_XX.hs. The real weights let `rank` break
 /// same-range ties by log-likelihood (the unique-mode correctness bar);
 /// contains-mode only ever relied on range domination.
+//
+// These are verbatim trained log-likelihood weights, not approximations of math
+// constants — many happen to land near ln(2)/ln(3)/etc. (e.g. -0.693147… is a
+// class log-prior, not `-LN_2`). `approx_constant` is a false positive here.
+#[allow(clippy::approx_constant)]
 pub fn classifiers() -> Classifiers {
     fn cd(prior: f64, unseen: f64, n: i64, lk: &[(&str, f64)]) -> ClassData {
         ClassData { prior, unseen, n, likelihoods: lk.iter().map(|(k, v)| (k.to_string(), *v)).collect() }

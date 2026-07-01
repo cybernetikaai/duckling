@@ -194,8 +194,8 @@ fn time_of_day_ampm(is_am: bool, td: &TimeData) -> TimeData {
     // cleanly when a specific date pins the day ("Jul 18, 2014 07:00 PM").
     // Only a pure hour (grain Hour) or an hh:mm (minutes set) is folded; hh:mm:ss
     // keeps its seconds via the fallback.
-    if let Some(Form::TimeOfDay { hours: Some(h), minutes, is12h }) = td.form {
-        if minutes.is_some() || td.grain == Grain::Hour {
+    if let Some(Form::TimeOfDay { hours: Some(h), minutes, is12h }) = td.form
+        && (minutes.is_some() || td.grain == Grain::Hour) {
             let hp = hour(is12h, Some(ampm), h as i64);
             let (pred, grain) = match minutes {
                 Some(m) => (intersect(minute(m as i64), hp), Grain::Minute),
@@ -212,7 +212,6 @@ fn time_of_day_ampm(is_am: bool, td: &TimeData) -> TimeData {
                 has_timezone: false,
             };
         }
-    }
     // Fallback (hh:mm:ss, or no known hour): intersect the am/pm half-day.
     TimeData {
         pred: intersect(td.pred.clone(), ampm_predicate(is_am)),

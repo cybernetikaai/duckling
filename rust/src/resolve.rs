@@ -132,11 +132,10 @@ pub fn resolve_time(td: &TimeData, ctx: &ResolveContext) -> Option<serde_json::V
             v.push(c);
         }
         v.extend(vfut.by_ref().take(3usize.saturating_sub(v.len())));
-        if v.is_empty() {
-            if let Some(b) = first_past {
+        if v.is_empty()
+            && let Some(b) = first_past {
                 v.push(b);
             }
-        }
         v
     };
 

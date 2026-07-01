@@ -387,8 +387,8 @@ where
     F: Fn(TimeObject) -> Option<TimeObject>,
 {
     let (g_past, g_future) = g.run(now, ctx);
-    let past1: Vec<TimeObject> = g_past.take(SAFE_MAX_INTERVAL).filter_map(|s| f(s)).collect();
-    let future1: Vec<TimeObject> = g_future.take(SAFE_MAX_INTERVAL).filter_map(|s| f(s)).collect();
+    let past1: Vec<TimeObject> = g_past.take(SAFE_MAX_INTERVAL).filter_map(&f).collect();
+    let future1: Vec<TimeObject> = g_future.take(SAFE_MAX_INTERVAL).filter_map(f).collect();
 
     let ends_after_now = |x: &TimeObject| time_starts_before_end_of(now, *x);
 
@@ -400,7 +400,7 @@ where
         .take_while(|x| time_starts_before_end_of(ctx.min_time, *x))
         .collect();
 
-    let bp = future1.iter().position(|x| ends_after_now(x)).unwrap_or(future1.len());
+    let bp = future1.iter().position(ends_after_now).unwrap_or(future1.len());
     let new_past = future1[..bp].to_vec();
     let old_future: Vec<TimeObject> = future1[bp..]
         .iter()
@@ -440,7 +440,7 @@ pub fn take_nth_after(n: i64, not_immediate: bool, cyclic: Predicate, base: Pred
             return (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::empty()) as BoxIter);
         }
         let f = |t: TimeObject| -> Option<TimeObject> {
-            let (past, future) = cyclic.run(t, ctx);
+            let (mut past, future) = cyclic.run(t, ctx);
             if n >= 0 {
                 let fut: Vec<TimeObject> = future.take((n as usize) + 2).collect();
                 let drop_n = if not_immediate && fut.first().is_some_and(|a| time_before(*a, t)) {
@@ -450,7 +450,7 @@ pub fn take_nth_after(n: i64, not_immediate: bool, cyclic: Predicate, base: Pred
                 };
                 fut.into_iter().nth(drop_n)
             } else {
-                past.skip(((-n) - 1) as usize).next()
+                past.nth(((-n) - 1) as usize)
             }
         };
         let (past, future) = seq_map(false, f, &base, now, ctx);
@@ -580,7 +580,7 @@ pub fn take_nth(n: i64, not_immediate: bool, pred: Predicate) -> Predicate {
             return (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::empty()) as BoxIter);
         }
         let base = ctx.ref_time;
-        let (past, future) = pred.run(base, ctx);
+        let (mut past, future) = pred.run(base, ctx);
         let nth = if n >= 0 {
             let fut: Vec<TimeObject> = future.take((n as usize) + 2).collect();
             let drop_n = if not_immediate
@@ -592,7 +592,7 @@ pub fn take_nth(n: i64, not_immediate: bool, pred: Predicate) -> Predicate {
             };
             fut.into_iter().nth(drop_n)
         } else {
-            past.skip(((-n) - 1) as usize).next()
+            past.nth(((-n) - 1) as usize)
         };
         match nth {
             None => (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::empty()) as BoxIter),
