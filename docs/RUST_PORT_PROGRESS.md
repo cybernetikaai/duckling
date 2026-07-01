@@ -51,6 +51,11 @@ Branch: `rust-port-en-time`.
 | + cycle this/last/next single-rule + upcoming | 682 / 984 | 302 | 10 / 10 | coming/upcoming->next; upcoming <int> <cycle>; -48 |
 | + fold am/pm into hour predicate | 687 / 984 | 297 | 10 / 10 | "3am" at 4:30 -> tomorrow 3am (was today, past) |
 | + fraction/half/mixed duration rules | 707 / 984 | 277 | 10 / 10 | quarter/half/three-qtr hour, 2.5h, n-and-a-half, fortnight, more, about |
+| + informal-numeral wrappers (a couple of/few) | 713 / 984 | 271 | 10 / 10 | "a couple of"/"a few" as one informal token (couple=2/few=3) |
+| + cycle/ordinal-of-time family | 728 / 984 | 256 | 10 / 10 | last/the <cycle> of <time>, <ordinal> (last) <cycle> of <time>, last <dow> of |
+| + <year> (bc\|ad) + about/sharp precision | 743 / 984 | 241 | 10 / 10 | era years; precision markers mark time non-latent (around/about/exactly/sharp) |
+| + season cycle predicate + this/last/next | 749 / 984 | 235 | 10 / 10 | seasonPredicate (seasonOf + iterate); "this/last/next season" |
+| + from-the dd-to-dd month + <n> minutes to hod | 756 / 984 | 228 | 10 / 10 | "from the 13 to 15 July"; "20 minutes to 2pm" |
 
 ## How to run
 
@@ -68,7 +73,9 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru duration fractions. contains **707/984**, unique **705/984**, tz_stress 10/10. Next: informal-numeral durations ("a couple of/few minutes" -> couple=2/few=3 as single numeral tokens); year-with-era ("in 2014 AD/BC"); "last <dow>/<cycle> of <time>"; "the <ordinal> last <cycle> of <time>".
+Cumulative thru from/minutes intervals. contains **756/984**, unique **754/984**, tz_stress **10/10** (timezone/DST fully green — the hard constraint).
+
+Remaining ~228 failures cluster as: **holidays ~42** (computed/niche: Ramadan/Eid/Diwali, Christmas-relative, King's Day, ides — long-tail infra); **part-of-day + time ~16** ("this evening at 2" needs the hour disambiguated to PM by the part-of-day); **`<time> for <duration>` ~4** (needs durationAfter/mergeDuration infra); **closest ~5** ("the closest Monday to Oct 5th" — predNthClosest); **quarter past <hod> ~5**; long tail. Next best targets: part-of-day hour disambiguation (16, systematic), then durationAfter for "<time> for <duration>", then predNthClosest.
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
