@@ -1,7 +1,7 @@
 # Duckling → Rust (EN Time) — Progress Log
 
-Living status for the autonomous port. Plan: `docs/superpowers/plans/2026-06-30-duckling-rust-en-time.md`.
-Branch: `rust-port-en-time`.
+Living status for the autonomous port. Remaining-work analysis:
+[`REMAINING_DIMENSIONS.md`](REMAINING_DIMENSIONS.md). Branch: `rust-port-en-time`.
 
 ## Corpus scoreboard
 

@@ -2,7 +2,7 @@
 //!
 //! Strategy: the test corpus (transcribed to `fixtures/en_time_corpus.json`)
 //! is the oracle; every rule is driven red->green against it. See
-//! `docs/superpowers/plans/2026-06-30-duckling-rust-en-time.md`.
+//! `docs/RUST_PORT_PROGRESS.md` for the milestone log and design notes.
 
 // The port contains zero `unsafe`; forbid it so that stays true.
 #![forbid(unsafe_code)]
