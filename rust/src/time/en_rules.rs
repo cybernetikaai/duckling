@@ -831,7 +831,8 @@ fn cycle_and_relative_rules() -> Vec<Rule> {
             ],
             prod: Box::new(|tokens| match tokens {
                 [Token::RegexMatch(g), Token::Time(td)] => {
-                    if g.first().map(|s| s.eq_ignore_ascii_case("next")).unwrap_or(false) {
+                    let word = g.first().map(|s| s.to_ascii_lowercase()).unwrap_or_default();
+                    if word == "next" {
                         // the day-of-week falling in next week
                         Some(Token::Time(TimeData {
                             pred: intersect(td.pred.clone(), cycle_nth(Grain::Week, 1)),
@@ -843,13 +844,18 @@ fn cycle_and_relative_rules() -> Vec<Rule> {
                             holiday: None,
                             has_timezone: false,
                         }))
-                    } else {
-                        // this/coming: predNth 0 notImmediate — a *single* pinned
+                    } else if word == "this" {
+                        // "this <dow>": predNth 0 notImmediate — a *single* pinned
                         // occurrence (the upcoming dow), so it survives intersection
                         // with a time-of-day. A bare dow's notImmediate lives in the
                         // series and is dropped when composed, which would let "this
                         // tuesday at 3" fall back to today when today is Tuesday.
                         Some(Token::Time(pred_nth_td(0, true, td)))
+                    } else {
+                        // "coming <dow>": Duckling has no dedicated rule; it behaves
+                        // like the bare dow (notImmediate in the series), so "coming
+                        // tuesday at 3" composes to today's Tuesday, unlike "this".
+                        Some(Token::Time(not_latent(td.clone())))
                     }
                 }
                 _ => None,
