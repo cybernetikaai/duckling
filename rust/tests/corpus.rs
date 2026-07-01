@@ -436,6 +436,37 @@ fn gb_locale() {
         failures.join("\n"));
 }
 
+/// Beyond-Duckling extension: holidays introduced or federally recognized AFTER
+/// Duckling's holiday data froze (~2020-03) — Juneteenth National Independence
+/// Day (US, 2021), Indigenous Peoples' Day spelling variants (US), and the
+/// Canadian National Day for Truth and Reconciliation / Orange Shirt Day (2021),
+/// Emancipation Day (2021), and National Indigenous Peoples Day. These
+/// DELIBERATELY diverge from the oracle, which returns nothing for them; expected
+/// values are hand-authored against official government dates. Region-scoped, so
+/// they never leak into oracle-based region tests. See docs/RUST_PORT_PROGRESS.md.
+#[test]
+fn modern_holidays() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/modern_holidays.json")).unwrap();
+    let ctx = ctx();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let locale = locale_of(c["locale"].as_str().unwrap());
+        let exp = strip_values(c["expected"].clone());
+        let got: Vec<Value> = duckling::parse_locale(input, &ctx, locale)
+            .into_iter().filter(|e| e.dim == "time").map(|e| strip_values(e.value)).collect();
+        if !got.iter().any(|g| g == &exp) {
+            failures.push(format!("[{:?}] {input:?}\n  expected {exp}\n  got      {got:?}",
+                c["locale"]));
+        }
+    }
+    eprintln!("modern_holidays checked {checked}, {} failing", failures.len());
+    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(), failures.join("\n"));
+}
+
 /// Large-scale randomized differential: random inputs (from parameterized
 /// templates across every rule family) paired with random references (date +
 /// time-of-day, 2010–2022), cross-checked against the oracle. All prior fuzzing

@@ -1101,6 +1101,58 @@ fn region_holiday_rules(locale: Locale) -> Vec<Rule> {
     }
     rules
 }
+
+/// Holidays introduced or federally recognized AFTER Duckling's holiday data
+/// froze (~2020-03). These deliberately DIVERGE from the Duckling oracle, which
+/// returns nothing for them — they are verified against official government
+/// dates rather than the oracle, and kept separate from the faithful
+/// `region_holiday_rules` port above. Region-scoped, since each is a national
+/// holiday of one country. Same calendar math as Duckling's own rules, so they
+/// resolve like any other recurring holiday (the parser gives the date for the
+/// reference year regardless of when the holiday was established).
+fn modern_holiday_rules(locale: Locale) -> Vec<Rule> {
+    match locale {
+        Locale::EnUs => vec![
+            // Juneteenth National Independence Day — U.S. federal holiday since
+            // June 2021. Duckling already has the June 19 date under the plain
+            // "juneteenth" name; this adds the formal federal name (same date).
+            holiday_rule(
+                "Juneteenth National Independence Day",
+                r"juneteenth national independence day",
+                || month_day_td(6, 19),
+            ),
+            // Indigenous Peoples' Day — 2nd Monday of October, same as the
+            // fixture's "indigenous people's day" entry, but matching the
+            // plural/no-apostrophe spellings that single regex missed.
+            holiday_rule(
+                "Indigenous Peoples' Day",
+                r"indigenous peoples?'? day",
+                || nth_dow_of_month_td(2, 1, 10),
+            ),
+        ],
+        Locale::EnCa => vec![
+            // National Day for Truth and Reconciliation — Canadian federal
+            // statutory holiday since 2021, September 30. Orange Shirt Day is
+            // observed on the same date.
+            holiday_rule(
+                "National Day for Truth and Reconciliation",
+                r"(national day for )?truth and reconciliation( day)?|orange shirt day",
+                || month_day_td(9, 30),
+            ),
+            // Emancipation Day — federally designated in Canada since 2021,
+            // August 1 (marks the 1834 abolition of slavery across the British
+            // Empire). Note: the U.S. "Emancipation Day" is a different date.
+            holiday_rule("Emancipation Day", r"emancipation day", || month_day_td(8, 1)),
+            // National Indigenous Peoples Day — observed in Canada on June 21.
+            holiday_rule(
+                "National Indigenous Peoples Day",
+                r"national indigenous peoples? day",
+                || month_day_td(6, 21),
+            ),
+        ],
+        _ => Vec::new(),
+    }
+}
 fn holiday_rule(name: &'static str, re: &str, make: impl Fn() -> TimeData + 'static) -> Rule {
     Rule {
         name: format!("holiday: {name}"),
@@ -3216,6 +3268,7 @@ pub fn en_rules(locale: Locale) -> Vec<Rule> {
     rules.extend(season_rules());
     rules.extend(numeric_date_rules(locale));
     rules.extend(region_holiday_rules(locale));
+    rules.extend(modern_holiday_rules(locale));
     rules.extend(end_beginning_of_month_rules());
     rules.extend(end_beginning_year_week_rules());
     rules.extend(this_next_last_time_rules());

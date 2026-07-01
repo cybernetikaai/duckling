@@ -1,0 +1,53 @@
+{
+  "_comment": "Beyond-Duckling extension: holidays introduced or federally recognized after Duckling's holiday data froze (~2020-03). The Duckling oracle returns nothing for these, so expected values are hand-authored against official government dates rather than oracle-verified. Reference date 2013-02-12 (same as the corpus ctx()); dates are the recurring calendar date for that year.",
+  "cases": [
+    {
+      "input": "juneteenth national independence day",
+      "locale": "EnUs",
+      "note": "US federal holiday since June 2021; formal name for the June 19 date Duckling already had under 'juneteenth'",
+      "expected": {"grain": "day", "holidayBeta": "Juneteenth National Independence Day", "type": "value", "value": "2013-06-19T00:00:00.000-02:00"}
+    },
+    {
+      "input": "indigenous peoples' day",
+      "locale": "EnUs",
+      "note": "2nd Monday of October; plural/apostrophe spelling Duckling's 'indigenous people's day' regex missed",
+      "expected": {"grain": "day", "holidayBeta": "Indigenous Peoples' Day", "type": "value", "value": "2013-10-14T00:00:00.000-02:00"}
+    },
+    {
+      "input": "indigenous peoples day",
+      "locale": "EnUs",
+      "note": "no-apostrophe spelling",
+      "expected": {"grain": "day", "holidayBeta": "Indigenous Peoples' Day", "type": "value", "value": "2013-10-14T00:00:00.000-02:00"}
+    },
+    {
+      "input": "national day for truth and reconciliation",
+      "locale": "EnCa",
+      "note": "Canadian federal statutory holiday since 2021, September 30",
+      "expected": {"grain": "day", "holidayBeta": "National Day for Truth and Reconciliation", "type": "value", "value": "2013-09-30T00:00:00.000-02:00"}
+    },
+    {
+      "input": "truth and reconciliation day",
+      "locale": "EnCa",
+      "note": "common short name",
+      "expected": {"grain": "day", "holidayBeta": "National Day for Truth and Reconciliation", "type": "value", "value": "2013-09-30T00:00:00.000-02:00"}
+    },
+    {
+      "input": "orange shirt day",
+      "locale": "EnCa",
+      "note": "observed on the same date as Truth and Reconciliation, September 30",
+      "expected": {"grain": "day", "holidayBeta": "National Day for Truth and Reconciliation", "type": "value", "value": "2013-09-30T00:00:00.000-02:00"}
+    },
+    {
+      "input": "emancipation day",
+      "locale": "EnCa",
+      "note": "federally designated in Canada since 2021, August 1 (distinct from the US April date)",
+      "expected": {"grain": "day", "holidayBeta": "Emancipation Day", "type": "value", "value": "2013-08-01T00:00:00.000-02:00"}
+    },
+    {
+      "input": "national indigenous peoples day",
+      "locale": "EnCa",
+      "note": "observed in Canada on June 21",
+      "expected": {"grain": "day", "holidayBeta": "National Indigenous Peoples Day", "type": "value", "value": "2013-06-21T00:00:00.000-02:00"}
+    }
+  ]
+}
