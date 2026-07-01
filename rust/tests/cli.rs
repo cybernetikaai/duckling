@@ -88,6 +88,10 @@ fn each_dimension_dispatches() {
         parse(&["--dims", "phone-number", "call +1 (650) 123-4567"])[0]["value"]["value"],
         "(+1) 6501234567"
     );
+    assert_eq!(
+        parse(&["--dims", "temperature", "70 degrees"])[0]["value"]["unit"],
+        "degree"
+    );
 }
 
 #[test]

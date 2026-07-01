@@ -33,7 +33,7 @@ they never touch the Time ranker.
 
 | Dimension | Haskell | Numeral refs | Estimate |
 |---|---|---|---|
-| Temperature | 161 L | yes (`isValueOnly`) | ~½–1 day |
+| ~~Temperature~~ ✅ | 161 L | done — temperature_corpus (31+3 neg) | — |
 | Volume | 166 L | 7 | ~½–1 day |
 | Distance | 213 L | 13 | ~1 day |
 | Quantity | 256 L | 21 | ~1 day |
