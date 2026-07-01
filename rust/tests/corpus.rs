@@ -281,11 +281,13 @@ fn tz_truth() {
 fn values_array() {
     let data: Value =
         serde_json::from_str(include_str!("../fixtures/values_array.json")).unwrap();
-    let ctx = ctx();
-    let n_of = |input: &str| -> Option<Vec<Value>> {
+    let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(-2));
+    let default_ref = jiff::civil::date(2013, 2, 12).at(4, 30, 0, 0)
+        .to_zoned(zone.clone()).unwrap().timestamp();
+    let n_of = |input: &str, c: &duckling::ResolveContext| -> Option<Vec<Value>> {
         // the full-span time entity's `values` array
         let count = input.chars().count();
-        duckling::parse(input, &ctx).into_iter()
+        duckling::parse(input, c).into_iter()
             .find(|e| e.dim == "time" && e.start == 0 && e.end == count)
             .and_then(|e| e.value.get("values").and_then(|v| v.as_array()).cloned())
     };
@@ -295,7 +297,14 @@ fn values_array() {
         checked += 1;
         let input = c["input"].as_str().unwrap();
         let want = c["values"].as_array().unwrap();
-        match n_of(input) {
+        // Optional per-case reference (for covering / across-reference cases);
+        // defaults to the standard 04:30 context.
+        let reference = match c.get("ref").and_then(|r| r.as_str()) {
+            Some(r) => r.parse().expect("ref"),
+            None => default_ref,
+        };
+        let case_ctx = duckling::ResolveContext { reference, zone: zone.clone(), with_latent: false };
+        match n_of(input, &case_ctx) {
             Some(got) if got.as_slice() == want.as_slice() => {}
             got => failures.push(format!("{input:?}\n  expected {want:?}\n  got      {got:?}")),
         }
