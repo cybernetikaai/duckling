@@ -195,6 +195,34 @@ pub fn numeral_rules() -> Vec<Rule> {
                 numeral(tens + unit)
             }),
         },
+        // "one twenty two" -> 122 (ruleSkipHundreds2). NOTE: the two-word
+        // ruleSkipHundreds1 ("nine thirty" -> 930) is intentionally NOT ported —
+        // its shape collides with time-of-day composition ("half an hour after
+        // nine thirty") in this crate's shared rule set (Duckling avoids this by
+        // parsing each dimension separately). The 3-word skip2 has no such clash.
+        Rule {
+            name: "one twenty two".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"(one|two|three|four|five|six|seven|eight|nine)")),
+                PatternItem::Regex(compile(
+                    r"(twenty|thirty|fou?rty|fifty|sixty|seventy|eighty|ninety)",
+                )),
+                PatternItem::Regex(compile(r"(one|two|three|four|five|six|seven|eight|nine)")),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [
+                    Token::RegexMatch(a),
+                    Token::RegexMatch(b),
+                    Token::RegexMatch(c),
+                ] => {
+                    let h = from_table(UNITS, a.first()?)?;
+                    let tens = from_table(TENS, b.first()?)?;
+                    let rest = from_table(UNITS, c.first()?)?;
+                    numeral(h * 100 + tens + rest)
+                }
+                _ => None,
+            }),
+        },
         // "hundred"/"thousand"/... -> 10^grain, multipliable (rulePowersOfTen).
         Rule {
             name: "powers of tens".into(),

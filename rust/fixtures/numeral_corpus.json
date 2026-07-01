@@ -196,6 +196,14 @@
   {
    "input": "200 dozens",
    "value": 2400
+  },
+  {
+   "input": "one twenty two",
+   "value": 122
+  },
+  {
+   "input": "ONE TwentY tWO",
+   "value": 122
   }
  ]
 }
