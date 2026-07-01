@@ -117,7 +117,8 @@ Branch: `rust-port-en-time`.
 | + regional holidays (11 regions) | 1069 / 1069 | 0 | 68 / 68 | **region_holidays 405**; Guy Fawkes/ANZAC/Melbourne Cup/Heritage Day… ported from per-region Rules.hs (subagent), oracle-verified across 3 years |
 | + US-region holidays (gap fix) | 1069 / 1069 | 0 | 68 / 68 | **region_holidays 726**; Independence/Memorial/Labor/Columbus Day, Cinco de Mayo, Juneteenth… (~96) were missing from base (Corpus.hs tests "4th of July" the date, not the holiday); now resolve |
 | + tractable "other" holidays | 1069 / 1069 | 0 | 68 / 68 | **region_holidays 753**; +9 relative-date holidays: Election Day, Cyber Monday (days-after-nth-DOW) + Victoria Day, Reconciliation Day (nth-DOW-rel-date, predLastOf vs predNthAfter distinguished) |
-| + post-2020 holidays (extension) | 1069 / 1069 | 0 | 68 / 68 | **modern_holidays 8**; holidays introduced after Duckling froze (~2020-03): Juneteenth National Independence Day (US name), Indigenous Peoples' Day spelling variants (US), Truth and Reconciliation / Orange Shirt Day / Emancipation Day / National Indigenous Peoples Day (CA). Deliberately diverges from oracle (returns nothing) — see "Deliberate divergence: post-2020 holidays" below |
+| + post-2020 holidays (extension) | 1069 / 1069 | 0 | 68 / 68 | **modern_holidays 8**; holidays introduced after Duckling froze (~2020-03): Juneteenth National Independence Day (US name), Indigenous Peoples' Day spelling variants (US), Truth and Reconciliation / Orange Shirt Day / Emancipation Day / National Indigenous Peoples Day (CA). Deliberately diverges from oracle (returns nothing) — see "Deliberate divergence: beyond-Duckling holidays" below |
+| + AU Queen's/King's Birthday (extension) | 1069 / 1069 | 0 | 68 / 68 | **modern_holidays 11**; Australia's Queen's Birthday (2nd Mon June, majority-state convention) + King's Birthday post-2022 rename — a major AU public holiday Duckling's AU rules never included (oracle returns nothing). Faithful AU port confirmed complete (all 28 EN/AU/Rules.hs holidays present) |
 
 ## Rule-level coverage audit
 
@@ -353,15 +354,16 @@ grain (it comes from the Fri 18:00 / Mon 00:00 endpoint TimeObjects, not `td.gra
 so bare "weekend"/"this past weekend"/"last weekend of October" are unchanged. This
 avoids the tie-break approach that regressed "3 in the morning". differential 1227/1227.
 
-**Deliberate divergence: post-2020 holidays (this iteration — EXTENSION).**
+**Deliberate divergence: beyond-Duckling holidays (EXTENSION).**
 Duckling's holiday data froze around 2020-03 (last upstream release), so it
-misses holidays created or federally recognized since. Confirmed against the
-live oracle: `national day for truth and reconciliation`, `orange shirt day`,
-`national indigenous peoples day`, and CA `emancipation day` all return `[]`;
-`juneteenth national independence day` returns `[]` (only bare `juneteenth`
-resolves); no-apostrophe `indigenous peoples day` returns `[]`. Because our AI
-speech pipeline sees these names in real user input, `modern_holiday_rules`
-(en_rules.rs) adds them as a small, region-scoped, clearly-labeled extension:
+misses holidays created/renamed since — and its per-region tables also omit some
+long-standing public holidays entirely. Confirmed against the live oracle:
+`national day for truth and reconciliation`, `orange shirt day`, `national
+indigenous peoples day`, CA `emancipation day`, `juneteenth national
+independence day`, no-apostrophe `indigenous peoples day`, and AU `queen's
+birthday` / `king's birthday` all return `[]`. Because our AI speech pipeline
+sees these names in real user input, `modern_holiday_rules` (en_rules.rs) adds
+them as a small, region-scoped, clearly-labeled extension:
 
 - **US** — *Juneteenth National Independence Day* (federal 2021; the June 19 date
   Duckling already had under `juneteenth`, now under its formal name);
@@ -371,14 +373,25 @@ speech pipeline sees these names in real user input, `modern_holiday_rules`
   (federal statutory holiday 2021, Sept 30); *Emancipation Day* (federal 2021,
   Aug 1 — distinct from the US April date, so CA-scoped); *National Indigenous
   Peoples Day* (June 21).
+- **AU** — *Queen's Birthday* / *King's Birthday* (2nd Monday of June, the
+  majority-state convention; King's Birthday is the post-2022 rename after
+  Charles III's accession). A major Australian public holiday Duckling's AU
+  rules never included. QLD (1st Mon Oct) and WA (governor-set) observe it on
+  other dates and are not represented — the same single-date-per-holiday
+  limitation as the faithful port (e.g. AU Labour Day). The faithful AU port
+  itself is confirmed complete: all 28 holidays in `Duckling/Time/EN/AU/Rules.hs`
+  are present (region_holidays), and AU Boxing/Christmas/New Year/Good
+  Friday/Easter Monday resolve via the shared global + computed rules.
 
 These intentionally DIVERGE from the oracle — the same posture as the tz
 ground-truth and interval divergences (favor correctness over byte-fidelity to a
 frozen dataset). They are verified against official government dates rather than
 the oracle, kept out of the faithful `region_holiday_rules` port, region-scoped
 so they never leak into oracle-based region tests, and guarded by the
-**modern_holidays 8** test. Deliberately NOT ported (still region/calendar
-edge cases, low speech-input value): most remaining ~20 "other" holidays.
+**modern_holidays 11** test. Deliberately NOT added (state-specific / discontinued,
+low speech-input value): AU Grand Final Day (VIC-only, date set annually) and
+Family & Community Day (ACT, discontinued 2017 → replaced by Reconciliation Day,
+which we already have); plus the remaining ~20 Duckling "other" holidays.
 
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 

@@ -1102,10 +1102,12 @@ fn region_holiday_rules(locale: Locale) -> Vec<Rule> {
     rules
 }
 
-/// Holidays introduced or federally recognized AFTER Duckling's holiday data
-/// froze (~2020-03). These deliberately DIVERGE from the Duckling oracle, which
-/// returns nothing for them — they are verified against official government
-/// dates rather than the oracle, and kept separate from the faithful
+/// Holidays absent from Duckling's frozen (~2020-03) holiday data — whether
+/// introduced/renamed after that freeze (Juneteenth National Independence Day,
+/// King's Birthday) or simply never included in Duckling's tables (Australia's
+/// Queen's/King's Birthday). These deliberately DIVERGE from the Duckling
+/// oracle, which returns nothing for them — they are verified against official
+/// government dates rather than the oracle, and kept separate from the faithful
 /// `region_holiday_rules` port above. Region-scoped, since each is a national
 /// holiday of one country. Same calendar math as Duckling's own rules, so they
 /// resolve like any other recurring holiday (the parser gives the date for the
@@ -1148,6 +1150,22 @@ fn modern_holiday_rules(locale: Locale) -> Vec<Rule> {
                 "National Indigenous Peoples Day",
                 r"national indigenous peoples? day",
                 || month_day_td(6, 21),
+            ),
+        ],
+        Locale::EnAu => vec![
+            // Queen's Birthday / King's Birthday — a major Australian public
+            // holiday Duckling's AU rules never included. Renamed "King's
+            // Birthday" nationally after the 2022 accession of Charles III;
+            // both names resolve to the same date. Observed on the 2nd Monday
+            // of June by most states and territories (NSW, VIC, SA, TAS, NT,
+            // ACT) — the majority convention, matching how Duckling picks a
+            // single date for AU holidays that vary by state (e.g. Labour Day).
+            // QLD (1st Mon Oct) and WA (governor-set) differ and are not
+            // represented, same limitation as the faithful port.
+            holiday_rule(
+                "Queen's Birthday",
+                r"(the )?(queen|king|monarch|sovereign)'?s'? (official )?birthday",
+                || nth_dow_of_month_td(2, 1, 6),
             ),
         ],
         _ => Vec::new(),
