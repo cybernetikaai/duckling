@@ -41,6 +41,7 @@ Branch: `rust-port-en-time`.
 | + before/after open intervals | 585 / 984 | 399 | 3 / 10 | withDirection + open_interval JSON (before=to, after=from) |
 | + quarters (<ord> quarter, Q1, qtr) | 594 / 984 | 390 | 3 / 10 | time_cycle + cycleNthAfter; +qtr grain |
 | + in-text timezones (8:00 PST, 4pm CET) | 610 / 984 | 374 | 3 / 10 | shiftTimezone via ref_offset in TimeContext |
+| + day-of-month intervals (Jul 13-15) | 621 / 984 | 363 | 3 / 10 | intersectDOM per endpoint + Closed interval |
 
 ## How to run
 
@@ -58,7 +59,7 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru timezones. **610/984 (62%)**. Next: DOM-interval (13 to 15 July), day before/after, fraction hours, then RANKING (unique gap) — the correctness capstone.
+Cumulative thru DOM-intervals. **621/984 (63%)**. Next: computed-holiday leftovers (Ramadan/GYSD/Earth Hour — niche infra), day before/after, fraction hours, then RANKING (unique gap).
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &

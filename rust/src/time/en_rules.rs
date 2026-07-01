@@ -768,6 +768,62 @@ fn direction_rules() -> Vec<Rule> {
     ]
 }
 
+fn dom_interval(m: &TimeData, t1: &Token, t2: &Token) -> Option<TimeData> {
+    let d1 = intersect_dom(m, t1)?;
+    let d2 = intersect_dom(m, t2)?;
+    interval_td(IntervalType::Closed, &d1, &d2)
+}
+
+/// Day-of-month intervals within a month (ruleIntervalMonthDDDD family):
+/// "July 13 to 15", "23rd to 26th Oct", "from 13 to 15 of July".
+fn dom_interval_rules() -> Vec<Rule> {
+    let sep = || compile(r"\-|to|th?ru|through|(un)?til(l)?");
+    let dv = || PatternItem::Predicate(Box::new(is_dom_value));
+    let am = || PatternItem::Predicate(Box::new(is_a_month));
+    vec![
+        Rule {
+            name: "<month> dd-dd (interval)".into(),
+            pattern: vec![am(), dv(), PatternItem::Regex(sep()), dv()],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(m), t1, _, t2] => dom_interval(m, t1, t2).map(Token::Time),
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "dd-dd <month> (interval)".into(),
+            pattern: vec![dv(), PatternItem::Regex(sep()), dv(), am()],
+            prod: Box::new(|tokens| match tokens {
+                [t1, _, t2, Token::Time(m)] => dom_interval(m, t1, t2).map(Token::Time),
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "dd-dd of <month> (interval)".into(),
+            pattern: vec![dv(), PatternItem::Regex(sep()), dv(), PatternItem::Regex(compile(r"of")), am()],
+            prod: Box::new(|tokens| match tokens {
+                [t1, _, t2, _, Token::Time(m)] => dom_interval(m, t1, t2).map(Token::Time),
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "from <month> dd-dd (interval)".into(),
+            pattern: vec![PatternItem::Regex(compile(r"from")), am(), dv(), PatternItem::Regex(sep()), dv()],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(m), t1, _, t2] => dom_interval(m, t1, t2).map(Token::Time),
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "from dd-dd of <month> (interval)".into(),
+            pattern: vec![PatternItem::Regex(compile(r"from")), dv(), PatternItem::Regex(sep()), dv(), PatternItem::Regex(compile(r"of")), am()],
+            prod: Box::new(|tokens| match tokens {
+                [_, t1, _, t2, _, Token::Time(m)] => dom_interval(m, t1, t2).map(Token::Time),
+                _ => None,
+            }),
+        },
+    ]
+}
+
 fn interval_rules() -> Vec<Rule> {
     let sep = r"\-|to|th?ru|through|(un)?til(l)?";
     vec![
@@ -1780,6 +1836,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(crate::time::computed::computed_interval_holiday_rules());
     rules.extend(absorb_rules());
     rules.extend(timezone_rules());
+    rules.extend(dom_interval_rules());
     rules.extend(direction_rules());
     rules.extend(intersect_rules());
     rules
