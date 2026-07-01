@@ -5,7 +5,7 @@ use crate::grain::Grain;
 use crate::regex::compile;
 use crate::time::object::{IntervalDirection, IntervalType};
 use crate::time::predicate::{
-    Predicate, ampm_predicate, cycle_nth, day_of_month, day_of_week, hour, hour_minute,
+    Ampm, Predicate, ampm_predicate, cycle_nth, day_of_month, day_of_week, hour, hour_minute,
     hour_minute_second, in_duration, intersect, month, shift_timezone, take_last_of, take_nth,
     take_nth_after, time_cycle, time_intervals, year as year_pred, cycle_n,
 };
@@ -144,8 +144,27 @@ fn year_td(n: i64) -> TimeData {
     }
 }
 
-/// Apply am/pm to a time-of-day by intersecting with a 12h interval.
+/// Apply am/pm to a time-of-day. Duckling merges the AMPM field into the hour
+/// predicate (runHourPredicate tdAMPM), so a bare hour becomes a step-24 series
+/// anchored at the next matching hour — "3am" at 4:30 resolves to *tomorrow*
+/// 3am, not today's already-past 3am. Only a separate-interval intersect would
+/// mis-file today's occurrence as future, so fold ampm into hour() directly for
+/// pure hours; hh:mm etc. fall back to the interval intersect.
 fn time_of_day_ampm(is_am: bool, td: &TimeData) -> TimeData {
+    let ampm = if is_am { Ampm::Am } else { Ampm::Pm };
+    if td.grain == Grain::Hour {
+        if let Some(Form::TimeOfDay { hours: Some(h), is12h }) = td.form {
+            return TimeData {
+                pred: hour(is12h, Some(ampm), h as i64),
+                grain: Grain::Hour,
+                latent: false,
+                not_immediate: false,
+                form: Some(Form::TimeOfDay { hours: None, is12h: false }),
+                direction: None,
+                holiday: td.holiday.clone(),
+            };
+        }
+    }
     TimeData {
         pred: intersect(td.pred.clone(), ampm_predicate(is_am)),
         grain: td.grain,
