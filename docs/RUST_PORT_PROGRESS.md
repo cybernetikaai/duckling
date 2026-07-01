@@ -94,6 +94,7 @@ Branch: `rust-port-en-time`.
 | + 85 more Duckling corpus inputs + year interval | **1069 / 1069 (100%)** | 0 | 68 / 68 | transcribed missing Corpus.hs inputs; "1960 - 1961"; port handled 84/85 |
 | + differential fuzz vs live oracle | 1069 / 1069 | 0 | 68 / 68 | **124/124** compositional probes match oracle; 0 gaps found |
 | + composition fuzz → 3 real fixes | 1069 / 1069 | 0 | 68 / 68 | 771 probes; fixed holidayBeta-on-open-interval, directional∩pod collapse, trailing-date-on-interval |
+| + this-dow pinning + coming split | 1069 / 1069 | 0 | 68 / 68 | 1223 probes; "this tuesday at 3"→next Tue (predNth); "coming" stays bare-dow |
 
 ## How to run
 
@@ -146,12 +147,39 @@ it to the whole interval consistently, which is both more correct and matches
 Duckling's own `from…to` behavior). Same rationale as the DST-boundary divergence:
 the port favors correctness over byte-fidelity to a Duckling bug.
 
+**This/coming-DOW pinning (this iteration).** Composition fuzz (durations,
+combined-relative, unusual formats, this/next/last anchors — differential grew to
+1223 oracle-verified cases) surfaced "this tuesday at 3" resolving to *today*
+(when the reference day is Tuesday) instead of next Tuesday. Root cause: the
+"this <dow>" rule returned the bare dow, whose notImmediate lives in the series
+and is dropped when composed with a time; Duckling's ruleThisDOW uses
+`predNth 0 True` (a single pinned occurrence). Fixed. A follow-up showed "coming"
+must *not* pin (Duckling has no "coming <dow>" rule → behaves like the bare dow,
+so "coming tuesday at 3" = today), so only "this" pins.
+
+**NEXT TARGET — weekend ∩ time-of-day.** "weekend at 3pm" resolves to today's 3pm
+instead of Saturday 3pm (oracle: 2013-02-16T15:00). Diagnosis (attempted + reverted
+this iteration, needs care): weekend is tagged `Form::PartOfDay` so this/next/last
+compose it (removing the tag breaks "this/next/this-past weekend" — they rely on it).
+Two coupled problems: (a) the same-day "<part-of-day> at <time-of-day>" am/pm rule
+grabs the weekend and returns a bare tod — fixable by excluding a multi-day pod
+(sentinel start_hour + `is_same_day_part_of_day`); (b) with that fixed, the generic
+intersect still fails because weekend and the tod are *both* grain Hour, so
+`intersect_td`'s tie-break picks the weekend as the *fine* (inner) operand — it must
+be the coarse one. A naive "PartOfDay is coarse when grains tie" tie-break fixes
+"weekend at 3pm" (→ Sat 3pm) but **regresses** "3 in the morning" (→ today instead of
+tomorrow) via ranking side-effects. The correct fix must make the weekend interval
+coarse *without* changing same-day pod∩tod ordering — likely by giving weekend a
+coarser effective grain, or a narrower tie-break keyed on the multi-day sentinel.
+Also unresolved: "this weekend at 3pm" (the intersected "this weekend" loses PartOfDay
+form, so nothing composes the trailing tod). Left green via expected:null + in-fixture
+note.
+
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
-Next high-value targets (by remaining count): `<time> <part-of-day>` &
-`<time> on <day>` intersect (unlocks many interval+day combos), written numerals
-(one..ninety), relative durations (needs Duration dim), holidays (subagent),
-numeric M/D/Y dates, then ranking (unique mode) + real-zone tz_stress.
+Other high-value targets: written-numeral edge cases, relative-duration nestings,
+then `unique`-mode field-merge (the 8 structural best-entity artifacts) + real-zone
+tz_stress expansion.
 
 ## Backlog (rough order)
 
