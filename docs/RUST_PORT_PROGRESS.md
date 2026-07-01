@@ -70,6 +70,10 @@ Branch: `rust-port-en-time`.
 | + season Closed, Mid-day, first..fifth <dow> of <time> | 909 / 984 | 75 | 10 / 10 | "this Summer", "midday", "first monday of last month" |
 | + <day> in <duration> / hence|ago + September regex | 923 / 984 | 61 | 10 / 10 | "March in a year", "thanksgiving 3 months ago"; Sept regex ordering |
 | + beginning-of-month capture fix + N <dow> from now | 929 / 984 | 55 | 10 / 10 | "beginning of January"; "3 fridays from now" |
+| + hhmm (latent) + N-dow notImmediate | 937 / 984 | 47 | 10 / 10 | "1030"->10:30, "330"->3:30; "4 tuesdays from now" |
+| + ASAP + after lunch/work/school | 941 / 984 | 43 | 10 / 10 | open-interval-after-now; meal part-of-day intervals |
+| + week (all/rest of the/the) | 943 / 984 | 41 | 10 / 10 | "all week", "rest of the week" |
+| + in <dur> at <tod>, last night, week-end (this/last) | 947 / 984 | 37 | 10 / 10 | "in 7 days at 5pm", "late last night", "this past weekend" |
 
 ## How to run
 
