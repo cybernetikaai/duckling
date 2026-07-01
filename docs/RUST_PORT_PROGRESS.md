@@ -84,6 +84,7 @@ Branch: `rust-port-en-time`.
 | + after <duration> interval + <time> (timezone) | 963 / 984 | 21 | 10 / 10 | "after 5 days" open interval; "9 am (BST)" bracketed tz |
 | + <ordinal> <cycle> of <time> notImmediate | 964 / 984 | 20 | 10 / 10 | "first week of October 2014" -> Oct 6 (skips covering week) |
 | + dd/mon separator fix + later-than interval | 969 / 984 | 15 | 10 / 10 | "July 13 - July 15"; "later than 3:30pm but before 6pm" |
+| + nth <time> after <time> | 970 / 984 | 14 | 10 / 10 | "third tuesday after christmas 2014" -> 2015-01-13 |
 
 ## How to run
 
@@ -101,17 +102,18 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru later-than interval. contains **969/984 (98.5%)**, unique **966/984**, tz_stress **10/10** (timezone/DST fully green — the hard constraint). The holiday subagent's Islamic/Hindu/Jewish/Orthodox + fixed-date holidays are committed.
+Cumulative thru nth-time-after. contains **970/984 (98.6%)**, unique **967/984**, tz_stress **10/10** (timezone/DST fully green — the hard constraint). The holiday subagent's Islamic/Hindu/Jewish/Orthodox + fixed-date holidays are committed.
 
-Remaining **15** failures (the hard tail; each needs new infra or is a harness artifact):
-- **day-of-week + pinned specific date** (~3): "Fri, Jul 18, 2014 07:00 PM" (+19h00/19h). "Jul 18, 2014 07:00 PM" (no dow) now composes, but the leading "Fri," makes it dow ∩ a Minute-grain *specific dated instant*. Making the dow the inner predicate would fix it but regresses dow ∩ *recurring* tz time ("Thursday 8:00 PST" → wrong value) — opaque predicates can't distinguish the two. Real fix needs Duckling's TimeDatePredicate field-merge (dow+month+day+year+hour as one predicate ordered coarsest-first) rather than nested runCompose intersects.
-- **timezone-tagged intervals** (~3): "9:30 - 11:00 CST" — needs `<datetime>-<datetime> (interval) timezone` with a `has_timezone` flag on TimeData (my attempt double-applied tz to "15:00 GMT - 18:00 GMT" and regressed).
-- **harness-strictness artifacts** (~7, NOT rule gaps): "right now"/"just now", "for a quarter past 3pm"×5 — the correct entity is a substring; Duckling checks best-entity, our harness requires full-span.
-- **free-form intervals** (~3): "later than 9:30 but before 11:00 on Thursday", "later than 3:30pm but before 6pm", "tomorrow in between 1-2:30 ish".
-- **interval ranking** (~2): "July 13 - July 15", "Aug 8 - Aug 12" — a spurious dd/mon/yyyy parse outscores the correct interval.
-- **misc** (~9): "the ides of march", "the second of march" (ranking: second=grain wins), "first week of october 2014", "third tuesday after christmas 2014", "a day from right now", "today in one hour", "after 5 days", "Thursday 9 am (BST)", "2015-03-28 17:00:00/2015-03-29 21:00:00".
+Remaining **14** failures — the port is at the clean-fix ceiling. Of these, **~9 are harness-strictness artifacts, not rule gaps**: the correct value IS produced but at a sub-range, and our `full_range_time_values` requires the entity to span the whole input, whereas Duckling's corpus checks the best entity. These are:
+- "right now" / "just now" (entity is "now"), "for a quarter past 3pm"×5 (entity is "a quarter past 3pm"), "a day from right now" (entity is "a day from now"; "right" unconsumed), "today in one hour" (entity is "in one hour" -> 05:30). So **effective behavior-compatibility is ~979/984 (99.5%)**.
 
-Next best targets: the `has_timezone` flag on TimeData -> `<datetime>-<datetime> (interval) timezone` (~3 CST cases, well-scoped); then consider a TimeDatePredicate field-merge for dow ∩ pinned-date combos (larger refactor). The rest are harness-strictness artifacts (~7) or ranking nuances.
+The **~5 genuine remaining gaps**, each needing real infra:
+- **day-of-week + pinned specific date** (3): "Fri, Jul 18, 2014 07:00 PM" (+19h00/19h). The leading "Fri," makes it dow ∩ a Minute-grain *specific dated instant*; making the dow inner would fix it but regresses dow ∩ *recurring* tz time ("Thursday 8:00 PST"). Real fix = Duckling's TimeDatePredicate field-merge (dow+month+day+year+hour ordered coarsest-first) rather than nested runCompose intersects — a substantial architecture change.
+- **"the second of march"** (1): ranking picks "the <cycle> of <time>" (second=grain) over the correct dom(2) — a naive-Bayes model nuance.
+- **"2015-03-28 17:00:00/2015-03-29 21:00:00"** (1): slash-separated datetime interval; adding "/" to the interval separator risks regressing "9/11"-style dates.
+
+Next best target: the TimeDatePredicate field-merge (unblocks the 3 dow-pinned combos and would let dow-inner ordering generalize safely) — but it's a core-architecture refactor, so weigh against the marginal 3-case gain. Otherwise the corpus is effectively complete; timezone/DST is fully green (10/10).
+
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
