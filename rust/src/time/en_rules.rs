@@ -1770,11 +1770,15 @@ fn duration_rules() -> Vec<Rule> {
                 [Token::RegexMatch(g), dur] => {
                     let (v, gr) = duration_of(dur)?;
                     let w = g.first()?.to_lowercase();
-                    if w == "within" {
-                        interval_td(IntervalType::Open, &now_td(), &in_duration_td(v, gr))
-                            .map(Token::Time)
-                    } else {
-                        Some(Token::Time(in_duration_td(v, gr)))
+                    match w.as_str() {
+                        "within" => interval_td(IntervalType::Open, &now_td(), &in_duration_td(v, gr))
+                            .map(Token::Time),
+                        // "after 5 days" -> open interval starting at that point.
+                        "after" => Some(Token::Time(with_direction(
+                            IntervalDirection::After,
+                            in_duration_td(v, gr),
+                        ))),
+                        _ => Some(Token::Time(in_duration_td(v, gr))),
                     }
                 }
                 _ => None,
