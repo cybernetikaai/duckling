@@ -246,7 +246,7 @@ fn months() -> Vec<Rule> {
         ("June", 6, r"june|jun\.?"),
         ("July", 7, r"july|jul\.?"),
         ("August", 8, r"august|aug\.?"),
-        ("September", 9, r"sept?|september|sep\.?"),
+        ("September", 9, r"september|sept?\.?"),
         ("October", 10, r"october|oct\.?"),
         ("November", 11, r"november|nov\.?"),
         ("December", 12, r"december|dec\.?"),
@@ -1192,6 +1192,43 @@ fn interval_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // "March in a year", "thanksgiving in 9 months": the day/month time
+        // intersected with the window one duration from now.
+        Rule {
+            name: "<day> in <duration>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(|t| {
+                    matches!(t, Token::Time(td) if td.grain == Grain::Day || td.grain == Grain::Month)
+                })),
+                PatternItem::Regex(compile(r"in")),
+                PatternItem::Predicate(Box::new(|t| matches!(t, Token::Duration(d) if d.grain > Grain::Hour))),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(td), _, dur] => {
+                    let (v, g) = duration_of(dur)?;
+                    intersect_td(td, &in_duration_interval_td(v, g)?).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "<day> <duration> hence|ago".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(|t| {
+                    matches!(t, Token::Time(td) if td.grain == Grain::Day || td.grain == Grain::Month)
+                })),
+                PatternItem::Predicate(Box::new(is_a_duration)),
+                PatternItem::Regex(compile(r"(from now|hence|ago)")),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(td), dur, Token::RegexMatch(g)] => {
+                    let (v, gr) = duration_of(dur)?;
+                    let signed = if g.first()?.eq_ignore_ascii_case("ago") { -v } else { v };
+                    intersect_td(td, &in_duration_interval_td(signed, gr)?).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
     ]
 }
 
@@ -1457,6 +1494,17 @@ fn in_duration_td(value: i64, grain: Grain) -> TimeData {
         direction: None,
         holiday: None,
     }
+}
+
+/// The grain-window [now+v, now+v+1) (port of inDurationInterval); negate v for
+/// durationIntervalAgo. Intersecting a day/month time with it selects the
+/// occurrence in that window: "March in a year" -> March of next year.
+fn in_duration_interval_td(value: i64, grain: Grain) -> Option<TimeData> {
+    interval_td(
+        IntervalType::Open,
+        &in_duration_td(value, grain),
+        &in_duration_td(value + 1, grain),
+    )
 }
 
 /// Relative-duration rules (ports of ruleIntervalForDurations / inDuration etc).
