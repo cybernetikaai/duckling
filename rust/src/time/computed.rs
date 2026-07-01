@@ -602,6 +602,48 @@ const GLOBAL_YOUTH_SERVICE_DAY: &[(i16, i8, i8)] = &[
     (2017, 4, 21), (2018, 4, 20),
 ];
 
+/// Boss's Day: closest weekday (Mon-Fri) to Oct 16 (port of
+/// `predNthClosest 0 weekday (monthDay 10 16)`). Precomputed since weekday is a
+/// series predicate; ties break toward the earlier date (Sat -> the Fri before).
+const BOSS_DAY: &[(i16, i8, i8)] = &[
+    (2010, 10, 15), (2011, 10, 17), (2012, 10, 16), (2013, 10, 16), (2014, 10, 16),
+    (2015, 10, 16), (2016, 10, 17), (2017, 10, 16), (2018, 10, 16), (2019, 10, 16),
+    (2020, 10, 16), (2021, 10, 15), (2022, 10, 17), (2023, 10, 16), (2024, 10, 16),
+    (2025, 10, 16), (2026, 10, 16), (2027, 10, 15), (2028, 10, 16), (2029, 10, 16),
+    (2030, 10, 16),
+];
+
+/// Parsi New Year: every 365 days from 2020-08-16 (port of
+/// `predEveryNDaysFrom 365 (2020, 8, 16)`; does not account for leap years).
+const PARSI_NEW_YEAR: &[(i16, i8, i8)] = &[
+    (2010, 8, 21), (2011, 8, 21), (2012, 8, 20), (2013, 8, 18), (2014, 8, 18),
+    (2015, 8, 18), (2016, 8, 17), (2017, 8, 17), (2018, 8, 17), (2019, 8, 17),
+    (2020, 8, 16), (2021, 8, 16), (2022, 8, 16), (2023, 8, 16), (2024, 8, 15),
+    (2025, 8, 15), (2026, 8, 15), (2027, 8, 15), (2028, 8, 14), (2029, 8, 14),
+    (2030, 8, 14),
+];
+
+/// King's Day (NL): Apr 27 unless it falls on a Sunday, then Apr 26 (port of
+/// computeKingsDay).
+const KINGS_DAY: &[(i16, i8, i8)] = &[
+    (2010, 4, 27), (2011, 4, 27), (2012, 4, 27), (2013, 4, 27), (2014, 4, 26),
+    (2015, 4, 27), (2016, 4, 27), (2017, 4, 27), (2018, 4, 27), (2019, 4, 27),
+    (2020, 4, 27), (2021, 4, 27), (2022, 4, 27), (2023, 4, 27), (2024, 4, 27),
+    (2025, 4, 26), (2026, 4, 27), (2027, 4, 27), (2028, 4, 27), (2029, 4, 27),
+    (2030, 4, 27),
+];
+
+/// Earth Hour: last Saturday of March, unless that is Holy Saturday (Easter
+/// Sunday - 1), in which case the Saturday before (port of computeEarthHour).
+/// The interval runs 20:30 -> 21:31 local, minute grain.
+const EARTH_HOUR: &[(i16, i8, i8)] = &[
+    (2010, 3, 27), (2011, 3, 26), (2012, 3, 31), (2013, 3, 23), (2014, 3, 29),
+    (2015, 3, 28), (2016, 3, 19), (2017, 3, 25), (2018, 3, 24), (2019, 3, 30),
+    (2020, 3, 28), (2021, 3, 27), (2022, 3, 26), (2023, 3, 25), (2024, 3, 23),
+    (2025, 3, 29), (2026, 3, 28), (2027, 3, 20), (2028, 3, 25), (2029, 3, 24),
+    (2030, 3, 30),
+];
+
 const MAWLID: &[(i16, i8, i8)] = &[
     (1950, 1, 1), (1950, 12, 22), (1951, 12, 11), (1952, 11, 30), (1953, 11, 19),
     (1954, 11, 8), (1955, 10, 29), (1956, 10, 17), (1957, 10, 6), (1958, 9, 26),
@@ -1021,5 +1063,42 @@ pub fn computed_holiday_rules() -> Vec<Rule> {
             RAVIDASS_JAYANTI,
         ),
         computed_holiday("Ugadi", r"y?ugadi|samvatsaradi|chaitra sukh?ladi", UGADI),
+        computed_holiday("Boss's Day", r"boss'?s?( day)?", BOSS_DAY),
+        computed_holiday("Parsi New Year", r"parsi new year|jamshedi navroz", PARSI_NEW_YEAR),
+        computed_holiday("King's Day", r"king's day|koningsdag", KINGS_DAY),
     ]
+}
+
+/// Earth Hour: a 61-minute interval (20:30 -> 21:31 local) on each precomputed
+/// day. Minute grain, so the resolved value is a minute-grain interval.
+fn earth_hour_days() -> Vec<TimeObject> {
+    EARTH_HOUR
+        .iter()
+        .map(|&(y, m, d)| {
+            let start = date(y, m, d).at(20, 30, 0, 0);
+            TimeObject {
+                start,
+                grain: Grain::Minute,
+                end: Some(crate::grain::add(start, Grain::Minute, 61)),
+            }
+        })
+        .collect()
+}
+
+pub fn earth_hour_rule() -> Rule {
+    let pred = time_computed(earth_hour_days());
+    let make = move || TimeData {
+        pred: pred.clone(),
+        grain: Grain::Minute,
+        latent: false,
+        not_immediate: false,
+        form: None,
+        direction: None,
+        holiday: Some("Earth Hour".to_string()),
+    };
+    Rule {
+        name: "holiday: Earth Hour".to_string(),
+        pattern: vec![PatternItem::Regex(compile(r"earth hour"))],
+        prod: Box::new(move |_| Some(Token::Time(make()))),
+    }
 }
