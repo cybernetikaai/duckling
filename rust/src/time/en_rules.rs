@@ -1312,6 +1312,61 @@ fn cycle_nth_after_td(not_immediate: bool, grain: Grain, n: i64, base: &TimeData
     }
 }
 
+/// <cycle> after/before <time>, and <ordinal> <cycle> of <time>
+/// (ruleCycleAfterBeforeTime, ruleCycleOrdinalOfTime).
+/// "the day after tomorrow", "day before yesterday", "first week of october".
+fn cycle_after_before_rules() -> Vec<Rule> {
+    fn after_before(tokens: &[Token], gi: usize, mi: usize, ti: usize) -> Option<Token> {
+        let g = grain_of(tokens.get(gi)?)?;
+        let m = match tokens.get(mi)? {
+            Token::RegexMatch(m) => m.first()?,
+            _ => return None,
+        };
+        let n = if m.eq_ignore_ascii_case("after") { 1 } else { -1 };
+        match tokens.get(ti)? {
+            Token::Time(td) => Some(Token::Time(cycle_nth_after_td(false, g, n, td))),
+            _ => None,
+        }
+    }
+    vec![
+        Rule {
+            name: "the <cycle> after|before <time>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"the")),
+                PatternItem::Predicate(Box::new(is_a_grain)),
+                PatternItem::Regex(compile(r"(after|before)")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| after_before(tokens, 1, 2, 3)),
+        },
+        Rule {
+            name: "<cycle> after|before <time>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_a_grain)),
+                PatternItem::Regex(compile(r"(after|before)")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| after_before(tokens, 0, 1, 2)),
+        },
+        Rule {
+            name: "<ordinal> <cycle> of <time>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_ordinal)),
+                PatternItem::Predicate(Box::new(is_a_grain)),
+                PatternItem::Regex(compile(r"of|in|from")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [ord, Token::TimeGrain(g), _, Token::Time(td)] => {
+                    let n = get_int_value(ord)?;
+                    Some(Token::Time(cycle_nth_after_td(false, *g, n - 1, td)))
+                }
+                _ => None,
+            }),
+        },
+    ]
+}
+
 /// <ordinal> quarter [<year>], "the <ordinal> quarter", "Q<n>" (ruleQuarter*).
 fn quarter_rules() -> Vec<Rule> {
     vec![
@@ -1830,6 +1885,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(this_next_last_time_rules());
     rules.extend(nth_dow_of_time_rules());
     rules.extend(quarter_rules());
+    rules.extend(cycle_after_before_rules());
     rules.extend(time_pod_rules());
     rules.extend(crate::time::computed::computed_holiday_rules());
     rules.extend(crate::time::computed::computed_holiday_shift_rules());
