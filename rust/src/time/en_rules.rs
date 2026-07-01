@@ -1263,6 +1263,19 @@ fn interval_rules() -> Vec<Rule> {
             }),
         },
         Rule {
+            name: "by the end of <time>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"by (the )?end of")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(td)] => {
+                    interval_td(IntervalType::Closed, &now_td(), td).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
+        Rule {
             name: "in <duration> at <time-of-day>".into(),
             pattern: vec![
                 PatternItem::Regex(compile(r"in")),

@@ -140,8 +140,8 @@ pub fn duration_rules() -> Vec<Rule> {
             ],
             prod: Box::new(|tokens| {
                 let g = groups(tokens.first()?)?;
-                let h: i64 = g.get(1)?.parse().ok()?;
-                let frac = g.get(2)?;
+                let h: i64 = g.first()?.parse().ok()?;
+                let frac = g.get(1)?;
                 let n: i64 = frac.parse().ok()?;
                 let d: i64 = 10i64.pow(frac.len() as u32);
                 Some(dur(Grain::Minute, 60 * h + n * 60 / d))
