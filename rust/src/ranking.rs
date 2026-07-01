@@ -26,7 +26,11 @@ pub type Classifiers = HashMap<String, Classifier>;
 /// Features: (1) concatenated child rule names, (2) concatenated child grains
 /// (Time/Duration/TimeGrain). Port of extractFeatures.
 fn extract_features(node: &Node) -> HashMap<String, i64> {
-    let feat_rules: String = node.children.iter().filter_map(|c| c.rule.clone()).collect();
+    let feat_rules: String = node
+        .children
+        .iter()
+        .filter_map(|c| c.rule.clone())
+        .collect();
     let grains: Vec<&str> = node
         .children
         .iter()
@@ -98,12 +102,13 @@ fn cmp_cand(a: &(usize, usize, f64), b: &(usize, usize, f64)) -> Ordering {
 /// Keep only the winners (candidates not dominated by any other). `items` pairs
 /// each candidate Node with its payload (the resolved Entity).
 pub fn rank<T: Clone>(cl: &Classifiers, items: Vec<(Node, T)>) -> Vec<T> {
-    let cands: Vec<(usize, usize, f64)> =
-        items.iter().map(|(n, _)| (n.range.0, n.range.1, score(cl, n))).collect();
+    let cands: Vec<(usize, usize, f64)> = items
+        .iter()
+        .map(|(n, _)| (n.range.0, n.range.1, score(cl, n)))
+        .collect();
     (0..cands.len())
         .filter(|&i| {
-            (0..cands.len())
-                .all(|j| i == j || cmp_cand(&cands[i], &cands[j]) != Ordering::Less)
+            (0..cands.len()).all(|j| i == j || cmp_cand(&cands[i], &cands[j]) != Ordering::Less)
         })
         .map(|i| items[i].1.clone())
         .collect()
@@ -120,7 +125,12 @@ pub fn rank<T: Clone>(cl: &Classifiers, items: Vec<(Node, T)>) -> Vec<T> {
 #[allow(clippy::approx_constant)]
 pub fn classifiers() -> Classifiers {
     fn cd(prior: f64, unseen: f64, n: i64, lk: &[(&str, f64)]) -> ClassData {
-        ClassData { prior, unseen, n, likelihoods: lk.iter().map(|(k, v)| (k.to_string(), *v)).collect() }
+        ClassData {
+            prior,
+            unseen,
+            n,
+            likelihoods: lk.iter().map(|(k, v)| (k.to_string(), *v)).collect(),
+        }
     }
     fn cl(ok: ClassData, ko: ClassData) -> Classifier {
         Classifier { ok, ko }

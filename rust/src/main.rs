@@ -18,7 +18,7 @@
 //!                                        English locale (affects numeric date order; default: en_US)
 //!   -h, --help                          print this help
 
-use duckling::{parse_all, parse_duration, parse_locale, parse_ordinal, Locale, ResolveContext};
+use duckling::{Locale, ResolveContext, parse_all, parse_duration, parse_locale, parse_ordinal};
 
 const HELP: &str = "\
 duckling — English time / duration / ordinal parser
@@ -108,20 +108,29 @@ fn main() {
     }
 
     let reference: jiff::Timestamp = match &ref_str {
-        Some(s) => s.parse().unwrap_or_else(|e| fail(&format!("bad --ref {s:?}: {e}"))),
+        Some(s) => s
+            .parse()
+            .unwrap_or_else(|e| fail(&format!("bad --ref {s:?}: {e}"))),
         None => jiff::Timestamp::now(),
     };
     let zone = jiff::tz::TimeZone::get(&tz_str)
         .unwrap_or_else(|e| fail(&format!("bad --tz {tz_str:?}: {e}")));
-    let locale = locale_from(&locale_str).unwrap_or_else(|| fail(&format!("unknown --locale {locale_str:?}")));
-    let ctx = ResolveContext { reference, zone, with_latent: false };
+    let locale = locale_from(&locale_str)
+        .unwrap_or_else(|| fail(&format!("unknown --locale {locale_str:?}")));
+    let ctx = ResolveContext {
+        reference,
+        zone,
+        with_latent: false,
+    };
 
     let entities = match dims.as_str() {
         "time" => parse_locale(&text, &ctx, locale),
         "duration" => parse_duration(&text),
         "ordinal" => parse_ordinal(&text),
         "all" => parse_all(&text, &ctx),
-        other => fail(&format!("unknown --dims {other:?} (want time|duration|ordinal|all)")),
+        other => fail(&format!(
+            "unknown --dims {other:?} (want time|duration|ordinal|all)"
+        )),
     };
 
     match serde_json::to_string_pretty(&entities) {

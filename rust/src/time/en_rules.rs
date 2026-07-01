@@ -5,10 +5,10 @@ use crate::grain::Grain;
 use crate::regex::compile;
 use crate::time::object::{IntervalDirection, IntervalType};
 use crate::time::predicate::{
-    Ampm, Predicate, ampm_predicate, cycle_nth, day_of_month, day_of_week, floor_grain_to_minute,
-    hour, hour_minute, hour_minute_second, in_duration, intersect, merge_duration, minute, month,
-    season_series, shift_duration, shift_timezone, take_last_of, take_nth, take_nth_after,
-    take_nth_closest, time_cycle, time_intervals, year as year_pred, cycle_n,
+    Ampm, Predicate, ampm_predicate, cycle_n, cycle_nth, day_of_month, day_of_week,
+    floor_grain_to_minute, hour, hour_minute, hour_minute_second, in_duration, intersect,
+    merge_duration, minute, month, season_series, shift_duration, shift_timezone, take_last_of,
+    take_nth, take_nth_after, take_nth_closest, time_cycle, time_intervals, year as year_pred,
 };
 use crate::types::{Form, Locale, PatternItem, Rule, TimeData, Token};
 
@@ -158,7 +158,11 @@ fn hour_td(is12h: bool, n: i64) -> TimeData {
         grain: Grain::Hour,
         latent: false,
         not_immediate: false,
-        form: Some(Form::TimeOfDay { hours: Some(n as i8), minutes: None, is12h }),
+        form: Some(Form::TimeOfDay {
+            hours: Some(n as i8),
+            minutes: None,
+            is12h,
+        }),
         direction: None,
         holiday: None,
         has_timezone: false,
@@ -167,7 +171,11 @@ fn hour_td(is12h: bool, n: i64) -> TimeData {
 
 fn year_td(n: i64) -> TimeData {
     // 2-digit years map to 1950..2049 (port of `year` helper).
-    let y = if n <= 99 { (n + 50).rem_euclid(100) + 1950 } else { n };
+    let y = if n <= 99 {
+        (n + 50).rem_euclid(100) + 1950
+    } else {
+        n
+    };
     TimeData {
         pred: year_pred(y),
         grain: Grain::Year,
@@ -194,38 +202,57 @@ fn time_of_day_ampm(is_am: bool, td: &TimeData) -> TimeData {
     // cleanly when a specific date pins the day ("Jul 18, 2014 07:00 PM").
     // Only a pure hour (grain Hour) or an hh:mm (minutes set) is folded; hh:mm:ss
     // keeps its seconds via the fallback.
-    if let Some(Form::TimeOfDay { hours: Some(h), minutes, is12h }) = td.form
-        && (minutes.is_some() || td.grain == Grain::Hour) {
-            let hp = hour(is12h, Some(ampm), h as i64);
-            let (pred, grain) = match minutes {
-                Some(m) => (intersect(minute(m as i64), hp), Grain::Minute),
-                None => (hp, Grain::Hour),
-            };
-            return TimeData {
-                pred,
-                grain,
-                latent: false,
-                not_immediate: false,
-                form: Some(Form::TimeOfDay { hours: None, minutes: None, is12h: false }),
-                direction: None,
-                holiday: td.holiday.clone(),
-                has_timezone: false,
-            };
-        }
+    if let Some(Form::TimeOfDay {
+        hours: Some(h),
+        minutes,
+        is12h,
+    }) = td.form
+        && (minutes.is_some() || td.grain == Grain::Hour)
+    {
+        let hp = hour(is12h, Some(ampm), h as i64);
+        let (pred, grain) = match minutes {
+            Some(m) => (intersect(minute(m as i64), hp), Grain::Minute),
+            None => (hp, Grain::Hour),
+        };
+        return TimeData {
+            pred,
+            grain,
+            latent: false,
+            not_immediate: false,
+            form: Some(Form::TimeOfDay {
+                hours: None,
+                minutes: None,
+                is12h: false,
+            }),
+            direction: None,
+            holiday: td.holiday.clone(),
+            has_timezone: false,
+        };
+    }
     // Fallback (hh:mm:ss, or no known hour): intersect the am/pm half-day.
     TimeData {
         pred: intersect(td.pred.clone(), ampm_predicate(is_am)),
         grain: td.grain,
         latent: false,
         not_immediate: false,
-        form: Some(Form::TimeOfDay { hours: None, minutes: None, is12h: false }),
+        form: Some(Form::TimeOfDay {
+            hours: None,
+            minutes: None,
+            is12h: false,
+        }),
         direction: None,
         holiday: td.holiday.clone(),
         has_timezone: false,
     }
 }
 
-fn tod(pred: Predicate, grain: Grain, hours: Option<i64>, minutes: Option<i64>, is12h: bool) -> TimeData {
+fn tod(
+    pred: Predicate,
+    grain: Grain,
+    hours: Option<i64>,
+    minutes: Option<i64>,
+    is12h: bool,
+) -> TimeData {
     TimeData {
         pred,
         grain,
@@ -330,17 +357,33 @@ fn is_an_hour_of_day(t: &Token) -> bool {
         if matches!(td.form, Some(Form::TimeOfDay { hours: Some(_), .. })) && td.grain > Grain::Minute)
 }
 fn hour_minute_td(is12h: bool, h: i64, m: i64) -> TimeData {
-    tod(hour_minute(is12h, h, m), Grain::Minute, Some(h), Some(m), is12h)
+    tod(
+        hour_minute(is12h, h, m),
+        Grain::Minute,
+        Some(h),
+        Some(m),
+        is12h,
+    )
 }
 fn minutes_after(n: i64, td: &TimeData) -> Option<TimeData> {
-    if let Some(Form::TimeOfDay { hours: Some(h), is12h, .. }) = td.form {
+    if let Some(Form::TimeOfDay {
+        hours: Some(h),
+        is12h,
+        ..
+    }) = td.form
+    {
         Some(hour_minute_td(is12h, h as i64, n))
     } else {
         None
     }
 }
 fn minutes_before(n: i64, td: &TimeData) -> Option<TimeData> {
-    if let Some(Form::TimeOfDay { hours: Some(h), is12h, .. }) = td.form {
+    if let Some(Form::TimeOfDay {
+        hours: Some(h),
+        is12h,
+        ..
+    }) = td.form
+    {
         let h = h as i64;
         let (hh, i12) = if h == 0 {
             (23, is12h)
@@ -395,7 +438,11 @@ fn past_to_rules() -> Vec<Rule> {
             prod: Box::new(|tokens| match tokens {
                 [Token::Time(hod), num] => {
                     let (h, is12h) = match hod.form {
-                        Some(Form::TimeOfDay { hours: Some(h), is12h, .. }) => (h as i64, is12h),
+                        Some(Form::TimeOfDay {
+                            hours: Some(h),
+                            is12h,
+                            ..
+                        }) => (h as i64, is12h),
                         _ => return None,
                     };
                     let td = hour_minute_td(is12h, h, get_int_value(num)?);
@@ -417,7 +464,11 @@ fn past_to_rules() -> Vec<Rule> {
             prod: Box::new(|tokens| match tokens {
                 [Token::Time(hod), _, num] => {
                     let (h, is12h) = match hod.form {
-                        Some(Form::TimeOfDay { hours: Some(h), is12h, .. }) => (h as i64, is12h),
+                        Some(Form::TimeOfDay {
+                            hours: Some(h),
+                            is12h,
+                            ..
+                        }) => (h as i64, is12h),
                         _ => return None,
                     };
                     let td = hour_minute_td(is12h, h, get_int_value(num)?);
@@ -471,10 +522,22 @@ fn past_to_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
-        before_rule("half to|till|before <hour-of-day>", r"half (to|till|before|of)", 30),
-        before_rule("quarter to|till|before <hour-of-day>", r"(a|one)? ?quarter (to|till|before|of)", 15),
+        before_rule(
+            "half to|till|before <hour-of-day>",
+            r"half (to|till|before|of)",
+            30,
+        ),
+        before_rule(
+            "quarter to|till|before <hour-of-day>",
+            r"(a|one)? ?quarter (to|till|before|of)",
+            15,
+        ),
         after_rule("half after|past <hour-of-day>", r"half (after|past)", 30),
-        after_rule("quarter after|past <hour-of-day>", r"(a|one)? ?quarter (after|past)", 15),
+        after_rule(
+            "quarter after|past <hour-of-day>",
+            r"(a|one)? ?quarter (after|past)",
+            15,
+        ),
         // <integer> to|past <hour-of-day>
         Rule {
             name: "<integer> to|till|before <hour-of-day>".into(),
@@ -484,7 +547,9 @@ fn past_to_rules() -> Vec<Rule> {
                 PatternItem::Predicate(Box::new(is_an_hour_of_day)),
             ],
             prod: Box::new(|tokens| match tokens {
-                [num, _, Token::Time(td)] => minutes_before(get_int_value(num)?, td).map(Token::Time),
+                [num, _, Token::Time(td)] => {
+                    minutes_before(get_int_value(num)?, td).map(Token::Time)
+                }
                 _ => None,
             }),
         },
@@ -511,7 +576,9 @@ fn past_to_rules() -> Vec<Rule> {
                 PatternItem::Predicate(Box::new(is_an_hour_of_day)),
             ],
             prod: Box::new(|tokens| match tokens {
-                [num, _, Token::Time(td)] => minutes_after(get_int_value(num)?, td).map(Token::Time),
+                [num, _, Token::Time(td)] => {
+                    minutes_after(get_int_value(num)?, td).map(Token::Time)
+                }
                 _ => None,
             }),
         },
@@ -522,13 +589,21 @@ fn time_of_day_rules() -> Vec<Rule> {
     vec![
         Rule {
             name: "hh:mm".into(),
-            pattern: vec![PatternItem::Regex(compile(r"((?:[01]?\d)|(?:2[0-3]))[:.]([0-5]\d)"))],
+            pattern: vec![PatternItem::Regex(compile(
+                r"((?:[01]?\d)|(?:2[0-3]))[:.]([0-5]\d)",
+            ))],
             prod: Box::new(|tokens| {
                 let g = regex_groups(tokens)?;
                 let h: i64 = g.first()?.parse().ok()?;
                 let m: i64 = g.get(1)?.parse().ok()?;
                 let is12h = h != 0 && h < 12;
-                Some(Token::Time(tod(hour_minute(is12h, h, m), Grain::Minute, Some(h), Some(m), is12h)))
+                Some(Token::Time(tod(
+                    hour_minute(is12h, h, m),
+                    Grain::Minute,
+                    Some(h),
+                    Some(m),
+                    is12h,
+                )))
             }),
         },
         Rule {
@@ -540,7 +615,13 @@ fn time_of_day_rules() -> Vec<Rule> {
                 let g = regex_groups(tokens)?;
                 let h: i64 = g.first()?.parse().ok()?;
                 let m: i64 = g.get(1).and_then(|s| s.parse().ok()).unwrap_or(0);
-                Some(Token::Time(tod(hour_minute(false, h, m), Grain::Minute, Some(h), Some(m), false)))
+                Some(Token::Time(tod(
+                    hour_minute(false, h, m),
+                    Grain::Minute,
+                    Some(h),
+                    Some(m),
+                    false,
+                )))
             }),
         },
         Rule {
@@ -634,7 +715,10 @@ fn numeral_dependent_rules() -> Vec<Rule> {
             ],
             prod: Box::new(|tokens| match tokens {
                 [Token::Time(td), Token::RegexMatch(g)] => {
-                    let is_am = g.get(1).map(|s| s.eq_ignore_ascii_case("a")).unwrap_or(false);
+                    let is_am = g
+                        .get(1)
+                        .map(|s| s.eq_ignore_ascii_case("a"))
+                        .unwrap_or(false);
                     let m_empty = g.get(3).map(|s| s.is_empty()).unwrap_or(true);
                     if td.latent && m_empty {
                         Some(Token::Time(mk_latent(time_of_day_ampm(is_am, td))))
@@ -838,9 +922,10 @@ fn cycle_and_relative_rules() -> Vec<Rule> {
                 PatternItem::Predicate(Box::new(is_a_grain)),
             ],
             prod: Box::new(|tokens| match tokens {
-                [_, num, grain] => {
-                    Some(Token::Time(cycle_nth_td(grain_of(grain)?, get_int_value(num)?)))
-                }
+                [_, num, grain] => Some(Token::Time(cycle_nth_td(
+                    grain_of(grain)?,
+                    get_int_value(num)?,
+                ))),
                 _ => None,
             }),
         },
@@ -852,9 +937,10 @@ fn cycle_and_relative_rules() -> Vec<Rule> {
                 PatternItem::Predicate(Box::new(is_a_grain)),
             ],
             prod: Box::new(|tokens| match tokens {
-                [num, _, grain] => {
-                    Some(Token::Time(cycle_nth_td(grain_of(grain)?, get_int_value(num)?)))
-                }
+                [num, _, grain] => Some(Token::Time(cycle_nth_td(
+                    grain_of(grain)?,
+                    get_int_value(num)?,
+                ))),
                 _ => None,
             }),
         },
@@ -866,7 +952,10 @@ fn cycle_and_relative_rules() -> Vec<Rule> {
             ],
             prod: Box::new(|tokens| match tokens {
                 [Token::RegexMatch(g), Token::Time(td)] => {
-                    let word = g.first().map(|s| s.to_ascii_lowercase()).unwrap_or_default();
+                    let word = g
+                        .first()
+                        .map(|s| s.to_ascii_lowercase())
+                        .unwrap_or_default();
                     if word == "next" {
                         // the day-of-week falling in next week
                         Some(Token::Time(TimeData {
@@ -931,7 +1020,9 @@ fn is_same_day_part_of_day(t: &Token) -> bool {
         if matches!(td.form, Some(Form::PartOfDay { start_hour }) if start_hour != WEEKEND_POD_HOUR))
 }
 fn part_of_day(start_hour: i64, mut td: TimeData) -> TimeData {
-    td.form = Some(Form::PartOfDay { start_hour: start_hour as i8 });
+    td.form = Some(Form::PartOfDay {
+        start_hour: start_hour as i8,
+    });
     td
 }
 fn pod_start_hour(td: &TimeData) -> Option<i64> {
@@ -1103,7 +1194,11 @@ fn region_holiday_rules(locale: Locale) -> Vec<Rule> {
                 // Closed: the oracle's `to` is the last day's end (e.g. Arbor Week
                 // Sep 1–7 → to = Sep 8), i.e. the 2nd endpoint is inclusive.
                 Box::new(move || {
-                    interval_td(IntervalType::Closed, &month_day_td(m1, d1), &month_day_td(m2, d2))
+                    interval_td(
+                        IntervalType::Closed,
+                        &month_day_td(m1, d1),
+                        &month_day_td(m2, d2),
+                    )
                 })
             }
             "easter_offset" => {
@@ -1115,7 +1210,12 @@ fn region_holiday_rules(locale: Locale) -> Vec<Rule> {
                 // after 1st Mon Nov; Cyber Monday = 4 days after Thanksgiving.
                 let (days, n, dow, m) = (i("days"), i("n"), i("dow"), i("month"));
                 Box::new(move || {
-                    Some(cycle_nth_after_td(false, Grain::Day, days, &nth_dow_of_month_td(n, dow, m)))
+                    Some(cycle_nth_after_td(
+                        false,
+                        Grain::Day,
+                        days,
+                        &nth_dow_of_month_td(n, dow, m),
+                    ))
                 })
             }
             "nth_dow_rel_date" => {
@@ -1175,7 +1275,9 @@ fn modern_holiday_rules(locale: Locale) -> Vec<Rule> {
             // Emancipation Day — federally designated in Canada since 2021,
             // August 1 (marks the 1834 abolition of slavery across the British
             // Empire). Note: the U.S. "Emancipation Day" is a different date.
-            holiday_rule("Emancipation Day", r"emancipation day", || month_day_td(8, 1)),
+            holiday_rule("Emancipation Day", r"emancipation day", || {
+                month_day_td(8, 1)
+            }),
             // National Indigenous Peoples Day — observed in Canada on June 21.
             holiday_rule(
                 "National Indigenous Peoples Day",
@@ -1223,7 +1325,11 @@ fn modern_holiday_rules(locale: Locale) -> Vec<Rule> {
             holiday_rule(
                 "St Brigid's Day",
                 r"(st\.?|saint) brigid'?s day|l[áa] fh[ée]ile br[íi]de",
-                || crate::time::computed::computed_holiday_td(crate::time::computed::ST_BRIGIDS_DAY),
+                || {
+                    crate::time::computed::computed_holiday_td(
+                        crate::time::computed::ST_BRIGIDS_DAY,
+                    )
+                },
             ),
         ],
         _ => Vec::new(),
@@ -1272,9 +1378,10 @@ fn direction_rules() -> Vec<Rule> {
                 PatternItem::Predicate(Box::new(is_a_time)),
             ],
             prod: Box::new(|tokens| match tokens {
-                [_, Token::Time(td)] => {
-                    Some(Token::Time(with_direction(IntervalDirection::Before, td.clone())))
-                }
+                [_, Token::Time(td)] => Some(Token::Time(with_direction(
+                    IntervalDirection::Before,
+                    td.clone(),
+                ))),
                 _ => None,
             }),
         },
@@ -1285,9 +1392,10 @@ fn direction_rules() -> Vec<Rule> {
                 PatternItem::Predicate(Box::new(is_a_time)),
             ],
             prod: Box::new(|tokens| match tokens {
-                [_, Token::Time(td)] => {
-                    Some(Token::Time(with_direction(IntervalDirection::After, td.clone())))
-                }
+                [_, Token::Time(td)] => Some(Token::Time(with_direction(
+                    IntervalDirection::After,
+                    td.clone(),
+                ))),
                 _ => None,
             }),
         },
@@ -1489,16 +1597,26 @@ fn interval_rules() -> Vec<Rule> {
         Rule {
             name: "hh(:mm) - <time-of-day> am|pm".into(),
             pattern: vec![
-                PatternItem::Regex(compile(r"(?:from )?((?:[01]?\d)|(?:2[0-3]))([:.]([0-5]\d))?")),
+                PatternItem::Regex(compile(
+                    r"(?:from )?((?:[01]?\d)|(?:2[0-3]))([:.]([0-5]\d))?",
+                )),
                 PatternItem::Regex(compile(r"\-|to|th?ru|through|(un)?til(l)?")),
                 PatternItem::Predicate(Box::new(is_a_time_of_day)),
                 PatternItem::Regex(compile(r"(in the )?([ap])(\s|\.)?m?\.?")),
             ],
             prod: Box::new(|tokens| match tokens {
-                [Token::RegexMatch(g1), _, Token::Time(td2), Token::RegexMatch(g4)] => {
+                [
+                    Token::RegexMatch(g1),
+                    _,
+                    Token::Time(td2),
+                    Token::RegexMatch(g4),
+                ] => {
                     let h: i64 = g1.first()?.parse().ok()?;
                     let m = g1.get(2).and_then(|s| s.parse::<i64>().ok());
-                    let is_am = g4.get(1).map(|s| s.eq_ignore_ascii_case("a")).unwrap_or(false);
+                    let is_am = g4
+                        .get(1)
+                        .map(|s| s.eq_ignore_ascii_case("a"))
+                        .unwrap_or(false);
                     let td1 = match m {
                         Some(mm) => hour_minute_td(true, h, mm),
                         None => hour_td(true, h),
@@ -1584,7 +1702,11 @@ fn interval_rules() -> Vec<Rule> {
             prod: Box::new(|tokens| match tokens {
                 [dur, Token::RegexMatch(g), Token::Time(td)] => {
                     let (v, gr) = duration_of(dur)?;
-                    let signed = if g.first()?.eq_ignore_ascii_case("before") { -v } else { v };
+                    let signed = if g.first()?.eq_ignore_ascii_case("before") {
+                        -v
+                    } else {
+                        v
+                    };
                     Some(Token::Time(duration_after_td(signed, gr, td)))
                 }
                 _ => None,
@@ -1678,11 +1800,13 @@ fn interval_rules() -> Vec<Rule> {
         Rule {
             name: "<day> in <duration>".into(),
             pattern: vec![
-                PatternItem::Predicate(Box::new(|t| {
-                    matches!(t, Token::Time(td) if td.grain == Grain::Day || td.grain == Grain::Month)
-                })),
+                PatternItem::Predicate(Box::new(
+                    |t| matches!(t, Token::Time(td) if td.grain == Grain::Day || td.grain == Grain::Month),
+                )),
                 PatternItem::Regex(compile(r"in")),
-                PatternItem::Predicate(Box::new(|t| matches!(t, Token::Duration(d) if d.grain > Grain::Hour))),
+                PatternItem::Predicate(Box::new(
+                    |t| matches!(t, Token::Duration(d) if d.grain > Grain::Hour),
+                )),
             ],
             prod: Box::new(|tokens| match tokens {
                 [Token::Time(td), _, dur] => {
@@ -1695,16 +1819,20 @@ fn interval_rules() -> Vec<Rule> {
         Rule {
             name: "<day> <duration> hence|ago".into(),
             pattern: vec![
-                PatternItem::Predicate(Box::new(|t| {
-                    matches!(t, Token::Time(td) if td.grain == Grain::Day || td.grain == Grain::Month)
-                })),
+                PatternItem::Predicate(Box::new(
+                    |t| matches!(t, Token::Time(td) if td.grain == Grain::Day || td.grain == Grain::Month),
+                )),
                 PatternItem::Predicate(Box::new(is_a_duration)),
                 PatternItem::Regex(compile(r"(from now|hence|ago)")),
             ],
             prod: Box::new(|tokens| match tokens {
                 [Token::Time(td), dur, Token::RegexMatch(g)] => {
                     let (v, gr) = duration_of(dur)?;
-                    let signed = if g.first()?.eq_ignore_ascii_case("ago") { -v } else { v };
+                    let signed = if g.first()?.eq_ignore_ascii_case("ago") {
+                        -v
+                    } else {
+                        v
+                    };
                     intersect_td(td, &in_duration_interval_td(signed, gr)?).map(Token::Time)
                 }
                 _ => None,
@@ -1727,7 +1855,9 @@ fn interval_rules() -> Vec<Rule> {
             name: "in <duration> at <time-of-day>".into(),
             pattern: vec![
                 PatternItem::Regex(compile(r"in")),
-                PatternItem::Predicate(Box::new(|t| matches!(t, Token::Duration(d) if d.grain > Grain::Hour))),
+                PatternItem::Predicate(Box::new(
+                    |t| matches!(t, Token::Duration(d) if d.grain > Grain::Hour),
+                )),
                 PatternItem::Regex(compile(r"at")),
                 PatternItem::Predicate(Box::new(is_a_time_of_day)),
             ],
@@ -1750,9 +1880,17 @@ fn interval_rules() -> Vec<Rule> {
                 // exclusive bound (Closed) is the reported "to" (Feb 17), which
                 // is what the corpus expects for both "all" and "rest".
                 let end = cycle_nth_after_td(true, Grain::Day, -2, &cycle_nth_td(Grain::Week, 1));
-                let start = if m == "all" { cycle_nth_td(Grain::Week, 0) } else { today_td() };
+                let start = if m == "all" {
+                    cycle_nth_td(Grain::Week, 0)
+                } else {
+                    today_td()
+                };
                 let period = interval_td(IntervalType::Closed, &start, &end)?;
-                Some(Token::Time(if m == "the" { mk_latent(period) } else { period }))
+                Some(Token::Time(if m == "the" {
+                    mk_latent(period)
+                } else {
+                    period
+                }))
             }),
         },
     ]
@@ -1768,7 +1906,10 @@ fn part_of_day_rules() -> Vec<Rule> {
             name: "as soon as possible".into(),
             pattern: vec![PatternItem::Regex(compile(r"asap|as\ssoon\sas\spossible"))],
             prod: Box::new(|_| {
-                Some(Token::Time(with_direction(IntervalDirection::After, now_td())))
+                Some(Token::Time(with_direction(
+                    IntervalDirection::After,
+                    now_td(),
+                )))
             }),
         },
         Rule {
@@ -1790,13 +1931,17 @@ fn part_of_day_rules() -> Vec<Rule> {
                 // compose it (Duckling's mkOkForThisNext), while marking it multi-day
                 // so the same-day am/pm rule skips it. Resolution unchanged.
                 let mut td = weekend_td();
-                td.form = Some(Form::PartOfDay { start_hour: WEEKEND_POD_HOUR });
+                td.form = Some(Form::PartOfDay {
+                    start_hour: WEEKEND_POD_HOUR,
+                });
                 Some(Token::Time(td))
             }),
         },
         Rule {
             name: "after lunch/work/school".into(),
-            pattern: vec![PatternItem::Regex(compile(r"after[\s-]?(lunch|work|school)"))],
+            pattern: vec![PatternItem::Regex(compile(
+                r"after[\s-]?(lunch|work|school)",
+            ))],
             prod: Box::new(|tokens| {
                 let m = regex_groups(tokens)?.first()?.to_lowercase();
                 let (s, e) = match m.as_str() {
@@ -1825,7 +1970,10 @@ fn part_of_day_rules() -> Vec<Rule> {
                 } else {
                     (12, 19) // afternoon
                 };
-                Some(Token::Time(part_of_day(h1, mk_latent(hour_interval(h1, h2)?))))
+                Some(Token::Time(part_of_day(
+                    h1,
+                    mk_latent(hour_interval(h1, h2)?),
+                )))
             }),
         },
         Rule {
@@ -1883,7 +2031,11 @@ fn part_of_day_rules() -> Vec<Rule> {
                 [Token::Time(pod), _, Token::Time(tod)] => {
                     let start = pod_start_hour(pod)?;
                     let hours = match tod.form {
-                        Some(Form::TimeOfDay { hours: Some(h), is12h: true, .. }) => h as i64,
+                        Some(Form::TimeOfDay {
+                            hours: Some(h),
+                            is12h: true,
+                            ..
+                        }) => h as i64,
                         _ => return None,
                     };
                     let is_am = start < 12 || hours == 12;
@@ -1941,16 +2093,41 @@ fn absorb_rules() -> Vec<Rule> {
 
 /// Named timezone -> fixed offset in minutes (subset of parseTimezone).
 const TZ: &[(&str, i64)] = &[
-    ("GMT", 0), ("UTC", 0), ("WET", 0),
-    ("BST", 60), ("CET", 60), ("WAT", 60), ("WEST", 60),
-    ("CEST", 120), ("EET", 120), ("SAST", 120),
-    ("EEST", 180), ("EAT", 180), ("MSK", 180),
+    ("GMT", 0),
+    ("UTC", 0),
+    ("WET", 0),
+    ("BST", 60),
+    ("CET", 60),
+    ("WAT", 60),
+    ("WEST", 60),
+    ("CEST", 120),
+    ("EET", 120),
+    ("SAST", 120),
+    ("EEST", 180),
+    ("EAT", 180),
+    ("MSK", 180),
     ("IST", 330),
-    ("PST", -480), ("PDT", -420), ("MST", -420), ("MDT", -360),
-    ("CST", -360), ("CDT", -300), ("EST", -300), ("EDT", -240),
-    ("AST", -240), ("ADT", -180), ("AKST", -540), ("AKDT", -480), ("HST", -600),
-    ("JST", 540), ("KST", 540), ("AEST", 600), ("AEDT", 660),
-    ("ACST", 570), ("AWST", 480), ("NZST", 720), ("NZDT", 780),
+    ("PST", -480),
+    ("PDT", -420),
+    ("MST", -420),
+    ("MDT", -360),
+    ("CST", -360),
+    ("CDT", -300),
+    ("EST", -300),
+    ("EDT", -240),
+    ("AST", -240),
+    ("ADT", -180),
+    ("AKST", -540),
+    ("AKDT", -480),
+    ("HST", -600),
+    ("JST", 540),
+    ("KST", 540),
+    ("AEST", 600),
+    ("AEDT", 660),
+    ("ACST", 570),
+    ("AWST", 480),
+    ("NZST", 720),
+    ("NZDT", 780),
 ];
 fn tz_offset(name: &str) -> Option<i64> {
     let u = name.to_uppercase();
@@ -2059,8 +2236,16 @@ fn timezone_rules() -> Vec<Rule> {
 /// day boundary.
 fn interval_timezone(tz_name: &str, a: &TimeData, b: &TimeData) -> Option<Token> {
     let off = tz_offset(tz_name)?;
-    let a_min = TimeData { pred: floor_grain_to_minute(a.pred.clone()), grain: Grain::Minute, ..a.clone() };
-    let b_min = TimeData { pred: floor_grain_to_minute(b.pred.clone()), grain: Grain::Minute, ..b.clone() };
+    let a_min = TimeData {
+        pred: floor_grain_to_minute(a.pred.clone()),
+        grain: Grain::Minute,
+        ..a.clone()
+    };
+    let b_min = TimeData {
+        pred: floor_grain_to_minute(b.pred.clone()),
+        grain: Grain::Minute,
+        ..b.clone()
+    };
     let iv = interval_td(IntervalType::Closed, &a_min, &b_min)?;
     Some(Token::Time(in_timezone_td(off, &iv)))
 }
@@ -2187,8 +2372,10 @@ fn duration_rules() -> Vec<Rule> {
                     let (v, gr) = duration_of(dur)?;
                     let w = g.first()?.to_lowercase();
                     match w.as_str() {
-                        "within" => interval_td(IntervalType::Open, &now_td(), &in_duration_td(v, gr))
-                            .map(Token::Time),
+                        "within" => {
+                            interval_td(IntervalType::Open, &now_td(), &in_duration_td(v, gr))
+                                .map(Token::Time)
+                        }
                         // "after 5 days" -> open interval starting at that point.
                         "after" => Some(Token::Time(with_direction(
                             IntervalDirection::After,
@@ -2209,7 +2396,11 @@ fn duration_rules() -> Vec<Rule> {
             prod: Box::new(|tokens| match tokens {
                 [dur, Token::RegexMatch(g)] => {
                     let (v, gr) = duration_of(dur)?;
-                    let signed = if g.first()?.eq_ignore_ascii_case("ago") { -v } else { v };
+                    let signed = if g.first()?.eq_ignore_ascii_case("ago") {
+                        -v
+                    } else {
+                        v
+                    };
                     Some(Token::Time(in_duration_td(signed, gr)))
                 }
                 _ => None,
@@ -2255,7 +2446,11 @@ fn is_ok_with_this_next(t: &Token) -> bool {
 fn season_td(sm: i64, sd: i64, em: i64, ed: i64) -> Option<TimeData> {
     // End is a full day (its exclusive bound is the following midnight), which
     // our Closed interval reports as the "to" value — matching Duckling.
-    let mut td = interval_td(IntervalType::Closed, &month_day_td(sm, sd), &month_day_td(em, ed))?;
+    let mut td = interval_td(
+        IntervalType::Closed,
+        &month_day_td(sm, sd),
+        &month_day_td(em, ed),
+    )?;
     td.form = Some(Form::Season);
     Some(td)
 }
@@ -2360,14 +2555,19 @@ fn cycle_last_of_td(grain: Grain, base: &TimeData) -> TimeData {
 /// The last occurrence of a cyclic time within `base` (port of predLastOf);
 /// grain comes from the cyclic predicate, e.g. "last Monday of March".
 fn pred_last_of_td(cyclic: &TimeData, base: &TimeData) -> TimeData {
-    TimeData::new(take_last_of(cyclic.pred.clone(), base.pred.clone()), cyclic.grain)
+    TimeData::new(
+        take_last_of(cyclic.pred.clone(), base.pred.clone()),
+        cyclic.grain,
+    )
 }
 
 /// The n-th occurrence of a cyclic time at/after `base` (port of predNthAfter,
 /// notImmediate=true), e.g. "first monday of last month". Grain from cyclic.
 fn pred_nth_after_td(n: i64, cyclic: &TimeData, base: &TimeData) -> TimeData {
-    let mut td =
-        TimeData::new(take_nth_after(n, true, cyclic.pred.clone(), base.pred.clone()), cyclic.grain);
+    let mut td = TimeData::new(
+        take_nth_after(n, true, cyclic.pred.clone(), base.pred.clone()),
+        cyclic.grain,
+    );
     td.holiday = cyclic.holiday.clone();
     td
 }
@@ -2386,7 +2586,10 @@ fn weekend_td() -> TimeData {
 /// The n-th closest occurrence of `td1` to `td2` (port of predNthClosest),
 /// e.g. "the closest Monday to Oct 5th". Grain/holiday come from td1.
 fn pred_nth_closest_td(n: i64, td1: &TimeData, td2: &TimeData) -> TimeData {
-    let mut td = TimeData::new(take_nth_closest(n, td1.pred.clone(), td2.pred.clone()), td1.grain);
+    let mut td = TimeData::new(
+        take_nth_closest(n, td1.pred.clone(), td2.pred.clone()),
+        td1.grain,
+    );
     td.holiday = td1.holiday.clone();
     td
 }
@@ -2401,7 +2604,11 @@ fn cycle_after_before_rules() -> Vec<Rule> {
             Token::RegexMatch(m) => m.first()?,
             _ => return None,
         };
-        let n = if m.eq_ignore_ascii_case("after") { 1 } else { -1 };
+        let n = if m.eq_ignore_ascii_case("after") {
+            1
+        } else {
+            -1
+        };
         match tokens.get(ti)? {
             Token::Time(td) => Some(Token::Time(cycle_nth_after_td(false, g, n, td))),
             _ => None,
@@ -2457,9 +2664,9 @@ fn cycle_after_before_rules() -> Vec<Rule> {
                 PatternItem::Predicate(Box::new(is_a_time)),
             ],
             prod: Box::new(|tokens| match tokens {
-                [_, ord, Token::TimeGrain(g), _, Token::Time(td)] => {
-                    Some(Token::Time(cycle_nth_after_td(true, *g, get_int_value(ord)? - 1, td)))
-                }
+                [_, ord, Token::TimeGrain(g), _, Token::Time(td)] => Some(Token::Time(
+                    cycle_nth_after_td(true, *g, get_int_value(ord)? - 1, td),
+                )),
                 _ => None,
             }),
         },
@@ -2472,9 +2679,9 @@ fn cycle_after_before_rules() -> Vec<Rule> {
                 PatternItem::Predicate(Box::new(is_a_time)),
             ],
             prod: Box::new(|tokens| match tokens {
-                [ord, Token::TimeGrain(g), _, Token::Time(td)] => {
-                    Some(Token::Time(cycle_nth_after_td(true, *g, get_int_value(ord)? - 1, td)))
-                }
+                [ord, Token::TimeGrain(g), _, Token::Time(td)] => Some(Token::Time(
+                    cycle_nth_after_td(true, *g, get_int_value(ord)? - 1, td),
+                )),
                 _ => None,
             }),
         },
@@ -2624,7 +2831,12 @@ fn quarter_rules() -> Vec<Rule> {
             ],
             prod: Box::new(|tokens| {
                 let n = get_int_value(tokens.first()?)?;
-                Some(Token::Time(cycle_nth_after_td(true, Grain::Quarter, n - 1, &cycle_nth_td(Grain::Year, 0))))
+                Some(Token::Time(cycle_nth_after_td(
+                    true,
+                    Grain::Quarter,
+                    n - 1,
+                    &cycle_nth_td(Grain::Year, 0),
+                )))
             }),
         },
         Rule {
@@ -2636,7 +2848,12 @@ fn quarter_rules() -> Vec<Rule> {
             ],
             prod: Box::new(|tokens| {
                 let n = get_int_value(tokens.get(1)?)?;
-                Some(Token::Time(cycle_nth_after_td(true, Grain::Quarter, n - 1, &cycle_nth_td(Grain::Year, 0))))
+                Some(Token::Time(cycle_nth_after_td(
+                    true,
+                    Grain::Quarter,
+                    n - 1,
+                    &cycle_nth_td(Grain::Year, 0),
+                )))
             }),
         },
         Rule {
@@ -2649,7 +2866,12 @@ fn quarter_rules() -> Vec<Rule> {
             prod: Box::new(|tokens| match tokens {
                 [ord, _, Token::Time(td)] => {
                     let n = get_int_value(ord)?;
-                    Some(Token::Time(cycle_nth_after_td(false, Grain::Quarter, n - 1, td)))
+                    Some(Token::Time(cycle_nth_after_td(
+                        false,
+                        Grain::Quarter,
+                        n - 1,
+                        td,
+                    )))
                 }
                 _ => None,
             }),
@@ -2660,7 +2882,12 @@ fn quarter_rules() -> Vec<Rule> {
             prod: Box::new(|tokens| {
                 let g = regex_groups(tokens)?;
                 let n: i64 = g.first()?.parse().ok()?;
-                Some(Token::Time(cycle_nth_after_td(true, Grain::Quarter, n - 1, &cycle_nth_td(Grain::Year, 0))))
+                Some(Token::Time(cycle_nth_after_td(
+                    true,
+                    Grain::Quarter,
+                    n - 1,
+                    &cycle_nth_td(Grain::Year, 0),
+                )))
             }),
         },
     ]
@@ -2684,9 +2911,11 @@ fn nth_dow_of_time_rules() -> Vec<Rule> {
                 PatternItem::Predicate(Box::new(is_a_time)),
             ],
             prod: Box::new(|tokens| match tokens {
-                [ord, Token::Time(a), _, Token::Time(b)] => {
-                    Some(Token::Time(pred_nth_after_td(get_int_value(ord)? - 1, a, b)))
-                }
+                [ord, Token::Time(a), _, Token::Time(b)] => Some(Token::Time(pred_nth_after_td(
+                    get_int_value(ord)? - 1,
+                    a,
+                    b,
+                ))),
                 _ => None,
             }),
         },
@@ -2703,9 +2932,9 @@ fn nth_dow_of_time_rules() -> Vec<Rule> {
                 PatternItem::Predicate(Box::new(is_a_time)),
             ],
             prod: Box::new(|tokens| match tokens {
-                [ord, Token::Time(dow), _, Token::Time(td)] => {
-                    Some(Token::Time(pred_nth_after_td(get_int_value(ord)? - 1, dow, td)))
-                }
+                [ord, Token::Time(dow), _, Token::Time(td)] => Some(Token::Time(
+                    pred_nth_after_td(get_int_value(ord)? - 1, dow, td),
+                )),
                 _ => None,
             }),
         },
@@ -2803,23 +3032,31 @@ fn end_beginning_year_week_rules() -> Vec<Rule> {
     vec![
         Rule {
             name: "by end of year".into(),
-            pattern: vec![PatternItem::Regex(compile(r"by (?:the )?(?:eoy|end of (?:the )?year)"))],
+            pattern: vec![PatternItem::Regex(compile(
+                r"by (?:the )?(?:eoy|end of (?:the )?year)",
+            ))],
             prod: Box::new(|_| {
                 interval_td(IntervalType::Open, &now_td(), &mo_of(&cy(1), 1)).map(Token::Time)
             }),
         },
         Rule {
             name: "end of year".into(),
-            pattern: vec![PatternItem::Regex(compile(r"(?:(?:at )?the )?(?:eoy|end of (?:the )?year)"))],
+            pattern: vec![PatternItem::Regex(compile(
+                r"(?:(?:at )?the )?(?:eoy|end of (?:the )?year)",
+            ))],
             prod: Box::new(|_| {
-                interval_td(IntervalType::Closed, &mo_of(&cy(0), 9), &mo_of(&cy(0), 12)).map(Token::Time)
+                interval_td(IntervalType::Closed, &mo_of(&cy(0), 9), &mo_of(&cy(0), 12))
+                    .map(Token::Time)
             }),
         },
         Rule {
             name: "beginning of year".into(),
-            pattern: vec![PatternItem::Regex(compile(r"(?:(?:at )?the )?(?:boy|beginning of (?:the )?year)"))],
+            pattern: vec![PatternItem::Regex(compile(
+                r"(?:(?:at )?the )?(?:boy|beginning of (?:the )?year)",
+            ))],
             prod: Box::new(|_| {
-                interval_td(IntervalType::Open, &mo_of(&cy(0), 1), &mo_of(&cy(0), 4)).map(Token::Time)
+                interval_td(IntervalType::Open, &mo_of(&cy(0), 1), &mo_of(&cy(0), 4))
+                    .map(Token::Time)
             }),
         },
         Rule {
@@ -2831,9 +3068,19 @@ fn end_beginning_year_week_rules() -> Vec<Rule> {
             prod: Box::new(|tokens| match tokens {
                 [Token::RegexMatch(g), Token::Time(td)] => {
                     if g.first()?.eq_ignore_ascii_case("beginning") {
-                        interval_td(IntervalType::Open, &intersect_td(&month_td(1), td)?, &intersect_td(&month_td(4), td)?).map(Token::Time)
+                        interval_td(
+                            IntervalType::Open,
+                            &intersect_td(&month_td(1), td)?,
+                            &intersect_td(&month_td(4), td)?,
+                        )
+                        .map(Token::Time)
                     } else {
-                        interval_td(IntervalType::Closed, &intersect_td(&month_td(9), td)?, &intersect_td(&month_td(12), td)?).map(Token::Time)
+                        interval_td(
+                            IntervalType::Closed,
+                            &intersect_td(&month_td(9), td)?,
+                            &intersect_td(&month_td(12), td)?,
+                        )
+                        .map(Token::Time)
                     }
                 }
                 _ => None,
@@ -2852,7 +3099,12 @@ fn end_beginning_year_week_rules() -> Vec<Rule> {
                     } else {
                         (5, 7)
                     };
-                    interval_td(IntervalType::Closed, &intersect_td(&day_of_week_td(sd), td)?, &intersect_td(&day_of_week_td(ed), td)?).map(Token::Time)
+                    interval_td(
+                        IntervalType::Closed,
+                        &intersect_td(&day_of_week_td(sd), td)?,
+                        &intersect_td(&day_of_week_td(ed), td)?,
+                    )
+                    .map(Token::Time)
                 }
                 _ => None,
             }),
@@ -2878,8 +3130,12 @@ fn end_beginning_of_month_rules() -> Vec<Rule> {
                 r"(?:(?:at )?the )?(?:eom|end of (?:the )?month)",
             ))],
             prod: Box::new(|_| {
-                interval_td(IntervalType::Open, &dom_of_this_month(21)?, &dom_of_next_month(1)?)
-                    .map(Token::Time)
+                interval_td(
+                    IntervalType::Open,
+                    &dom_of_this_month(21)?,
+                    &dom_of_next_month(1)?,
+                )
+                .map(Token::Time)
             }),
         },
         Rule {
@@ -2888,8 +3144,12 @@ fn end_beginning_of_month_rules() -> Vec<Rule> {
                 r"(?:(?:at )?the )?(?:bom|beginning of (?:the )?month)",
             ))],
             prod: Box::new(|_| {
-                interval_td(IntervalType::Closed, &dom_of_this_month(1)?, &dom_of_this_month(10)?)
-                    .map(Token::Time)
+                interval_td(
+                    IntervalType::Closed,
+                    &dom_of_this_month(1)?,
+                    &dom_of_this_month(10)?,
+                )
+                .map(Token::Time)
             }),
         },
     ]
@@ -2897,10 +3157,12 @@ fn end_beginning_of_month_rules() -> Vec<Rule> {
 
 fn month_num(s: &str) -> Option<i64> {
     let s = s.to_lowercase();
-    ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
-        .iter()
-        .position(|p| s.starts_with(p))
-        .map(|i| (i + 1) as i64)
+    [
+        "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec",
+    ]
+    .iter()
+    .position(|p| s.starts_with(p))
+    .map(|i| (i + 1) as i64)
 }
 fn valid_md(m: i64, d: i64) -> bool {
     (1..=12).contains(&m) && (1..=31).contains(&d)
@@ -2943,7 +3205,9 @@ fn numeric_date_rules(locale: Locale) -> Vec<Rule> {
         },
         Rule {
             name: "yyyy-mm".into(),
-            pattern: vec![PatternItem::Regex(compile(r"(\d{4})\s*[/-]\s*(1[0-2]|0?[1-9])"))],
+            pattern: vec![PatternItem::Regex(compile(
+                r"(\d{4})\s*[/-]\s*(1[0-2]|0?[1-9])",
+            ))],
             prod: Box::new(|tokens| {
                 let g = regex_groups(tokens)?;
                 year_month_td(parse_i(g, 0)?, parse_i(g, 1)?).map(Token::Time)
@@ -2967,7 +3231,11 @@ fn numeric_date_rules(locale: Locale) -> Vec<Rule> {
             // US: mm/dd/yyyy (month first). GB: dd/mm/yyyy (day first). Same regex;
             // the two leading fields swap roles by locale. "." separator included,
             // covering the "dd.mm.yyyy" GB / "mm.dd.yyyy" US variants too.
-            name: if year_day_first { "dd/mm/yyyy".into() } else { "mm/dd/yyyy".into() },
+            name: if year_day_first {
+                "dd/mm/yyyy".into()
+            } else {
+                "mm/dd/yyyy".into()
+            },
             pattern: vec![PatternItem::Regex(compile(
                 r"(\d{1,2})[-/.](\d{1,2})[-/.](\d{2,4})",
             ))],
@@ -2999,7 +3267,11 @@ fn numeric_date_rules(locale: Locale) -> Vec<Rule> {
         },
         Rule {
             // US: mm/dd (month first). GB: dd/mm (day first).
-            name: if noyear_day_first { "dd/mm".into() } else { "mm/dd".into() },
+            name: if noyear_day_first {
+                "dd/mm".into()
+            } else {
+                "mm/dd".into()
+            },
             pattern: vec![PatternItem::Regex(compile(r"(\d{1,2})\s*[/-]\s*(\d{1,2})"))],
             prod: Box::new(move |tokens| {
                 let g = regex_groups(tokens)?;
@@ -3023,195 +3295,751 @@ fn numeric_date_rules(locale: Locale) -> Vec<Rule> {
 fn holiday_rules() -> Vec<Rule> {
     vec![
         // Fixed dates, year over year (port of rulePeriodicHolidays monthDay entries).
-        holiday_rule("Africa Day", r"africa(n (freedom|liberation))? day", || month_day_td(5, 25)),
-        holiday_rule("Africa Industrialization Day", r"africa industrialization day", || month_day_td(11, 20)),
-        holiday_rule("All Saints' Day", r"all saints' day", || month_day_td(11, 1)),
+        holiday_rule("Africa Day", r"africa(n (freedom|liberation))? day", || {
+            month_day_td(5, 25)
+        }),
+        holiday_rule(
+            "Africa Industrialization Day",
+            r"africa industrialization day",
+            || month_day_td(11, 20),
+        ),
+        holiday_rule("All Saints' Day", r"all saints' day", || {
+            month_day_td(11, 1)
+        }),
         holiday_rule("All Souls' Day", r"all souls' day", || month_day_td(11, 2)),
-        holiday_rule("April Fools", r"(april|all) fool'?s('? day)?", || month_day_td(4, 1)),
-        holiday_rule("Arabic Language Day", r"arabic language day", || month_day_td(12, 18)),
-        holiday_rule("Assumption of Mary", r"assumption of mary", || month_day_td(8, 15)),
+        holiday_rule("April Fools", r"(april|all) fool'?s('? day)?", || {
+            month_day_td(4, 1)
+        }),
+        holiday_rule("Arabic Language Day", r"arabic language day", || {
+            month_day_td(12, 18)
+        }),
+        holiday_rule("Assumption of Mary", r"assumption of mary", || {
+            month_day_td(8, 15)
+        }),
         holiday_rule("Boxing Day", r"boxing day", || month_day_td(12, 26)),
-        holiday_rule("Chinese Language Day", r"chinese language day", || month_day_td(4, 20)),
-        holiday_rule("Christmas", r"(xmas|christmas)( day)?", || month_day_td(12, 25)),
-        holiday_rule("Christmas Eve", r"(xmas|christmas)( day)?('s)? eve", || month_day_td(12, 24)),
-        holiday_rule("Day of Remembrance for all Victims of Chemical Warfare", r"day of remembrance for all victims of chemical warfare", || month_day_td(4, 29)),
-        holiday_rule("Day of Remembrance of the Victims of the Rwanda Genocide", r"day of remembrance of the victims of the rwanda genocide", || month_day_td(4, 7)),
-        holiday_rule("Day of the Seafarer", r"day of the seafarer", || month_day_td(6, 25)),
+        holiday_rule("Chinese Language Day", r"chinese language day", || {
+            month_day_td(4, 20)
+        }),
+        holiday_rule("Christmas", r"(xmas|christmas)( day)?", || {
+            month_day_td(12, 25)
+        }),
+        holiday_rule("Christmas Eve", r"(xmas|christmas)( day)?('s)? eve", || {
+            month_day_td(12, 24)
+        }),
+        holiday_rule(
+            "Day of Remembrance for all Victims of Chemical Warfare",
+            r"day of remembrance for all victims of chemical warfare",
+            || month_day_td(4, 29),
+        ),
+        holiday_rule(
+            "Day of Remembrance of the Victims of the Rwanda Genocide",
+            r"day of remembrance of the victims of the rwanda genocide",
+            || month_day_td(4, 7),
+        ),
+        holiday_rule("Day of the Seafarer", r"day of the seafarer", || {
+            month_day_td(6, 25)
+        }),
         holiday_rule("Earth Day", r"earth day", || month_day_td(4, 22)),
-        holiday_rule("English Language Day", r"english language day", || month_day_td(4, 23)),
+        holiday_rule("English Language Day", r"english language day", || {
+            month_day_td(4, 23)
+        }),
         holiday_rule("Epiphany", r"Epiphany", || month_day_td(1, 6)),
-        holiday_rule("Feast of St Francis of Assisi", r"feast of st\.? francis of assisi", || month_day_td(10, 4)),
-        holiday_rule("Feast of the Immaculate Conception", r"feast of the immaculate conception", || month_day_td(12, 8)),
-        holiday_rule("Global Day of Parents", r"global day of parents", || month_day_td(6, 1)),
+        holiday_rule(
+            "Feast of St Francis of Assisi",
+            r"feast of st\.? francis of assisi",
+            || month_day_td(10, 4),
+        ),
+        holiday_rule(
+            "Feast of the Immaculate Conception",
+            r"feast of the immaculate conception",
+            || month_day_td(12, 8),
+        ),
+        holiday_rule("Global Day of Parents", r"global day of parents", || {
+            month_day_td(6, 1)
+        }),
         holiday_rule("Halloween", r"hall?owe?en( day)?", || month_day_td(10, 31)),
-        holiday_rule("Human Rights Day", r"human rights? day", || month_day_td(12, 10)),
-        holiday_rule("International Albinism Awareness Day", r"international albinism awareness day", || month_day_td(6, 13)),
-        holiday_rule("International Anti-Corruption Day", r"international anti(\-|\s)corruption day", || month_day_td(12, 9)),
-        holiday_rule("International Asteroid Day", r"international asteroid day", || month_day_td(6, 30)),
-        holiday_rule("International Celebrate Bisexuality Day", r"international celebrate bisexuality day", || month_day_td(9, 23)),
-        holiday_rule("International Chernobyl Disaster Remembrance Day", r"international chernobyl disaster remembrance day", || month_day_td(4, 26)),
-        holiday_rule("International Civil Aviation Day", r"international civil aviation day", || month_day_td(12, 7)),
-        holiday_rule("International Customs Day", r"international customs day", || month_day_td(1, 26)),
-        holiday_rule("International Day Against Drug Abuse and Illicit Trafficking", r"international day against drug abuse and illicit trafficking", || month_day_td(6, 26)),
-        holiday_rule("International Day against Nuclear Tests", r"international day against nuclear tests", || month_day_td(8, 29)),
-        holiday_rule("International Day for Biological Diversity", r"international day for biological diversity|world biodiversity day", || month_day_td(5, 22)),
-        holiday_rule("International Day for Monuments and Sites", r"international day for monuments and sites", || month_day_td(4, 18)),
-        holiday_rule("International Day for Preventing the Exploitation of the Environment in War and Armed Conflict", r"international day for preventing the exploitation of the environment in war and armed conflict", || month_day_td(11, 6)),
-        holiday_rule("International Day for South-South Cooperation", r"international day for south(\-|\s)south cooperation", || month_day_td(9, 12)),
-        holiday_rule("International Day for Tolerance", r"international day for tolerance", || month_day_td(11, 16)),
-        holiday_rule("International Day for the Abolition of Slavery", r"international day for the abolition of slavery", || month_day_td(12, 2)),
-        holiday_rule("International Day for the Elimination of Racial Discrimination", r"international day for the elimination of racial discrimination", || month_day_td(3, 21)),
-        holiday_rule("International Day for the Elimination of Sexual Violence in Conflict", r"international day for the elimination of sexual violence in conflict", || month_day_td(6, 19)),
-        holiday_rule("International Day for the Elimination of Violence against Women", r"international day for the elimination of violence against women", || month_day_td(11, 25)),
-        holiday_rule("International Day for the Eradication of Poverty", r"international day for the eradication of poverty", || month_day_td(10, 17)),
-        holiday_rule("International Day for the Preservation of the Ozone Layer", r"international day for the preservation of the ozone Layer", || month_day_td(9, 16)),
-        holiday_rule("International Day for the Remembrance of the Slave Trade and its Abolition", r"international day for the remembrance of the slave trade and its abolition", || month_day_td(8, 23)),
-        holiday_rule("International Day for the Right to the Truth concerning Gross Human Rights Violations and for the Dignity of Victims", r"international day for the right to the truth concerning gross human rights violations and for the dignity of victims", || month_day_td(3, 24)),
-        holiday_rule("International Day for the Total Elimination of Nuclear Weapons", r"international day for the total elimination of nuclear weapons", || month_day_td(9, 26)),
-        holiday_rule("International Day in Support of Victims of Torture", r"international day in support of victims of torture", || month_day_td(6, 26)),
-        holiday_rule("International Day of Charity", r"international day of charity", || month_day_td(9, 5)),
-        holiday_rule("International Day of Commemoration in Memory of the Victims of the Holocaust", r"international day of commemoration in memory of the victims of the holocaust", || month_day_td(1, 27)),
-        holiday_rule("International Day of Democracy", r"international day of democracy", || month_day_td(9, 15)),
-        holiday_rule("International Day of Disabled Persons", r"international day of disabled persons", || month_day_td(12, 3)),
-        holiday_rule("International Day of Families", r"international day of families", || month_day_td(5, 15)),
-        holiday_rule("International Day of Family Remittances", r"international day of family remittances", || month_day_td(6, 16)),
-        holiday_rule("International Day of Forests", r"international day of forests", || month_day_td(3, 21)),
-        holiday_rule("International Day of Friendship", r"international day of friendship", || month_day_td(7, 30)),
-        holiday_rule("International Day of Happiness", r"international day of happiness", || month_day_td(3, 20)),
-        holiday_rule("International Day of Human Space Flight", r"international day of human space flight", || month_day_td(4, 12)),
-        holiday_rule("International Day of Innocent Children Victims of Aggression", r"international day of innocent children victims of aggression", || month_day_td(6, 4)),
-        holiday_rule("International Day of Non-Violence", r"international day of non(\-|\s)violence", || month_day_td(10, 2)),
-        holiday_rule("International Day of Nowruz", r"international day of nowruz", || month_day_td(3, 21)),
-        holiday_rule("International Day of Older Persons", r"international day of older persons", || month_day_td(10, 1)),
-        holiday_rule("International Day of Peace", r"international day of peace", || month_day_td(9, 21)),
-        holiday_rule("International Day of Persons with Disabilities", r"international day of persons with disabilities", || month_day_td(12, 3)),
-        holiday_rule("International Day of Remembrance of Slavery Victims and the Transatlantic Slave Trade", r"international day of remembrance of slavery victims and the transatlantic slave trade", || month_day_td(3, 25)),
-        holiday_rule("International Day of Rural Women", r"international day of rural women", || month_day_td(10, 15)),
-        holiday_rule("International Day of Solidarity with Detained and Missing Staff Members", r"international day of solidarity with detained and missing staff members", || month_day_td(3, 25)),
-        holiday_rule("International Day of Solidarity with the Palestinian People", r"international day of solidarity with the palestinian people", || month_day_td(11, 29)),
-        holiday_rule("International Day of Sport for Development and Peace", r"international day of sport for development and peace", || month_day_td(4, 6)),
-        holiday_rule("International Day of United Nations Peacekeepers", r"international day of united nations peacekeepers", || month_day_td(5, 29)),
-        holiday_rule("International Day of Women and Girls in Science", r"international day of women and girls in science", || month_day_td(2, 11)),
-        holiday_rule("International Day of Yoga", r"international day of yoga", || month_day_td(6, 21)),
-        holiday_rule("International Day of Zero Tolerance for Female Genital Mutilation", r"international day of zero tolerance for female genital mutilation", || month_day_td(2, 6)),
-        holiday_rule("International Day of the Girl Child", r"international day of the girl child", || month_day_td(10, 11)),
-        holiday_rule("International Day of the Victims of Enforced Disappearances", r"international day of the victims of enforced disappearances", || month_day_td(8, 30)),
-        holiday_rule("International Day of the World's Indigenous People", r"international day of the world'?s indigenous people", || month_day_td(8, 9)),
-        holiday_rule("International Day to End Impunity for Crimes against Journalists", r"international day to end impunity for crimes against journalists", || month_day_td(11, 2)),
-        holiday_rule("International Day to End Obstetric Fistula", r"international day to end obstetric fistula", || month_day_td(5, 23)),
-        holiday_rule("International Day for Disaster Reduction", r"iddr|international day for (natural )?disaster reduction", || month_day_td(10, 13)),
-        holiday_rule("International Human Solidarity Day", r"international human solidarity day", || month_day_td(12, 20)),
-        holiday_rule("International Jazz Day", r"international jazz day", || month_day_td(4, 30)),
-        holiday_rule("International Literacy Day", r"international literacy day", || month_day_td(9, 8)),
-        holiday_rule("International Men's Day", r"international men'?s day", || month_day_td(11, 19)),
-        holiday_rule("International Migrants Day", r"international migrants day", || month_day_td(12, 18)),
-        holiday_rule("International Mother Language Day", r"international mother language day", || month_day_td(2, 21)),
-        holiday_rule("International Mountain Day", r"international mountain day", || month_day_td(12, 11)),
-        holiday_rule("International Nurses Day", r"international nurses day", || month_day_td(5, 12)),
-        holiday_rule("International Overdose Awareness Day", r"international overdose awareness day", || month_day_td(8, 31)),
-        holiday_rule("International Volunteer Day for Economic and Social Development", r"international volunteer day for economic and social development", || month_day_td(12, 5)),
-        holiday_rule("International Widows' Day", r"international widows'? day", || month_day_td(6, 23)),
-        holiday_rule("International Women's Day", r"international women'?s day", || month_day_td(3, 8)),
-        holiday_rule("International Youth Day", r"international youth day", || month_day_td(8, 12)),
+        holiday_rule("Human Rights Day", r"human rights? day", || {
+            month_day_td(12, 10)
+        }),
+        holiday_rule(
+            "International Albinism Awareness Day",
+            r"international albinism awareness day",
+            || month_day_td(6, 13),
+        ),
+        holiday_rule(
+            "International Anti-Corruption Day",
+            r"international anti(\-|\s)corruption day",
+            || month_day_td(12, 9),
+        ),
+        holiday_rule(
+            "International Asteroid Day",
+            r"international asteroid day",
+            || month_day_td(6, 30),
+        ),
+        holiday_rule(
+            "International Celebrate Bisexuality Day",
+            r"international celebrate bisexuality day",
+            || month_day_td(9, 23),
+        ),
+        holiday_rule(
+            "International Chernobyl Disaster Remembrance Day",
+            r"international chernobyl disaster remembrance day",
+            || month_day_td(4, 26),
+        ),
+        holiday_rule(
+            "International Civil Aviation Day",
+            r"international civil aviation day",
+            || month_day_td(12, 7),
+        ),
+        holiday_rule(
+            "International Customs Day",
+            r"international customs day",
+            || month_day_td(1, 26),
+        ),
+        holiday_rule(
+            "International Day Against Drug Abuse and Illicit Trafficking",
+            r"international day against drug abuse and illicit trafficking",
+            || month_day_td(6, 26),
+        ),
+        holiday_rule(
+            "International Day against Nuclear Tests",
+            r"international day against nuclear tests",
+            || month_day_td(8, 29),
+        ),
+        holiday_rule(
+            "International Day for Biological Diversity",
+            r"international day for biological diversity|world biodiversity day",
+            || month_day_td(5, 22),
+        ),
+        holiday_rule(
+            "International Day for Monuments and Sites",
+            r"international day for monuments and sites",
+            || month_day_td(4, 18),
+        ),
+        holiday_rule(
+            "International Day for Preventing the Exploitation of the Environment in War and Armed Conflict",
+            r"international day for preventing the exploitation of the environment in war and armed conflict",
+            || month_day_td(11, 6),
+        ),
+        holiday_rule(
+            "International Day for South-South Cooperation",
+            r"international day for south(\-|\s)south cooperation",
+            || month_day_td(9, 12),
+        ),
+        holiday_rule(
+            "International Day for Tolerance",
+            r"international day for tolerance",
+            || month_day_td(11, 16),
+        ),
+        holiday_rule(
+            "International Day for the Abolition of Slavery",
+            r"international day for the abolition of slavery",
+            || month_day_td(12, 2),
+        ),
+        holiday_rule(
+            "International Day for the Elimination of Racial Discrimination",
+            r"international day for the elimination of racial discrimination",
+            || month_day_td(3, 21),
+        ),
+        holiday_rule(
+            "International Day for the Elimination of Sexual Violence in Conflict",
+            r"international day for the elimination of sexual violence in conflict",
+            || month_day_td(6, 19),
+        ),
+        holiday_rule(
+            "International Day for the Elimination of Violence against Women",
+            r"international day for the elimination of violence against women",
+            || month_day_td(11, 25),
+        ),
+        holiday_rule(
+            "International Day for the Eradication of Poverty",
+            r"international day for the eradication of poverty",
+            || month_day_td(10, 17),
+        ),
+        holiday_rule(
+            "International Day for the Preservation of the Ozone Layer",
+            r"international day for the preservation of the ozone Layer",
+            || month_day_td(9, 16),
+        ),
+        holiday_rule(
+            "International Day for the Remembrance of the Slave Trade and its Abolition",
+            r"international day for the remembrance of the slave trade and its abolition",
+            || month_day_td(8, 23),
+        ),
+        holiday_rule(
+            "International Day for the Right to the Truth concerning Gross Human Rights Violations and for the Dignity of Victims",
+            r"international day for the right to the truth concerning gross human rights violations and for the dignity of victims",
+            || month_day_td(3, 24),
+        ),
+        holiday_rule(
+            "International Day for the Total Elimination of Nuclear Weapons",
+            r"international day for the total elimination of nuclear weapons",
+            || month_day_td(9, 26),
+        ),
+        holiday_rule(
+            "International Day in Support of Victims of Torture",
+            r"international day in support of victims of torture",
+            || month_day_td(6, 26),
+        ),
+        holiday_rule(
+            "International Day of Charity",
+            r"international day of charity",
+            || month_day_td(9, 5),
+        ),
+        holiday_rule(
+            "International Day of Commemoration in Memory of the Victims of the Holocaust",
+            r"international day of commemoration in memory of the victims of the holocaust",
+            || month_day_td(1, 27),
+        ),
+        holiday_rule(
+            "International Day of Democracy",
+            r"international day of democracy",
+            || month_day_td(9, 15),
+        ),
+        holiday_rule(
+            "International Day of Disabled Persons",
+            r"international day of disabled persons",
+            || month_day_td(12, 3),
+        ),
+        holiday_rule(
+            "International Day of Families",
+            r"international day of families",
+            || month_day_td(5, 15),
+        ),
+        holiday_rule(
+            "International Day of Family Remittances",
+            r"international day of family remittances",
+            || month_day_td(6, 16),
+        ),
+        holiday_rule(
+            "International Day of Forests",
+            r"international day of forests",
+            || month_day_td(3, 21),
+        ),
+        holiday_rule(
+            "International Day of Friendship",
+            r"international day of friendship",
+            || month_day_td(7, 30),
+        ),
+        holiday_rule(
+            "International Day of Happiness",
+            r"international day of happiness",
+            || month_day_td(3, 20),
+        ),
+        holiday_rule(
+            "International Day of Human Space Flight",
+            r"international day of human space flight",
+            || month_day_td(4, 12),
+        ),
+        holiday_rule(
+            "International Day of Innocent Children Victims of Aggression",
+            r"international day of innocent children victims of aggression",
+            || month_day_td(6, 4),
+        ),
+        holiday_rule(
+            "International Day of Non-Violence",
+            r"international day of non(\-|\s)violence",
+            || month_day_td(10, 2),
+        ),
+        holiday_rule(
+            "International Day of Nowruz",
+            r"international day of nowruz",
+            || month_day_td(3, 21),
+        ),
+        holiday_rule(
+            "International Day of Older Persons",
+            r"international day of older persons",
+            || month_day_td(10, 1),
+        ),
+        holiday_rule(
+            "International Day of Peace",
+            r"international day of peace",
+            || month_day_td(9, 21),
+        ),
+        holiday_rule(
+            "International Day of Persons with Disabilities",
+            r"international day of persons with disabilities",
+            || month_day_td(12, 3),
+        ),
+        holiday_rule(
+            "International Day of Remembrance of Slavery Victims and the Transatlantic Slave Trade",
+            r"international day of remembrance of slavery victims and the transatlantic slave trade",
+            || month_day_td(3, 25),
+        ),
+        holiday_rule(
+            "International Day of Rural Women",
+            r"international day of rural women",
+            || month_day_td(10, 15),
+        ),
+        holiday_rule(
+            "International Day of Solidarity with Detained and Missing Staff Members",
+            r"international day of solidarity with detained and missing staff members",
+            || month_day_td(3, 25),
+        ),
+        holiday_rule(
+            "International Day of Solidarity with the Palestinian People",
+            r"international day of solidarity with the palestinian people",
+            || month_day_td(11, 29),
+        ),
+        holiday_rule(
+            "International Day of Sport for Development and Peace",
+            r"international day of sport for development and peace",
+            || month_day_td(4, 6),
+        ),
+        holiday_rule(
+            "International Day of United Nations Peacekeepers",
+            r"international day of united nations peacekeepers",
+            || month_day_td(5, 29),
+        ),
+        holiday_rule(
+            "International Day of Women and Girls in Science",
+            r"international day of women and girls in science",
+            || month_day_td(2, 11),
+        ),
+        holiday_rule(
+            "International Day of Yoga",
+            r"international day of yoga",
+            || month_day_td(6, 21),
+        ),
+        holiday_rule(
+            "International Day of Zero Tolerance for Female Genital Mutilation",
+            r"international day of zero tolerance for female genital mutilation",
+            || month_day_td(2, 6),
+        ),
+        holiday_rule(
+            "International Day of the Girl Child",
+            r"international day of the girl child",
+            || month_day_td(10, 11),
+        ),
+        holiday_rule(
+            "International Day of the Victims of Enforced Disappearances",
+            r"international day of the victims of enforced disappearances",
+            || month_day_td(8, 30),
+        ),
+        holiday_rule(
+            "International Day of the World's Indigenous People",
+            r"international day of the world'?s indigenous people",
+            || month_day_td(8, 9),
+        ),
+        holiday_rule(
+            "International Day to End Impunity for Crimes against Journalists",
+            r"international day to end impunity for crimes against journalists",
+            || month_day_td(11, 2),
+        ),
+        holiday_rule(
+            "International Day to End Obstetric Fistula",
+            r"international day to end obstetric fistula",
+            || month_day_td(5, 23),
+        ),
+        holiday_rule(
+            "International Day for Disaster Reduction",
+            r"iddr|international day for (natural )?disaster reduction",
+            || month_day_td(10, 13),
+        ),
+        holiday_rule(
+            "International Human Solidarity Day",
+            r"international human solidarity day",
+            || month_day_td(12, 20),
+        ),
+        holiday_rule("International Jazz Day", r"international jazz day", || {
+            month_day_td(4, 30)
+        }),
+        holiday_rule(
+            "International Literacy Day",
+            r"international literacy day",
+            || month_day_td(9, 8),
+        ),
+        holiday_rule(
+            "International Men's Day",
+            r"international men'?s day",
+            || month_day_td(11, 19),
+        ),
+        holiday_rule(
+            "International Migrants Day",
+            r"international migrants day",
+            || month_day_td(12, 18),
+        ),
+        holiday_rule(
+            "International Mother Language Day",
+            r"international mother language day",
+            || month_day_td(2, 21),
+        ),
+        holiday_rule(
+            "International Mountain Day",
+            r"international mountain day",
+            || month_day_td(12, 11),
+        ),
+        holiday_rule(
+            "International Nurses Day",
+            r"international nurses day",
+            || month_day_td(5, 12),
+        ),
+        holiday_rule(
+            "International Overdose Awareness Day",
+            r"international overdose awareness day",
+            || month_day_td(8, 31),
+        ),
+        holiday_rule(
+            "International Volunteer Day for Economic and Social Development",
+            r"international volunteer day for economic and social development",
+            || month_day_td(12, 5),
+        ),
+        holiday_rule(
+            "International Widows' Day",
+            r"international widows'? day",
+            || month_day_td(6, 23),
+        ),
+        holiday_rule(
+            "International Women's Day",
+            r"international women'?s day",
+            || month_day_td(3, 8),
+        ),
+        holiday_rule(
+            "International Youth Day",
+            r"international youth day",
+            || month_day_td(8, 12),
+        ),
         holiday_rule("May Day", r"may day", || month_day_td(5, 1)),
-        holiday_rule("Nelson Mandela Day", r"nelson mandela day", || month_day_td(7, 18)),
-        holiday_rule("New Year's Day", r"new year'?s?( day)?", || month_day_td(1, 1)),
-        holiday_rule("New Year's Eve", r"new year'?s? eve", || month_day_td(12, 31)),
-        holiday_rule("Orthodox Christmas Day", r"orthodox christmas day", || month_day_td(1, 7)),
-        holiday_rule("Orthodox New Year", r"orthodox new year", || month_day_td(1, 14)),
-        holiday_rule("Public Service Day", r"public service day", || month_day_td(6, 23)),
-        holiday_rule("St. George's Day", r"(saint|st\.?) george'?s day|feast of saint george", || month_day_td(4, 23)),
-        holiday_rule("St Patrick's Day", r"(saint|st\.?) (patrick|paddy)'?s day", || month_day_td(3, 17)),
-        holiday_rule("St. Stephen's Day", r"(saint|st\.?) stephen'?s day", || month_day_td(12, 26)),
-        holiday_rule("Time of Remembrance and Reconciliation for Those Who Lost Their Lives during the Second World War", r"time of remembrance and reconciliation for those who lost their lives during the second world war", || month_day_td(5, 8)),
-        holiday_rule("United Nations Day", r"united nations day", || month_day_td(10, 24)),
-        holiday_rule("United Nations' Mine Awareness Day", r"united nations'? mine awareness day", || month_day_td(4, 4)),
-        holiday_rule("United Nations' World Health Day", r"united nations'? world health day", || month_day_td(4, 7)),
-        holiday_rule("Universal Children's Day", r"universal children'?s day", || month_day_td(11, 20)),
-        holiday_rule("Valentine's Day", r"valentine'?s?( day)?", || month_day_td(2, 14)),
+        holiday_rule("Nelson Mandela Day", r"nelson mandela day", || {
+            month_day_td(7, 18)
+        }),
+        holiday_rule("New Year's Day", r"new year'?s?( day)?", || {
+            month_day_td(1, 1)
+        }),
+        holiday_rule("New Year's Eve", r"new year'?s? eve", || {
+            month_day_td(12, 31)
+        }),
+        holiday_rule("Orthodox Christmas Day", r"orthodox christmas day", || {
+            month_day_td(1, 7)
+        }),
+        holiday_rule("Orthodox New Year", r"orthodox new year", || {
+            month_day_td(1, 14)
+        }),
+        holiday_rule("Public Service Day", r"public service day", || {
+            month_day_td(6, 23)
+        }),
+        holiday_rule(
+            "St. George's Day",
+            r"(saint|st\.?) george'?s day|feast of saint george",
+            || month_day_td(4, 23),
+        ),
+        holiday_rule(
+            "St Patrick's Day",
+            r"(saint|st\.?) (patrick|paddy)'?s day",
+            || month_day_td(3, 17),
+        ),
+        holiday_rule("St. Stephen's Day", r"(saint|st\.?) stephen'?s day", || {
+            month_day_td(12, 26)
+        }),
+        holiday_rule(
+            "Time of Remembrance and Reconciliation for Those Who Lost Their Lives during the Second World War",
+            r"time of remembrance and reconciliation for those who lost their lives during the second world war",
+            || month_day_td(5, 8),
+        ),
+        holiday_rule("United Nations Day", r"united nations day", || {
+            month_day_td(10, 24)
+        }),
+        holiday_rule(
+            "United Nations' Mine Awareness Day",
+            r"united nations'? mine awareness day",
+            || month_day_td(4, 4),
+        ),
+        holiday_rule(
+            "United Nations' World Health Day",
+            r"united nations'? world health day",
+            || month_day_td(4, 7),
+        ),
+        holiday_rule(
+            "Universal Children's Day",
+            r"universal children'?s day",
+            || month_day_td(11, 20),
+        ),
+        holiday_rule("Valentine's Day", r"valentine'?s?( day)?", || {
+            month_day_td(2, 14)
+        }),
         holiday_rule("World AIDS Day", r"world aids day", || month_day_td(12, 1)),
-        holiday_rule("World Autism Awareness Day", r"world autism awareness day", || month_day_td(4, 2)),
-        holiday_rule("World Autoimmune Arthritis Day", r"world autoimmune arthritis day", || month_day_td(5, 20)),
-        holiday_rule("World Blood Donor Day", r"world blood donor day", || month_day_td(6, 14)),
-        holiday_rule("World Book and Copyright Day", r"world book and copyright day", || month_day_td(4, 23)),
-        holiday_rule("World Braille Day", r"world braille day", || month_day_td(1, 4)),
-        holiday_rule("World Cancer Day", r"world cancer day", || month_day_td(2, 4)),
-        holiday_rule("World Cities Day", r"world cities day", || month_day_td(10, 31)),
-        holiday_rule("World CP Day", r"world (cerebral palsy| cp) day", || month_day_td(10, 6)),
-        holiday_rule("World Day Against Child Labour", r"world day against child labour", || month_day_td(6, 12)),
-        holiday_rule("World Day against Trafficking in Persons", r"world day against trafficking in persons", || month_day_td(7, 30)),
-        holiday_rule("World Day for Audiovisual Heritage", r"world day for audiovisual heritage", || month_day_td(10, 27)),
-        holiday_rule("World Day for Cultural Diversity for Dialogue and Development", r"world day for cultural diversity for dialogue and development", || month_day_td(5, 21)),
-        holiday_rule("World Day for Safety and Health at Work", r"world day for safety and health at work", || month_day_td(4, 28)),
-        holiday_rule("World Day for the Abolition of Slavery", r"world day for the abolition of slavery", || month_day_td(12, 2)),
-        holiday_rule("World Day of Social Justice", r"world day of social justice", || month_day_td(2, 20)),
-        holiday_rule("World Day of the Sick", r"world day of the sick", || month_day_td(2, 11)),
-        holiday_rule("World Day to Combat Desertification and Drought", r"world day to combat desertification and drought", || month_day_td(6, 17)),
-        holiday_rule("World Development Information Day", r"world development information day", || month_day_td(10, 24)),
-        holiday_rule("World Diabetes Day", r"world diabetes day", || month_day_td(11, 14)),
-        holiday_rule("World Down Syndrome Day", r"world down syndrome day", || month_day_td(3, 21)),
-        holiday_rule("World Elder Abuse Awareness Day", r"world elder abuse awareness day", || month_day_td(6, 15)),
-        holiday_rule("World Environment Day", r"world environment day", || month_day_td(6, 5)),
+        holiday_rule(
+            "World Autism Awareness Day",
+            r"world autism awareness day",
+            || month_day_td(4, 2),
+        ),
+        holiday_rule(
+            "World Autoimmune Arthritis Day",
+            r"world autoimmune arthritis day",
+            || month_day_td(5, 20),
+        ),
+        holiday_rule("World Blood Donor Day", r"world blood donor day", || {
+            month_day_td(6, 14)
+        }),
+        holiday_rule(
+            "World Book and Copyright Day",
+            r"world book and copyright day",
+            || month_day_td(4, 23),
+        ),
+        holiday_rule("World Braille Day", r"world braille day", || {
+            month_day_td(1, 4)
+        }),
+        holiday_rule("World Cancer Day", r"world cancer day", || {
+            month_day_td(2, 4)
+        }),
+        holiday_rule("World Cities Day", r"world cities day", || {
+            month_day_td(10, 31)
+        }),
+        holiday_rule("World CP Day", r"world (cerebral palsy| cp) day", || {
+            month_day_td(10, 6)
+        }),
+        holiday_rule(
+            "World Day Against Child Labour",
+            r"world day against child labour",
+            || month_day_td(6, 12),
+        ),
+        holiday_rule(
+            "World Day against Trafficking in Persons",
+            r"world day against trafficking in persons",
+            || month_day_td(7, 30),
+        ),
+        holiday_rule(
+            "World Day for Audiovisual Heritage",
+            r"world day for audiovisual heritage",
+            || month_day_td(10, 27),
+        ),
+        holiday_rule(
+            "World Day for Cultural Diversity for Dialogue and Development",
+            r"world day for cultural diversity for dialogue and development",
+            || month_day_td(5, 21),
+        ),
+        holiday_rule(
+            "World Day for Safety and Health at Work",
+            r"world day for safety and health at work",
+            || month_day_td(4, 28),
+        ),
+        holiday_rule(
+            "World Day for the Abolition of Slavery",
+            r"world day for the abolition of slavery",
+            || month_day_td(12, 2),
+        ),
+        holiday_rule(
+            "World Day of Social Justice",
+            r"world day of social justice",
+            || month_day_td(2, 20),
+        ),
+        holiday_rule("World Day of the Sick", r"world day of the sick", || {
+            month_day_td(2, 11)
+        }),
+        holiday_rule(
+            "World Day to Combat Desertification and Drought",
+            r"world day to combat desertification and drought",
+            || month_day_td(6, 17),
+        ),
+        holiday_rule(
+            "World Development Information Day",
+            r"world development information day",
+            || month_day_td(10, 24),
+        ),
+        holiday_rule("World Diabetes Day", r"world diabetes day", || {
+            month_day_td(11, 14)
+        }),
+        holiday_rule(
+            "World Down Syndrome Day",
+            r"world down syndrome day",
+            || month_day_td(3, 21),
+        ),
+        holiday_rule(
+            "World Elder Abuse Awareness Day",
+            r"world elder abuse awareness day",
+            || month_day_td(6, 15),
+        ),
+        holiday_rule("World Environment Day", r"world environment day", || {
+            month_day_td(6, 5)
+        }),
         holiday_rule("World Food Day", r"world food day", || month_day_td(10, 16)),
-        holiday_rule("World Genocide Commemoration Day", r"world genocide commemoration day", || month_day_td(12, 9)),
-        holiday_rule("World Heart Day", r"world heart day", || month_day_td(9, 29)),
-        holiday_rule("World Hepatitis Day", r"world hepatitis day", || month_day_td(7, 28)),
-        holiday_rule("World Humanitarian Day", r"world humanitarian day", || month_day_td(8, 19)),
-        holiday_rule("World Information Society Day", r"world information society day", || month_day_td(5, 17)),
-        holiday_rule("World Intellectual Property Day", r"world intellectual property day", || month_day_td(4, 26)),
-        holiday_rule("World Malaria Day", r"world malaria day", || month_day_td(4, 25)),
-        holiday_rule("World Mental Health Day", r"world mental health day", || month_day_td(10, 10)),
-        holiday_rule("World Meteorological Day", r"world meteorological day", || month_day_td(3, 23)),
-        holiday_rule("World No Tobacco Day", r"world no tobacco day", || month_day_td(5, 31)),
-        holiday_rule("World Oceans Day", r"world oceans day", || month_day_td(6, 8)),
-        holiday_rule("World Ovarian Cancer Day", r"world ovarian cancer day", || month_day_td(5, 8)),
-        holiday_rule("World Pneumonia Day", r"world pneumonia day", || month_day_td(11, 12)),
-        holiday_rule("World Poetry Day", r"world poetry day", || month_day_td(3, 21)),
-        holiday_rule("World Population Day", r"world population day", || month_day_td(7, 11)),
+        holiday_rule(
+            "World Genocide Commemoration Day",
+            r"world genocide commemoration day",
+            || month_day_td(12, 9),
+        ),
+        holiday_rule("World Heart Day", r"world heart day", || {
+            month_day_td(9, 29)
+        }),
+        holiday_rule("World Hepatitis Day", r"world hepatitis day", || {
+            month_day_td(7, 28)
+        }),
+        holiday_rule("World Humanitarian Day", r"world humanitarian day", || {
+            month_day_td(8, 19)
+        }),
+        holiday_rule(
+            "World Information Society Day",
+            r"world information society day",
+            || month_day_td(5, 17),
+        ),
+        holiday_rule(
+            "World Intellectual Property Day",
+            r"world intellectual property day",
+            || month_day_td(4, 26),
+        ),
+        holiday_rule("World Malaria Day", r"world malaria day", || {
+            month_day_td(4, 25)
+        }),
+        holiday_rule(
+            "World Mental Health Day",
+            r"world mental health day",
+            || month_day_td(10, 10),
+        ),
+        holiday_rule(
+            "World Meteorological Day",
+            r"world meteorological day",
+            || month_day_td(3, 23),
+        ),
+        holiday_rule("World No Tobacco Day", r"world no tobacco day", || {
+            month_day_td(5, 31)
+        }),
+        holiday_rule("World Oceans Day", r"world oceans day", || {
+            month_day_td(6, 8)
+        }),
+        holiday_rule(
+            "World Ovarian Cancer Day",
+            r"world ovarian cancer day",
+            || month_day_td(5, 8),
+        ),
+        holiday_rule("World Pneumonia Day", r"world pneumonia day", || {
+            month_day_td(11, 12)
+        }),
+        holiday_rule("World Poetry Day", r"world poetry day", || {
+            month_day_td(3, 21)
+        }),
+        holiday_rule("World Population Day", r"world population day", || {
+            month_day_td(7, 11)
+        }),
         holiday_rule("World Post Day", r"world post day", || month_day_td(10, 9)),
-        holiday_rule("World Prematurity Day", r"world prematurity day", || month_day_td(11, 17)),
-        holiday_rule("World Press Freedom Day", r"world press freedom day", || month_day_td(5, 3)),
-        holiday_rule("World Rabies Day", r"world rabies day", || month_day_td(9, 28)),
-        holiday_rule("World Radio Day", r"world radio day", || month_day_td(2, 13)),
-        holiday_rule("World Refugee Day", r"world refugee day", || month_day_td(6, 20)),
-        holiday_rule("World Science Day for Peace and Development", r"world science day for peace and development", || month_day_td(11, 10)),
-        holiday_rule("World Sexual Health Day", r"world sexual health day", || month_day_td(9, 4)),
+        holiday_rule("World Prematurity Day", r"world prematurity day", || {
+            month_day_td(11, 17)
+        }),
+        holiday_rule(
+            "World Press Freedom Day",
+            r"world press freedom day",
+            || month_day_td(5, 3),
+        ),
+        holiday_rule("World Rabies Day", r"world rabies day", || {
+            month_day_td(9, 28)
+        }),
+        holiday_rule("World Radio Day", r"world radio day", || {
+            month_day_td(2, 13)
+        }),
+        holiday_rule("World Refugee Day", r"world refugee day", || {
+            month_day_td(6, 20)
+        }),
+        holiday_rule(
+            "World Science Day for Peace and Development",
+            r"world science day for peace and development",
+            || month_day_td(11, 10),
+        ),
+        holiday_rule(
+            "World Sexual Health Day",
+            r"world sexual health day",
+            || month_day_td(9, 4),
+        ),
         holiday_rule("World Soil Day", r"world soil day", || month_day_td(12, 5)),
-        holiday_rule("World Stroke Day", r"world stroke day", || month_day_td(10, 29)),
-        holiday_rule("World Suicide Prevention Day", r"world suicide prevention day", || month_day_td(9, 10)),
-        holiday_rule("World Teachers' Day", r"world teachers'? day", || month_day_td(10, 5)),
-        holiday_rule("World Television Day", r"world television day", || month_day_td(11, 21)),
-        holiday_rule("World Toilet Day", r"world toilet day", || month_day_td(11, 19)),
-        holiday_rule("World Tourism Day", r"world tourism day", || month_day_td(9, 27)),
-        holiday_rule("World Tuberculosis Day", r"world tuberculosis day", || month_day_td(3, 24)),
+        holiday_rule("World Stroke Day", r"world stroke day", || {
+            month_day_td(10, 29)
+        }),
+        holiday_rule(
+            "World Suicide Prevention Day",
+            r"world suicide prevention day",
+            || month_day_td(9, 10),
+        ),
+        holiday_rule("World Teachers' Day", r"world teachers'? day", || {
+            month_day_td(10, 5)
+        }),
+        holiday_rule("World Television Day", r"world television day", || {
+            month_day_td(11, 21)
+        }),
+        holiday_rule("World Toilet Day", r"world toilet day", || {
+            month_day_td(11, 19)
+        }),
+        holiday_rule("World Tourism Day", r"world tourism day", || {
+            month_day_td(9, 27)
+        }),
+        holiday_rule("World Tuberculosis Day", r"world tuberculosis day", || {
+            month_day_td(3, 24)
+        }),
         holiday_rule("World Tuna Day", r"world tuna day", || month_day_td(5, 2)),
-        holiday_rule("World Vegan Day", r"world vegan day", || month_day_td(11, 1)),
-        holiday_rule("World Vegetarian Day", r"world vegetarian day", || month_day_td(10, 1)),
-        holiday_rule("World Water Day", r"world water day", || month_day_td(3, 22)),
-        holiday_rule("World Wetlands Day", r"world wetlands day", || month_day_td(2, 2)),
-        holiday_rule("World Wildlife Day", r"world wildlife day", || month_day_td(3, 3)),
-        holiday_rule("World Youth Skills Day", r"world youth skills day", || month_day_td(7, 15)),
-        holiday_rule("Zero Discrimination Day", r"zero discrimination day", || month_day_td(3, 1)),
+        holiday_rule("World Vegan Day", r"world vegan day", || {
+            month_day_td(11, 1)
+        }),
+        holiday_rule("World Vegetarian Day", r"world vegetarian day", || {
+            month_day_td(10, 1)
+        }),
+        holiday_rule("World Water Day", r"world water day", || {
+            month_day_td(3, 22)
+        }),
+        holiday_rule("World Wetlands Day", r"world wetlands day", || {
+            month_day_td(2, 2)
+        }),
+        holiday_rule("World Wildlife Day", r"world wildlife day", || {
+            month_day_td(3, 3)
+        }),
+        holiday_rule("World Youth Skills Day", r"world youth skills day", || {
+            month_day_td(7, 15)
+        }),
+        holiday_rule(
+            "Zero Discrimination Day",
+            r"zero discrimination day",
+            || month_day_td(3, 1),
+        ),
         // Fixed day/week/month, year over year (nthDOWOfMonth / predLastOf).
-        holiday_rule("Commonwealth Day", r"commonwealth day", || nth_dow_of_month_td(2, 1, 3)),
-        holiday_rule("Day of Remembrance for Road Traffic Victims", r"(world )?day of remembrance for road traffic victims", || nth_dow_of_month_td(3, 7, 11)),
-        holiday_rule("International Day of Cooperatives", r"international day of co\-?operatives", || nth_dow_of_month_td(1, 6, 7)),
-        holiday_rule("Martin Luther King's Day", r"(MLK|Martin Luther King('?s)?,?)( Jr\.?| Junior)? day|(civil|idaho human) rights day", || nth_dow_of_month_td(3, 1, 1)),
-        holiday_rule("World Habitat Day", r"world habitat day", || nth_dow_of_month_td(1, 1, 10)),
-        holiday_rule("World Kidney Day", r"world kidney day", || nth_dow_of_month_td(2, 4, 3)),
-        holiday_rule("World Leprosy Day", r"world leprosy day", || last_dow_of_month_td(7, 1)),
-        holiday_rule("World Maritime Day", r"world maritime day", || last_dow_of_month_td(4, 9)),
-        holiday_rule("World Migratory Bird Day", r"world migratory bird day", || nth_dow_of_month_td(2, 6, 5)),
-        holiday_rule("World Philosophy Day", r"world philosophy day", || nth_dow_of_month_td(3, 4, 11)),
-        holiday_rule("World Religion Day", r"world religion day", || nth_dow_of_month_td(3, 7, 1)),
-        holiday_rule("World Sight Day", r"world sight day", || nth_dow_of_month_td(2, 4, 10)),
+        holiday_rule("Commonwealth Day", r"commonwealth day", || {
+            nth_dow_of_month_td(2, 1, 3)
+        }),
+        holiday_rule(
+            "Day of Remembrance for Road Traffic Victims",
+            r"(world )?day of remembrance for road traffic victims",
+            || nth_dow_of_month_td(3, 7, 11),
+        ),
+        holiday_rule(
+            "International Day of Cooperatives",
+            r"international day of co\-?operatives",
+            || nth_dow_of_month_td(1, 6, 7),
+        ),
+        holiday_rule(
+            "Martin Luther King's Day",
+            r"(MLK|Martin Luther King('?s)?,?)( Jr\.?| Junior)? day|(civil|idaho human) rights day",
+            || nth_dow_of_month_td(3, 1, 1),
+        ),
+        holiday_rule("World Habitat Day", r"world habitat day", || {
+            nth_dow_of_month_td(1, 1, 10)
+        }),
+        holiday_rule("World Kidney Day", r"world kidney day", || {
+            nth_dow_of_month_td(2, 4, 3)
+        }),
+        holiday_rule("World Leprosy Day", r"world leprosy day", || {
+            last_dow_of_month_td(7, 1)
+        }),
+        holiday_rule("World Maritime Day", r"world maritime day", || {
+            last_dow_of_month_td(4, 9)
+        }),
+        holiday_rule(
+            "World Migratory Bird Day",
+            r"world migratory bird day",
+            || nth_dow_of_month_td(2, 6, 5),
+        ),
+        holiday_rule("World Philosophy Day", r"world philosophy day", || {
+            nth_dow_of_month_td(3, 4, 11)
+        }),
+        holiday_rule("World Religion Day", r"world religion day", || {
+            nth_dow_of_month_td(3, 7, 1)
+        }),
+        holiday_rule("World Sight Day", r"world sight day", || {
+            nth_dow_of_month_td(2, 4, 10)
+        }),
         // The day after Thanksgiving (4th Thursday of November + 1 day).
         holiday_rule("Black Friday", r"black frid?day", || {
             cycle_nth_after_td(false, Grain::Day, 1, &nth_dow_of_month_td(4, 4, 11))
         }),
         // Thanksgiving Day is corpus-exercised (EN/US Rules.hs); kept from the
         // prior baseline so its passing cases do not regress.
-        holiday_rule("Thanksgiving Day", r"thanks?giving( day)?", || nth_dow_of_month_td(4, 4, 11)),
+        holiday_rule("Thanksgiving Day", r"thanks?giving( day)?", || {
+            nth_dow_of_month_td(4, 4, 11)
+        }),
     ]
 }
 
@@ -3294,7 +4122,11 @@ fn precision_and_era_rules() -> Vec<Rule> {
                     Token::RegexMatch(g) => g.first()?,
                     _ => return None,
                 };
-                let y = if ab.to_lowercase().starts_with('b') { -y } else { y };
+                let y = if ab.to_lowercase().starts_with('b') {
+                    -y
+                } else {
+                    y
+                };
                 Some(Token::Time(TimeData::new(year_pred(y), Grain::Year)))
             }),
         },
@@ -3325,7 +4157,12 @@ fn precision_and_era_rules() -> Vec<Rule> {
 
 pub fn en_rules(locale: Locale) -> Vec<Rule> {
     let mut rules = vec![
-        instant("now", Grain::Second, 0, r"(right |just )?now|at\s+the\s+moment|atm"),
+        instant(
+            "now",
+            Grain::Second,
+            0,
+            r"(right |just )?now|at\s+the\s+moment|atm",
+        ),
         instant("today", Grain::Day, 0, r"todays?|at\s+this\s+time"),
         instant("tomorrow", Grain::Day, 1, r"tmrw?|tomm?or?rows?"),
         instant("yesterday", Grain::Day, -1, r"yesterdays?"),

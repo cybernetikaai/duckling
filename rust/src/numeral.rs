@@ -19,7 +19,12 @@ pub struct NumeralData {
 
 impl NumeralData {
     pub fn new(value: f64, ok_for_time: bool) -> Self {
-        NumeralData { value, ok_for_time, grain: None, multipliable: false }
+        NumeralData {
+            value,
+            ok_for_time,
+            grain: None,
+            multipliable: false,
+        }
     }
 }
 
@@ -39,15 +44,42 @@ pub fn ok_for_time(n: &NumeralData) -> bool {
 const INFORMAL: &[&str] = &["single", "couple", "pair", "few", "dozen"];
 
 const UNITS: &[(&str, i64)] = &[
-    ("zero", 0), ("one", 1), ("single", 1), ("two", 2), ("couple", 2), ("pair", 2),
-    ("three", 3), ("few", 3), ("four", 4), ("five", 5), ("six", 6), ("seven", 7),
-    ("eight", 8), ("nine", 9), ("ten", 10), ("eleven", 11), ("twelve", 12),
-    ("dozen", 12), ("thirteen", 13), ("fourteen", 14), ("fifteen", 15),
-    ("sixteen", 16), ("seventeen", 17), ("eighteen", 18), ("nineteen", 19),
+    ("zero", 0),
+    ("one", 1),
+    ("single", 1),
+    ("two", 2),
+    ("couple", 2),
+    ("pair", 2),
+    ("three", 3),
+    ("few", 3),
+    ("four", 4),
+    ("five", 5),
+    ("six", 6),
+    ("seven", 7),
+    ("eight", 8),
+    ("nine", 9),
+    ("ten", 10),
+    ("eleven", 11),
+    ("twelve", 12),
+    ("dozen", 12),
+    ("thirteen", 13),
+    ("fourteen", 14),
+    ("fifteen", 15),
+    ("sixteen", 16),
+    ("seventeen", 17),
+    ("eighteen", 18),
+    ("nineteen", 19),
 ];
 const TENS: &[(&str, i64)] = &[
-    ("twenty", 20), ("thirty", 30), ("forty", 40), ("fourty", 40), ("fifty", 50),
-    ("sixty", 60), ("seventy", 70), ("eighty", 80), ("ninety", 90),
+    ("twenty", 20),
+    ("thirty", 30),
+    ("forty", 40),
+    ("fourty", 40),
+    ("fifty", 50),
+    ("sixty", 60),
+    ("seventy", 70),
+    ("eighty", 80),
+    ("ninety", 90),
 ];
 
 fn from_table(table: &[(&str, i64)], w: &str) -> Option<i64> {
@@ -114,7 +146,10 @@ pub fn numeral_rules() -> Vec<Rule> {
                 let w = w.strip_suffix(" of").unwrap_or(w);
                 let w = w.trim_end_matches('s');
                 let v = from_table(UNITS, w)?;
-                Some(Token::Numeral(NumeralData::new(v as f64, !INFORMAL.contains(&w))))
+                Some(Token::Numeral(NumeralData::new(
+                    v as f64,
+                    !INFORMAL.contains(&w),
+                )))
             }),
         },
         // 20..90

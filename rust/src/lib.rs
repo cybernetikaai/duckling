@@ -4,19 +4,19 @@
 //! is the oracle; every rule is driven red->green against it. See
 //! `docs/superpowers/plans/2026-06-30-duckling-rust-en-time.md`.
 
-pub mod grain;
 pub mod document;
 pub mod duration;
-pub mod regex;
-pub mod types;
 pub mod engine;
+pub mod grain;
 pub mod json;
 pub mod numeral;
 pub mod ordinal;
 pub mod ranking;
+pub mod regex;
 pub mod resolve;
 pub mod time;
 pub mod timegrain;
+pub mod types;
 
 pub use resolve::{Entity, ResolveContext};
 

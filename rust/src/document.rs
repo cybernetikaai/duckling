@@ -10,7 +10,10 @@ pub struct Document {
 
 impl Document {
     pub fn new(s: &str) -> Self {
-        Document { text: s.to_string(), chars: s.chars().collect() }
+        Document {
+            text: s.to_string(),
+            chars: s.chars().collect(),
+        }
     }
 
     pub fn len(&self) -> usize {
@@ -46,7 +49,9 @@ impl Document {
     pub fn is_adjacent(&self, prev_end: usize, next_start: usize) -> bool {
         next_start >= prev_end
             && next_start <= self.chars.len()
-            && self.chars[prev_end..next_start].iter().all(|c| c.is_whitespace())
+            && self.chars[prev_end..next_start]
+                .iter()
+                .all(|c| c.is_whitespace())
     }
 
     /// Translate a byte offset (from regex matches on `text`) to a char index.

@@ -13,12 +13,32 @@ pub struct OrdinalData {
 /// `ordinalsMap` (first..ninetieth). Also the units table for composites.
 fn base_ordinal(w: &str) -> Option<i64> {
     Some(match w {
-        "first" => 1, "second" => 2, "third" => 3, "fourth" => 4, "fifth" => 5,
-        "sixth" => 6, "seventh" => 7, "eighth" => 8, "ninth" => 9, "tenth" => 10,
-        "eleventh" => 11, "twelfth" => 12, "thirteenth" => 13, "fourteenth" => 14,
-        "fifteenth" => 15, "sixteenth" => 16, "seventeenth" => 17, "eighteenth" => 18,
-        "nineteenth" => 19, "twentieth" => 20, "thirtieth" => 30, "fortieth" => 40,
-        "fiftieth" => 50, "sixtieth" => 60, "seventieth" => 70, "eightieth" => 80,
+        "first" => 1,
+        "second" => 2,
+        "third" => 3,
+        "fourth" => 4,
+        "fifth" => 5,
+        "sixth" => 6,
+        "seventh" => 7,
+        "eighth" => 8,
+        "ninth" => 9,
+        "tenth" => 10,
+        "eleventh" => 11,
+        "twelfth" => 12,
+        "thirteenth" => 13,
+        "fourteenth" => 14,
+        "fifteenth" => 15,
+        "sixteenth" => 16,
+        "seventeenth" => 17,
+        "eighteenth" => 18,
+        "nineteenth" => 19,
+        "twentieth" => 20,
+        "thirtieth" => 30,
+        "fortieth" => 40,
+        "fiftieth" => 50,
+        "sixtieth" => 60,
+        "seventieth" => 70,
+        "eightieth" => 80,
         "ninetieth" => 90,
         _ => return None,
     })
@@ -27,8 +47,14 @@ fn base_ordinal(w: &str) -> Option<i64> {
 /// `cardinalsMap` (tens) for the composite rule.
 fn tens(w: &str) -> Option<i64> {
     Some(match w {
-        "twenty" => 20, "thirty" => 30, "forty" => 40, "fifty" => 50,
-        "sixty" => 60, "seventy" => 70, "eighty" => 80, "ninety" => 90,
+        "twenty" => 20,
+        "thirty" => 30,
+        "forty" => 40,
+        "fifty" => 50,
+        "sixty" => 60,
+        "seventy" => 70,
+        "eighty" => 80,
+        "ninety" => 90,
         _ => return None,
     })
 }
@@ -52,7 +78,9 @@ pub fn ordinal_rules() -> Vec<Rule> {
         },
         // ruleCompositeOrdinals — tens + units ("twenty-first", "twenty fifth", "thirtythird")
         Rule {
-            name: "ordinals (composite, e.g. eighty-seven, forty—seventh, twenty ninth, thirtythird)".into(),
+            name:
+                "ordinals (composite, e.g. eighty-seven, forty—seventh, twenty ninth, thirtythird)"
+                    .into(),
             pattern: vec![PatternItem::Regex(compile(
                 r"(twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)[\s\-\—]?(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)",
             ))],

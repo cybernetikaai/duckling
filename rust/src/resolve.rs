@@ -82,11 +82,23 @@ pub fn resolve_time(td: &TimeData, ctx: &ResolveContext) -> Option<serde_json::V
     let ref_zoned = ctx.reference.to_zoned(ctx.zone.clone());
     let ref_dt = ref_zoned.datetime();
     let ref_offset_minutes = (ref_zoned.offset().seconds() / 60) as i64;
-    let ref_time = TimeObject { start: ref_dt, grain: Grain::Second, end: None };
+    let ref_time = TimeObject {
+        start: ref_dt,
+        grain: Grain::Second,
+        end: None,
+    };
     let tc = TimeContext {
         ref_time,
-        min_time: TimeObject { start: add(ref_dt, Grain::Year, -2000), grain: Grain::Second, end: None },
-        max_time: TimeObject { start: add(ref_dt, Grain::Year, 2000), grain: Grain::Second, end: None },
+        min_time: TimeObject {
+            start: add(ref_dt, Grain::Year, -2000),
+            grain: Grain::Second,
+            end: None,
+        },
+        max_time: TimeObject {
+            start: add(ref_dt, Grain::Year, 2000),
+            grain: Grain::Second,
+            end: None,
+        },
         ref_offset_minutes,
     };
     // --- Primary resolution (`chosen`) — the validated single-occurrence logic. ---
@@ -133,9 +145,10 @@ pub fn resolve_time(td: &TimeData, ctx: &ResolveContext) -> Option<serde_json::V
         }
         v.extend(vfut.by_ref().take(3usize.saturating_sub(v.len())));
         if v.is_empty()
-            && let Some(b) = first_past {
-                v.push(b);
-            }
+            && let Some(b) = first_past
+        {
+            v.push(b);
+        }
         v
     };
 
@@ -145,7 +158,12 @@ pub fn resolve_time(td: &TimeData, ctx: &ResolveContext) -> Option<serde_json::V
     let occ_json = |occ: &TimeObject| -> serde_json::Value {
         let off = zone_offset(occ.start, &ctx.zone);
         if let Some(dir) = td.direction {
-            open_interval_value(occ.start, off, occ.grain, matches!(dir, IntervalDirection::After))
+            open_interval_value(
+                occ.start,
+                off,
+                occ.grain,
+                matches!(dir, IntervalDirection::After),
+            )
         } else {
             match occ.end {
                 Some(end) => {
@@ -160,7 +178,10 @@ pub fn resolve_time(td: &TimeData, ctx: &ResolveContext) -> Option<serde_json::V
     let mut value = occ_json(&chosen);
     if let serde_json::Value::Object(o) = &mut value {
         if let Some(h) = &td.holiday {
-            o.insert("holidayBeta".to_string(), serde_json::Value::String(h.clone()));
+            o.insert(
+                "holidayBeta".to_string(),
+                serde_json::Value::String(h.clone()),
+            );
         }
         o.insert("values".to_string(), serde_json::Value::Array(values));
     }

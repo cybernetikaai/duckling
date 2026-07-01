@@ -40,7 +40,11 @@ pub fn parse_string(rules: &[Rule], doc: &Document) -> Vec<Node> {
     // produces everything it ever will in the first round; skip it thereafter.
     let has_predicate: Vec<bool> = rules
         .iter()
-        .map(|r| r.pattern.iter().any(|it| matches!(it, PatternItem::Predicate(_))))
+        .map(|r| {
+            r.pattern
+                .iter()
+                .any(|it| matches!(it, PatternItem::Predicate(_)))
+        })
         .collect();
 
     let mut stash: Vec<Node> = Vec::new();

@@ -34,7 +34,11 @@ impl Re {
                 continue;
             }
             let groups = (1..cap.len())
-                .map(|i| cap.get(i).map(|m| m.as_str().to_string()).unwrap_or_default())
+                .map(|i| {
+                    cap.get(i)
+                        .map(|m| m.as_str().to_string())
+                        .unwrap_or_default()
+                })
                 .collect();
             out.push(RegexHit { start, end, groups });
         }

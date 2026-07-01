@@ -9,7 +9,7 @@ use std::rc::Rc;
 
 use crate::grain::{Grain, add, lower, round as grain_round};
 use crate::time::object::{
-    IntervalType, TimeObject, time_before, time_interval, time_intersect, time_plus, time_plus_end,
+    IntervalType, TimeObject, time_before, time_intersect, time_interval, time_plus, time_plus_end,
     time_round, time_starting_at_the_end_of, time_starts_before_end_of,
 };
 use jiff::civil::DateTime;
@@ -71,11 +71,21 @@ fn time_sequence(grain: Grain, step: i64, anchor: TimeObject) -> (BoxIter, BoxIt
 pub fn cycle_nth(g: Grain, n: i64) -> Predicate {
     Predicate::Series(Rc::new(move |t: TimeObject, ctx: &TimeContext| {
         let base = ctx.ref_time;
-        let anchor = TimeObject { start: add(grain_round(base.start, g), g, n), grain: g, end: None };
+        let anchor = TimeObject {
+            start: add(grain_round(base.start, g), g, n),
+            grain: g,
+            end: None,
+        };
         if time_starts_before_end_of(t, anchor) {
-            (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::once(anchor)) as BoxIter)
+            (
+                Box::new(std::iter::empty()) as BoxIter,
+                Box::new(std::iter::once(anchor)) as BoxIter,
+            )
         } else {
-            (Box::new(std::iter::once(anchor)) as BoxIter, Box::new(std::iter::empty()) as BoxIter)
+            (
+                Box::new(std::iter::once(anchor)) as BoxIter,
+                Box::new(std::iter::empty()) as BoxIter,
+            )
         }
     }))
 }
@@ -116,7 +126,11 @@ pub fn month(n: i64) -> Predicate {
 pub fn hour(is12h: bool, ampm: Option<Ampm>, n: i64) -> Predicate {
     Predicate::Series(Rc::new(move |t: TimeObject, _ctx| {
         let h = t.start.hour() as i64;
-        let step: i64 = if is12h && n <= 12 && ampm.is_none() { 12 } else { 24 };
+        let step: i64 = if is12h && n <= 12 && ampm.is_none() {
+            12
+        } else {
+            24
+        };
         let n2 = match ampm {
             Some(Ampm::Am) => n.rem_euclid(12),
             Some(Ampm::Pm) => n.rem_euclid(12) + 12,
@@ -170,11 +184,19 @@ pub fn intersect(fine: Predicate, coarse: Predicate) -> Predicate {
             .take(SAFE_MAX)
             .flat_map(move |time1| compose_one(&f_fwd, time1, ref_t, ref_off))
             .collect();
-        (Box::new(back.into_iter()) as BoxIter, Box::new(fwd.into_iter()) as BoxIter)
+        (
+            Box::new(back.into_iter()) as BoxIter,
+            Box::new(fwd.into_iter()) as BoxIter,
+        )
     }))
 }
 
-fn compose_one(fine: &Predicate, time1: TimeObject, ref_time: TimeObject, ref_off: i64) -> Vec<TimeObject> {
+fn compose_one(
+    fine: &Predicate,
+    time1: TimeObject,
+    ref_time: TimeObject,
+    ref_off: i64,
+) -> Vec<TimeObject> {
     // Duckling's fixedRange keeps the original reference time and only clamps
     // min/max to the segment. Preds that anchor at `now` (dow/month/dom/hour)
     // use `time1`; preds anchored at the reference (in_duration, cycle_nth) must
@@ -211,9 +233,15 @@ pub fn year(n: i64) -> Predicate {
             end: None,
         };
         if tyear <= n {
-            (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::once(y)) as BoxIter)
+            (
+                Box::new(std::iter::empty()) as BoxIter,
+                Box::new(std::iter::once(y)) as BoxIter,
+            )
         } else {
-            (Box::new(std::iter::once(y)) as BoxIter, Box::new(std::iter::empty()) as BoxIter)
+            (
+                Box::new(std::iter::once(y)) as BoxIter,
+                Box::new(std::iter::empty()) as BoxIter,
+            )
         }
     }))
 }
@@ -225,11 +253,18 @@ pub fn day_of_month(n: i64) -> Predicate {
         // No month has >31 days; an out-of-range n would make `enough_days`
         // reject forever (infinite filter). Yield nothing instead.
         if !(1..=31).contains(&n) {
-            return (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::empty()) as BoxIter);
+            return (
+                Box::new(std::iter::empty()) as BoxIter,
+                Box::new(std::iter::empty()) as BoxIter,
+            );
         }
         let rounded = time_round(t, Grain::Month);
         let dom = t.start.day() as i64;
-        let anchor = if dom <= n { rounded } else { time_plus(rounded, Grain::Month, 1) };
+        let anchor = if dom <= n {
+            rounded
+        } else {
+            time_plus(rounded, Grain::Month, 1)
+        };
         let fwd = successors(Some(anchor), |p| Some(time_plus(*p, Grain::Month, 1)))
             .filter(move |to: &TimeObject| n <= to.start.date().days_in_month() as i64)
             .map(move |to| time_plus(to, Grain::Day, n - 1));
@@ -251,9 +286,13 @@ pub fn ampm_predicate(is_am: bool) -> Predicate {
         let anchor_start = time_plus(rounded, Grain::Hour, n);
         let anchor_end = time_plus(anchor_start, Grain::Hour, 12);
         let anchor = time_interval(IntervalType::Open, anchor_start, anchor_end);
-        let fwd = successors(Some(anchor), move |p| Some(time_plus_end(*p, Grain::Hour, 24)));
+        let fwd = successors(Some(anchor), move |p| {
+            Some(time_plus_end(*p, Grain::Hour, 24))
+        });
         let prev = time_plus_end(anchor, Grain::Hour, -24);
-        let past = successors(Some(prev), move |p| Some(time_plus_end(*p, Grain::Hour, -24)));
+        let past = successors(Some(prev), move |p| {
+            Some(time_plus_end(*p, Grain::Hour, -24))
+        });
         (Box::new(past) as BoxIter, Box::new(fwd) as BoxIter)
     }))
 }
@@ -265,11 +304,21 @@ pub fn in_duration(value: i64, grain: Grain) -> Predicate {
     Predicate::Series(Rc::new(move |t: TimeObject, ctx: &TimeContext| {
         let lg = lower(grain);
         let start = add(grain_round(ctx.ref_time.start, lg), grain, value);
-        let obj = TimeObject { start, grain: lg, end: None };
+        let obj = TimeObject {
+            start,
+            grain: lg,
+            end: None,
+        };
         if time_starts_before_end_of(t, obj) {
-            (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::once(obj)) as BoxIter)
+            (
+                Box::new(std::iter::empty()) as BoxIter,
+                Box::new(std::iter::once(obj)) as BoxIter,
+            )
         } else {
-            (Box::new(std::iter::once(obj)) as BoxIter, Box::new(std::iter::empty()) as BoxIter)
+            (
+                Box::new(std::iter::once(obj)) as BoxIter,
+                Box::new(std::iter::empty()) as BoxIter,
+            )
         }
     }))
 }
@@ -283,7 +332,10 @@ pub fn time_computed(dates: Vec<TimeObject>) -> Predicate {
         let mut past: Vec<TimeObject> = dates[..idx].to_vec();
         past.reverse();
         let future: Vec<TimeObject> = dates[idx..].to_vec();
-        (Box::new(past.into_iter()) as BoxIter, Box::new(future.into_iter()) as BoxIter)
+        (
+            Box::new(past.into_iter()) as BoxIter,
+            Box::new(future.into_iter()) as BoxIter,
+        )
     }))
 }
 
@@ -319,8 +371,14 @@ pub fn shift_timezone(provided_minutes: i64, inner: Predicate) -> Predicate {
 pub fn floor_grain_to_minute(inner: Predicate) -> Predicate {
     Predicate::Series(Rc::new(move |t: TimeObject, ctx: &TimeContext| {
         let (past, future) = inner.run(t, ctx);
-        let m = |o: TimeObject| TimeObject { grain: o.grain.min(Grain::Minute), ..o };
-        (Box::new(past.map(m)) as BoxIter, Box::new(future.map(m)) as BoxIter)
+        let m = |o: TimeObject| TimeObject {
+            grain: o.grain.min(Grain::Minute),
+            ..o
+        };
+        (
+            Box::new(past.map(m)) as BoxIter,
+            Box::new(future.map(m)) as BoxIter,
+        )
     }))
 }
 
@@ -343,7 +401,9 @@ pub fn cycle_n(not_immediate: bool, grain: Grain, n: i64) -> Predicate {
         let slot: Option<TimeObject> = if n >= 0 {
             let mut fut: Vec<TimeObject> = future.take(n as usize + 2).collect();
             if not_immediate
-                && fut.first().is_some_and(|a| time_intersect(*a, base).is_some())
+                && fut
+                    .first()
+                    .is_some_and(|a| time_intersect(*a, base).is_some())
                 && !fut.is_empty()
             {
                 fut.remove(0);
@@ -360,13 +420,18 @@ pub fn cycle_n(not_immediate: bool, grain: Grain, n: i64) -> Predicate {
             }
         };
         match slot {
-            Some(nth) if time_starts_before_end_of(t, nth) => {
-                (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::once(nth)) as BoxIter)
-            }
-            Some(nth) => {
-                (Box::new(std::iter::once(nth)) as BoxIter, Box::new(std::iter::empty()) as BoxIter)
-            }
-            None => (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::empty()) as BoxIter),
+            Some(nth) if time_starts_before_end_of(t, nth) => (
+                Box::new(std::iter::empty()) as BoxIter,
+                Box::new(std::iter::once(nth)) as BoxIter,
+            ),
+            Some(nth) => (
+                Box::new(std::iter::once(nth)) as BoxIter,
+                Box::new(std::iter::empty()) as BoxIter,
+            ),
+            None => (
+                Box::new(std::iter::empty()) as BoxIter,
+                Box::new(std::iter::empty()) as BoxIter,
+            ),
         }
     }))
 }
@@ -392,7 +457,10 @@ where
 
     let ends_after_now = |x: &TimeObject| time_starts_before_end_of(now, *x);
 
-    let sp = past1.iter().position(|x| !ends_after_now(x)).unwrap_or(past1.len());
+    let sp = past1
+        .iter()
+        .position(|x| !ends_after_now(x))
+        .unwrap_or(past1.len());
     let new_future = past1[..sp].to_vec();
     let old_past: Vec<TimeObject> = past1[sp..]
         .iter()
@@ -400,7 +468,10 @@ where
         .take_while(|x| time_starts_before_end_of(ctx.min_time, *x))
         .collect();
 
-    let bp = future1.iter().position(ends_after_now).unwrap_or(future1.len());
+    let bp = future1
+        .iter()
+        .position(ends_after_now)
+        .unwrap_or(future1.len());
     let new_past = future1[..bp].to_vec();
     let old_future: Vec<TimeObject> = future1[bp..]
         .iter()
@@ -425,19 +496,31 @@ pub fn time_intervals(kind: IntervalType, pred1: Predicate, pred2: Predicate) ->
     Predicate::Series(Rc::new(move |now: TimeObject, ctx: &TimeContext| {
         let f = |segment: TimeObject| -> Option<TimeObject> {
             let (_p, mut fut2) = pred2.run(segment, ctx);
-            fut2.next().map(|first_future| time_interval(kind, segment, first_future))
+            fut2.next()
+                .map(|first_future| time_interval(kind, segment, first_future))
         };
         let (past, future) = seq_map(true, f, &pred1, now, ctx);
-        (Box::new(past.into_iter()) as BoxIter, Box::new(future.into_iter()) as BoxIter)
+        (
+            Box::new(past.into_iter()) as BoxIter,
+            Box::new(future.into_iter()) as BoxIter,
+        )
     }))
 }
 
 /// nth occurrence of `cyclic` within/after each `base` occurrence (takeNthAfter).
 /// e.g. predNthAfter(3, Thursday, November) = the 4th Thursday = Thanksgiving.
-pub fn take_nth_after(n: i64, not_immediate: bool, cyclic: Predicate, base: Predicate) -> Predicate {
+pub fn take_nth_after(
+    n: i64,
+    not_immediate: bool,
+    cyclic: Predicate,
+    base: Predicate,
+) -> Predicate {
     Predicate::Series(Rc::new(move |now: TimeObject, ctx: &TimeContext| {
         if n.unsigned_abs() > MAX_NTH {
-            return (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::empty()) as BoxIter);
+            return (
+                Box::new(std::iter::empty()) as BoxIter,
+                Box::new(std::iter::empty()) as BoxIter,
+            );
         }
         let f = |t: TimeObject| -> Option<TimeObject> {
             let (mut past, future) = cyclic.run(t, ctx);
@@ -454,7 +537,10 @@ pub fn take_nth_after(n: i64, not_immediate: bool, cyclic: Predicate, base: Pred
             }
         };
         let (past, future) = seq_map(false, f, &base, now, ctx);
-        (Box::new(past.into_iter()) as BoxIter, Box::new(future.into_iter()) as BoxIter)
+        (
+            Box::new(past.into_iter()) as BoxIter,
+            Box::new(future.into_iter()) as BoxIter,
+        )
     }))
 }
 
@@ -490,7 +576,11 @@ fn season_obj(s: (i16, usize)) -> TimeObject {
     let start = season_start_date(y, idx);
     let (ny, nidx) = next_season_idx(y, idx);
     let end = season_start_date(ny, nidx).yesterday().unwrap();
-    TimeObject { start: start.at(0, 0, 0, 0), grain: Grain::Day, end: Some(end.at(0, 0, 0, 0)) }
+    TimeObject {
+        start: start.at(0, 0, 0, 0),
+        grain: Grain::Day,
+        end: Some(end.at(0, 0, 0, 0)),
+    }
 }
 
 /// Cycle through the four astronomical seasons (port of seasonPredicate).
@@ -544,7 +634,10 @@ pub fn take_nth_closest(n: i64, cyclic: Predicate, base: Predicate) -> Predicate
             res
         };
         let (past, future) = seq_map(false, f, &base, now, ctx);
-        (Box::new(past.into_iter()) as BoxIter, Box::new(future.into_iter()) as BoxIter)
+        (
+            Box::new(past.into_iter()) as BoxIter,
+            Box::new(future.into_iter()) as BoxIter,
+        )
     }))
 }
 
@@ -558,7 +651,10 @@ pub fn merge_duration(base: Predicate, value: i64, grain: Grain) -> Predicate {
             Some(time_plus(t2, grain, value))
         };
         let (past, future) = seq_map(false, f, &base, now, ctx);
-        (Box::new(past.into_iter()) as BoxIter, Box::new(future.into_iter()) as BoxIter)
+        (
+            Box::new(past.into_iter()) as BoxIter,
+            Box::new(future.into_iter()) as BoxIter,
+        )
     }))
 }
 
@@ -570,21 +666,29 @@ pub fn shift_duration(base: Predicate, value: i64, grain: Grain) -> Predicate {
             Some(time_plus(time_round(x, lower(grain)), grain, value))
         };
         let (past, future) = seq_map(false, f, &base, now, ctx);
-        (Box::new(past.into_iter()) as BoxIter, Box::new(future.into_iter()) as BoxIter)
+        (
+            Box::new(past.into_iter()) as BoxIter,
+            Box::new(future.into_iter()) as BoxIter,
+        )
     }))
 }
 
 pub fn take_nth(n: i64, not_immediate: bool, pred: Predicate) -> Predicate {
     Predicate::Series(Rc::new(move |t: TimeObject, ctx: &TimeContext| {
         if n.unsigned_abs() > MAX_NTH {
-            return (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::empty()) as BoxIter);
+            return (
+                Box::new(std::iter::empty()) as BoxIter,
+                Box::new(std::iter::empty()) as BoxIter,
+            );
         }
         let base = ctx.ref_time;
         let (mut past, future) = pred.run(base, ctx);
         let nth = if n >= 0 {
             let fut: Vec<TimeObject> = future.take((n as usize) + 2).collect();
             let drop_n = if not_immediate
-                && fut.first().is_some_and(|a| time_intersect(*a, base).is_some())
+                && fut
+                    .first()
+                    .is_some_and(|a| time_intersect(*a, base).is_some())
             {
                 (n as usize) + 1
             } else {
@@ -595,13 +699,18 @@ pub fn take_nth(n: i64, not_immediate: bool, pred: Predicate) -> Predicate {
             past.nth(((-n) - 1) as usize)
         };
         match nth {
-            None => (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::empty()) as BoxIter),
-            Some(o) if time_starts_before_end_of(t, o) => {
-                (Box::new(std::iter::empty()) as BoxIter, Box::new(std::iter::once(o)) as BoxIter)
-            }
-            Some(o) => {
-                (Box::new(std::iter::once(o)) as BoxIter, Box::new(std::iter::empty()) as BoxIter)
-            }
+            None => (
+                Box::new(std::iter::empty()) as BoxIter,
+                Box::new(std::iter::empty()) as BoxIter,
+            ),
+            Some(o) if time_starts_before_end_of(t, o) => (
+                Box::new(std::iter::empty()) as BoxIter,
+                Box::new(std::iter::once(o)) as BoxIter,
+            ),
+            Some(o) => (
+                Box::new(std::iter::once(o)) as BoxIter,
+                Box::new(std::iter::empty()) as BoxIter,
+            ),
         }
     }))
 }
@@ -615,7 +724,10 @@ pub fn take_last_of(cyclic: Predicate, base: Predicate) -> Predicate {
             past.next()
         };
         let (past, future) = seq_map(false, f, &base, now, ctx);
-        (Box::new(past.into_iter()) as BoxIter, Box::new(future.into_iter()) as BoxIter)
+        (
+            Box::new(past.into_iter()) as BoxIter,
+            Box::new(future.into_iter()) as BoxIter,
+        )
     }))
 }
 
@@ -624,8 +736,17 @@ mod tests {
     use super::*;
     use jiff::civil::date;
     fn tctx(y: i16, mo: i8, da: i8, h: i8, mi: i8, s: i8) -> TimeContext {
-        let now = TimeObject { start: date(y, mo, da).at(h, mi, s, 0), grain: Grain::Second, end: None };
-        TimeContext { ref_time: now, min_time: now, max_time: now, ref_offset_minutes: -120 }
+        let now = TimeObject {
+            start: date(y, mo, da).at(h, mi, s, 0),
+            grain: Grain::Second,
+            end: None,
+        };
+        TimeContext {
+            ref_time: now,
+            min_time: now,
+            max_time: now,
+            ref_offset_minutes: -120,
+        }
     }
     /// Resolution-style pick: first future occurrence, else first past.
     fn future_head(p: &Predicate, ctx: &TimeContext) -> TimeObject {
@@ -635,16 +756,31 @@ mod tests {
     #[test]
     fn cycle_nth_instants() {
         let ctx = tctx(2013, 2, 12, 4, 30, 0);
-        assert_eq!(future_head(&cycle_nth(Grain::Day, 0), &ctx).start, date(2013, 2, 12).at(0, 0, 0, 0));
-        assert_eq!(future_head(&cycle_nth(Grain::Day, 1), &ctx).start, date(2013, 2, 13).at(0, 0, 0, 0));
-        assert_eq!(future_head(&cycle_nth(Grain::Day, -1), &ctx).start, date(2013, 2, 11).at(0, 0, 0, 0));
-        assert_eq!(future_head(&cycle_nth(Grain::Second, 0), &ctx).start, date(2013, 2, 12).at(4, 30, 0, 0));
+        assert_eq!(
+            future_head(&cycle_nth(Grain::Day, 0), &ctx).start,
+            date(2013, 2, 12).at(0, 0, 0, 0)
+        );
+        assert_eq!(
+            future_head(&cycle_nth(Grain::Day, 1), &ctx).start,
+            date(2013, 2, 13).at(0, 0, 0, 0)
+        );
+        assert_eq!(
+            future_head(&cycle_nth(Grain::Day, -1), &ctx).start,
+            date(2013, 2, 11).at(0, 0, 0, 0)
+        );
+        assert_eq!(
+            future_head(&cycle_nth(Grain::Second, 0), &ctx).start,
+            date(2013, 2, 12).at(4, 30, 0, 0)
+        );
     }
     #[test]
     fn day_of_week_picks_next() {
         let ctx = tctx(2013, 2, 12, 4, 30, 0); // Tuesday
         // next Monday after Tue Feb 12 is Feb 18
-        assert_eq!(future_head(&day_of_week(1), &ctx).start, date(2013, 2, 18).at(0, 0, 0, 0));
+        assert_eq!(
+            future_head(&day_of_week(1), &ctx).start,
+            date(2013, 2, 18).at(0, 0, 0, 0)
+        );
     }
     #[test]
     fn month_picks_current_february() {
@@ -655,11 +791,21 @@ mod tests {
     }
     #[test]
     fn hour_minute_composes() {
-        let now = TimeObject { start: date(2013, 2, 12).at(4, 30, 0, 0), grain: Grain::Second, end: None };
+        let now = TimeObject {
+            start: date(2013, 2, 12).at(4, 30, 0, 0),
+            grain: Grain::Second,
+            end: None,
+        };
         let ctx = TimeContext {
             ref_time: now,
-            min_time: TimeObject { start: date(2011, 2, 12).at(4, 30, 0, 0), ..now },
-            max_time: TimeObject { start: date(2015, 2, 12).at(4, 30, 0, 0), ..now },
+            min_time: TimeObject {
+                start: date(2011, 2, 12).at(4, 30, 0, 0),
+                ..now
+            },
+            max_time: TimeObject {
+                start: date(2015, 2, 12).at(4, 30, 0, 0),
+                ..now
+            },
             ref_offset_minutes: -120,
         };
         let h = future_head(&hour_minute(true, 4, 23), &ctx);

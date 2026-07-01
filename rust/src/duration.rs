@@ -45,7 +45,10 @@ fn with_grain_value(g: Grain, d: &DurationData) -> i64 {
 /// the `instance Semigroup DurationData`). "2 years" <> "3 months" = 27 months.
 fn merge(a: &DurationData, b: &DurationData) -> DurationData {
     let g = a.grain.min(b.grain);
-    DurationData { value: with_grain_value(g, a) + with_grain_value(g, b), grain: g }
+    DurationData {
+        value: with_grain_value(g, a) + with_grain_value(g, b),
+        grain: g,
+    }
 }
 
 fn is_a_duration(t: &Token) -> bool {
@@ -78,9 +81,7 @@ fn is_natural(t: &Token) -> bool {
     matches!(t, Token::Numeral(n) if crate::numeral::int_value(n).is_some_and(|v| v >= 0))
 }
 fn is_natural_between(lo: i64, hi: i64) -> impl Fn(&Token) -> bool {
-    move |t: &Token| {
-        matches!(t, Token::Numeral(n) if crate::numeral::int_value(n).is_some_and(|v| v >= lo && v <= hi))
-    }
+    move |t: &Token| matches!(t, Token::Numeral(n) if crate::numeral::int_value(n).is_some_and(|v| v >= lo && v <= hi))
 }
 fn nat(t: &Token) -> Option<i64> {
     match t {
@@ -263,7 +264,13 @@ pub fn duration_rules() -> Vec<Rule> {
             ],
             prod: Box::new(|tokens| match tokens {
                 [Token::Numeral(n), Token::TimeGrain(g), Token::Duration(dd)] if *g > dd.grain => {
-                    Some(Token::Duration(merge(&DurationData { value: nat_num(n)?, grain: *g }, dd)))
+                    Some(Token::Duration(merge(
+                        &DurationData {
+                            value: nat_num(n)?,
+                            grain: *g,
+                        },
+                        dd,
+                    )))
                 }
                 _ => None,
             }),
@@ -279,9 +286,18 @@ pub fn duration_rules() -> Vec<Rule> {
                 PatternItem::Predicate(Box::new(is_a_duration)),
             ],
             prod: Box::new(|tokens| match tokens {
-                [Token::Numeral(n), Token::TimeGrain(g), _, Token::Duration(dd)] if *g > dd.grain => {
-                    Some(Token::Duration(merge(&DurationData { value: nat_num(n)?, grain: *g }, dd)))
-                }
+                [
+                    Token::Numeral(n),
+                    Token::TimeGrain(g),
+                    _,
+                    Token::Duration(dd),
+                ] if *g > dd.grain => Some(Token::Duration(merge(
+                    &DurationData {
+                        value: nat_num(n)?,
+                        grain: *g,
+                    },
+                    dd,
+                ))),
                 _ => None,
             }),
         },
@@ -310,12 +326,18 @@ pub fn duration_rules() -> Vec<Rule> {
             name: "<Integer> and <Integer> quarter of hour".into(),
             pattern: vec![
                 PatternItem::Predicate(Box::new(is_natural)),
-                PatternItem::Regex(compile(r"and (a |an |one |two |three )?quarters?( of)?( an)?")),
+                PatternItem::Regex(compile(
+                    r"and (a |an |one |two |three )?quarters?( of)?( an)?",
+                )),
                 PatternItem::Predicate(Box::new(|t| matches!(t, Token::TimeGrain(Grain::Hour)))),
             ],
             prod: Box::new(|tokens| {
                 let h = nat(tokens.first()?)?;
-                let q = match groups(tokens.get(1)?)?.first().map(|s| s.trim().to_lowercase()).as_deref() {
+                let q = match groups(tokens.get(1)?)?
+                    .first()
+                    .map(|s| s.trim().to_lowercase())
+                    .as_deref()
+                {
                     Some("two") => 2,
                     Some("three") => 3,
                     _ => 1,

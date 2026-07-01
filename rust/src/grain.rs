@@ -104,26 +104,44 @@ mod tests {
     }
     #[test]
     fn add_day() {
-        assert_eq!(add(d(2013, 2, 12, 4, 30, 0), Grain::Day, 1), d(2013, 2, 13, 4, 30, 0));
+        assert_eq!(
+            add(d(2013, 2, 12, 4, 30, 0), Grain::Day, 1),
+            d(2013, 2, 13, 4, 30, 0)
+        );
     }
     #[test]
     fn add_month_clip() {
-        assert_eq!(add(d(2013, 1, 31, 0, 0, 0), Grain::Month, 1), d(2013, 2, 28, 0, 0, 0));
+        assert_eq!(
+            add(d(2013, 1, 31, 0, 0, 0), Grain::Month, 1),
+            d(2013, 2, 28, 0, 0, 0)
+        );
     }
     #[test]
     fn add_year_clip() {
-        assert_eq!(add(d(2016, 2, 29, 0, 0, 0), Grain::Year, 1), d(2017, 2, 28, 0, 0, 0));
+        assert_eq!(
+            add(d(2016, 2, 29, 0, 0, 0), Grain::Year, 1),
+            d(2017, 2, 28, 0, 0, 0)
+        );
     }
     #[test]
     fn round_day() {
-        assert_eq!(round(d(2013, 2, 12, 4, 30, 0), Grain::Day), d(2013, 2, 12, 0, 0, 0));
+        assert_eq!(
+            round(d(2013, 2, 12, 4, 30, 0), Grain::Day),
+            d(2013, 2, 12, 0, 0, 0)
+        );
     }
     #[test]
     fn round_month() {
-        assert_eq!(round(d(2013, 2, 12, 4, 30, 0), Grain::Month), d(2013, 2, 1, 0, 0, 0));
+        assert_eq!(
+            round(d(2013, 2, 12, 4, 30, 0), Grain::Month),
+            d(2013, 2, 1, 0, 0, 0)
+        );
     }
     #[test]
     fn round_week_to_monday() {
-        assert_eq!(round(d(2013, 2, 12, 4, 30, 0), Grain::Week), d(2013, 2, 11, 0, 0, 0));
+        assert_eq!(
+            round(d(2013, 2, 12, 4, 30, 0), Grain::Week),
+            d(2013, 2, 11, 0, 0, 0)
+        );
     }
 }

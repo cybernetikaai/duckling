@@ -22,7 +22,11 @@ fn ctx() -> duckling::ResolveContext {
         .to_zoned(zone.clone())
         .unwrap()
         .timestamp();
-    duckling::ResolveContext { reference, zone, with_latent: false }
+    duckling::ResolveContext {
+        reference,
+        zone,
+        with_latent: false,
+    }
 }
 
 /// "values" is the alternatives array; behavior-compat ignores it.
@@ -92,7 +96,12 @@ fn positive_corpus() {
         failures.is_empty(),
         "{} failures:\n{}",
         failures.len(),
-        failures.iter().take(5000).cloned().collect::<Vec<_>>().join("\n")
+        failures
+            .iter()
+            .take(5000)
+            .cloned()
+            .collect::<Vec<_>>()
+            .join("\n")
     );
 }
 
@@ -102,8 +111,7 @@ fn positive_corpus() {
 /// + reference instant.
 #[test]
 fn tz_stress() {
-    let data: Value =
-        serde_json::from_str(include_str!("../fixtures/tz_stress.json")).unwrap();
+    let data: Value = serde_json::from_str(include_str!("../fixtures/tz_stress.json")).unwrap();
     let mut failures = Vec::new();
     let mut checked = 0usize;
     for c in data["cases"].as_array().unwrap() {
@@ -114,9 +122,16 @@ fn tz_stress() {
         checked += 1;
         let input = c["input"].as_str().unwrap();
         let zone = jiff::tz::TimeZone::get(c["zone"].as_str().unwrap()).expect("zone");
-        let reference: jiff::Timestamp =
-            c["referenceTimeUtc"].as_str().unwrap().parse().expect("reference instant");
-        let ctx = duckling::ResolveContext { reference, zone, with_latent: false };
+        let reference: jiff::Timestamp = c["referenceTimeUtc"]
+            .as_str()
+            .unwrap()
+            .parse()
+            .expect("reference instant");
+        let ctx = duckling::ResolveContext {
+            reference,
+            zone,
+            with_latent: false,
+        };
         let got = full_range_time_values(input, &ctx);
         let exp = strip_values(expected.clone());
         if !got.iter().any(|g| g == &exp) {
@@ -161,8 +176,7 @@ fn negative_corpus() {
 /// rule *combinations* the curated corpus may under-cover. Best-entity semantics.
 #[test]
 fn differential_corpus() {
-    let data: Value =
-        serde_json::from_str(include_str!("../fixtures/differential.json")).unwrap();
+    let data: Value = serde_json::from_str(include_str!("../fixtures/differential.json")).unwrap();
     let ctx = ctx();
     let mut failures = Vec::new();
     let mut checked = 0usize;
@@ -175,12 +189,24 @@ fn differential_corpus() {
         let input = ex["input"].as_str().unwrap();
         let exp = strip_values(expected.clone());
         if !best_time_values(input, &ctx).iter().any(|g| g == &exp) {
-            failures.push(format!("{input:?}\n  expected {exp}\n  got      {:?}", best_time_values(input, &ctx)));
+            failures.push(format!(
+                "{input:?}\n  expected {exp}\n  got      {:?}",
+                best_time_values(input, &ctx)
+            ));
         }
     }
     eprintln!("differential checked {checked}, {} failing", failures.len());
-    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
-        failures.iter().take(5000).cloned().collect::<Vec<_>>().join("\n"));
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures
+            .iter()
+            .take(5000)
+            .cloned()
+            .collect::<Vec<_>>()
+            .join("\n")
+    );
 }
 
 /// Regex rules must not match inside a word: the 3-letter day/month abbreviations
@@ -191,17 +217,32 @@ fn differential_corpus() {
 fn no_subword_matches() {
     let ctx = ctx();
     for word in [
-        "money", "friend", "market", "monkey", "satisfy", "octopus", "month",
-        "augment", "apron", "novel", "decide", "sunny", "monster", "fritter",
+        "money", "friend", "market", "monkey", "satisfy", "octopus", "month", "augment", "apron",
+        "novel", "decide", "sunny", "monster", "fritter",
     ] {
-        let n = duckling::parse(word, &ctx).into_iter().filter(|e| e.dim == "time").count();
-        assert_eq!(n, 0, "{word:?} must not produce a sub-word time match, got {n}");
+        let n = duckling::parse(word, &ctx)
+            .into_iter()
+            .filter(|e| e.dim == "time")
+            .count();
+        assert_eq!(
+            n, 0,
+            "{word:?} must not produce a sub-word time match, got {n}"
+        );
     }
     // Whole-word abbreviations still resolve.
-    for (w, want) in [("mon", "2013-02-18"), ("fri", "2013-02-15"), ("mar", "2013-03-01"),
-                      ("dec", "2013-12-01"), ("see you fri", "2013-02-15")] {
-        assert!(best_time_values(w, &ctx).iter().any(|v| v["value"].as_str().is_some_and(|s| s.starts_with(want))),
-            "{w:?} should resolve to {want}");
+    for (w, want) in [
+        ("mon", "2013-02-18"),
+        ("fri", "2013-02-15"),
+        ("mar", "2013-03-01"),
+        ("dec", "2013-12-01"),
+        ("see you fri", "2013-02-15"),
+    ] {
+        assert!(
+            best_time_values(w, &ctx)
+                .iter()
+                .any(|v| v["value"].as_str().is_some_and(|s| s.starts_with(want))),
+            "{w:?} should resolve to {want}"
+        );
     }
 }
 
@@ -212,29 +253,55 @@ fn no_subword_matches() {
 #[test]
 fn may_is_latent() {
     let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(-2));
-    let reference = jiff::civil::date(2013, 2, 12).at(4, 30, 0, 0)
-        .to_zoned(zone.clone()).unwrap().timestamp();
-    let default = duckling::ResolveContext { reference, zone: zone.clone(), with_latent: false };
-    let latent = duckling::ResolveContext { reference, zone, with_latent: true };
+    let reference = jiff::civil::date(2013, 2, 12)
+        .at(4, 30, 0, 0)
+        .to_zoned(zone.clone())
+        .unwrap()
+        .timestamp();
+    let default = duckling::ResolveContext {
+        reference,
+        zone: zone.clone(),
+        with_latent: false,
+    };
+    let latent = duckling::ResolveContext {
+        reference,
+        zone,
+        with_latent: true,
+    };
 
     // Bare "May" / "may 2015": no time entity in default mode (latent, dropped).
     for bare in ["May", "may", "may 2015"] {
         let got = full_range_time_values(bare, &default);
-        assert!(got.is_empty(), "{bare:?} should be latent (no default-mode parse), got {got:?}");
+        assert!(
+            got.is_empty(),
+            "{bare:?} should be latent (no default-mode parse), got {got:?}"
+        );
     }
     // In latent mode, bare "May" resolves to May 1st.
     assert!(
-        best_time_values("May", &latent).iter().any(|v| v["value"] == "2013-05-01T00:00:00.000-02:00"),
+        best_time_values("May", &latent)
+            .iter()
+            .any(|v| v["value"] == "2013-05-01T00:00:00.000-02:00"),
         "May should resolve to 2013-05-01 in latent mode"
     );
     // Composition de-latents it (default mode resolves).
-    for (input, want) in [("in May", "2013-05-01"), ("May 1st", "2013-05-01"), ("next May", "2013-05-01")] {
+    for (input, want) in [
+        ("in May", "2013-05-01"),
+        ("May 1st", "2013-05-01"),
+        ("next May", "2013-05-01"),
+    ] {
         let got = best_time_values(input, &default);
-        assert!(got.iter().any(|v| v["value"].as_str().is_some_and(|s| s.starts_with(want))),
-            "{input:?} should de-latent to {want}, got {got:?}");
+        assert!(
+            got.iter()
+                .any(|v| v["value"].as_str().is_some_and(|s| s.starts_with(want))),
+            "{input:?} should de-latent to {want}, got {got:?}"
+        );
     }
     // A concrete month (March) is never latent — present in default mode.
-    assert!(!full_range_time_values("March", &default).is_empty(), "March must not be latent");
+    assert!(
+        !full_range_time_values("March", &default).is_empty(),
+        "March must not be latent"
+    );
 }
 
 /// Timezone ground-truth: the product-critical requirement is correct offsets
@@ -245,8 +312,7 @@ fn may_is_latent() {
 /// to that wall-clock — across 9 real zones spanning both hemispheres' DST.
 #[test]
 fn tz_truth() {
-    let data: Value =
-        serde_json::from_str(include_str!("../fixtures/tz_truth.json")).unwrap();
+    let data: Value = serde_json::from_str(include_str!("../fixtures/tz_truth.json")).unwrap();
     let mut failures = Vec::new();
     let mut checked = 0usize;
     for c in data["cases"].as_array().unwrap() {
@@ -254,22 +320,45 @@ fn tz_truth() {
         let zone = jiff::tz::TimeZone::get(c["zone"].as_str().unwrap()).expect("zone");
         let reference: jiff::Timestamp = c["refUtc"].as_str().unwrap().parse().expect("ref");
         let want = c["expectedOffset"].as_str().unwrap();
-        let ctx = duckling::ResolveContext { reference, zone, with_latent: false };
+        let ctx = duckling::ResolveContext {
+            reference,
+            zone,
+            with_latent: false,
+        };
         // "3pm" resolves to the reference date's 15:00 in-zone; its value string
         // ends with the RFC3339 offset the port assigned (e.g. "...15:00.000-04:00").
-        let got: Vec<String> = duckling::parse("3pm", &ctx).into_iter()
+        let got: Vec<String> = duckling::parse("3pm", &ctx)
+            .into_iter()
             .filter(|e| e.dim == "time")
-            .filter_map(|e| e.value.get("value").and_then(|v| v.as_str()).map(|s| s.to_string()))
+            .filter_map(|e| {
+                e.value
+                    .get("value")
+                    .and_then(|v| v.as_str())
+                    .map(|s| s.to_string())
+            })
             .collect();
-        let ok = got.iter().any(|v| v.len() >= 6 && &v[v.len() - 6..] == want);
+        let ok = got
+            .iter()
+            .any(|v| v.len() >= 6 && &v[v.len() - 6..] == want);
         if !ok {
-            failures.push(format!("[{} {}] expected offset {want}, got {got:?}",
-                c["zone"], c["date"]));
+            failures.push(format!(
+                "[{} {}] expected offset {want}, got {got:?}",
+                c["zone"], c["date"]
+            ));
         }
     }
     eprintln!("tz_truth checked {checked}, {} failing", failures.len());
-    assert!(failures.is_empty(), "{} tz-truth failures:\n{}", failures.len(),
-        failures.iter().take(200).cloned().collect::<Vec<_>>().join("\n"));
+    assert!(
+        failures.is_empty(),
+        "{} tz-truth failures:\n{}",
+        failures.len(),
+        failures
+            .iter()
+            .take(200)
+            .cloned()
+            .collect::<Vec<_>>()
+            .join("\n")
+    );
 }
 
 /// The `values` alternatives array: Duckling returns `value` plus a `values` list
@@ -279,15 +368,18 @@ fn tz_truth() {
 /// 10:30 / 22:30 / next-day) and holiday/interval alternatives.
 #[test]
 fn values_array() {
-    let data: Value =
-        serde_json::from_str(include_str!("../fixtures/values_array.json")).unwrap();
+    let data: Value = serde_json::from_str(include_str!("../fixtures/values_array.json")).unwrap();
     let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(-2));
-    let default_ref = jiff::civil::date(2013, 2, 12).at(4, 30, 0, 0)
-        .to_zoned(zone.clone()).unwrap().timestamp();
+    let default_ref = jiff::civil::date(2013, 2, 12)
+        .at(4, 30, 0, 0)
+        .to_zoned(zone.clone())
+        .unwrap()
+        .timestamp();
     let n_of = |input: &str, c: &duckling::ResolveContext| -> Option<Vec<Value>> {
         // the full-span time entity's `values` array
         let count = input.chars().count();
-        duckling::parse(input, c).into_iter()
+        duckling::parse(input, c)
+            .into_iter()
             .find(|e| e.dim == "time" && e.start == 0 && e.end == count)
             .and_then(|e| e.value.get("values").and_then(|v| v.as_array()).cloned())
     };
@@ -303,25 +395,46 @@ fn values_array() {
             Some(r) => r.parse().expect("ref"),
             None => default_ref,
         };
-        let case_ctx = duckling::ResolveContext { reference, zone: zone.clone(), with_latent: false };
+        let case_ctx = duckling::ResolveContext {
+            reference,
+            zone: zone.clone(),
+            with_latent: false,
+        };
         match n_of(input, &case_ctx) {
             Some(got) if got.as_slice() == want.as_slice() => {}
-            got => failures.push(format!("{input:?}\n  expected {want:?}\n  got      {got:?}")),
+            got => failures.push(format!(
+                "{input:?}\n  expected {want:?}\n  got      {got:?}"
+            )),
         }
     }
     eprintln!("values_array checked {checked}, {} failing", failures.len());
-    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
-        failures.iter().take(50).cloned().collect::<Vec<_>>().join("\n"));
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures
+            .iter()
+            .take(50)
+            .cloned()
+            .collect::<Vec<_>>()
+            .join("\n")
+    );
 }
 
 fn locale_of(s: &str) -> duckling::Locale {
     match s {
-        "EnUs" => duckling::Locale::EnUs, "EnGb" => duckling::Locale::EnGb,
-        "EnCa" => duckling::Locale::EnCa, "EnAu" => duckling::Locale::EnAu,
-        "EnNz" => duckling::Locale::EnNz, "EnIn" => duckling::Locale::EnIn,
-        "EnIe" => duckling::Locale::EnIe, "EnZa" => duckling::Locale::EnZa,
-        "EnPh" => duckling::Locale::EnPh, "EnBz" => duckling::Locale::EnBz,
-        "EnJm" => duckling::Locale::EnJm, "EnTt" => duckling::Locale::EnTt,
+        "EnUs" => duckling::Locale::EnUs,
+        "EnGb" => duckling::Locale::EnGb,
+        "EnCa" => duckling::Locale::EnCa,
+        "EnAu" => duckling::Locale::EnAu,
+        "EnNz" => duckling::Locale::EnNz,
+        "EnIn" => duckling::Locale::EnIn,
+        "EnIe" => duckling::Locale::EnIe,
+        "EnZa" => duckling::Locale::EnZa,
+        "EnPh" => duckling::Locale::EnPh,
+        "EnBz" => duckling::Locale::EnBz,
+        "EnJm" => duckling::Locale::EnJm,
+        "EnTt" => duckling::Locale::EnTt,
         _ => panic!("unknown locale {s}"),
     }
 }
@@ -343,18 +456,39 @@ fn region_holidays() {
         let input = c["input"].as_str().unwrap();
         let locale = locale_of(c["locale"].as_str().unwrap());
         let reference: jiff::Timestamp = c["ref"].as_str().unwrap().parse().expect("ref");
-        let ctx = duckling::ResolveContext { reference, zone: zone.clone(), with_latent: false };
+        let ctx = duckling::ResolveContext {
+            reference,
+            zone: zone.clone(),
+            with_latent: false,
+        };
         let exp = strip_values(c["expected"].clone());
         let got: Vec<Value> = duckling::parse_locale(input, &ctx, locale)
-            .into_iter().filter(|e| e.dim == "time").map(|e| strip_values(e.value)).collect();
+            .into_iter()
+            .filter(|e| e.dim == "time")
+            .map(|e| strip_values(e.value))
+            .collect();
         if !got.iter().any(|g| g == &exp) {
-            failures.push(format!("[{:?} {}] {input:?}\n  expected {exp}\n  got      {got:?}",
-                c["locale"], c["ref"]));
+            failures.push(format!(
+                "[{:?} {}] {input:?}\n  expected {exp}\n  got      {got:?}",
+                c["locale"], c["ref"]
+            ));
         }
     }
-    eprintln!("region_holidays checked {checked}, {} failing", failures.len());
-    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
-        failures.iter().take(60).cloned().collect::<Vec<_>>().join("\n"));
+    eprintln!(
+        "region_holidays checked {checked}, {} failing",
+        failures.len()
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures
+            .iter()
+            .take(60)
+            .cloned()
+            .collect::<Vec<_>>()
+            .join("\n")
+    );
 }
 
 /// All English regions' numeric-date conventions vs the oracle (locale=en_XX):
@@ -363,16 +497,21 @@ fn region_holidays() {
 /// that form (out-of-range month field).
 #[test]
 fn region_dates() {
-    let data: Value =
-        serde_json::from_str(include_str!("../fixtures/region_dates.json")).unwrap();
+    let data: Value = serde_json::from_str(include_str!("../fixtures/region_dates.json")).unwrap();
     let ctx = ctx();
     let loc = |s: &str| match s {
-        "EnUs" => duckling::Locale::EnUs, "EnGb" => duckling::Locale::EnGb,
-        "EnCa" => duckling::Locale::EnCa, "EnAu" => duckling::Locale::EnAu,
-        "EnNz" => duckling::Locale::EnNz, "EnIn" => duckling::Locale::EnIn,
-        "EnIe" => duckling::Locale::EnIe, "EnZa" => duckling::Locale::EnZa,
-        "EnPh" => duckling::Locale::EnPh, "EnBz" => duckling::Locale::EnBz,
-        "EnJm" => duckling::Locale::EnJm, "EnTt" => duckling::Locale::EnTt,
+        "EnUs" => duckling::Locale::EnUs,
+        "EnGb" => duckling::Locale::EnGb,
+        "EnCa" => duckling::Locale::EnCa,
+        "EnAu" => duckling::Locale::EnAu,
+        "EnNz" => duckling::Locale::EnNz,
+        "EnIn" => duckling::Locale::EnIn,
+        "EnIe" => duckling::Locale::EnIe,
+        "EnZa" => duckling::Locale::EnZa,
+        "EnPh" => duckling::Locale::EnPh,
+        "EnBz" => duckling::Locale::EnBz,
+        "EnJm" => duckling::Locale::EnJm,
+        "EnTt" => duckling::Locale::EnTt,
         _ => panic!("unknown locale {s}"),
     };
     let mut failures = Vec::new();
@@ -382,7 +521,8 @@ fn region_dates() {
         let input = c["input"].as_str().unwrap();
         let locale = loc(c["locale"].as_str().unwrap());
         let count = input.chars().count();
-        let got: Vec<Value> = duckling::parse_locale(input, &ctx, locale).into_iter()
+        let got: Vec<Value> = duckling::parse_locale(input, &ctx, locale)
+            .into_iter()
             .filter(|e| e.dim == "time" && e.start == 0 && e.end == count)
             .map(|e| strip_values(e.value))
             .collect();
@@ -393,12 +533,19 @@ fn region_dates() {
             got.iter().any(|g| g == &strip_values(expected.clone()))
         };
         if !ok {
-            failures.push(format!("[{:?}] {input:?}\n  expected {expected}\n  got      {got:?}",
-                c["locale"]));
+            failures.push(format!(
+                "[{:?}] {input:?}\n  expected {expected}\n  got      {got:?}",
+                c["locale"]
+            ));
         }
     }
     eprintln!("region_dates checked {checked}, {} failing", failures.len());
-    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(), failures.join("\n"));
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
 }
 
 /// EN_GB locale: numeric dates are day-first (dd/mm), unlike the US default
@@ -407,8 +554,7 @@ fn region_dates() {
 /// day-first forms whose month field is out of range ("6/15/2014", "2/29/2016").
 #[test]
 fn gb_locale() {
-    let data: Value =
-        serde_json::from_str(include_str!("../fixtures/gb_locale.json")).unwrap();
+    let data: Value = serde_json::from_str(include_str!("../fixtures/gb_locale.json")).unwrap();
     let ctx = ctx();
     let mut failures = Vec::new();
     let mut checked = 0usize;
@@ -428,12 +574,18 @@ fn gb_locale() {
             got.iter().any(|g| g == &strip_values(expected.clone()))
         };
         if !ok {
-            failures.push(format!("{input:?}\n  expected {expected}\n  got      {got:?}"));
+            failures.push(format!(
+                "{input:?}\n  expected {expected}\n  got      {got:?}"
+            ));
         }
     }
     eprintln!("gb_locale checked {checked}, {} failing", failures.len());
-    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
-        failures.join("\n"));
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
 }
 
 /// Beyond-Duckling extension: holidays absent from Duckling's frozen (~2020-03)
@@ -462,17 +614,34 @@ fn modern_holidays() {
             Some(s) => s.parse().expect("ref"),
             None => default_ref,
         };
-        let ctx = duckling::ResolveContext { reference, zone: zone.clone(), with_latent: false };
+        let ctx = duckling::ResolveContext {
+            reference,
+            zone: zone.clone(),
+            with_latent: false,
+        };
         let exp = strip_values(c["expected"].clone());
         let got: Vec<Value> = duckling::parse_locale(input, &ctx, locale)
-            .into_iter().filter(|e| e.dim == "time").map(|e| strip_values(e.value)).collect();
+            .into_iter()
+            .filter(|e| e.dim == "time")
+            .map(|e| strip_values(e.value))
+            .collect();
         if !got.iter().any(|g| g == &exp) {
-            failures.push(format!("[{:?}] {input:?}\n  expected {exp}\n  got      {got:?}",
-                c["locale"]));
+            failures.push(format!(
+                "[{:?}] {input:?}\n  expected {exp}\n  got      {got:?}",
+                c["locale"]
+            ));
         }
     }
-    eprintln!("modern_holidays checked {checked}, {} failing", failures.len());
-    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(), failures.join("\n"));
+    eprintln!(
+        "modern_holidays checked {checked}, {} failing",
+        failures.len()
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
 }
 
 /// ASR / spoken-English time idioms — the actual input distribution of a
@@ -485,28 +654,45 @@ fn modern_holidays() {
 /// the written-ordinal gap (first..tenth only) and the "<hour> oh <minute>" gap.
 #[test]
 fn spoken_forms() {
-    let data: Value =
-        serde_json::from_str(include_str!("../fixtures/spoken_forms.json")).unwrap();
+    let data: Value = serde_json::from_str(include_str!("../fixtures/spoken_forms.json")).unwrap();
     let ctx = ctx();
     // Strip a trailing tz offset ("...-02:00" / "...Z" / "...+00:00") to leave wall-clock.
     fn wall(s: &str) -> String {
         let s = s.trim();
-        match s.rfind('Z').or_else(|| s.rfind('+')).or_else(|| s.rfind('-').filter(|&i| i > 10)) {
+        match s
+            .rfind('Z')
+            .or_else(|| s.rfind('+'))
+            .or_else(|| s.rfind('-').filter(|&i| i > 10))
+        {
             Some(i) => s[..i].to_string(),
             None => s.to_string(),
         }
     }
     fn port_walls(input: &str, ctx: &duckling::ResolveContext) -> Vec<String> {
-        duckling::parse(input, ctx).into_iter().filter(|e| e.dim == "time").map(|e| {
-            let v = &e.value;
-            if let Some(val) = v.get("value").and_then(|x| x.as_str()) {
-                wall(val)
-            } else {
-                format!("[{}|{}]",
-                    v.get("from").and_then(|f| f.get("value")).and_then(|x| x.as_str()).map(wall).unwrap_or("None".into()),
-                    v.get("to").and_then(|f| f.get("value")).and_then(|x| x.as_str()).map(wall).unwrap_or("None".into()))
-            }
-        }).collect()
+        duckling::parse(input, ctx)
+            .into_iter()
+            .filter(|e| e.dim == "time")
+            .map(|e| {
+                let v = &e.value;
+                if let Some(val) = v.get("value").and_then(|x| x.as_str()) {
+                    wall(val)
+                } else {
+                    format!(
+                        "[{}|{}]",
+                        v.get("from")
+                            .and_then(|f| f.get("value"))
+                            .and_then(|x| x.as_str())
+                            .map(wall)
+                            .unwrap_or("None".into()),
+                        v.get("to")
+                            .and_then(|f| f.get("value"))
+                            .and_then(|x| x.as_str())
+                            .map(wall)
+                            .unwrap_or("None".into())
+                    )
+                }
+            })
+            .collect()
     }
     let mut failures = Vec::new();
     let mut checked = 0usize;
@@ -520,7 +706,12 @@ fn spoken_forms() {
         }
     }
     eprintln!("spoken_forms checked {checked}, {} failing", failures.len());
-    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(), failures.join("\n"));
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
 }
 
 /// Duration dimension (`parse_duration`) — port of Duckling/Duration/EN/Corpus.hs.
@@ -534,9 +725,15 @@ fn duration_corpus() {
         serde_json::from_str(include_str!("../fixtures/duration_corpus.json")).unwrap();
     let per_second = |u: &str| -> i64 {
         match u {
-            "second" => 1, "minute" => 60, "hour" => 3600, "day" => 86400,
-            "week" => 604800, "month" => 2_592_000, "quarter" => 7_776_000,
-            "year" => 31_536_000, _ => panic!("unit {u}"),
+            "second" => 1,
+            "minute" => 60,
+            "hour" => 3600,
+            "day" => 86400,
+            "week" => 604800,
+            "month" => 2_592_000,
+            "quarter" => 7_776_000,
+            "year" => 31_536_000,
+            _ => panic!("unit {u}"),
         }
     };
     let mut failures = Vec::new();
@@ -576,8 +773,16 @@ fn duration_corpus() {
             failures.push(format!("[negative] {input:?} unexpectedly parsed: {hit:?}"));
         }
     }
-    eprintln!("duration_corpus checked {checked}, {} failing", failures.len());
-    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(), failures.join("\n"));
+    eprintln!(
+        "duration_corpus checked {checked}, {} failing",
+        failures.len()
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
 }
 
 /// Ordinal dimension (`parse_ordinal`) — port of Duckling/Ordinal/EN/Corpus.hs.
@@ -604,8 +809,16 @@ fn ordinal_corpus() {
             failures.push(format!("{input:?}\n  expected {want}\n  got      {got:?}"));
         }
     }
-    eprintln!("ordinal_corpus checked {checked}, {} failing", failures.len());
-    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(), failures.join("\n"));
+    eprintln!(
+        "ordinal_corpus checked {checked}, {} failing",
+        failures.len()
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
 }
 
 /// Combined Time+Duration (`parse_all`) — the `dims:["time","duration"]` surface.
@@ -616,27 +829,45 @@ fn ordinal_corpus() {
 /// "2 hours" Duration dominated), "…20 minutes and wake me at 7am"→Duration+Time.
 #[test]
 fn combined_dims() {
-    let data: Value =
-        serde_json::from_str(include_str!("../fixtures/combined_dims.json")).unwrap();
+    let data: Value = serde_json::from_str(include_str!("../fixtures/combined_dims.json")).unwrap();
     let ctx = ctx();
     let mut failures = Vec::new();
     let mut checked = 0usize;
     for c in data["cases"].as_array().unwrap() {
         checked += 1;
         let input = c["input"].as_str().unwrap();
-        let mut exp: Vec<(String, u64, u64)> = c["expected"].as_array().unwrap().iter()
-            .map(|e| (e[0].as_str().unwrap().to_string(), e[1].as_u64().unwrap(), e[2].as_u64().unwrap()))
+        let mut exp: Vec<(String, u64, u64)> = c["expected"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|e| {
+                (
+                    e[0].as_str().unwrap().to_string(),
+                    e[1].as_u64().unwrap(),
+                    e[2].as_u64().unwrap(),
+                )
+            })
             .collect();
         exp.sort();
         let mut got: Vec<(String, u64, u64)> = duckling::parse_all(input, &ctx)
-            .into_iter().map(|e| (e.dim, e.start as u64, e.end as u64)).collect();
+            .into_iter()
+            .map(|e| (e.dim, e.start as u64, e.end as u64))
+            .collect();
         got.sort();
         if exp != got {
             failures.push(format!("{input:?}\n  expected {exp:?}\n  got      {got:?}"));
         }
     }
-    eprintln!("combined_dims checked {checked}, {} failing", failures.len());
-    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(), failures.join("\n"));
+    eprintln!(
+        "combined_dims checked {checked}, {} failing",
+        failures.len()
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
 }
 
 /// Large-scale randomized differential: random inputs (from parameterized
@@ -646,8 +877,7 @@ fn combined_dims() {
 /// to catch rare interaction bugs the separate audits couldn't. Best-entity.
 #[test]
 fn random_diff() {
-    let data: Value =
-        serde_json::from_str(include_str!("../fixtures/random_diff.json")).unwrap();
+    let data: Value = serde_json::from_str(include_str!("../fixtures/random_diff.json")).unwrap();
     let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(-2));
     let mut failures = Vec::new();
     let mut checked = 0usize;
@@ -655,16 +885,32 @@ fn random_diff() {
         checked += 1;
         let input = c["input"].as_str().unwrap();
         let reference: jiff::Timestamp = c["ref"].as_str().unwrap().parse().expect("ref");
-        let ctx = duckling::ResolveContext { reference, zone: zone.clone(), with_latent: false };
+        let ctx = duckling::ResolveContext {
+            reference,
+            zone: zone.clone(),
+            with_latent: false,
+        };
         let exp = strip_values(c["expected"].clone());
         if !best_time_values(input, &ctx).iter().any(|g| g == &exp) {
-            failures.push(format!("[{}] {input:?}\n  expected {exp}\n  got      {:?}",
-                c["ref"], best_time_values(input, &ctx)));
+            failures.push(format!(
+                "[{}] {input:?}\n  expected {exp}\n  got      {:?}",
+                c["ref"],
+                best_time_values(input, &ctx)
+            ));
         }
     }
     eprintln!("random_diff checked {checked}, {} failing", failures.len());
-    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
-        failures.iter().take(60).cloned().collect::<Vec<_>>().join("\n"));
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures
+            .iter()
+            .take(60)
+            .cloned()
+            .collect::<Vec<_>>()
+            .join("\n")
+    );
 }
 
 /// Robustness: adversarial / untrusted input must never panic or hang. Huge
@@ -676,13 +922,32 @@ fn random_diff() {
 fn robustness() {
     let ctx = ctx();
     let adversarial = [
-        "999999999999999999 days ago", "in 9999999999999 years", "in 99999999 months",
-        "in 2147483648 days", "9999999999 hours ago", "1000000 months from now",
-        "in 100000000 days", "50000 years from now", "in 9999999999999999 minutes",
-        "9999999999999999999 fridays from now", "in 5000000000 quarters",
-        "in 88888888888 fortnights", "the 999999999999th of january", "2222222222222-02-12",
-        "999999999th monday", "february 31", "2013-99-99", "99:99", "year 999999999999",
-        "the 32nd", "in -5 days", "in 0 days", "", "   ", "!@#$%^&*()", "\u{1f600} tomorrow",
+        "999999999999999999 days ago",
+        "in 9999999999999 years",
+        "in 99999999 months",
+        "in 2147483648 days",
+        "9999999999 hours ago",
+        "1000000 months from now",
+        "in 100000000 days",
+        "50000 years from now",
+        "in 9999999999999999 minutes",
+        "9999999999999999999 fridays from now",
+        "in 5000000000 quarters",
+        "in 88888888888 fortnights",
+        "the 999999999999th of january",
+        "2222222222222-02-12",
+        "999999999th monday",
+        "february 31",
+        "2013-99-99",
+        "99:99",
+        "year 999999999999",
+        "the 32nd",
+        "in -5 days",
+        "in 0 days",
+        "",
+        "   ",
+        "!@#$%^&*()",
+        "\u{1f600} tomorrow",
     ];
     for input in adversarial {
         // Must return (no panic); content is irrelevant.
@@ -690,7 +955,8 @@ fn robustness() {
     }
     // Legitimately-large N must still resolve (the cap is generous, not restrictive).
     assert!(
-        best_time_values("500 fridays from now", &ctx).iter()
+        best_time_values("500 fridays from now", &ctx)
+            .iter()
             .any(|v| v["value"] == "2022-09-09T00:00:00.000-02:00"),
         "500 fridays from now should still resolve"
     );
@@ -703,8 +969,7 @@ fn robustness() {
 /// "9am" at 15:00 → tomorrow) is otherwise untested. Best-entity semantics.
 #[test]
 fn tod_ref() {
-    let data: Value =
-        serde_json::from_str(include_str!("../fixtures/tod_ref.json")).unwrap();
+    let data: Value = serde_json::from_str(include_str!("../fixtures/tod_ref.json")).unwrap();
     let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(-2));
     let mut failures = Vec::new();
     let mut checked = 0usize;
@@ -712,16 +977,32 @@ fn tod_ref() {
         checked += 1;
         let input = c["input"].as_str().unwrap();
         let reference: jiff::Timestamp = c["ref"].as_str().unwrap().parse().expect("ref");
-        let ctx = duckling::ResolveContext { reference, zone: zone.clone(), with_latent: false };
+        let ctx = duckling::ResolveContext {
+            reference,
+            zone: zone.clone(),
+            with_latent: false,
+        };
         let exp = strip_values(c["expected"].clone());
         if !best_time_values(input, &ctx).iter().any(|g| g == &exp) {
-            failures.push(format!("[@{}] {input:?}\n  expected {exp}\n  got      {:?}",
-                c["refLabel"], best_time_values(input, &ctx)));
+            failures.push(format!(
+                "[@{}] {input:?}\n  expected {exp}\n  got      {:?}",
+                c["refLabel"],
+                best_time_values(input, &ctx)
+            ));
         }
     }
     eprintln!("tod_ref checked {checked}, {} failing", failures.len());
-    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
-        failures.iter().take(200).cloned().collect::<Vec<_>>().join("\n"));
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures
+            .iter()
+            .take(200)
+            .cloned()
+            .collect::<Vec<_>>()
+            .join("\n")
+    );
 }
 
 /// Holidays across years: every holiday the port knows, resolved at reference =
@@ -731,8 +1012,7 @@ fn tod_ref() {
 /// error in another year would otherwise go undetected. Best-entity semantics.
 #[test]
 fn holiday_years() {
-    let data: Value =
-        serde_json::from_str(include_str!("../fixtures/holiday_years.json")).unwrap();
+    let data: Value = serde_json::from_str(include_str!("../fixtures/holiday_years.json")).unwrap();
     let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(-2));
     let mut failures = Vec::new();
     let mut checked = 0usize;
@@ -740,16 +1020,35 @@ fn holiday_years() {
         checked += 1;
         let input = c["input"].as_str().unwrap();
         let reference: jiff::Timestamp = c["ref"].as_str().unwrap().parse().expect("ref");
-        let ctx = duckling::ResolveContext { reference, zone: zone.clone(), with_latent: false };
+        let ctx = duckling::ResolveContext {
+            reference,
+            zone: zone.clone(),
+            with_latent: false,
+        };
         let exp = strip_values(c["expected"].clone());
         if !best_time_values(input, &ctx).iter().any(|g| g == &exp) {
-            failures.push(format!("[{}] {input:?}\n  expected {exp}\n  got      {:?}",
-                c["year"], best_time_values(input, &ctx)));
+            failures.push(format!(
+                "[{}] {input:?}\n  expected {exp}\n  got      {:?}",
+                c["year"],
+                best_time_values(input, &ctx)
+            ));
         }
     }
-    eprintln!("holiday_years checked {checked}, {} failing", failures.len());
-    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
-        failures.iter().take(200).cloned().collect::<Vec<_>>().join("\n"));
+    eprintln!(
+        "holiday_years checked {checked}, {} failing",
+        failures.len()
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures
+            .iter()
+            .take(200)
+            .cloned()
+            .collect::<Vec<_>>()
+            .join("\n")
+    );
 }
 
 /// DST gap/fold ground-truth: the hardest offset case. A spring-forward gap time
@@ -759,8 +1058,7 @@ fn holiday_years() {
 /// 12 real 2013 transitions (US/EU/AU/NZ). Ground truth, not Duckling.
 #[test]
 fn tz_gapfold() {
-    let data: Value =
-        serde_json::from_str(include_str!("../fixtures/tz_gapfold.json")).unwrap();
+    let data: Value = serde_json::from_str(include_str!("../fixtures/tz_gapfold.json")).unwrap();
     let mut failures = Vec::new();
     let mut checked = 0usize;
     for c in data["cases"].as_array().unwrap() {
@@ -769,20 +1067,38 @@ fn tz_gapfold() {
         let reference: jiff::Timestamp = c["refUtc"].as_str().unwrap().parse().expect("ref");
         let input = c["input"].as_str().unwrap();
         let want = c["expectedOffset"].as_str().unwrap();
-        let ctx = duckling::ResolveContext { reference, zone, with_latent: false };
-        let got: Vec<String> = duckling::parse(input, &ctx).into_iter()
+        let ctx = duckling::ResolveContext {
+            reference,
+            zone,
+            with_latent: false,
+        };
+        let got: Vec<String> = duckling::parse(input, &ctx)
+            .into_iter()
             .filter(|e| e.dim == "time")
-            .filter_map(|e| e.value.get("value").and_then(|v| v.as_str()).map(|s| s.to_string()))
+            .filter_map(|e| {
+                e.value
+                    .get("value")
+                    .and_then(|v| v.as_str())
+                    .map(|s| s.to_string())
+            })
             .collect();
-        let ok = got.iter().any(|v| v.len() >= 6 && &v[v.len() - 6..] == want);
+        let ok = got
+            .iter()
+            .any(|v| v.len() >= 6 && &v[v.len() - 6..] == want);
         if !ok {
-            failures.push(format!("[{} {} {}] {input:?} expected offset {want}, got {got:?}",
-                c["zone"], c["date"], c["kind"]));
+            failures.push(format!(
+                "[{} {} {}] {input:?} expected offset {want}, got {got:?}",
+                c["zone"], c["date"], c["kind"]
+            ));
         }
     }
     eprintln!("tz_gapfold checked {checked}, {} failing", failures.len());
-    assert!(failures.is_empty(), "{} gap/fold failures:\n{}", failures.len(),
-        failures.join("\n"));
+    assert!(
+        failures.is_empty(),
+        "{} gap/fold failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
 }
 
 /// Multi-entity extraction: inputs with several times ("Monday or Tuesday",
@@ -791,8 +1107,7 @@ fn tz_gapfold() {
 /// this compares the *full set* of (start, end, value) against the oracle.
 #[test]
 fn multi_entity() {
-    let data: Value =
-        serde_json::from_str(include_str!("../fixtures/multi_entity.json")).unwrap();
+    let data: Value = serde_json::from_str(include_str!("../fixtures/multi_entity.json")).unwrap();
     let ctx = ctx();
     let mut failures = Vec::new();
     let mut checked = 0usize;
@@ -800,23 +1115,44 @@ fn multi_entity() {
         checked += 1;
         let input = c["input"].as_str().unwrap();
         // Expected set of (start, end, value) from the oracle.
-        let mut want: Vec<(u64, u64, Value)> = c["entities"].as_array().unwrap().iter()
-            .map(|e| (e["start"].as_u64().unwrap(), e["end"].as_u64().unwrap(), strip_values(e["value"].clone())))
+        let mut want: Vec<(u64, u64, Value)> = c["entities"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|e| {
+                (
+                    e["start"].as_u64().unwrap(),
+                    e["end"].as_u64().unwrap(),
+                    strip_values(e["value"].clone()),
+                )
+            })
             .collect();
         want.sort_by_key(|(s, e, _)| (*s, *e));
         // Port's set.
-        let mut got: Vec<(u64, u64, Value)> = duckling::parse(input, &ctx).into_iter()
+        let mut got: Vec<(u64, u64, Value)> = duckling::parse(input, &ctx)
+            .into_iter()
             .filter(|e| e.dim == "time")
             .map(|e| (e.start as u64, e.end as u64, strip_values(e.value)))
             .collect();
         got.sort_by_key(|(s, e, _)| (*s, *e));
         if got != want {
-            failures.push(format!("{input:?}\n  expected {want:?}\n  got      {got:?}"));
+            failures.push(format!(
+                "{input:?}\n  expected {want:?}\n  got      {got:?}"
+            ));
         }
     }
     eprintln!("multi_entity checked {checked}, {} failing", failures.len());
-    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
-        failures.iter().take(5000).cloned().collect::<Vec<_>>().join("\n"));
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures
+            .iter()
+            .take(5000)
+            .cloned()
+            .collect::<Vec<_>>()
+            .join("\n")
+    );
 }
 
 /// Sentence-level differential: natural sentences with an embedded time expression
@@ -845,12 +1181,27 @@ fn sentence_stress() {
         }
         let exp = strip_values(expected.clone());
         if !best_time_values(input, &ctx).iter().any(|g| g == &exp) {
-            failures.push(format!("{input:?}\n  expected {exp}\n  got      {:?}", best_time_values(input, &ctx)));
+            failures.push(format!(
+                "{input:?}\n  expected {exp}\n  got      {:?}",
+                best_time_values(input, &ctx)
+            ));
         }
     }
-    eprintln!("sentence_stress checked {checked}, {} failing", failures.len());
-    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
-        failures.iter().take(5000).cloned().collect::<Vec<_>>().join("\n"));
+    eprintln!(
+        "sentence_stress checked {checked}, {} failing",
+        failures.len()
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures
+            .iter()
+            .take(5000)
+            .cloned()
+            .collect::<Vec<_>>()
+            .join("\n")
+    );
 }
 
 /// Reference-time differential: ref-sensitive inputs ("next tuesday", "end of the
@@ -861,8 +1212,7 @@ fn sentence_stress() {
 /// Best-entity semantics; each case carries its own reference.
 #[test]
 fn ref_stress() {
-    let data: Value =
-        serde_json::from_str(include_str!("../fixtures/ref_stress.json")).unwrap();
+    let data: Value = serde_json::from_str(include_str!("../fixtures/ref_stress.json")).unwrap();
     let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(-2));
     let mut failures = Vec::new();
     let mut checked = 0usize;
@@ -874,16 +1224,30 @@ fn ref_stress() {
         checked += 1;
         let input = c["input"].as_str().unwrap();
         let reference: jiff::Timestamp = c["ref"].as_str().unwrap().parse().expect("reference");
-        let ctx = duckling::ResolveContext { reference, zone: zone.clone(), with_latent: false };
+        let ctx = duckling::ResolveContext {
+            reference,
+            zone: zone.clone(),
+            with_latent: false,
+        };
         let exp = strip_values(expected.clone());
         if !best_time_values(input, &ctx).iter().any(|g| g == &exp) {
             failures.push(format!(
                 "[{}] {input:?}\n  expected {exp}\n  got      {:?}",
-                c["refLabel"], best_time_values(input, &ctx)
+                c["refLabel"],
+                best_time_values(input, &ctx)
             ));
         }
     }
     eprintln!("ref_stress checked {checked}, {} failing", failures.len());
-    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
-        failures.iter().take(5000).cloned().collect::<Vec<_>>().join("\n"));
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures
+            .iter()
+            .take(5000)
+            .cloned()
+            .collect::<Vec<_>>()
+            .join("\n")
+    );
 }
