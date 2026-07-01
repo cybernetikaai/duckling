@@ -128,6 +128,7 @@ Branch: `rust-port-en-time`.
 | + Duration differential vs oracle | 1069 / 1069 | 0 | 68 / 68 | **duration_corpus 135** (+47 oracle-verified cases, +5 genuine negatives); 64-input differential (abbreviations, fractions, composites, colloquial, more/less, precision) → **0 divergences** incl. partial-match parity ("3.5 weeks"→both drop "3." and yield partial "5 weeks", since decimal-durations only apply to hours/minutes). New dimension validated against the live oracle, not just the transcribed corpus |
 | + combined Time+Duration (parse_all) | 1069 / 1069 | 0 | 68 / 68 | **combined_dims 28**; new `parse_all` = the `dims:["time","duration"]` surface, ranking both in one pool by dimension-agnostic range domination. **0 divergences** vs oracle: "in 2 hours"→Time (contained Duration dominated), "…20 minutes and wake me at 7am"→Duration+Time (disjoint), "at 3pm for 2 hours"→one Time. `parse` (Time-only) unchanged → Time corpus untouched |
 | + multi-entity sentence differential | 1069 / 1069 | 0 | 68 / 68 | **combined_dims 58**; +30 realistic full-sentence utterances (53 entities) — "wake me at 7am and remind me in 2 hours"→2 Time, "take the medicine every 4 hours for 3 days"→2 Duration, "book it from 9 to 5 on monday". **0 divergences** — `parse_all` extracts the exact oracle entity set (dim+span) from multi-mention speech, the realistic product input |
+| + prose false-positive parity | 1069 / 1069 | 0 | 68 / 68 | **combined_dims 96**; +38 prose sentences with temporal homographs/idioms ("the second option", "a quarter of the students", "give me a second", "the third quarter earnings", "wait a minute", "i'll take seconds"→[]). **0 divergences** — `parse_all` matches Duckling's dimension-scoped extraction exactly (incl. its no-intent quirks like "the second"→day-of-month), so no spurious-entity drift in ordinary speech |
 
 ## Rule-level coverage audit
 
@@ -362,6 +363,22 @@ monday", "set an alarm for 6:30am and a reminder for 8pm tonight". `parse_all`
 returned the *exact* oracle entity set (dim+span) for all 30 — the ranker
 correctly surfaces every non-dominated entity across a sentence, not just one.
 Merged into **combined_dims** (28→58 cases).
+
+**Prose false-positive parity (this iteration → 0 divergences).** The Duration
+dimension was new and hadn't faced the "no spurious entity in ordinary English"
+bar that Time has (sentence_stress, dict scan). Tested `parse_all` on 38 prose
+sentences where temporal words appear non-temporally: ordinal homographs ("the
+second option is better", "he came in third"), grain homographs ("a quarter of
+the students", "the third quarter earnings", "minutes of the meeting"), idioms
+("give me a second", "wait a minute", "back in the day", "i'll take seconds"), and
+legit embedded durations ("a week is a long time", "it lasted an hour"). **0
+divergences** — `parse_all` reproduces Duckling's *dimension-scoped* extraction
+exactly, including its intent-blind quirks: "the second option" → Time "the
+second" (day-of-month 2nd), "the third quarter" → Time (quarter of year), "a
+quarter of the students" → Duration "a quarter" (15 min). These aren't port false
+positives; they are faithful Duckling behavior (Duckling extracts dimensions, it
+does not detect whether a mention is temporal). "i'll take seconds" → [] on both.
+Merged into **combined_dims** (58→96).
 
 **Composition fuzz (this iteration).** Beyond the curated corpus, generated
 ~770 compositional probes (deep nestings, directionals, interval+date, duration

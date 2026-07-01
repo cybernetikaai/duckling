@@ -1,5 +1,5 @@
 {
- "_comment": "Combined time+duration (parse_all) cross-dimension range-domination, vs the oracle dims=[time,duration] at ref 2013-02-12 04:30. Each case lists the expected surviving entities as [dim,start,end]; the widest match per position wins, disjoint matches all surface. Includes single expressions and realistic multi-entity spoken sentences.",
+ "_comment": "Combined time+duration (parse_all) cross-dimension range-domination, vs the oracle dims=[time,duration] at ref 2013-02-12 04:30. Each case lists the expected surviving entities as [dim,start,end]; the widest match per position wins, disjoint matches all surface. Includes single expressions and realistic multi-entity spoken sentences. Also covers prose false-positive parity (temporal homographs like \"the second option\", \"a quarter of the students\").",
  "cases": [
   {
    "input": "in 2 hours",
@@ -700,6 +700,260 @@
      40
     ]
    ]
+  },
+  {
+   "input": "the second option is better",
+   "expected": [
+    [
+     "time",
+     0,
+     10
+    ]
+   ]
+  },
+  {
+   "input": "she is second in line",
+   "expected": []
+  },
+  {
+   "input": "he came in third",
+   "expected": []
+  },
+  {
+   "input": "the third quarter earnings were strong",
+   "expected": [
+    [
+     "time",
+     0,
+     17
+    ]
+   ]
+  },
+  {
+   "input": "first come first served",
+   "expected": []
+  },
+  {
+   "input": "the first lady spoke",
+   "expected": [
+    [
+     "time",
+     0,
+     9
+    ]
+   ]
+  },
+  {
+   "input": "he finished in fourth place",
+   "expected": []
+  },
+  {
+   "input": "a quarter of the students passed",
+   "expected": [
+    [
+     "duration",
+     0,
+     9
+    ]
+   ]
+  },
+  {
+   "input": "half the team is out",
+   "expected": []
+  },
+  {
+   "input": "minutes of the meeting",
+   "expected": []
+  },
+  {
+   "input": "seconds please",
+   "expected": []
+  },
+  {
+   "input": "the minute details matter",
+   "expected": [
+    [
+     "time",
+     0,
+     10
+    ]
+   ]
+  },
+  {
+   "input": "he is second to none",
+   "expected": []
+  },
+  {
+   "input": "days go by so fast",
+   "expected": []
+  },
+  {
+   "input": "for hours she waited",
+   "expected": []
+  },
+  {
+   "input": "months went by",
+   "expected": []
+  },
+  {
+   "input": "give me a second",
+   "expected": [
+    [
+     "duration",
+     8,
+     16
+    ]
+   ]
+  },
+  {
+   "input": "wait a minute",
+   "expected": [
+    [
+     "duration",
+     5,
+     13
+    ]
+   ]
+  },
+  {
+   "input": "just a moment",
+   "expected": []
+  },
+  {
+   "input": "hang on a sec",
+   "expected": [
+    [
+     "duration",
+     8,
+     13
+    ]
+   ]
+  },
+  {
+   "input": "back in the day",
+   "expected": [
+    [
+     "time",
+     8,
+     15
+    ]
+   ]
+  },
+  {
+   "input": "once in a blue moon",
+   "expected": []
+  },
+  {
+   "input": "in a bit",
+   "expected": []
+  },
+  {
+   "input": "in no time",
+   "expected": []
+  },
+  {
+   "input": "a couple came to dinner",
+   "expected": []
+  },
+  {
+   "input": "several people showed up",
+   "expected": []
+  },
+  {
+   "input": "two of them left",
+   "expected": []
+  },
+  {
+   "input": "a week is a long time",
+   "expected": [
+    [
+     "duration",
+     0,
+     6
+    ]
+   ]
+  },
+  {
+   "input": "it lasted an hour",
+   "expected": [
+    [
+     "duration",
+     10,
+     17
+    ]
+   ]
+  },
+  {
+   "input": "i waited two hours",
+   "expected": [
+    [
+     "duration",
+     9,
+     18
+    ]
+   ]
+  },
+  {
+   "input": "give it a month",
+   "expected": [
+    [
+     "duration",
+     8,
+     15
+    ]
+   ]
+  },
+  {
+   "input": "the trip takes 3 days",
+   "expected": [
+    [
+     "duration",
+     15,
+     21
+    ]
+   ]
+  },
+  {
+   "input": "the year 2020 was hard",
+   "expected": [
+    [
+     "time",
+     0,
+     8
+    ]
+   ]
+  },
+  {
+   "input": "see you next fall",
+   "expected": [
+    [
+     "time",
+     8,
+     17
+    ]
+   ]
+  },
+  {
+   "input": "spring is coming",
+   "expected": [
+    [
+     "time",
+     0,
+     6
+    ]
+   ]
+  },
+  {
+   "input": "i'll take seconds",
+   "expected": []
+  },
+  {
+   "input": "time flies",
+   "expected": []
+  },
+  {
+   "input": "a moment of silence",
+   "expected": []
   }
  ]
 }
