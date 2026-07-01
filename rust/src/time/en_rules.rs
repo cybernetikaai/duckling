@@ -2035,7 +2035,9 @@ fn cycle_after_before_rules() -> Vec<Rule> {
             prod: Box::new(|tokens| match tokens {
                 [ord, Token::TimeGrain(g), _, Token::Time(td)] => {
                     let n = get_int_value(ord)?;
-                    Some(Token::Time(cycle_nth_after_td(false, *g, n - 1, td)))
+                    // notImmediate=true (ruleCycleOrdinalOfTime): "first week of
+                    // October 2014" skips the week that merely covers Oct 1.
+                    Some(Token::Time(cycle_nth_after_td(true, *g, n - 1, td)))
                 }
                 _ => None,
             }),
