@@ -433,6 +433,52 @@ pub fn take_nth_after(n: i64, not_immediate: bool, cyclic: Predicate, base: Pred
 /// nth occurrence of `pred` relative to the reference time (port of takeNth).
 /// n>=0 picks from the future (skipping the current one if not_immediate and it
 /// covers now); n<0 picks from the past. Used by predNth for this/next/last.
+// Season boundaries (Spring, Summer, Fall, Winter), ports of seasonStart.
+const SEASON_STARTS: [(i8, i8); 4] = [(3, 20), (6, 21), (9, 23), (12, 21)];
+
+fn season_start_date(y: i16, idx: usize) -> jiff::civil::Date {
+    let (m, d) = SEASON_STARTS[idx];
+    jiff::civil::date(y, m, d)
+}
+fn next_season_idx(y: i16, idx: usize) -> (i16, usize) {
+    if idx == 3 { (y + 1, 0) } else { (y, idx + 1) }
+}
+fn prev_season_idx(y: i16, idx: usize) -> (i16, usize) {
+    if idx == 0 { (y - 1, 3) } else { (y, idx - 1) }
+}
+/// The season containing `day` (port of seasonOf): the latest season whose
+/// start is on/before `day`, falling back to the previous year's Winter.
+fn season_of(day: jiff::civil::Date) -> (i16, usize) {
+    let y = day.year();
+    for idx in [3usize, 2, 1, 0] {
+        if season_start_date(y, idx) <= day {
+            return (y, idx);
+        }
+    }
+    (y - 1, 3)
+}
+fn season_obj(s: (i16, usize)) -> TimeObject {
+    let (y, idx) = s;
+    let start = season_start_date(y, idx);
+    let (ny, nidx) = next_season_idx(y, idx);
+    let end = season_start_date(ny, nidx).yesterday().unwrap();
+    TimeObject { start: start.at(0, 0, 0, 0), grain: Grain::Day, end: Some(end.at(0, 0, 0, 0)) }
+}
+
+/// Cycle through the four astronomical seasons (port of seasonPredicate).
+/// future starts at the current season; past runs backwards from the previous.
+pub fn season_series() -> Predicate {
+    Predicate::Series(Rc::new(move |t: TimeObject, _ctx| {
+        let cur = season_of(t.start.date());
+        let fwd = successors(Some(cur), |&(y, i)| Some(next_season_idx(y, i))).map(season_obj);
+        let back = successors(Some(prev_season_idx(cur.0, cur.1)), |&(y, i)| {
+            Some(prev_season_idx(y, i))
+        })
+        .map(season_obj);
+        (Box::new(back) as BoxIter, Box::new(fwd) as BoxIter)
+    }))
+}
+
 pub fn take_nth(n: i64, not_immediate: bool, pred: Predicate) -> Predicate {
     Predicate::Series(Rc::new(move |t: TimeObject, ctx: &TimeContext| {
         let base = ctx.ref_time;

@@ -6,8 +6,8 @@ use crate::regex::compile;
 use crate::time::object::{IntervalDirection, IntervalType};
 use crate::time::predicate::{
     Ampm, Predicate, ampm_predicate, cycle_nth, day_of_month, day_of_week, hour, hour_minute,
-    hour_minute_second, in_duration, intersect, month, shift_timezone, take_last_of, take_nth,
-    take_nth_after, time_cycle, time_intervals, year as year_pred, cycle_n,
+    hour_minute_second, in_duration, intersect, month, season_series, shift_timezone,
+    take_last_of, take_nth, take_nth_after, time_cycle, time_intervals, year as year_pred, cycle_n,
 };
 use crate::types::{Form, PatternItem, Rule, TimeData, Token};
 
@@ -1297,20 +1297,36 @@ fn season_td(sm: i64, sd: i64, em: i64, ed: i64) -> Option<TimeData> {
 }
 
 fn season_rules() -> Vec<Rule> {
+    let mut rules = vec![Rule {
+        name: "last|this|next <season>".into(),
+        pattern: vec![PatternItem::Regex(compile(
+            r"(this|current|next|last|past|previous) seasons?",
+        ))],
+        prod: Box::new(|tokens| {
+            let w = regex_groups(tokens)?.first()?.to_lowercase();
+            let n = match w.as_str() {
+                "this" | "current" => 0,
+                "last" | "past" | "previous" => -1,
+                "next" => 1,
+                _ => return None,
+            };
+            let mut td = TimeData::new(take_nth(n, false, season_series()), Grain::Day);
+            td.form = Some(Form::Season);
+            Some(Token::Time(td))
+        }),
+    }];
     let seasons: [(&str, &str, i64, i64, i64, i64); 4] = [
         ("summer", r"summer", 6, 21, 9, 23),
         ("fall", r"fall|autumn", 9, 23, 12, 21),
         ("winter", r"winter", 12, 21, 3, 20),
         ("spring", r"spring", 3, 20, 6, 21),
     ];
-    seasons
-        .iter()
-        .map(|&(name, re, sm, sd, em, ed)| Rule {
-            name: format!("season {name}"),
-            pattern: vec![PatternItem::Regex(compile(re))],
-            prod: Box::new(move |_| season_td(sm, sd, em, ed).map(Token::Time)),
-        })
-        .collect()
+    rules.extend(seasons.iter().map(|&(name, re, sm, sd, em, ed)| Rule {
+        name: format!("season {name}"),
+        pattern: vec![PatternItem::Regex(compile(re))],
+        prod: Box::new(move |_| season_td(sm, sd, em, ed).map(Token::Time)),
+    }));
+    rules
 }
 
 fn time_pod_rules() -> Vec<Rule> {
