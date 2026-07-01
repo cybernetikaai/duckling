@@ -18,6 +18,7 @@ pub mod json;
 pub mod numeral;
 pub mod ordinal;
 pub mod phonenumber;
+pub mod quantity;
 pub mod ranking;
 pub mod regex;
 pub mod resolve;
@@ -388,6 +389,27 @@ pub fn parse_distance(input: &str) -> Vec<Entity> {
         Token::Distance(dd) => resolve::distance_value(dd).map(|v| ("distance", v)),
         _ => None,
     })
+}
+
+/// Parse quantities ("2 cups of sugar", "500g", "between 100 and 1000 grams").
+/// `with_latent` controls whether a bare number resolves as an `unnamed`
+/// quantity (Duckling's `withLatent` option). Runs in Quantity's own rule set,
+/// so it never touches the Time ranker.
+pub fn parse_quantity_opts(input: &str, with_latent: bool) -> Vec<Entity> {
+    let rules = dim_rules("quantity", || {
+        let mut r = numeral::en::numeral_rules();
+        r.extend(quantity::en::quantity_rules());
+        r
+    });
+    emit_entities(&rules, input, move |t| match t {
+        Token::Quantity(qd) => resolve::quantity_value(qd, with_latent).map(|v| ("quantity", v)),
+        _ => None,
+    })
+}
+
+/// Parse quantities, dropping latent bare-number quantities (Duckling default).
+pub fn parse_quantity(input: &str) -> Vec<Entity> {
+    parse_quantity_opts(input, false)
 }
 
 /// Debug: every Time candidate (unranked) as "rule | range | score | value".

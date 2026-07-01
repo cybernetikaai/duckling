@@ -100,6 +100,10 @@ fn each_dimension_dispatches() {
         parse(&["--dims", "distance", "3 km"])[0]["value"]["unit"],
         "kilometre"
     );
+    assert_eq!(
+        parse(&["--dims", "quantity", "3 cups of sugar"])[0]["value"]["product"],
+        "sugar"
+    );
 }
 
 #[test]

@@ -11,6 +11,7 @@ use crate::grain::Grain;
 use crate::numeral::NumeralData;
 use crate::ordinal::OrdinalData;
 use crate::phonenumber::PhoneNumberData;
+use crate::quantity::QuantityData;
 use crate::regex::Re;
 use crate::temperature::TemperatureData;
 use crate::time::object::IntervalDirection;
@@ -126,6 +127,7 @@ pub enum Token {
     Temperature(TemperatureData),
     Volume(VolumeData),
     Distance(DistanceData),
+    Quantity(QuantityData),
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]

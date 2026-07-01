@@ -36,7 +36,7 @@ they never touch the Time ranker.
 | ~~Temperature~~ ✅ | 161 L | done — temperature_corpus (31+3 neg) | — |
 | ~~Volume~~ ✅ | 166 L | done — volume_corpus (54+4 neg) | — |
 | ~~Distance~~ ✅ | 213 L | done — distance_corpus (51+4 neg); incl. composite feet/inch + metric↔imperial fold + ambiguous "m" | — |
-| Quantity | 256 L | 21 | ~1 day |
+| ~~Quantity~~ ✅ | 256 L | done — quantity_corpus (50+4 latent+4 neg); mg/kg scaling, product, latent, intervals | — |
 | AmountOfMoney | 432 L | 20 | ~1.5 days |
 
 **Shared prerequisite: finish Numeral** (~1 day) — their corpora test `$1.2M`,
@@ -85,7 +85,7 @@ product actually needs to extract those quantities.
 2. ~~Email → Url → CreditCardNumber → PhoneNumber (quick wins)~~ — ✅ done.
 3. ~~Finish Numeral~~ ✅ — corpus-complete (105/105); one documented omission
    (ruleSkipHundreds1). Prerequisite for Bucket B now cleared.
-4. ~~Temperature~~ ✅ → ~~Volume~~ ✅ → ~~Distance~~ ✅ → Quantity → AmountOfMoney.
-   **Next: Quantity** (Duckling/Quantity/EN — `<numeral> <unit> [of <product>]`,
-   e.g. "2 cups of sugar", "3 grams", intervals). Same isolated-rule-set pattern:
-   its own `numeral + quantity` set via `dim_rules`, so zero Time-corpus risk.
+4. ~~Temperature~~ ✅ → ~~Volume~~ ✅ → ~~Distance~~ ✅ → ~~Quantity~~ ✅ → AmountOfMoney.
+   **Next: AmountOfMoney** (Duckling/AmountOfMoney/EN — currencies/symbols, "$20",
+   "20 dollars", "3.5 euros", cents, intervals, "about"). Last Bucket B dimension;
+   same isolated-rule-set pattern (own `numeral + amountofmoney` set), zero Time risk.

@@ -1,0 +1,79 @@
+{
+ "_comment": "Transcribed from Duckling/Quantity/EN/Corpus.hs. parse_quantity (withLatent=false) must produce an entity whose value ~= expected (tolerance; mg/kg scaling is float). 'latent' cases use withLatent=true. negatives (bare number / unit word alone) produce none in default mode.",
+ "cases": [
+  { "input": "two pounds of meat", "expected": {"value": 2, "unit": "pound", "product": "meat", "type": "value"} },
+
+  { "input": "2 grams",          "expected": {"value": 2, "unit": "gram", "type": "value"} },
+  { "input": "0.002 kg",         "expected": {"value": 2, "unit": "gram", "type": "value"} },
+  { "input": "2 g.",             "expected": {"value": 2, "unit": "gram", "type": "value"} },
+  { "input": "2 gs",             "expected": {"value": 2, "unit": "gram", "type": "value"} },
+  { "input": "2/1000 kilograms", "expected": {"value": 2, "unit": "gram", "type": "value"} },
+  { "input": "2000 milligrams",  "expected": {"value": 2, "unit": "gram", "type": "value"} },
+  { "input": "2,000 milligrams", "expected": {"value": 2, "unit": "gram", "type": "value"} },
+
+  { "input": "a kilogram", "expected": {"value": 1000, "unit": "gram", "type": "value"} },
+  { "input": "a kg",       "expected": {"value": 1000, "unit": "gram", "type": "value"} },
+  { "input": "1 k.g.",     "expected": {"value": 1000, "unit": "gram", "type": "value"} },
+  { "input": "1 k.gs",     "expected": {"value": 1000, "unit": "gram", "type": "value"} },
+  { "input": "1000 gs",    "expected": {"value": 1000, "unit": "gram", "type": "value"} },
+
+  { "input": "a Pound", "expected": {"value": 1, "unit": "pound", "type": "value"} },
+  { "input": "1 lb",    "expected": {"value": 1, "unit": "pound", "type": "value"} },
+  { "input": "a lb",    "expected": {"value": 1, "unit": "pound", "type": "value"} },
+
+  { "input": "2 ounces", "expected": {"value": 2, "unit": "ounce", "type": "value"} },
+  { "input": "2oz",      "expected": {"value": 2, "unit": "ounce", "type": "value"} },
+
+  { "input": "3 Cups of sugar", "expected": {"value": 3, "unit": "cup", "product": "sugar", "type": "value"} },
+  { "input": "3 Cups of SugAr", "expected": {"value": 3, "unit": "cup", "product": "sugar", "type": "value"} },
+
+  { "input": "3/4 cup",  "expected": {"value": 0.75, "unit": "cup", "type": "value"} },
+  { "input": "0.75 cup", "expected": {"value": 0.75, "unit": "cup", "type": "value"} },
+  { "input": ".75 cups", "expected": {"value": 0.75, "unit": "cup", "type": "value"} },
+
+  { "input": "500 grams of strawberries",     "expected": {"value": 500, "unit": "gram", "product": "strawberries", "type": "value"} },
+  { "input": "500g of strawberries",          "expected": {"value": 500, "unit": "gram", "product": "strawberries", "type": "value"} },
+  { "input": "0.5 kilograms of strawberries", "expected": {"value": 500, "unit": "gram", "product": "strawberries", "type": "value"} },
+  { "input": "0.5 kg of strawberries",        "expected": {"value": 500, "unit": "gram", "product": "strawberries", "type": "value"} },
+  { "input": "500000mg of strawberries",      "expected": {"value": 500, "unit": "gram", "product": "strawberries", "type": "value"} },
+
+  { "input": "100-1000 gram of strawberries",              "expected": {"type": "interval", "from": {"value": 100, "unit": "gram", "product": "strawberries"}, "to": {"value": 1000, "unit": "gram", "product": "strawberries"}} },
+  { "input": "between 100 and 1000 grams of strawberries", "expected": {"type": "interval", "from": {"value": 100, "unit": "gram", "product": "strawberries"}, "to": {"value": 1000, "unit": "gram", "product": "strawberries"}} },
+  { "input": "from 100 to 1000 g of strawberries",         "expected": {"type": "interval", "from": {"value": 100, "unit": "gram", "product": "strawberries"}, "to": {"value": 1000, "unit": "gram", "product": "strawberries"}} },
+  { "input": "100 - 1000 g of strawberries",               "expected": {"type": "interval", "from": {"value": 100, "unit": "gram", "product": "strawberries"}, "to": {"value": 1000, "unit": "gram", "product": "strawberries"}} },
+
+  { "input": "around 2 -7 g",                     "expected": {"type": "interval", "from": {"value": 2, "unit": "gram"}, "to": {"value": 7, "unit": "gram"}} },
+  { "input": "~2-7 grams",                        "expected": {"type": "interval", "from": {"value": 2, "unit": "gram"}, "to": {"value": 7, "unit": "gram"}} },
+  { "input": "from 2 to 7 g",                     "expected": {"type": "interval", "from": {"value": 2, "unit": "gram"}, "to": {"value": 7, "unit": "gram"}} },
+  { "input": "between 2.0 g and about 7.0 g",     "expected": {"type": "interval", "from": {"value": 2, "unit": "gram"}, "to": {"value": 7, "unit": "gram"}} },
+  { "input": "between 0.002 kg and about 0.007 kg","expected": {"type": "interval", "from": {"value": 2, "unit": "gram"}, "to": {"value": 7, "unit": "gram"}} },
+  { "input": "2 - ~7 grams",                      "expected": {"type": "interval", "from": {"value": 2, "unit": "gram"}, "to": {"value": 7, "unit": "gram"}} },
+
+  { "input": "less than six pounds of meat","expected": {"type": "interval", "to": {"value": 6, "unit": "pound", "product": "meat"}} },
+  { "input": "no more than 6 lbs of meat",  "expected": {"type": "interval", "to": {"value": 6, "unit": "pound", "product": "meat"}} },
+  { "input": "below 6.0 pounds of meat",    "expected": {"type": "interval", "to": {"value": 6, "unit": "pound", "product": "meat"}} },
+  { "input": "at most six pounds of meat",  "expected": {"type": "interval", "to": {"value": 6, "unit": "pound", "product": "meat"}} },
+
+  { "input": "exceeding 2 Cups",  "expected": {"type": "interval", "from": {"value": 2, "unit": "cup"}} },
+  { "input": "at least two Cups", "expected": {"type": "interval", "from": {"value": 2, "unit": "cup"}} },
+  { "input": "over 2 Cups",       "expected": {"type": "interval", "from": {"value": 2, "unit": "cup"}} },
+  { "input": "more than 2 Cups",  "expected": {"type": "interval", "from": {"value": 2, "unit": "cup"}} },
+
+  { "input": "exceeding 4 oz of chocolate",    "expected": {"type": "interval", "from": {"value": 4, "unit": "ounce", "product": "chocolate"}} },
+  { "input": "at least 4.0 oz of chocolate",   "expected": {"type": "interval", "from": {"value": 4, "unit": "ounce", "product": "chocolate"}} },
+  { "input": "over four ounces of chocolate",  "expected": {"type": "interval", "from": {"value": 4, "unit": "ounce", "product": "chocolate"}} },
+  { "input": "more than four ounces of chocolate","expected": {"type": "interval", "from": {"value": 4, "unit": "ounce", "product": "chocolate"}} }
+ ],
+ "latent": [
+  { "input": "around 4", "expected": {"value": 4, "unit": "unnamed", "type": "value"} },
+  { "input": "four",     "expected": {"value": 4, "unit": "unnamed", "type": "value"} },
+  { "input": "~ four",   "expected": {"value": 4, "unit": "unnamed", "type": "value"} },
+  { "input": "about 38.5","expected": {"value": 38.5, "unit": "unnamed", "type": "value"} }
+ ],
+ "negatives": [
+  "5",
+  "grams",
+  "cup",
+  "hello world"
+ ]
+}

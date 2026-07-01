@@ -1599,3 +1599,58 @@ fn distance_corpus() {
         failures.join("\n")
     );
 }
+
+/// Quantity corpus (Duckling/Quantity/EN/Corpus.hs). Default mode (withLatent
+/// false): mg/kg scaling makes values float, so compared with tolerance;
+/// `latent` cases require withLatent true; negatives (bare number / unit word
+/// alone) produce none in default mode.
+#[test]
+fn quantity_corpus() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/quantity_corpus.json")).unwrap();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let want = &c["expected"];
+        let got: Vec<Value> = duckling::parse_quantity(input)
+            .into_iter()
+            .map(|e| e.value)
+            .collect();
+        if !got.iter().any(|g| approx_eq(g, want)) {
+            failures.push(format!("{input:?}\n  expected {want}\n  got      {got:?}"));
+        }
+    }
+    for c in data["latent"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let want = &c["expected"];
+        let got: Vec<Value> = duckling::parse_quantity_opts(input, true)
+            .into_iter()
+            .map(|e| e.value)
+            .collect();
+        if !got.iter().any(|g| approx_eq(g, want)) {
+            failures.push(format!(
+                "[latent] {input:?}\n  expected {want}\n  got      {got:?}"
+            ));
+        }
+    }
+    for neg in data["negatives"].as_array().unwrap() {
+        checked += 1;
+        let input = neg.as_str().unwrap();
+        if !duckling::parse_quantity(input).is_empty() {
+            failures.push(format!("[negative] {input:?} parsed a quantity"));
+        }
+    }
+    eprintln!(
+        "quantity_corpus checked {checked}, {} failing",
+        failures.len()
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
+}
