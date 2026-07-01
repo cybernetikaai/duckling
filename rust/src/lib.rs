@@ -33,7 +33,7 @@ fn build_rules(locale: Locale) -> Vec<Rule> {
     r.extend(ordinal::ordinal_rules());
     r.extend(timegrain::timegrain_rules());
     r.extend(duration::duration_rules());
-    r.extend(time::en_rules::en_rules(locale));
+    r.extend(time::en::en_rules(locale));
     r
 }
 

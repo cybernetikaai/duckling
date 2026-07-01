@@ -1159,7 +1159,7 @@ fn region_holiday_rules(locale: Locale) -> Vec<Rule> {
         Locale::EnTt => "TT",
     };
     let data: serde_json::Value =
-        serde_json::from_str(include_str!("../../fixtures/region_holidays.json"))
+        serde_json::from_str(include_str!("../../../fixtures/region_holidays.json"))
             .expect("region_holidays fixture");
     let Some(arr) = data.get(region).and_then(|v| v.as_array()) else {
         return Vec::new();

@@ -1,6 +1,6 @@
 //! Time dimension: objects, predicates, EN rules.
 
 pub mod computed;
-pub mod en_rules;
+pub mod en;
 pub mod object;
 pub mod predicate;
