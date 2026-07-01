@@ -876,6 +876,50 @@ fn part_of_day_rules() -> Vec<Rule> {
     ]
 }
 
+fn is_grain_of_time_day(t: &Token) -> bool {
+    matches!(t, Token::Time(td) if td.grain == Grain::Day)
+}
+
+/// Absorb connective words so the surrounded time can intersect (ruleAbsorbOnDay,
+/// ruleAbsorbOnADOW, ruleAbsorbCommaTOD). e.g. "on Thursday", "Monday,".
+fn absorb_rules() -> Vec<Rule> {
+    vec![
+        Rule {
+            name: "on <day>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"on")),
+                PatternItem::Predicate(Box::new(is_grain_of_time_day)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(td)] => Some(Token::Time(td.clone())),
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "on a <named-day>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"on a")),
+                PatternItem::Predicate(Box::new(is_a_day_of_week)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(td)] => Some(Token::Time(td.clone())),
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "absorption of , after named day".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_a_day_of_week)),
+                PatternItem::Regex(compile(r",")),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(td), _] => Some(Token::Time(td.clone())),
+                _ => None,
+            }),
+        },
+    ]
+}
+
 /// Generic intersection of two adjacent times (ports of ruleIntersect /
 /// ruleIntersectOf). Composes dates+years, dow+month-day, time-on-day, etc.
 fn intersect_rules() -> Vec<Rule> {
@@ -1440,6 +1484,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(crate::time::computed::computed_holiday_rules());
     rules.extend(crate::time::computed::computed_holiday_shift_rules());
     rules.extend(crate::time::computed::computed_interval_holiday_rules());
+    rules.extend(absorb_rules());
     rules.extend(intersect_rules());
     rules
 }
