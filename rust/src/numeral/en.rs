@@ -310,5 +310,25 @@ pub fn numeral_rules() -> Vec<Rule> {
                 )))
             }),
         },
+        // "100K", "1.2M" (ruleSuffixes): <numeral> (k|m|g) at a word boundary.
+        Rule {
+            name: "suffixes (K,M,G)".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_numeral)),
+                PatternItem::Regex(compile(r"(k|m|g)(?=[\W$€¢£]|$)")),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Numeral(n), Token::RegexMatch(g)] => {
+                    let mult = match g.first()?.to_lowercase().as_str() {
+                        "k" => 1e3,
+                        "m" => 1e6,
+                        "g" => 1e9,
+                        _ => return None,
+                    };
+                    Some(Token::Numeral(NumeralData::new(n.value * mult, true)))
+                }
+                _ => None,
+            }),
+        },
     ]
 }
