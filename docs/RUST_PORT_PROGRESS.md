@@ -104,6 +104,24 @@ Branch: `rust-port-en-time`.
 | + reverse scan + multi-entity | 1069 / 1069 | 0 | 68 / 68 | reverse dict scan (false negatives): 0; **multi_entity 24** full-entity-set matches (ranker multi-select); 0 gaps — single-word surface bidirectionally clean |
 | + tz ground-truth (vs IANA tzdata) | 1069 / 1069 | 0 | 68 / 68 | **tz_truth 270** (9 zones × all dates) + **tz_gapfold 12** (PEP-495 fold=0); offsets correct vs authoritative tzdata, not just Duckling |
 | + engine perf (chart parser) | 1069 / 1069 | 0 | 68 / 68 | per-parse latency −42–53% (regex-hit cache + skip regex-only rules + no per-round stash clone); behavior unchanged |
+| + rule-level coverage audit (2 gaps) | 1069 / 1069 | 0 | 68 / 68 | diff vs Duckling/Time/EN/Rules.hs; fixed "N dow from <time>" (was only "from now") + added "<ordinal> <cycle> after <time>" |
+
+## Rule-level coverage audit
+
+Diffed the port's rule names against Duckling's own `Duckling/Time/EN/Rules.hs`
+(140 rules). ~22 names differed; testing each phrasing against the oracle found
+**2 genuine gaps** (now fixed) — the rest were renames or don't fire in base EN:
+- **fixed** `<integer> <day-of-week> from <time>` — the port only had "from now"
+  (pred_nth vs reference); generalized to any base via predNthAfter, so "2 fridays
+  from today/tomorrow/next monday" now resolve.
+- **fixed** `<ordinal> <cycle> after <time>` — was missing; "3rd week after next
+  monday" resolved a day early. Ported `cycleNthAfter True grain (n-1)`.
+- **renames** (already covered): "between `<time>` and `<time>`", "nth `<time>` after
+  `<time>`", "now"/"right now", "this/next/last `<time>`", "`<time>` `<part-of-day>`".
+- **don't fire in base EN** (oracle returns nothing too, so matching): word-minute
+  rules ("three oh five", "three twenty"), "hhmm (military) am|pm" ("1500 pm").
+- **latent, dropped in default mode** (port matches in default): "`<part-of-day>`
+  `<latent-time-of-day>`" ("evening 8" → nothing by default in both).
 
 ## Performance
 
