@@ -252,6 +252,14 @@
   {
    "input": "minus three million two hundred thousand",
    "value": -3200000
+  },
+  {
+   "input": "forty-five (45)",
+   "value": 45
+  },
+  {
+   "input": "45 (forty five)",
+   "value": 45
   }
  ]
 }

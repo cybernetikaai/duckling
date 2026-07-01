@@ -99,6 +99,9 @@ fn is_multipliable(t: &Token) -> bool {
 fn has_grain(t: &Token) -> bool {
     matches!(t, Token::Numeral(n) if n.grain.is_some_and(|g| g > 1))
 }
+fn is_int_positive(t: &Token) -> bool {
+    matches!(t, Token::Numeral(n) if n.value > 0.0 && n.value.fract() == 0.0)
+}
 /// Power-of-ten exponent for a magnitude word (port of powersOfTensMap).
 fn power_of_ten(w: &str) -> Option<i64> {
     Some(match w {
@@ -305,6 +308,25 @@ pub fn numeral_rules() -> Vec<Rule> {
             ],
             prod: Box::new(|tokens| match tokens {
                 [_, Token::Numeral(n)] => Some(Token::Numeral(NumeralData::new(-n.value, true))),
+                _ => None,
+            }),
+        },
+        // "forty-five (45)", "45 (forty five)" (ruleLegalParentheses): a spelled
+        // and a digit form of the same positive integer confirm each other.
+        Rule {
+            name: "<integer> '('<integer>')'".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_int_positive)),
+                PatternItem::Regex(compile(r"\(")),
+                PatternItem::Predicate(Box::new(is_int_positive)),
+                PatternItem::Regex(compile(r"\)")),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Numeral(a), _, Token::Numeral(b), _]
+                    if a.value as i64 == b.value as i64 =>
+                {
+                    Some(Token::Numeral(NumeralData::new(a.value, true)))
+                }
                 _ => None,
             }),
         },
