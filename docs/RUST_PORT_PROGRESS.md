@@ -125,6 +125,7 @@ Branch: `rust-port-en-time`.
 | + spoken-interval audit → 1 real fix | 1069 / 1069 | 0 | 68 / 68 | **spoken_forms 142**; +37 interval/range forms across 2 refs ("nine to five", "monday to friday", "from half past nine to eleven"). Fixed "from now to 5pm": the tod/non-tod endpoint guard wrongly rejected an instant ("now", grain Second) paired with a tod → refined to allow Second-grain instants (trailing-date case "from 3pm to 5pm tomorrow" still routes correctly; differential 768 green) |
 | + spoken-duration composition audit | 1069 / 1069 | 0 | 68 / 68 | **spoken_forms 178**; +36 duration/directional compositions across 2 refs ("half an hour before noon", "twenty minutes after three", "an hour and a half ago", "any time after half nine", "three days before christmas", "within the next hour"). **0 divergences** — the original corpus's duration rules already cover this; the spoken/British variants compose correctly. Spoken surface now thoroughly validated |
 | + Duration dimension (new output) | 1069 / 1069 | 0 | 68 / 68 | **duration_corpus 83** (all of Duckling/Duration/EN/Corpus.hs + 5 negatives); new `parse_duration` emits `dim:"duration"` JSON ({value,unit,`<unit>`,normalized}); ported the DurationData Semigroup + composite rules ("2 years and 3 months"→27mo, "an hour and 45 minutes"→105min, "1 year 2 days 3 hours and 4 seconds"). **Bonus Time fix:** the composites also fixed "2 hours and 30 minutes from now" (was dropping "2 hours"→05:00, now 07:00). Kept separate from `parse` (Time), so Time ranker untouched |
+| + Duration differential vs oracle | 1069 / 1069 | 0 | 68 / 68 | **duration_corpus 135** (+47 oracle-verified cases, +5 genuine negatives); 64-input differential (abbreviations, fractions, composites, colloquial, more/less, precision) → **0 divergences** incl. partial-match parity ("3.5 weeks"→both drop "3." and yield partial "5 weeks", since decimal-durations only apply to hours/minutes). New dimension validated against the live oracle, not just the transcribed corpus |
 
 ## Rule-level coverage audit
 
@@ -320,6 +321,21 @@ numeral-and-quarter and dot-minutes rules. Passes all of `Duration/EN/Corpus.hs`
 rules to the shared rule set fixed a latent Time bug — "2 hours and 30 minutes
 from now" previously dropped "2 hours" (→05:00) and now composes to 150 min
 (→07:00), matching "in 2 hours and 30 minutes"; Time corpus stayed green.
+
+**Duration differential (this iteration → 0 divergences).** Validated the new
+dimension against the live oracle beyond the transcribed corpus: 64 inputs
+spanning abbreviations ("30 sec", "4 hr", "3 yrs"), fractions ("quarter of an
+hour", "2.5 hours", "half a year"), composites ("two hours thirty", "a week and
+2 days", "3 hours 15 minutes"), colloquial ("a couple of hours"), more/less
+("2 more minutes"), and precision ("about 20 minutes"). **0 false-negatives, 0
+false-positives** — the port matches the oracle exactly, including on partial-match
+fallbacks: "3.5 weeks" has no full-span parse on either side (the decimal-duration
+rule only applies to hours/minutes), so both yield the partial "5 weeks" (dropping
+"3."). Locked the 47 oracle-verified full-span cases into **duration_corpus**
+(83→135 checks). Confirmed coverage limits are genuine Duckling parity (not port
+bugs): "5s"/"3wk"/"6 mos" abbreviations and "several weeks" are unsupported by
+Duckling too — kept out of the hard-negative list so a future beyond-Duckling
+extension isn't blocked.
 
 **Composition fuzz (this iteration).** Beyond the curated corpus, generated
 ~770 compositional probes (deep nestings, directionals, interval+date, duration

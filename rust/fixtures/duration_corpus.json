@@ -390,6 +390,241 @@
    "input": "15.5 min",
    "value": 930,
    "unit": "second"
+  },
+  {
+   "input": "5 seconds",
+   "value": 5,
+   "unit": "second"
+  },
+  {
+   "input": "ten minutes",
+   "value": 10,
+   "unit": "minute"
+  },
+  {
+   "input": "ninety minutes",
+   "value": 90,
+   "unit": "minute"
+  },
+  {
+   "input": "sixty seconds",
+   "value": 60,
+   "unit": "second"
+  },
+  {
+   "input": "one hundred days",
+   "value": 100,
+   "unit": "day"
+  },
+  {
+   "input": "a couple of hours",
+   "value": 2,
+   "unit": "hour"
+  },
+  {
+   "input": "a few days",
+   "value": 3,
+   "unit": "day"
+  },
+  {
+   "input": "a couple minutes",
+   "value": 2,
+   "unit": "minute"
+  },
+  {
+   "input": "a couple of weeks",
+   "value": 2,
+   "unit": "week"
+  },
+  {
+   "input": "10min",
+   "value": 10,
+   "unit": "minute"
+  },
+  {
+   "input": "2hr",
+   "value": 2,
+   "unit": "hour"
+  },
+  {
+   "input": "5 secs",
+   "value": 5,
+   "unit": "second"
+  },
+  {
+   "input": "10 mins",
+   "value": 10,
+   "unit": "minute"
+  },
+  {
+   "input": "2 hrs",
+   "value": 2,
+   "unit": "hour"
+  },
+  {
+   "input": "30 sec",
+   "value": 30,
+   "unit": "second"
+  },
+  {
+   "input": "4 hr",
+   "value": 4,
+   "unit": "hour"
+  },
+  {
+   "input": "3 yrs",
+   "value": 3,
+   "unit": "year"
+  },
+  {
+   "input": "quarter of an hour",
+   "value": 15,
+   "unit": "minute"
+  },
+  {
+   "input": "three quarters of an hour",
+   "value": 45,
+   "unit": "minute"
+  },
+  {
+   "input": "half a minute",
+   "value": 30,
+   "unit": "second"
+  },
+  {
+   "input": "half a year",
+   "value": 6,
+   "unit": "month"
+  },
+  {
+   "input": "1/4 hour",
+   "value": 15,
+   "unit": "minute"
+  },
+  {
+   "input": "3/4 hour",
+   "value": 45,
+   "unit": "minute"
+  },
+  {
+   "input": "2.5 hours",
+   "value": 150,
+   "unit": "minute"
+  },
+  {
+   "input": "two hours thirty",
+   "value": 150,
+   "unit": "minute"
+  },
+  {
+   "input": "3 hours 15 minutes",
+   "value": 195,
+   "unit": "minute"
+  },
+  {
+   "input": "one day and a half",
+   "value": 36,
+   "unit": "hour"
+  },
+  {
+   "input": "a week and 2 days",
+   "value": 9,
+   "unit": "day"
+  },
+  {
+   "input": "5 minutes and 30 seconds",
+   "value": 330,
+   "unit": "second"
+  },
+  {
+   "input": "3 days and 4 hours",
+   "value": 76,
+   "unit": "hour"
+  },
+  {
+   "input": "1 week 3 days",
+   "value": 10,
+   "unit": "day"
+  },
+  {
+   "input": "an hour and ten minutes",
+   "value": 70,
+   "unit": "minute"
+  },
+  {
+   "input": "two days three hours",
+   "value": 51,
+   "unit": "hour"
+  },
+  {
+   "input": "4 hours and 20 minutes",
+   "value": 260,
+   "unit": "minute"
+  },
+  {
+   "input": "5 fewer days",
+   "value": 5,
+   "unit": "day"
+  },
+  {
+   "input": "3 additional hours",
+   "value": 3,
+   "unit": "hour"
+  },
+  {
+   "input": "2 extra weeks",
+   "value": 2,
+   "unit": "week"
+  },
+  {
+   "input": "10 less seconds",
+   "value": 10,
+   "unit": "second"
+  },
+  {
+   "input": "1000 seconds",
+   "value": 1000,
+   "unit": "second"
+  },
+  {
+   "input": "48 hours",
+   "value": 48,
+   "unit": "hour"
+  },
+  {
+   "input": "365 days",
+   "value": 365,
+   "unit": "day"
+  },
+  {
+   "input": "90 seconds",
+   "value": 90,
+   "unit": "second"
+  },
+  {
+   "input": "120 minutes",
+   "value": 120,
+   "unit": "minute"
+  },
+  {
+   "input": "about 20 minutes",
+   "value": 20,
+   "unit": "minute"
+  },
+  {
+   "input": "around two hours",
+   "value": 2,
+   "unit": "hour"
+  },
+  {
+   "input": "approximately 5 days",
+   "value": 5,
+   "unit": "day"
+  },
+  {
+   "input": "exactly 3 hours",
+   "value": 3,
+   "unit": "hour"
   }
  ],
  "negatives": [
@@ -397,6 +632,11 @@
   "in days",
   "secretary",
   "minutes",
-  "I second that"
+  "I second that",
+  "a while",
+  "some time",
+  "ages",
+  "months",
+  "a bit"
  ]
 }
