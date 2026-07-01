@@ -107,6 +107,7 @@ Branch: `rust-port-en-time`.
 | + rule-level coverage audit (2 gaps) | 1069 / 1069 | 0 | 68 / 68 | diff vs Duckling/Time/EN/Rules.hs; fixed "N dow from <time>" (was only "from now") + added "<ordinal> <cycle> after <time>" |
 | + holiday-years audit (1 fix) | 1069 / 1069 | 0 | 68 / 68 | **holiday_years 2730** (183 holidays × 2013–2027); fixed ongoing interval holidays ("Ramadan" during Ramadan→current, not next year) |
 | + reference-time-of-day audit | 1069 / 1069 | 0 | 68 / 68 | **tod_ref 406** (time-sensitive inputs × 10 ref-times, 00:30→23:45) + format-variant spot-check; 0 gaps — past/future/rollover across the day is correct |
+| + robustness audit (2 fixes) | 1069 / 1069 | 0 | 68 / 68 | adversarial-input fuzz; fixed panic (jiff Span overflow in add → try_*) + hang (predNth take(n+2) over infinite series → MAX_NTH cap) |
 
 ## Rule-level coverage audit
 
@@ -161,6 +162,12 @@ nodes) for diminishing return; current latency is well within the use case's bud
 - **ref_stress** 1249 — ref-*sensitive* inputs across 21 reference instants
   (every weekday, month/year ends, leap days). Catches reference-dependent bugs
   (the "this tuesday at 3" class). Confirms all recent fixes are ref-robust.
+- **robustness** — adversarial/untrusted input must never panic or hang (the port
+  parses free user speech). Fuzzing found two crash/DoS bugs, both fixed: jiff's
+  Span setters panic above their per-unit range ("50000 years from now") → fallible
+  `try_*` in grain::add; and predNth/predNthAfter walked an infinite series
+  `take(n+2)` times for absurd n ("10^19 fridays from now") → MAX_NTH cap.
+  Legit large-N still resolves ("500 fridays from now" → 2022-09-09).
 - **tod_ref** 406 — time-of-day-sensitive inputs ("3pm", "this morning", "in 6 hours",
   "tonight", "at midnight") resolved at 10 reference times across a day (00:30→23:45)
   vs the oracle. Covers already-passed times ("9am" at 15:00→tomorrow), crossing-
