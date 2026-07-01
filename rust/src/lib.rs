@@ -35,14 +35,23 @@ fn build_rules(locale: Locale) -> Vec<Rule> {
 }
 
 thread_local! {
-    // Compile the rule set (regexes) once per thread, not once per parse.
-    // All dimensions share one rule set; the engine produces Numeral/Time/...
-    // tokens and Time rules consume the others via predicate pattern items.
-    // Two locale variants (differ only in numeric-date field order); each is
-    // compiled lazily on first use of that locale.
-    static RULES_US: Vec<Rule> = build_rules(Locale::EnUs);
-    static RULES_GB: Vec<Rule> = build_rules(Locale::EnGb);
+    // Compile the rule set (regexes) once per (thread, locale), not once per parse.
+    // All dimensions share one rule set; the engine produces Numeral/Time/... tokens
+    // and Time rules consume the others via predicate pattern items. Locale variants
+    // differ only in numeric-date field order (and, later, regional holidays); each
+    // is compiled lazily on first use and cached.
+    static RULES: std::cell::RefCell<std::collections::HashMap<Locale, std::rc::Rc<Vec<Rule>>>> =
+        std::cell::RefCell::new(std::collections::HashMap::new());
     static CLASSIFIERS: ranking::Classifiers = ranking::classifiers();
+}
+
+fn rules_for(locale: Locale) -> std::rc::Rc<Vec<Rule>> {
+    RULES.with(|c| {
+        c.borrow_mut()
+            .entry(locale)
+            .or_insert_with(|| std::rc::Rc::new(build_rules(locale)))
+            .clone()
+    })
 }
 
 fn resolve_entities(rules: &[Rule], doc: &Document, ctx: &ResolveContext) -> Vec<Entity> {
@@ -79,17 +88,15 @@ pub fn parse(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
 /// date field order — US "3/4"→March 4, GB "3/4"→April 3 (and GB accepts "13/12").
 pub fn parse_locale(input: &str, ctx: &ResolveContext, locale: Locale) -> Vec<Entity> {
     let doc = Document::new(input);
-    match locale {
-        Locale::EnUs => RULES_US.with(|rules| resolve_entities(rules, &doc, ctx)),
-        Locale::EnGb => RULES_GB.with(|rules| resolve_entities(rules, &doc, ctx)),
-    }
+    resolve_entities(&rules_for(locale), &doc, ctx)
 }
 
 /// Debug: every Time candidate (unranked) as "rule | range | score | value".
 pub fn parse_all_debug(input: &str, ctx: &ResolveContext) -> Vec<String> {
     let doc = Document::new(input);
-    RULES_US.with(|rules| {
-        let nodes = engine::parse_string(rules, &doc);
+    let rules = rules_for(Locale::EnUs);
+    {
+        let nodes = engine::parse_string(&rules, &doc);
         CLASSIFIERS.with(|cl| {
             let mut out = Vec::new();
             for n in &nodes {
@@ -113,5 +120,5 @@ pub fn parse_all_debug(input: &str, ctx: &ResolveContext) -> Vec<String> {
             }
             out
         })
-    })
+    }
 }

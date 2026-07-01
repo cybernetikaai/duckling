@@ -1,0 +1,960 @@
+{
+ "cases": [
+  {
+   "locale": "EnUs",
+   "input": "3/4/2015",
+   "expected": {
+    "value": "2015-03-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "3/4",
+   "expected": {
+    "value": "2013-03-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "13/12",
+   "expected": null
+  },
+  {
+   "locale": "EnUs",
+   "input": "13/12/2013",
+   "expected": null
+  },
+  {
+   "locale": "EnUs",
+   "input": "12/11",
+   "expected": {
+    "value": "2013-12-11T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "6/15",
+   "expected": {
+    "value": "2013-06-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "6/15/2014",
+   "expected": {
+    "value": "2014-06-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "1.2.2013",
+   "expected": {
+    "value": "2013-01-02T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "25/12/2013",
+   "expected": null
+  },
+  {
+   "locale": "EnUs",
+   "input": "28/2",
+   "expected": null
+  },
+  {
+   "locale": "EnGb",
+   "input": "3/4/2015",
+   "expected": {
+    "value": "2015-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "3/4",
+   "expected": {
+    "value": "2013-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "13/12",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "13/12/2013",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "12/11",
+   "expected": {
+    "value": "2013-11-12T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "6/15",
+   "expected": null
+  },
+  {
+   "locale": "EnGb",
+   "input": "6/15/2014",
+   "expected": null
+  },
+  {
+   "locale": "EnGb",
+   "input": "1.2.2013",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "25/12/2013",
+   "expected": {
+    "value": "2013-12-25T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "28/2",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "3/4/2015",
+   "expected": {
+    "value": "2015-03-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "3/4",
+   "expected": {
+    "value": "2013-03-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "13/12",
+   "expected": null
+  },
+  {
+   "locale": "EnCa",
+   "input": "13/12/2013",
+   "expected": null
+  },
+  {
+   "locale": "EnCa",
+   "input": "12/11",
+   "expected": {
+    "value": "2013-12-11T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "6/15",
+   "expected": {
+    "value": "2013-06-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "6/15/2014",
+   "expected": {
+    "value": "2014-06-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "1.2.2013",
+   "expected": {
+    "value": "2013-01-02T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "25/12/2013",
+   "expected": null
+  },
+  {
+   "locale": "EnCa",
+   "input": "28/2",
+   "expected": null
+  },
+  {
+   "locale": "EnAu",
+   "input": "3/4/2015",
+   "expected": {
+    "value": "2015-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "3/4",
+   "expected": {
+    "value": "2013-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "13/12",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "13/12/2013",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "12/11",
+   "expected": {
+    "value": "2013-11-12T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "6/15",
+   "expected": null
+  },
+  {
+   "locale": "EnAu",
+   "input": "6/15/2014",
+   "expected": null
+  },
+  {
+   "locale": "EnAu",
+   "input": "1.2.2013",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "25/12/2013",
+   "expected": {
+    "value": "2013-12-25T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "28/2",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "3/4/2015",
+   "expected": {
+    "value": "2015-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "3/4",
+   "expected": {
+    "value": "2013-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "13/12",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "13/12/2013",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "12/11",
+   "expected": {
+    "value": "2013-11-12T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "6/15",
+   "expected": null
+  },
+  {
+   "locale": "EnNz",
+   "input": "6/15/2014",
+   "expected": null
+  },
+  {
+   "locale": "EnNz",
+   "input": "1.2.2013",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "25/12/2013",
+   "expected": {
+    "value": "2013-12-25T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "28/2",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "3/4/2015",
+   "expected": {
+    "value": "2015-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "3/4",
+   "expected": {
+    "value": "2013-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "13/12",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "13/12/2013",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "12/11",
+   "expected": {
+    "value": "2013-11-12T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "6/15",
+   "expected": null
+  },
+  {
+   "locale": "EnIn",
+   "input": "6/15/2014",
+   "expected": null
+  },
+  {
+   "locale": "EnIn",
+   "input": "1.2.2013",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "25/12/2013",
+   "expected": {
+    "value": "2013-12-25T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "28/2",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "3/4/2015",
+   "expected": {
+    "value": "2015-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "3/4",
+   "expected": {
+    "value": "2013-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "13/12",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "13/12/2013",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "12/11",
+   "expected": {
+    "value": "2013-11-12T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "6/15",
+   "expected": null
+  },
+  {
+   "locale": "EnIe",
+   "input": "6/15/2014",
+   "expected": null
+  },
+  {
+   "locale": "EnIe",
+   "input": "1.2.2013",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "25/12/2013",
+   "expected": {
+    "value": "2013-12-25T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "28/2",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "3/4/2015",
+   "expected": {
+    "value": "2015-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "3/4",
+   "expected": {
+    "value": "2013-03-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "13/12",
+   "expected": null
+  },
+  {
+   "locale": "EnZa",
+   "input": "13/12/2013",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "12/11",
+   "expected": {
+    "value": "2013-12-11T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "6/15",
+   "expected": {
+    "value": "2013-06-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "6/15/2014",
+   "expected": null
+  },
+  {
+   "locale": "EnZa",
+   "input": "1.2.2013",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "25/12/2013",
+   "expected": {
+    "value": "2013-12-25T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "28/2",
+   "expected": null
+  },
+  {
+   "locale": "EnPh",
+   "input": "3/4/2015",
+   "expected": {
+    "value": "2015-03-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "3/4",
+   "expected": {
+    "value": "2013-03-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "13/12",
+   "expected": null
+  },
+  {
+   "locale": "EnPh",
+   "input": "13/12/2013",
+   "expected": null
+  },
+  {
+   "locale": "EnPh",
+   "input": "12/11",
+   "expected": {
+    "value": "2013-12-11T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "6/15",
+   "expected": {
+    "value": "2013-06-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "6/15/2014",
+   "expected": {
+    "value": "2014-06-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "1.2.2013",
+   "expected": {
+    "value": "2013-01-02T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "25/12/2013",
+   "expected": null
+  },
+  {
+   "locale": "EnPh",
+   "input": "28/2",
+   "expected": null
+  },
+  {
+   "locale": "EnBz",
+   "input": "3/4/2015",
+   "expected": {
+    "value": "2015-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "3/4",
+   "expected": {
+    "value": "2013-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "13/12",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "13/12/2013",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "12/11",
+   "expected": {
+    "value": "2013-11-12T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "6/15",
+   "expected": null
+  },
+  {
+   "locale": "EnBz",
+   "input": "6/15/2014",
+   "expected": null
+  },
+  {
+   "locale": "EnBz",
+   "input": "1.2.2013",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "25/12/2013",
+   "expected": {
+    "value": "2013-12-25T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "28/2",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "3/4/2015",
+   "expected": {
+    "value": "2015-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "3/4",
+   "expected": {
+    "value": "2013-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "13/12",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "13/12/2013",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "12/11",
+   "expected": {
+    "value": "2013-11-12T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "6/15",
+   "expected": null
+  },
+  {
+   "locale": "EnJm",
+   "input": "6/15/2014",
+   "expected": null
+  },
+  {
+   "locale": "EnJm",
+   "input": "1.2.2013",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "25/12/2013",
+   "expected": {
+    "value": "2013-12-25T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "28/2",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "3/4/2015",
+   "expected": {
+    "value": "2015-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "3/4",
+   "expected": {
+    "value": "2013-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "13/12",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "13/12/2013",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "12/11",
+   "expected": {
+    "value": "2013-11-12T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "6/15",
+   "expected": null
+  },
+  {
+   "locale": "EnTt",
+   "input": "6/15/2014",
+   "expected": null
+  },
+  {
+   "locale": "EnTt",
+   "input": "1.2.2013",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "25/12/2013",
+   "expected": {
+    "value": "2013-12-25T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "28/2",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  }
+ ]
+}

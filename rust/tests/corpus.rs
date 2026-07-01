@@ -314,6 +314,50 @@ fn values_array() {
         failures.iter().take(50).cloned().collect::<Vec<_>>().join("\n"));
 }
 
+/// All English regions' numeric-date conventions vs the oracle (locale=en_XX):
+/// month-first (US/CA/PH), day-first (GB/AU/NZ/IN/IE/BZ/JM/TT), and ZA's hybrid
+/// (no-year month-first, with-year day-first). null expected = the region rejects
+/// that form (out-of-range month field).
+#[test]
+fn region_dates() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/region_dates.json")).unwrap();
+    let ctx = ctx();
+    let loc = |s: &str| match s {
+        "EnUs" => duckling::Locale::EnUs, "EnGb" => duckling::Locale::EnGb,
+        "EnCa" => duckling::Locale::EnCa, "EnAu" => duckling::Locale::EnAu,
+        "EnNz" => duckling::Locale::EnNz, "EnIn" => duckling::Locale::EnIn,
+        "EnIe" => duckling::Locale::EnIe, "EnZa" => duckling::Locale::EnZa,
+        "EnPh" => duckling::Locale::EnPh, "EnBz" => duckling::Locale::EnBz,
+        "EnJm" => duckling::Locale::EnJm, "EnTt" => duckling::Locale::EnTt,
+        _ => panic!("unknown locale {s}"),
+    };
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let locale = loc(c["locale"].as_str().unwrap());
+        let count = input.chars().count();
+        let got: Vec<Value> = duckling::parse_locale(input, &ctx, locale).into_iter()
+            .filter(|e| e.dim == "time" && e.start == 0 && e.end == count)
+            .map(|e| strip_values(e.value))
+            .collect();
+        let expected = &c["expected"];
+        let ok = if expected.is_null() {
+            got.is_empty()
+        } else {
+            got.iter().any(|g| g == &strip_values(expected.clone()))
+        };
+        if !ok {
+            failures.push(format!("[{:?}] {input:?}\n  expected {expected}\n  got      {got:?}",
+                c["locale"]));
+        }
+    }
+    eprintln!("region_dates checked {checked}, {} failing", failures.len());
+    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(), failures.join("\n"));
+}
+
 /// EN_GB locale: numeric dates are day-first (dd/mm), unlike the US default
 /// (mm/dd). Cross-checked against the oracle with locale=en_GB. Positive cases
 /// resolve day-first ("13/12/2013"→Dec 13, "3/4/2015"→Apr 3); rejections are

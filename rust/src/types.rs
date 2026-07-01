@@ -11,14 +11,47 @@ use crate::regex::Re;
 use crate::time::object::IntervalDirection;
 use crate::time::predicate::Predicate;
 
-/// English locale variant. Base EN is region-neutral; the numeric-date rules
-/// differ by region — US reads "3/4" as month/day (March 4), GB as day/month
-/// (April 3). Everything else (named-month dates, ISO, holidays, times) is shared.
-#[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]
+/// English locale variant. Base EN is region-neutral; regions differ in numeric-
+/// date field order — US reads "3/4" as month/day (March 4), GB as day/month
+/// (April 3) — and in region-specific holidays. Everything else (named-month
+/// dates, ISO, times) is shared. Duckling ships these English regions.
+#[derive(Clone, Copy, PartialEq, Eq, Debug, Hash, Default)]
 pub enum Locale {
     #[default]
     EnUs,
     EnGb,
+    EnCa,
+    EnAu,
+    EnNz,
+    EnIn,
+    EnIe,
+    EnZa,
+    EnPh,
+    EnBz,
+    EnJm,
+    EnTt,
+}
+
+/// How a region orders numeric dates. Three patterns cover all English regions:
+/// month-first (US/CA/PH), day-first (GB/AU/NZ/IN/IE/BZ/JM/TT), and ZA's hybrid —
+/// no-year forms month-first ("3/4"→Mar 4) but with-year forms day-first
+/// ("3/4/2015"→Apr 3), per Duckling/Time/EN/ZA/Rules.hs.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum DateConvention {
+    MonthFirst,
+    DayFirst,
+    ZaHybrid,
+}
+
+impl Locale {
+    pub fn date_convention(self) -> DateConvention {
+        use Locale::*;
+        match self {
+            EnUs | EnCa | EnPh => DateConvention::MonthFirst,
+            EnZa => DateConvention::ZaHybrid,
+            EnGb | EnAu | EnNz | EnIn | EnIe | EnBz | EnJm | EnTt => DateConvention::DayFirst,
+        }
+    }
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]

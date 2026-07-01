@@ -2693,7 +2693,12 @@ fn parse_i(g: &[String], i: usize) -> Option<i64> {
 /// Numeric date formats (US order: M/D/Y). Ports of the mm/dd(/yyyy), dd/mon/yyyy,
 /// mm/yyyy rules.
 fn numeric_date_rules(locale: Locale) -> Vec<Rule> {
-    let gb = locale == Locale::EnGb;
+    use crate::types::DateConvention::*;
+    let conv = locale.date_convention();
+    // with-year forms ("3/4/2015"): day-first for GB-style AND the ZA hybrid.
+    let year_day_first = matches!(conv, DayFirst | ZaHybrid);
+    // no-year forms ("3/4"): day-first for GB-style only (ZA is month-first here).
+    let noyear_day_first = matches!(conv, DayFirst);
     vec![
         Rule {
             name: "yyyy-mm-dd".into(),
@@ -2731,13 +2736,13 @@ fn numeric_date_rules(locale: Locale) -> Vec<Rule> {
             // US: mm/dd/yyyy (month first). GB: dd/mm/yyyy (day first). Same regex;
             // the two leading fields swap roles by locale. "." separator included,
             // covering the "dd.mm.yyyy" GB / "mm.dd.yyyy" US variants too.
-            name: if gb { "dd/mm/yyyy".into() } else { "mm/dd/yyyy".into() },
+            name: if year_day_first { "dd/mm/yyyy".into() } else { "mm/dd/yyyy".into() },
             pattern: vec![PatternItem::Regex(compile(
                 r"(\d{1,2})[-/.](\d{1,2})[-/.](\d{2,4})",
             ))],
             prod: Box::new(move |tokens| {
                 let g = regex_groups(tokens)?;
-                let (m_idx, d_idx) = if gb { (1, 0) } else { (0, 1) };
+                let (m_idx, d_idx) = if year_day_first { (1, 0) } else { (0, 1) };
                 year_month_day_td(parse_i(g, 2)?, parse_i(g, m_idx)?, parse_i(g, d_idx)?)
                     .map(Token::Time)
             }),
@@ -2763,11 +2768,11 @@ fn numeric_date_rules(locale: Locale) -> Vec<Rule> {
         },
         Rule {
             // US: mm/dd (month first). GB: dd/mm (day first).
-            name: if gb { "dd/mm".into() } else { "mm/dd".into() },
+            name: if noyear_day_first { "dd/mm".into() } else { "mm/dd".into() },
             pattern: vec![PatternItem::Regex(compile(r"(\d{1,2})\s*[/-]\s*(\d{1,2})"))],
             prod: Box::new(move |tokens| {
                 let g = regex_groups(tokens)?;
-                let (m, d) = if gb {
+                let (m, d) = if noyear_day_first {
                     (parse_i(g, 1)?, parse_i(g, 0)?)
                 } else {
                     (parse_i(g, 0)?, parse_i(g, 1)?)
