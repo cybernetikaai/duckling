@@ -56,6 +56,11 @@ pub fn email_value(e: &crate::email::EmailData) -> serde_json::Value {
     serde_json::json!({"type": "value", "value": e.value})
 }
 
+/// Resolve a Url to Duckling's JSON: `{value, domain, type:"value"}`.
+pub fn url_value(u: &crate::url::UrlData) -> serde_json::Value {
+    serde_json::json!({"value": u.value, "domain": u.domain, "type": "value"})
+}
+
 /// Resolve a Duration to Duckling's JSON: `{value, unit, <unit>: value, type,
 /// normalized: {value: <seconds>, unit: "second"}}` (port of the DurationData
 /// ToJSON instance). The `<unit>` key is dynamic — e.g. `"minute": 30`.

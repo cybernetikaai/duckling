@@ -899,6 +899,47 @@ fn email_corpus() {
     );
 }
 
+/// Url dimension (`parse_url`) — port of Duckling/Url/Rules.hs. A positive must
+/// produce an entity with the expected value + (lowercased) domain; negatives
+/// (bare words, "hey:42", …) produce none.
+#[test]
+fn url_corpus() {
+    let data: Value = serde_json::from_str(include_str!("../fixtures/url_corpus.json")).unwrap();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let (wv, wd) = (c["value"].as_str().unwrap(), c["domain"].as_str().unwrap());
+        let ok = duckling::parse_url(input).iter().any(|e| {
+            e.value["value"].as_str() == Some(wv) && e.value["domain"].as_str() == Some(wd)
+        });
+        if !ok {
+            let got: Vec<_> = duckling::parse_url(input)
+                .into_iter()
+                .map(|e| e.value)
+                .collect();
+            failures.push(format!(
+                "{input:?}\n  expected ({wv}, {wd})\n  got      {got:?}"
+            ));
+        }
+    }
+    for neg in data["negatives"].as_array().unwrap() {
+        checked += 1;
+        let input = neg.as_str().unwrap();
+        if !duckling::parse_url(input).is_empty() {
+            failures.push(format!("[negative] {input:?} parsed a URL"));
+        }
+    }
+    eprintln!("url_corpus checked {checked}, {} failing", failures.len());
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
+}
+
 /// Combined Time+Duration (`parse_all`) — the `dims:["time","duration"]` surface.
 /// Time and Duration compete in one pool by dimension-agnostic range domination,
 /// exactly as Duckling: the widest match per position wins, disjoint matches all

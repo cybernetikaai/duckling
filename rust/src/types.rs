@@ -11,6 +11,7 @@ use crate::ordinal::OrdinalData;
 use crate::regex::Re;
 use crate::time::object::IntervalDirection;
 use crate::time::predicate::Predicate;
+use crate::url::UrlData;
 
 /// English locale variant. Base EN is region-neutral; regions differ in numeric-
 /// date field order — US reads "3/4" as month/day (March 4), GB as day/month
@@ -114,6 +115,7 @@ pub enum Token {
     TimeGrain(Grain),
     Duration(DurationData),
     Email(EmailData),
+    Url(UrlData),
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]

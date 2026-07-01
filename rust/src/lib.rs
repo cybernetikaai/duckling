@@ -21,6 +21,7 @@ pub mod resolve;
 pub mod time;
 pub mod timegrain;
 pub mod types;
+pub mod url;
 
 pub use resolve::{Entity, ResolveContext};
 
@@ -303,6 +304,16 @@ pub fn parse_email(input: &str) -> Vec<Entity> {
     let rules = dim_rules("email", email::en::email_rules);
     emit_entities(&rules, input, |t| match t {
         Token::Email(e) => Some(("email", resolve::email_value(e))),
+        _ => None,
+    })
+}
+
+/// Parse `input` and return resolved **Url** entities (dim `"url"`,
+/// `{value, domain, type:"value"}`) — the `dims:["url"]` surface. Language-agnostic.
+pub fn parse_url(input: &str) -> Vec<Entity> {
+    let rules = dim_rules("url", url::url_rules);
+    emit_entities(&rules, input, |t| match t {
+        Token::Url(u) => Some(("url", resolve::url_value(u))),
         _ => None,
     })
 }
