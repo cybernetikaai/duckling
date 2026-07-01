@@ -12,24 +12,30 @@
 //!   echo "text" | duckling [OPTIONS]
 //!
 //! Options:
-//!   --dims <time|duration|ordinal|all>  dimension(s) to extract (default: time)
+//!   --dims <D>  dimension: time | duration | ordinal | number | email | url |
+//!               credit-card-number | phone-number | all   (default: time)
 //!   --ref  <RFC3339>                    reference "now" instant (default: system now)
 //!   --tz   <IANA zone>                  target timezone, e.g. America/New_York (default: UTC)
 //!   --locale <en_US|en_GB|en_CA|en_AU|en_NZ|en_IN|en_IE|en_ZA|en_PH|en_BZ|en_JM|en_TT>
 //!                                        English locale (affects numeric date order; default: en_US)
 //!   -h, --help                          print this help
 
-use duckling::{Locale, ResolveContext, parse_all, parse_duration, parse_locale, parse_ordinal};
+use duckling::{
+    Locale, ResolveContext, parse_all, parse_creditcard, parse_duration, parse_email, parse_locale,
+    parse_numeral, parse_ordinal, parse_phonenumber, parse_url,
+};
 
 const HELP: &str = "\
-duckling — English time / duration / ordinal parser
+duckling — English parser: time, duration, ordinal, number, email, url, credit
+card, phone number
 
 USAGE:
     duckling [OPTIONS] \"text to parse\"
     echo \"text\" | duckling [OPTIONS]
 
 OPTIONS:
-    --dims <D>      time | duration | ordinal | all       (default: time)
+    --dims <D>      time | duration | ordinal | number | email | url |
+                    credit-card-number | phone-number | all   (default: time)
     --ref <TS>      reference instant, RFC 3339            (default: system now)
                     e.g. 2013-02-12T04:30:00-02:00
     --tz <ZONE>     target IANA timezone                   (default: UTC)
@@ -46,6 +52,8 @@ EXAMPLES:
     duckling --tz America/New_York --ref 2013-02-12T04:30:00Z \"in 2 hours\"
     duckling --dims all \"set a timer for 20 minutes and wake me at 7am\"
     duckling --dims duration \"an hour and a half\"
+    duckling --dims email \"ping me at a dot b at x dot com\"
+    duckling --dims phone-number \"call +1 (650) 123-4567\"
     duckling --locale en_GB \"13/12/2013\"";
 
 fn locale_from(name: &str) -> Option<Locale> {
@@ -128,9 +136,15 @@ fn main() {
         "time" => parse_locale(&text, &ctx, locale),
         "duration" => parse_duration(&text),
         "ordinal" => parse_ordinal(&text),
+        "number" => parse_numeral(&text),
+        "email" => parse_email(&text),
+        "url" => parse_url(&text),
+        "credit-card-number" => parse_creditcard(&text),
+        "phone-number" => parse_phonenumber(&text),
         "all" => parse_all(&text, &ctx),
         other => fail(&format!(
-            "unknown --dims {other:?} (want time|duration|ordinal|all)"
+            "unknown --dims {other:?} (want time|duration|ordinal|number|email|url|\
+             credit-card-number|phone-number|all)"
         )),
     };
 
