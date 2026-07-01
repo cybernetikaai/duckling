@@ -326,6 +326,47 @@ fn past_to_rules() -> Vec<Rule> {
         }
     }
     vec![
+        // "ten thirty", "3 15", "three twenty" -> hour + minutes (latent-preserving).
+        Rule {
+            name: "<hour-of-day> <integer>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_an_hour_of_day)),
+                PatternItem::Predicate(is_integer_between(10, 59)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(hod), num] => {
+                    let (h, is12h) = match hod.form {
+                        Some(Form::TimeOfDay { hours: Some(h), is12h }) => (h as i64, is12h),
+                        _ => return None,
+                    };
+                    let td = hour_minute_td(is12h, h, get_int_value(num)?);
+                    Some(Token::Time(if hod.latent { mk_latent(td) } else { td }))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "<time-of-day> o'clock".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_a_time_of_day)),
+                PatternItem::Regex(compile(r"o.?clock")),
+            ],
+            prod: Box::new(|tokens| match tokens.first()? {
+                Token::Time(td) => Some(Token::Time(not_latent(td.clone()))),
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "half <integer> (UK style hour-of-day)".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"half")),
+                PatternItem::Predicate(Box::new(is_an_hour_of_day)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(td)] => minutes_after(30, td).map(Token::Time),
+                _ => None,
+            }),
+        },
         // <hour> half / <hour> quarter
         Rule {
             name: "<hour-of-day> half".into(),
