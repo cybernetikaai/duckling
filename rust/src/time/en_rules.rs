@@ -1272,6 +1272,28 @@ fn hour_interval(h1: i64, h2: i64) -> Option<TimeData> {
 fn part_of_day_rules() -> Vec<Rule> {
     vec![
         Rule {
+            name: "as soon as possible".into(),
+            pattern: vec![PatternItem::Regex(compile(r"asap|as\ssoon\sas\spossible"))],
+            prod: Box::new(|_| {
+                Some(Token::Time(with_direction(IntervalDirection::After, now_td())))
+            }),
+        },
+        Rule {
+            name: "after lunch/work/school".into(),
+            pattern: vec![PatternItem::Regex(compile(r"after[\s-]?(lunch|work|school)"))],
+            prod: Box::new(|tokens| {
+                let m = regex_groups(tokens)?.first()?.to_lowercase();
+                let (s, e) = match m.as_str() {
+                    "lunch" => (13, 17),
+                    "work" => (17, 21),
+                    "school" => (15, 21),
+                    _ => return None,
+                };
+                let iv = interval_td(IntervalType::Open, &hour_td(false, s), &hour_td(false, e))?;
+                Some(Token::Time(part_of_day(s, intersect_td(&today_td(), &iv)?)))
+            }),
+        },
+        Rule {
             name: "part of days".into(),
             pattern: vec![PatternItem::Regex(compile(
                 r"(morning|after ?noo?n(ish)?|evening|night|(at )?lunch)",
