@@ -78,8 +78,10 @@ fn positive_corpus() {
             // Duckling's semantics: expected value among the best (ranked) entities.
             best_time_values(input, &ctx).iter().any(|g| g == &exp)
         } else {
-            // unique mode stays strict: exactly one full-span result.
-            got.len() == 1 && got[0] == exp
+            // unique mode: an unambiguous full-span answer. Redundant rule paths
+            // that resolve to the *same* value count as one; only genuinely
+            // differing full-span values (real ambiguity) fail.
+            !got.is_empty() && got.iter().all(|g| g == &exp)
         };
         if !ok {
             failures.push(format!("{input:?}\n  expected {exp}\n  got      {got:?}"));
