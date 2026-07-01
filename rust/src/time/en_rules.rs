@@ -2346,6 +2346,68 @@ fn holiday_rules() -> Vec<Rule> {
     ]
 }
 
+/// A day-of-month range within a named month, [sd..ed] Open; ed == -1 means
+/// "to the last day of the month" (cycleLastOf Day). Shared by the
+/// beginning/end-of-<named-month> and early/mid/late-<named-month> rules.
+fn month_dom_range(month: &TimeData, sd: i64, ed: i64) -> Option<TimeData> {
+    let start = intersect_td(month, &day_of_month_td(sd))?;
+    let end = if ed == -1 {
+        cycle_last_of_td(Grain::Day, month)
+    } else {
+        intersect_td(month, &day_of_month_td(ed))?
+    };
+    // Duckling uses interval Open here, but its end object is a full day whose
+    // exclusive bound is the following midnight — which is what our Closed
+    // interval yields (end-of-end-day), so the reported "to" matches.
+    interval_td(IntervalType::Closed, &start, &end)
+}
+
+/// "beginning|end of <named-month>" and "early|mid|late <named-month>"
+/// (ports of the <named-month> dom-range variants).
+fn named_month_part_rules() -> Vec<Rule> {
+    vec![
+        Rule {
+            name: "at the beginning|end of <named-month>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"(at the )?(beginning|end) of")),
+                PatternItem::Predicate(Box::new(is_a_month)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::RegexMatch(g), Token::Time(m)] => {
+                    let (sd, ed) = if g.first()?.to_lowercase().contains("beginning") {
+                        (1, 10)
+                    } else {
+                        (21, -1)
+                    };
+                    month_dom_range(m, sd, ed).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "part of <named-month>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"(early|mid|late)-?( of)?")),
+                PatternItem::Predicate(Box::new(is_a_month)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::RegexMatch(g), Token::Time(m)] => {
+                    let w = g.first()?.to_lowercase();
+                    let (sd, ed) = if w.contains("early") {
+                        (1, 10)
+                    } else if w.contains("mid") {
+                        (11, 20)
+                    } else {
+                        (21, -1)
+                    };
+                    month_dom_range(m, sd, ed).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
+    ]
+}
+
 /// Year with era, and the "about/sharp" precision markers (which just mark the
 /// wrapped time non-latent). Ports of ruleYearADBC / ruleTODPrecision /
 /// rulePrecisionTOD.
@@ -2428,6 +2490,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(dom_interval_rules());
     rules.extend(direction_rules());
     rules.extend(precision_and_era_rules());
+    rules.extend(named_month_part_rules());
     rules.extend(intersect_rules());
     rules
 }
