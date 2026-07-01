@@ -1135,6 +1135,17 @@ fn interval_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        Rule {
+            name: "last weekend of <named-month>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"last\s(week(\s|-)?end|wkend)\s(of|in)")),
+                PatternItem::Predicate(Box::new(is_a_month)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(m)] => Some(Token::Time(pred_last_of_td(&weekend_td(), m))),
+                _ => None,
+            }),
+        },
     ]
 }
 
@@ -1582,6 +1593,13 @@ fn cycle_last_of_td(grain: Grain, base: &TimeData) -> TimeData {
 /// grain comes from the cyclic predicate, e.g. "last Monday of March".
 fn pred_last_of_td(cyclic: &TimeData, base: &TimeData) -> TimeData {
     TimeData::new(take_last_of(cyclic.pred.clone(), base.pred.clone()), cyclic.grain)
+}
+
+/// The recurring weekend interval Fri 18:00 → Mon 00:00 (port of `weekend`).
+fn weekend_td() -> TimeData {
+    let fri = intersect(hour(false, None, 18), day_of_week(5));
+    let mon = intersect(hour(false, None, 0), day_of_week(1));
+    TimeData::new(time_intervals(IntervalType::Open, fri, mon), Grain::Hour)
 }
 
 /// The n-th closest occurrence of `td1` to `td2` (port of predNthClosest),
