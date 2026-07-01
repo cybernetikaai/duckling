@@ -395,6 +395,28 @@ fn past_to_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // "eight oh five", "twelve oh three", "seven oh eight" -> H:0N (spoken
+        // "oh"/"zero" for the leading-zero minute). Port of ruleHONumeralAlt;
+        // the integer is a single digit 1-9.
+        Rule {
+            name: "<hour-of-day> zero <integer>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_an_hour_of_day)),
+                PatternItem::Regex(compile(r"(zero|o(h|u)?)")),
+                PatternItem::Predicate(is_integer_between(1, 9)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(hod), _, num] => {
+                    let (h, is12h) = match hod.form {
+                        Some(Form::TimeOfDay { hours: Some(h), is12h, .. }) => (h as i64, is12h),
+                        _ => return None,
+                    };
+                    let td = hour_minute_td(is12h, h, get_int_value(num)?);
+                    Some(Token::Time(if hod.latent { mk_latent(td) } else { td }))
+                }
+                _ => None,
+            }),
+        },
         Rule {
             name: "<time-of-day> o'clock".into(),
             pattern: vec![

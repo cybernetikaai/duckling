@@ -120,6 +120,7 @@ Branch: `rust-port-en-time`.
 | + post-2020 holidays (extension) | 1069 / 1069 | 0 | 68 / 68 | **modern_holidays 8**; holidays introduced after Duckling froze (~2020-03): Juneteenth National Independence Day (US name), Indigenous Peoples' Day spelling variants (US), Truth and Reconciliation / Orange Shirt Day / Emancipation Day / National Indigenous Peoples Day (CA). Deliberately diverges from oracle (returns nothing) — see "Deliberate divergence: beyond-Duckling holidays" below |
 | + AU Queen's/King's Birthday (extension) | 1069 / 1069 | 0 | 68 / 68 | **modern_holidays 11**; Australia's Queen's Birthday (2nd Mon June, majority-state convention) + King's Birthday post-2022 rename — a major AU public holiday Duckling's AU rules never included (oracle returns nothing). Faithful AU port confirmed complete (all 28 EN/AU/Rules.hs holidays present) |
 | + NZ Matariki/King's + IE St Brigid's (extension) | 1069 / 1069 | 0 | 68 / 68 | **modern_holidays 20**; region audit found 3 more post-2020 public holidays the oracle lacks: NZ **Matariki** (2022, legislated Friday date-table 2022–2052), NZ **King's Birthday** (1st Mon June rename), IE **St Brigid's Day** (2023, exact date-table incl. the 1-Feb-Friday exception). Per-case `ref` pins the table years |
+| + spoken-form audit → 2 real fixes | 1069 / 1069 | 0 | 68 / 68 | **spoken_forms 53** (ASR idioms vs oracle). Found 2 faithful-port gaps the curated corpus missed: (1) written ordinals were truncated to first..tenth — ported the full `ruleOrdinals` (…twentieth, thirtieth…ninetieth) + `ruleCompositeOrdinals` ("twenty fifth"→25), fixing "the fifteenth of august", "december twenty fifth"; (2) added `<hour> oh <integer>` ("eight oh five am"→8:05). unique 1061/1069 unchanged |
 
 ## Rule-level coverage audit
 
@@ -407,6 +408,33 @@ so they never leak into oracle-based region tests, and guarded by the
 low speech-input value): AU Grand Final Day (VIC-only, date set annually) and
 Family & Community Day (ACT, discontinued 2017 → replaced by Reconciliation Day,
 which we already have); plus the remaining ~20 Duckling "other" holidays.
+
+**Spoken-form audit (this iteration → 2 real fixes).** Prior fuzzing used
+written/templated inputs; this pass targeted the product's actual input
+distribution — ASR/spoken-English idioms ("half seven", "eight oh five am", "the
+fifteenth of august", "december twenty fifth", "quarter to noon", "the day after
+tomorrow", "tomorrow at half past nine", …). Curated ~70, cross-checked each
+against the live oracle (en_US, ref 2013-02-12 04:30, wall-clock compare after
+aligning the reference — the oracle mis-parses `Etc/GMT+2` to +00:00, so both
+sides are reduced to offset-free wall-clock from a common 04:30 ref). This
+surfaced **two genuine faithful-port gaps the curated corpus never caught**:
+
+1. **Written ordinals were truncated to first..tenth.** `ordinal.rs` had only
+   the 10 small words + digit ordinals; Duckling's `ruleOrdinals` covers
+   first..twentieth plus thirtieth/fortieth/…/ninetieth, and `ruleCompositeOrdinals`
+   covers twenty-first..ninety-ninth (incl. spaced "twenty fifth"). So "the
+   fifteenth of august" resolved to Aug 1 (ordinal dropped) and "december twenty
+   fifth" to Dec 20. Ported both rules verbatim (unified under Duckling's real
+   rule names, which the trained classifier already references) — now Aug 15 /
+   Dec 25. Very common in speech; a clear miss.
+2. **No `<hour> oh <minute>` rule.** "eight oh five am" → 5:00 (dropped "eight
+   oh"). Ported `ruleHONumeralAlt` (`<hour-of-day> (zero|oh|ou) <integer 1-9>`)
+   → 8:05. Bare (non-am/pm) "twelve oh three" stays latent → dropped in default
+   mode, matching the oracle exactly.
+
+Both verified across contains (1069/1069) and unique (1061/1069 — same 8
+structural artifacts as before, no regression). The 53 oracle-resolved spoken
+forms are locked as the **spoken_forms** regression test.
 
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 

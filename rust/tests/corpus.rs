@@ -475,6 +475,54 @@ fn modern_holidays() {
     assert!(failures.is_empty(), "{} failures:\n{}", failures.len(), failures.join("\n"));
 }
 
+/// ASR / spoken-English time idioms — the actual input distribution of a
+/// speech pipeline ("half seven", "eight oh five am", "the fifteenth of august",
+/// "december twenty fifth", "quarter to noon", "the day after tomorrow", …).
+/// Each was cross-checked against the live oracle (en_US, ref 2013-02-12 04:30);
+/// only cases the oracle resolves are kept. Expected values are offset-stripped
+/// wall-clock (the port's -02:00 output compared against the oracle's UTC
+/// wall-clock, both from a 04:30 reference). This surfaced — and now guards —
+/// the written-ordinal gap (first..tenth only) and the "<hour> oh <minute>" gap.
+#[test]
+fn spoken_forms() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/spoken_forms.json")).unwrap();
+    let ctx = ctx();
+    // Strip a trailing tz offset ("...-02:00" / "...Z" / "...+00:00") to leave wall-clock.
+    fn wall(s: &str) -> String {
+        let s = s.trim();
+        match s.rfind('Z').or_else(|| s.rfind('+')).or_else(|| s.rfind('-').filter(|&i| i > 10)) {
+            Some(i) => s[..i].to_string(),
+            None => s.to_string(),
+        }
+    }
+    fn port_walls(input: &str, ctx: &duckling::ResolveContext) -> Vec<String> {
+        duckling::parse(input, ctx).into_iter().filter(|e| e.dim == "time").map(|e| {
+            let v = &e.value;
+            if let Some(val) = v.get("value").and_then(|x| x.as_str()) {
+                wall(val)
+            } else {
+                format!("[{}|{}]",
+                    v.get("from").and_then(|f| f.get("value")).and_then(|x| x.as_str()).map(wall).unwrap_or("None".into()),
+                    v.get("to").and_then(|f| f.get("value")).and_then(|x| x.as_str()).map(wall).unwrap_or("None".into()))
+            }
+        }).collect()
+    }
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let exp = c["wall"].as_str().unwrap().to_string();
+        let got = port_walls(input, &ctx);
+        if !got.iter().any(|g| g == &exp) {
+            failures.push(format!("{input:?}\n  expected {exp}\n  got      {got:?}"));
+        }
+    }
+    eprintln!("spoken_forms checked {checked}, {} failing", failures.len());
+    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(), failures.join("\n"));
+}
+
 /// Large-scale randomized differential: random inputs (from parameterized
 /// templates across every rule family) paired with random references (date +
 /// time-of-day, 2010–2022), cross-checked against the oracle. All prior fuzzing
