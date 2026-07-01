@@ -2517,7 +2517,7 @@ fn numeric_date_rules() -> Vec<Rule> {
         Rule {
             name: "dd/mon/yyyy".into(),
             pattern: vec![PatternItem::Regex(compile(
-                r"(\d{1,2})(?:st|nd|rd|th)?[-/.\s]+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[-/.\s]+(\d{2,4})",
+                r"(\d{1,2})(?:st|nd|rd|th)?[-/.\s](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[-/.\s](\d{2,4})",
             ))],
             prod: Box::new(|tokens| {
                 let g = regex_groups(tokens)?;
