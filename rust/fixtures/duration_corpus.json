@@ -1,0 +1,402 @@
+{
+ "_comment": "Duckling/Duration/EN/Corpus.hs, transcribed. parse_duration must produce a full-span duration entity with value+unit (normalized checked = inSeconds). negatives must yield no full-span duration.",
+ "cases": [
+  {
+   "input": "one sec",
+   "value": 1,
+   "unit": "second"
+  },
+  {
+   "input": "1 second",
+   "value": 1,
+   "unit": "second"
+  },
+  {
+   "input": "1\"",
+   "value": 1,
+   "unit": "second"
+  },
+  {
+   "input": "2 mins",
+   "value": 2,
+   "unit": "minute"
+  },
+  {
+   "input": "two minutes",
+   "value": 2,
+   "unit": "minute"
+  },
+  {
+   "input": "2'",
+   "value": 2,
+   "unit": "minute"
+  },
+  {
+   "input": "2 more minutes",
+   "value": 2,
+   "unit": "minute"
+  },
+  {
+   "input": "two additional minutes",
+   "value": 2,
+   "unit": "minute"
+  },
+  {
+   "input": "2 extra minutes",
+   "value": 2,
+   "unit": "minute"
+  },
+  {
+   "input": "2 less minutes",
+   "value": 2,
+   "unit": "minute"
+  },
+  {
+   "input": "2 fewer minutes",
+   "value": 2,
+   "unit": "minute"
+  },
+  {
+   "input": "2m",
+   "value": 2,
+   "unit": "minute"
+  },
+  {
+   "input": "2 m",
+   "value": 2,
+   "unit": "minute"
+  },
+  {
+   "input": "30 days",
+   "value": 30,
+   "unit": "day"
+  },
+  {
+   "input": "seven weeks",
+   "value": 7,
+   "unit": "week"
+  },
+  {
+   "input": "1 month",
+   "value": 1,
+   "unit": "month"
+  },
+  {
+   "input": "a month",
+   "value": 1,
+   "unit": "month"
+  },
+  {
+   "input": "3 quarters",
+   "value": 3,
+   "unit": "quarter"
+  },
+  {
+   "input": "2 years",
+   "value": 2,
+   "unit": "year"
+  },
+  {
+   "input": "half an hour",
+   "value": 30,
+   "unit": "minute"
+  },
+  {
+   "input": "half hour",
+   "value": 30,
+   "unit": "minute"
+  },
+  {
+   "input": "1/2 hour",
+   "value": 30,
+   "unit": "minute"
+  },
+  {
+   "input": "1/2h",
+   "value": 30,
+   "unit": "minute"
+  },
+  {
+   "input": "1/2 h",
+   "value": 30,
+   "unit": "minute"
+  },
+  {
+   "input": "half a day",
+   "value": 12,
+   "unit": "hour"
+  },
+  {
+   "input": "half day",
+   "value": 12,
+   "unit": "hour"
+  },
+  {
+   "input": "1/2 day",
+   "value": 12,
+   "unit": "hour"
+  },
+  {
+   "input": "an hour and a half",
+   "value": 90,
+   "unit": "minute"
+  },
+  {
+   "input": "one hour and half",
+   "value": 90,
+   "unit": "minute"
+  },
+  {
+   "input": "1 hour thirty",
+   "value": 90,
+   "unit": "minute"
+  },
+  {
+   "input": "1 hour and thirty",
+   "value": 90,
+   "unit": "minute"
+  },
+  {
+   "input": "1.5 hours",
+   "value": 90,
+   "unit": "minute"
+  },
+  {
+   "input": "1.5 hrs",
+   "value": 90,
+   "unit": "minute"
+  },
+  {
+   "input": "one and two quarter hour",
+   "value": 90,
+   "unit": "minute"
+  },
+  {
+   "input": "one and two quarters hour",
+   "value": 90,
+   "unit": "minute"
+  },
+  {
+   "input": "one and two quarter of hour",
+   "value": 90,
+   "unit": "minute"
+  },
+  {
+   "input": "one and two quarters of hour",
+   "value": 90,
+   "unit": "minute"
+  },
+  {
+   "input": "1 hour fifteen",
+   "value": 75,
+   "unit": "minute"
+  },
+  {
+   "input": "1 hour and fifteen",
+   "value": 75,
+   "unit": "minute"
+  },
+  {
+   "input": "one and quarter hour",
+   "value": 75,
+   "unit": "minute"
+  },
+  {
+   "input": "one and a quarter hour",
+   "value": 75,
+   "unit": "minute"
+  },
+  {
+   "input": "one and one quarter hour",
+   "value": 75,
+   "unit": "minute"
+  },
+  {
+   "input": "one and quarter of hour",
+   "value": 75,
+   "unit": "minute"
+  },
+  {
+   "input": "one and a quarter of hour",
+   "value": 75,
+   "unit": "minute"
+  },
+  {
+   "input": "one and one quarter of hour",
+   "value": 75,
+   "unit": "minute"
+  },
+  {
+   "input": "2 hours ten",
+   "value": 130,
+   "unit": "minute"
+  },
+  {
+   "input": "2 hour and 10",
+   "value": 130,
+   "unit": "minute"
+  },
+  {
+   "input": "1 hour fifteen seconds",
+   "value": 3615,
+   "unit": "second"
+  },
+  {
+   "input": "1 hour and fifteen seconds",
+   "value": 3615,
+   "unit": "second"
+  },
+  {
+   "input": "a month and a half",
+   "value": 45,
+   "unit": "day"
+  },
+  {
+   "input": "one month and half",
+   "value": 45,
+   "unit": "day"
+  },
+  {
+   "input": "2 years and 3 months",
+   "value": 27,
+   "unit": "month"
+  },
+  {
+   "input": "2 years, 3 months",
+   "value": 27,
+   "unit": "month"
+  },
+  {
+   "input": "2 years 3 months",
+   "value": 27,
+   "unit": "month"
+  },
+  {
+   "input": "1 year, 2 days, 3 hours and 4 seconds",
+   "value": 31719604,
+   "unit": "second"
+  },
+  {
+   "input": "1 year 2 days 3 hours and 4 seconds",
+   "value": 31719604,
+   "unit": "second"
+  },
+  {
+   "input": "5 and a half minutes",
+   "value": 330,
+   "unit": "second"
+  },
+  {
+   "input": "five and half min",
+   "value": 330,
+   "unit": "second"
+  },
+  {
+   "input": "5 and an half minute",
+   "value": 330,
+   "unit": "second"
+  },
+  {
+   "input": "one and three quarter hour",
+   "value": 105,
+   "unit": "minute"
+  },
+  {
+   "input": "one and three quarters hour",
+   "value": 105,
+   "unit": "minute"
+  },
+  {
+   "input": "one and three quarter of hour",
+   "value": 105,
+   "unit": "minute"
+  },
+  {
+   "input": "one and three quarters of hour",
+   "value": 105,
+   "unit": "minute"
+  },
+  {
+   "input": "one and three quarter of hours",
+   "value": 105,
+   "unit": "minute"
+  },
+  {
+   "input": "one and three quarters of hours",
+   "value": 105,
+   "unit": "minute"
+  },
+  {
+   "input": "two and quarter hour",
+   "value": 135,
+   "unit": "minute"
+  },
+  {
+   "input": "two and a quarter of hour",
+   "value": 135,
+   "unit": "minute"
+  },
+  {
+   "input": "two and quarter of hours",
+   "value": 135,
+   "unit": "minute"
+  },
+  {
+   "input": "two and a quarter of hours",
+   "value": 135,
+   "unit": "minute"
+  },
+  {
+   "input": "an hour and 45 minutes",
+   "value": 105,
+   "unit": "minute"
+  },
+  {
+   "input": "one hour and 45 minutes",
+   "value": 105,
+   "unit": "minute"
+  },
+  {
+   "input": "a minute and 30 seconds",
+   "value": 90,
+   "unit": "second"
+  },
+  {
+   "input": "one minute and 30 seconds",
+   "value": 90,
+   "unit": "second"
+  },
+  {
+   "input": "an hour and 30 seconds",
+   "value": 3630,
+   "unit": "second"
+  },
+  {
+   "input": "15.5 minutes",
+   "value": 930,
+   "unit": "second"
+  },
+  {
+   "input": "15.5 minute",
+   "value": 930,
+   "unit": "second"
+  },
+  {
+   "input": "15.5 mins",
+   "value": 930,
+   "unit": "second"
+  },
+  {
+   "input": "15.5 min",
+   "value": 930,
+   "unit": "second"
+  }
+ ],
+ "negatives": [
+  "for months",
+  "in days",
+  "secretary",
+  "minutes",
+  "I second that"
+ ]
+}

@@ -2,7 +2,8 @@
 
 use serde::Serialize;
 
-use crate::grain::{Grain, add};
+use crate::duration::{DurationData, in_seconds};
+use crate::grain::{Grain, add, grain_str};
 use crate::json::{interval_value, open_interval_value, simple_value};
 use crate::time::object::{IntervalDirection, TimeObject, time_intersect};
 use crate::time::predicate::TimeContext;
@@ -33,6 +34,23 @@ pub struct Entity {
     pub end: usize,
     pub value: serde_json::Value,
     pub latent: bool,
+}
+
+/// Resolve a Duration to Duckling's JSON: `{value, unit, <unit>: value, type,
+/// normalized: {value: <seconds>, unit: "second"}}` (port of the DurationData
+/// ToJSON instance). The `<unit>` key is dynamic — e.g. `"minute": 30`.
+pub fn duration_value(d: &DurationData) -> serde_json::Value {
+    let unit = grain_str(d.grain);
+    let mut o = serde_json::Map::new();
+    o.insert("type".to_string(), serde_json::json!("value"));
+    o.insert("value".to_string(), serde_json::json!(d.value));
+    o.insert("unit".to_string(), serde_json::json!(unit));
+    o.insert(unit.to_string(), serde_json::json!(d.value));
+    o.insert(
+        "normalized".to_string(),
+        serde_json::json!({"value": in_seconds(d.grain, d.value), "unit": "second"}),
+    );
+    serde_json::Value::Object(o)
 }
 
 /// Resolve a TimeData against the context, returning its value JSON

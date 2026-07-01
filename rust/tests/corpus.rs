@@ -523,6 +523,63 @@ fn spoken_forms() {
     assert!(failures.is_empty(), "{} failures:\n{}", failures.len(), failures.join("\n"));
 }
 
+/// Duration dimension (`parse_duration`) — port of Duckling/Duration/EN/Corpus.hs.
+/// Each case's full-span duration entity must carry the expected `value`+`unit`,
+/// and its `normalized.value` (seconds) must match `inSeconds(unit, value)`.
+/// Negatives must produce no full-span duration entity. Duration resolution is
+/// context-free, so no ResolveContext is used.
+#[test]
+fn duration_corpus() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/duration_corpus.json")).unwrap();
+    let per_second = |u: &str| -> i64 {
+        match u {
+            "second" => 1, "minute" => 60, "hour" => 3600, "day" => 86400,
+            "week" => 604800, "month" => 2_592_000, "quarter" => 7_776_000,
+            "year" => 31_536_000, _ => panic!("unit {u}"),
+        }
+    };
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let n = input.chars().count();
+        let want_val = c["value"].as_i64().unwrap();
+        let want_unit = c["unit"].as_str().unwrap();
+        let want_norm = per_second(want_unit) * want_val;
+        let got: Vec<Value> = duckling::parse_duration(input)
+            .into_iter()
+            .filter(|e| e.dim == "duration" && e.start == 0 && e.end == n)
+            .map(|e| e.value)
+            .collect();
+        let ok = got.iter().any(|v| {
+            v["value"].as_i64() == Some(want_val)
+                && v["unit"].as_str() == Some(want_unit)
+                && v["normalized"]["value"].as_i64() == Some(want_norm)
+        });
+        if !ok {
+            failures.push(format!("{input:?}\n  expected {want_val} {want_unit} (norm {want_norm})\n  got      {got:?}"));
+        }
+    }
+    // Negatives: no full-span duration entity.
+    for neg in data["negatives"].as_array().unwrap() {
+        checked += 1;
+        let input = neg.as_str().unwrap();
+        let n = input.chars().count();
+        let hit: Vec<Value> = duckling::parse_duration(input)
+            .into_iter()
+            .filter(|e| e.dim == "duration" && e.start == 0 && e.end == n)
+            .map(|e| e.value)
+            .collect();
+        if !hit.is_empty() {
+            failures.push(format!("[negative] {input:?} unexpectedly parsed: {hit:?}"));
+        }
+    }
+    eprintln!("duration_corpus checked {checked}, {} failing", failures.len());
+    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(), failures.join("\n"));
+}
+
 /// Large-scale randomized differential: random inputs (from parameterized
 /// templates across every rule family) paired with random references (date +
 /// time-of-day, 2010–2022), cross-checked against the oracle. All prior fuzzing

@@ -91,6 +91,44 @@ pub fn parse_locale(input: &str, ctx: &ResolveContext, locale: Locale) -> Vec<En
     resolve_entities(&rules_for(locale), &doc, ctx)
 }
 
+/// Parse `input` and return resolved **Duration** entities (dim `"duration"`),
+/// ranked (range-dominated). Durations are context-free — "half an hour",
+/// "2 years and 3 months", "an hour and 45 minutes" — so no `ResolveContext` is
+/// needed. This is the `dims:["duration"]` surface, separate from `parse`
+/// (Time), so it never perturbs the Time ranker.
+pub fn parse_duration(input: &str) -> Vec<Entity> {
+    let doc = Document::new(input);
+    let rules = rules_for(Locale::EnUs);
+    let nodes = engine::parse_string(&rules, &doc);
+    let scored: Vec<(Node, Entity)> = nodes
+        .into_iter()
+        .filter_map(|n| {
+            let dd = match &n.token {
+                Token::Duration(dd) => dd.clone(),
+                _ => return None,
+            };
+            let e = Entity {
+                dim: "duration".to_string(),
+                body: doc.substring(n.range.0, n.range.1),
+                start: n.range.0,
+                end: n.range.1,
+                value: resolve::duration_value(&dd),
+                latent: false,
+            };
+            Some((n, e))
+        })
+        .collect();
+    let ranked = CLASSIFIERS.with(|cl| ranking::rank(cl, scored));
+    // Several composite rules can produce the same span+value (e.g. "2 years and
+    // 3 months" via both the ",/and" and the <duration>-and-<duration> rules);
+    // collapse identical (range, value) entities.
+    let mut seen = std::collections::HashSet::new();
+    ranked
+        .into_iter()
+        .filter(|e| seen.insert((e.start, e.end, e.value.to_string())))
+        .collect()
+}
+
 /// Debug: every Time candidate (unranked) as "rule | range | score | value".
 pub fn parse_all_debug(input: &str, ctx: &ResolveContext) -> Vec<String> {
     let doc = Document::new(input);

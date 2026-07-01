@@ -124,6 +124,7 @@ Branch: `rust-port-en-time`.
 | + spoken-form audit II (breadth) | 1069 / 1069 | 0 | 68 / 68 | **spoken_forms 105**; +52 forms across 2 refs — 24h spoken ("fourteen thirty"), American "of"=to ("ten of three"→2:50), composite ordinals in dates ("march twenty first"), spelled datetimes, this/next part-of-day, week/month relatives. **0 divergences** — pass-1 fixes generalize; port faithfully matches oracle incl. forms Duckling rejects ("fourteen thirty"/"sixteen hundred"/"twenty twenty"-as-year → [] both sides) |
 | + spoken-interval audit → 1 real fix | 1069 / 1069 | 0 | 68 / 68 | **spoken_forms 142**; +37 interval/range forms across 2 refs ("nine to five", "monday to friday", "from half past nine to eleven"). Fixed "from now to 5pm": the tod/non-tod endpoint guard wrongly rejected an instant ("now", grain Second) paired with a tod → refined to allow Second-grain instants (trailing-date case "from 3pm to 5pm tomorrow" still routes correctly; differential 768 green) |
 | + spoken-duration composition audit | 1069 / 1069 | 0 | 68 / 68 | **spoken_forms 178**; +36 duration/directional compositions across 2 refs ("half an hour before noon", "twenty minutes after three", "an hour and a half ago", "any time after half nine", "three days before christmas", "within the next hour"). **0 divergences** — the original corpus's duration rules already cover this; the spoken/British variants compose correctly. Spoken surface now thoroughly validated |
+| + Duration dimension (new output) | 1069 / 1069 | 0 | 68 / 68 | **duration_corpus 83** (all of Duckling/Duration/EN/Corpus.hs + 5 negatives); new `parse_duration` emits `dim:"duration"` JSON ({value,unit,`<unit>`,normalized}); ported the DurationData Semigroup + composite rules ("2 years and 3 months"→27mo, "an hour and 45 minutes"→105min, "1 year 2 days 3 hours and 4 seconds"). **Bonus Time fix:** the composites also fixed "2 hours and 30 minutes from now" (was dropping "2 hours"→05:00, now 07:00). Kept separate from `parse` (Time), so Time ranker untouched |
 
 ## Rule-level coverage audit
 
@@ -305,13 +306,20 @@ The 8 remaining `unique`-mode gaps ("for a quarter past 3pm"×5, "Fri, Jul 18, 2
 
 Not attempted (out of scope / disproportionate): the `TimeDatePredicate` field-merge that would let leading-"Fri," combos produce a *full-span* parse (a core-architecture rewrite for zero contains-mode gain). The opaque-Series predicate model is behavior-complete for the corpus as-is.
 
-Also out of scope — **emitting the Duration dimension as first-class output**. The
-port has full Duration machinery internally (it feeds time rules — "in 2 hours",
-"for 3 days"), but `parse` emits only Time entities (`dim:"time"`), matching a
-`dims:["time"]` request. Duckling's standalone Duration entity (`{value, unit,
-normalized, …}`) is a *different dimension*; emitting it would add cross-dimension
-ranking against the Time-only classifier model. This is a scope expansion, not a
-gap in the time port, so it's deferred to a hypothetical multi-dim phase.
+**Duration dimension — now implemented** (was previously deferred). `parse_duration(input)`
+emits standalone Duration entities (`dim:"duration"`, `{value, unit, <unit>,
+type, normalized:{value,unit}}`) — the full `dims:["duration"]` surface. It is a
+*separate* entry point from `parse` (Time), collecting `Token::Duration` nodes and
+ranking them among themselves (range domination), so the Time ranker/classifier is
+untouched — no cross-dimension ranking, no risk to the 1069/1069 Time corpus. To
+complete it, ported the missing `Duration/EN/Rules.hs` pieces: the DurationData
+Semigroup (`withGrain` + combine-at-finer-grain) and the three composite rules
+(`<int> <grain> <dur>`, `… ,|and <dur>`, `<dur> ,|and <dur>`), plus the
+numeral-and-quarter and dot-minutes rules. Passes all of `Duration/EN/Corpus.hs`
+(**duration_corpus 83**, incl. 5 negatives). Side benefit: adding the composite
+rules to the shared rule set fixed a latent Time bug — "2 hours and 30 minutes
+from now" previously dropped "2 hours" (→05:00) and now composes to 150 min
+(→07:00), matching "in 2 hours and 30 minutes"; Time corpus stayed green.
 
 **Composition fuzz (this iteration).** Beyond the curated corpus, generated
 ~770 compositional probes (deep nestings, directionals, interval+date, duration
