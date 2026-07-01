@@ -12250,6 +12250,317 @@
     "grain": "hour",
     "type": "value"
    }
+  },
+  {
+   "input": "10 after 8",
+   "expected": {
+    "value": "2013-02-12T08:10:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "10am CET",
+   "expected": {
+    "value": "2013-02-12T07:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "20 minutes to 2pm",
+   "expected": {
+    "value": "2013-02-12T13:40:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "20 past 3",
+   "expected": {
+    "value": "2013-02-12T15:20:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "20 past 3pm",
+   "expected": {
+    "value": "2013-02-12T15:20:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 o'clock GMT",
+   "expected": {
+    "value": "2013-02-12T13:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3pm EST on friday",
+   "expected": {
+    "value": "2013-02-15T18:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3pm PST",
+   "expected": {
+    "value": "2013-02-12T21:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "5 till 9am",
+   "expected": {
+    "to": {
+     "value": "2013-02-12T10:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "from": {
+     "value": "2013-02-12T05:00:00.000-02:00",
+     "grain": "hour"
+    },
+    "type": "interval"
+   }
+  },
+  {
+   "input": "5pm PST tomorrow",
+   "expected": {
+    "value": "2013-02-13T23:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "9am EST tomorrow",
+   "expected": {
+    "value": "2013-02-13T12:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "a couple days ago",
+   "expected": {
+    "value": "2013-02-10T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "a few hours ago",
+   "expected": {
+    "value": "2013-02-12T01:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "a quarter of 3",
+   "expected": {
+    "value": "2013-02-12T14:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "beginning of march at noon",
+   "expected": {
+    "value": "2013-03-01T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "beginning of next week at 3pm",
+   "expected": {
+    "value": "2013-02-18T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "couple weeks from now",
+   "expected": {
+    "value": "2013-02-26T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of next week at 5pm",
+   "expected": {
+    "value": "2013-02-22T17:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "end of the month at noon",
+   "expected": {
+    "value": "2013-02-21T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "five of ten",
+   "expected": {
+    "value": "2013-02-12T09:55:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "half past noon",
+   "expected": {
+    "value": "2013-02-12T12:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in a couple hours",
+   "expected": {
+    "value": "2013-02-12T06:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in a couple of hours",
+   "expected": {
+    "value": "2013-02-12T06:30:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in a few days",
+   "expected": {
+    "value": "2013-02-15T04:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "in a few minutes",
+   "expected": {
+    "value": "2013-02-12T04:33:00.000-02:00",
+    "grain": "second",
+    "type": "value"
+   }
+  },
+  {
+   "input": "midnight UTC",
+   "expected": {
+    "value": "2013-02-12T22:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "monday at 3pm PST",
+   "expected": {
+    "value": "2013-02-18T21:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "new years day at midnight",
+   "expected": {
+    "value": "2014-01-01T00:00:00.000-02:00",
+    "grain": "hour",
+    "holidayBeta": "New Year's Day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "next month at 9am",
+   "expected": {
+    "value": "2013-03-01T09:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "noon GMT",
+   "expected": {
+    "value": "2013-02-12T10:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "quarter past noon",
+   "expected": {
+    "value": "2013-02-12T12:15:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "quarter to midnight",
+   "expected": {
+    "value": "2013-02-12T23:45:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "ten to 5",
+   "expected": {
+    "value": "2013-02-12T04:50:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "ten to 5pm",
+   "expected": {
+    "value": "2013-02-12T16:50:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the 3rd at noon",
+   "expected": {
+    "value": "2013-03-03T12:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "the first at 3pm",
+   "expected": {
+    "value": "2013-03-01T15:00:00.000-02:00",
+    "grain": "hour",
+    "type": "value"
+   }
+  },
+  {
+   "input": "tomorrow at noon PST",
+   "expected": {
+    "value": "2013-02-13T18:00:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
+  },
+  {
+   "input": "twenty-five past six",
+   "expected": {
+    "value": "2013-02-12T06:25:00.000-02:00",
+    "grain": "minute",
+    "type": "value"
+   }
   }
  ]
 }
