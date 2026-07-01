@@ -22,9 +22,9 @@
 //!   -h, --help                          print this help
 
 use duckling::{
-    Locale, ResolveContext, parse_all, parse_amountofmoney, parse_creditcard, parse_distance,
-    parse_duration, parse_email, parse_locale, parse_numeral, parse_ordinal, parse_phonenumber,
-    parse_quantity, parse_temperature, parse_url, parse_volume,
+    Locale, ResolveContext, parse_all, parse_creditcard, parse_distance, parse_duration,
+    parse_email, parse_locale, parse_numeral, parse_ordinal, parse_phonenumber, parse_temperature,
+    parse_url, parse_volume,
 };
 
 const HELP: &str = "\
@@ -45,10 +45,14 @@ OPTIONS:
                     e.g. America/New_York, Europe/London
     --locale <L>    en_US en_GB en_CA en_AU en_NZ en_IN
                     en_IE en_ZA en_PH en_BZ en_JM en_TT    (default: en_US)
+    --latent        surface latent parses (e.g. a bare year \"2001\" as a time)
+    --batch         read one input per stdin line; print one compact JSON array
+                    per line (NDJSON), for bulk corpora
     -h, --help      print this help
 
 OUTPUT:
     A JSON array of entities: {dim, body, start, end, value, latent}.
+    (--batch: one such array per line, in input order.)
 
 EXAMPLES:
     duckling \"tomorrow at 5pm\"
@@ -83,11 +87,47 @@ fn fail(msg: &str) -> ! {
     std::process::exit(2);
 }
 
+/// Run one dimension over one text (the `--dims` dispatch). `with_latent` comes
+/// from `ctx.with_latent`; it also toggles the latent variants of the dimensions
+/// that have one (quantity, amount-of-money).
+fn parse_dims(
+    dims: &str,
+    text: &str,
+    ctx: &ResolveContext,
+    locale: Locale,
+) -> Vec<duckling::Entity> {
+    use duckling::{parse_amountofmoney_opts, parse_quantity_opts};
+    let lat = ctx.with_latent;
+    match dims {
+        "time" => parse_locale(text, ctx, locale),
+        "duration" => parse_duration(text),
+        "ordinal" => parse_ordinal(text),
+        "number" => parse_numeral(text),
+        "email" => parse_email(text),
+        "url" => parse_url(text),
+        "credit-card-number" => parse_creditcard(text),
+        "phone-number" => parse_phonenumber(text),
+        "temperature" => parse_temperature(text),
+        "volume" => parse_volume(text),
+        "distance" => parse_distance(text),
+        "quantity" => parse_quantity_opts(text, lat),
+        "amount-of-money" => parse_amountofmoney_opts(text, lat),
+        "all" => parse_all(text, ctx),
+        other => fail(&format!(
+            "unknown --dims {other:?} (want time|duration|ordinal|number|email|url|\
+             credit-card-number|phone-number|temperature|volume|distance|quantity|\
+             amount-of-money|all)"
+        )),
+    }
+}
+
 fn main() {
     let mut dims = String::from("time");
     let mut ref_str: Option<String> = None;
     let mut tz_str = String::from("UTC");
     let mut locale_str = String::from("en_US");
+    let mut batch = false;
+    let mut with_latent = false;
     let mut words: Vec<String> = Vec::new();
 
     let mut it = std::env::args().skip(1);
@@ -97,12 +137,46 @@ fn main() {
                 println!("{HELP}");
                 return;
             }
+            "--batch" => batch = true,
+            "--latent" => with_latent = true,
             "--dims" => dims = it.next().unwrap_or_else(|| fail("--dims needs a value")),
             "--ref" => ref_str = Some(it.next().unwrap_or_else(|| fail("--ref needs a value"))),
             "--tz" => tz_str = it.next().unwrap_or_else(|| fail("--tz needs a value")),
             "--locale" => locale_str = it.next().unwrap_or_else(|| fail("--locale needs a value")),
             other => words.push(other.to_string()),
         }
+    }
+
+    let reference: jiff::Timestamp = match &ref_str {
+        Some(s) => s
+            .parse()
+            .unwrap_or_else(|e| fail(&format!("bad --ref {s:?}: {e}"))),
+        None => jiff::Timestamp::now(),
+    };
+    let zone = jiff::tz::TimeZone::get(&tz_str)
+        .unwrap_or_else(|e| fail(&format!("bad --tz {tz_str:?}: {e}")));
+    let locale = locale_from(&locale_str)
+        .unwrap_or_else(|| fail(&format!("unknown --locale {locale_str:?}")));
+    let ctx = ResolveContext {
+        reference,
+        zone,
+        with_latent,
+    };
+
+    // Batch mode: one input text per stdin line -> one compact JSON array per
+    // line (NDJSON), preserving order. For bulk corpora / evaluation harnesses.
+    if batch {
+        use std::io::{BufRead, Write};
+        let stdin = std::io::stdin();
+        let stdout = std::io::stdout();
+        let mut out = std::io::BufWriter::new(stdout.lock());
+        for line in stdin.lock().lines() {
+            let line = line.unwrap_or_default();
+            let entities = parse_dims(&dims, line.trim(), &ctx, locale);
+            let json = serde_json::to_string(&entities).unwrap_or_else(|_| "[]".to_string());
+            writeln!(out, "{json}").ok();
+        }
+        return;
     }
 
     // Text from positional args, else from stdin.
@@ -119,43 +193,7 @@ fn main() {
         std::process::exit(2);
     }
 
-    let reference: jiff::Timestamp = match &ref_str {
-        Some(s) => s
-            .parse()
-            .unwrap_or_else(|e| fail(&format!("bad --ref {s:?}: {e}"))),
-        None => jiff::Timestamp::now(),
-    };
-    let zone = jiff::tz::TimeZone::get(&tz_str)
-        .unwrap_or_else(|e| fail(&format!("bad --tz {tz_str:?}: {e}")));
-    let locale = locale_from(&locale_str)
-        .unwrap_or_else(|| fail(&format!("unknown --locale {locale_str:?}")));
-    let ctx = ResolveContext {
-        reference,
-        zone,
-        with_latent: false,
-    };
-
-    let entities = match dims.as_str() {
-        "time" => parse_locale(&text, &ctx, locale),
-        "duration" => parse_duration(&text),
-        "ordinal" => parse_ordinal(&text),
-        "number" => parse_numeral(&text),
-        "email" => parse_email(&text),
-        "url" => parse_url(&text),
-        "credit-card-number" => parse_creditcard(&text),
-        "phone-number" => parse_phonenumber(&text),
-        "temperature" => parse_temperature(&text),
-        "volume" => parse_volume(&text),
-        "distance" => parse_distance(&text),
-        "quantity" => parse_quantity(&text),
-        "amount-of-money" => parse_amountofmoney(&text),
-        "all" => parse_all(&text, &ctx),
-        other => fail(&format!(
-            "unknown --dims {other:?} (want time|duration|ordinal|number|email|url|\
-             credit-card-number|phone-number|temperature|volume|distance|quantity|\
-             amount-of-money|all)"
-        )),
-    };
+    let entities = parse_dims(&dims, &text, &ctx, locale);
 
     match serde_json::to_string_pretty(&entities) {
         Ok(json) => println!("{json}"),
