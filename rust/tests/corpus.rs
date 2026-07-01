@@ -272,6 +272,39 @@ fn tz_truth() {
         failures.iter().take(200).cloned().collect::<Vec<_>>().join("\n"));
 }
 
+/// DST gap/fold ground-truth: the hardest offset case. A spring-forward gap time
+/// (2:30am, nonexistent) and a fall-back fold time (1:30am, repeated) are ambiguous;
+/// the port resolves them by picking the pre-transition ("before") offset. This
+/// asserts that choice matches Python zoneinfo's PEP-495 fold=0 convention across
+/// 12 real 2013 transitions (US/EU/AU/NZ). Ground truth, not Duckling.
+#[test]
+fn tz_gapfold() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/tz_gapfold.json")).unwrap();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let zone = jiff::tz::TimeZone::get(c["zone"].as_str().unwrap()).expect("zone");
+        let reference: jiff::Timestamp = c["refUtc"].as_str().unwrap().parse().expect("ref");
+        let input = c["input"].as_str().unwrap();
+        let want = c["expectedOffset"].as_str().unwrap();
+        let ctx = duckling::ResolveContext { reference, zone, with_latent: false };
+        let got: Vec<String> = duckling::parse(input, &ctx).into_iter()
+            .filter(|e| e.dim == "time")
+            .filter_map(|e| e.value.get("value").and_then(|v| v.as_str()).map(|s| s.to_string()))
+            .collect();
+        let ok = got.iter().any(|v| v.len() >= 6 && &v[v.len() - 6..] == want);
+        if !ok {
+            failures.push(format!("[{} {} {}] {input:?} expected offset {want}, got {got:?}",
+                c["zone"], c["date"], c["kind"]));
+        }
+    }
+    eprintln!("tz_gapfold checked {checked}, {} failing", failures.len());
+    assert!(failures.is_empty(), "{} gap/fold failures:\n{}", failures.len(),
+        failures.join("\n"));
+}
+
 /// Multi-entity extraction: inputs with several times ("Monday or Tuesday",
 /// "9am Monday and 5pm Friday") where the ranker must select multiple non-
 /// overlapping best entities. Prior tests only checked the single best entity;
