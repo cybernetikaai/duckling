@@ -10,6 +10,11 @@ const INFORMAL: &[&str] = &["single", "couple", "pair", "few", "dozen"];
 
 const UNITS: &[(&str, i64)] = &[
     ("zero", 0),
+    ("naught", 0),
+    ("nought", 0),
+    ("nil", 0),
+    ("none", 0),
+    ("zilch", 0),
     ("one", 1),
     ("single", 1),
     ("two", 2),
@@ -127,7 +132,7 @@ pub fn numeral_rules() -> Vec<Rule> {
         Rule {
             name: "integer (0..19)".into(),
             pattern: vec![PatternItem::Regex(compile(
-                r"(nineteen|eighteen|seventeen|sixteen|fifteen|fourteen|thirteen|twelve|eleven|ten|nine|eight|seven|six|five|four|three|two|one|zero|single|(a )?(pair|couple)s?( of)?|(a )?few|dozens?)",
+                r"(nineteen|eighteen|seventeen|sixteen|fifteen|fourteen|thirteen|twelve|eleven|ten|nine|eight|seven|six|five|four|three|two|one|zero|naught|nought|nil|none|zilch|single|(a )?(pair|couple)s?( of)?|(a )?few|dozens?)",
             ))],
             prod: Box::new(|tokens| {
                 let g = match tokens.first() {

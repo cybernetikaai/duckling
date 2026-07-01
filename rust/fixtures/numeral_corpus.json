@@ -156,6 +156,22 @@
   {
    "input": "20/100",
    "value": 0.2
+  },
+  {
+   "input": "naught",
+   "value": 0
+  },
+  {
+   "input": "nought",
+   "value": 0
+  },
+  {
+   "input": "nil",
+   "value": 0
+  },
+  {
+   "input": "none",
+   "value": 0
   }
  ]
 }
