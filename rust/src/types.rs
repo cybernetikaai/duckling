@@ -11,6 +11,16 @@ use crate::regex::Re;
 use crate::time::object::IntervalDirection;
 use crate::time::predicate::Predicate;
 
+/// English locale variant. Base EN is region-neutral; the numeric-date rules
+/// differ by region — US reads "3/4" as month/day (March 4), GB as day/month
+/// (April 3). Everything else (named-month dates, ISO, holidays, times) is shared.
+#[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]
+pub enum Locale {
+    #[default]
+    EnUs,
+    EnGb,
+}
+
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Form {
     DayOfWeek,

@@ -10,7 +10,7 @@ use crate::time::predicate::{
     season_series, shift_duration, shift_timezone, take_last_of, take_nth, take_nth_after,
     take_nth_closest, time_cycle, time_intervals, year as year_pred, cycle_n,
 };
-use crate::types::{Form, PatternItem, Rule, TimeData, Token};
+use crate::types::{Form, Locale, PatternItem, Rule, TimeData, Token};
 
 fn regex_groups(tokens: &[Token]) -> Option<&Vec<String>> {
     match tokens.first() {
@@ -2692,7 +2692,8 @@ fn parse_i(g: &[String], i: usize) -> Option<i64> {
 
 /// Numeric date formats (US order: M/D/Y). Ports of the mm/dd(/yyyy), dd/mon/yyyy,
 /// mm/yyyy rules.
-fn numeric_date_rules() -> Vec<Rule> {
+fn numeric_date_rules(locale: Locale) -> Vec<Rule> {
+    let gb = locale == Locale::EnGb;
     vec![
         Rule {
             name: "yyyy-mm-dd".into(),
@@ -2727,13 +2728,18 @@ fn numeric_date_rules() -> Vec<Rule> {
             }),
         },
         Rule {
-            name: "mm/dd/yyyy".into(),
+            // US: mm/dd/yyyy (month first). GB: dd/mm/yyyy (day first). Same regex;
+            // the two leading fields swap roles by locale. "." separator included,
+            // covering the "dd.mm.yyyy" GB / "mm.dd.yyyy" US variants too.
+            name: if gb { "dd/mm/yyyy".into() } else { "mm/dd/yyyy".into() },
             pattern: vec![PatternItem::Regex(compile(
                 r"(\d{1,2})[-/.](\d{1,2})[-/.](\d{2,4})",
             ))],
-            prod: Box::new(|tokens| {
+            prod: Box::new(move |tokens| {
                 let g = regex_groups(tokens)?;
-                year_month_day_td(parse_i(g, 2)?, parse_i(g, 0)?, parse_i(g, 1)?).map(Token::Time)
+                let (m_idx, d_idx) = if gb { (1, 0) } else { (0, 1) };
+                year_month_day_td(parse_i(g, 2)?, parse_i(g, m_idx)?, parse_i(g, d_idx)?)
+                    .map(Token::Time)
             }),
         },
         Rule {
@@ -2756,11 +2762,16 @@ fn numeric_date_rules() -> Vec<Rule> {
             }),
         },
         Rule {
-            name: "mm/dd".into(),
+            // US: mm/dd (month first). GB: dd/mm (day first).
+            name: if gb { "dd/mm".into() } else { "mm/dd".into() },
             pattern: vec![PatternItem::Regex(compile(r"(\d{1,2})\s*[/-]\s*(\d{1,2})"))],
-            prod: Box::new(|tokens| {
+            prod: Box::new(move |tokens| {
                 let g = regex_groups(tokens)?;
-                let (m, d) = (parse_i(g, 0)?, parse_i(g, 1)?);
+                let (m, d) = if gb {
+                    (parse_i(g, 1)?, parse_i(g, 0)?)
+                } else {
+                    (parse_i(g, 0)?, parse_i(g, 1)?)
+                };
                 if !valid_md(m, d) {
                     return None;
                 }
@@ -3076,7 +3087,7 @@ fn precision_and_era_rules() -> Vec<Rule> {
     ]
 }
 
-pub fn en_rules() -> Vec<Rule> {
+pub fn en_rules(locale: Locale) -> Vec<Rule> {
     let mut rules = vec![
         instant("now", Grain::Second, 0, r"(right |just )?now|at\s+the\s+moment|atm"),
         instant("today", Grain::Day, 0, r"todays?|at\s+this\s+time"),
@@ -3095,7 +3106,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(duration_rules());
     rules.extend(holiday_rules());
     rules.extend(season_rules());
-    rules.extend(numeric_date_rules());
+    rules.extend(numeric_date_rules(locale));
     rules.extend(end_beginning_of_month_rules());
     rules.extend(end_beginning_year_week_rules());
     rules.extend(this_next_last_time_rules());

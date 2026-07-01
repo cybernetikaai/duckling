@@ -314,6 +314,41 @@ fn values_array() {
         failures.iter().take(50).cloned().collect::<Vec<_>>().join("\n"));
 }
 
+/// EN_GB locale: numeric dates are day-first (dd/mm), unlike the US default
+/// (mm/dd). Cross-checked against the oracle with locale=en_GB. Positive cases
+/// resolve day-first ("13/12/2013"→Dec 13, "3/4/2015"→Apr 3); rejections are
+/// day-first forms whose month field is out of range ("6/15/2014", "2/29/2016").
+#[test]
+fn gb_locale() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/gb_locale.json")).unwrap();
+    let ctx = ctx();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let count = input.chars().count();
+        let got: Vec<Value> = duckling::parse_locale(input, &ctx, duckling::Locale::EnGb)
+            .into_iter()
+            .filter(|e| e.dim == "time" && e.start == 0 && e.end == count)
+            .map(|e| strip_values(e.value))
+            .collect();
+        let expected = &c["expected"];
+        let ok = if expected.is_null() {
+            got.is_empty()
+        } else {
+            got.iter().any(|g| g == &strip_values(expected.clone()))
+        };
+        if !ok {
+            failures.push(format!("{input:?}\n  expected {expected}\n  got      {got:?}"));
+        }
+    }
+    eprintln!("gb_locale checked {checked}, {} failing", failures.len());
+    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
+        failures.join("\n"));
+}
+
 /// Large-scale randomized differential: random inputs (from parameterized
 /// templates across every rule family) paired with random references (date +
 /// time-of-day, 2010–2022), cross-checked against the oracle. All prior fuzzing
