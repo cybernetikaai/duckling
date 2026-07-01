@@ -111,6 +111,7 @@ Branch: `rust-port-en-time`.
 | + `values` alternatives array | 1069 / 1069 | 0 | 68 / 68 | **values_array 60**; emit Duckling's `values` (next-occurrence alternatives); last output feature, oracle-verified |
 | + values-array covering/ref cases | 1069 / 1069 | 0 | 68 / 68 | **values_array 69**; alternatives correct across day/year references (ongoing holidays, covering hour, passed tod) |
 | + numeric-date locale audit | 1069 / 1069 | 0 | 68 / 68 | US M/D/Y convention matches oracle ("3/4/2015"→Mar 4); D/M out-of-range-month rejected; +8 differential, +4 negatives |
+| + large-scale randomized diff | 1069 / 1069 | 0 | 68 / 68 | **random_diff 1500**; random inputs × random references (2010–2022) vs oracle; 0 real divergences — definitive completeness pass |
 
 ## Rule-level coverage audit
 
@@ -165,6 +166,13 @@ nodes) for diminishing return; current latency is well within the use case's bud
 - **ref_stress** 1249 — ref-*sensitive* inputs across 21 reference instants
   (every weekday, month/year ends, leap days). Catches reference-dependent bugs
   (the "this tuesday at 3" class). Confirms all recent fixes are ref-robust.
+- **random_diff** 1500 — large-scale randomized differential: random inputs
+  (parameterized templates across every rule family) × random references (date +
+  time-of-day, 2010–2022), vs the oracle. Varies input AND reference together (all
+  other fuzzing varied one at a time). 0 real divergences. NB: the fixture is
+  generated against `tz=Etc/GMT+2` (stable −02:00), because `America/Noronha`
+  applied historical DST before ~2008 — a resolved date in a DST year would differ
+  from the fixed −02:00 test zone (a test artifact, not a port bug).
 - **values_array** 69 — the port emits Duckling's `values` array (up to 3 next-
   occurrence alternatives: 3 for recurring predicates, 1 for single/past ones); this
   test cross-checks the full array element-by-element vs the oracle, incl. the 12h
