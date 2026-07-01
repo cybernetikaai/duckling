@@ -310,6 +310,21 @@ pub fn numeral_rules() -> Vec<Rule> {
                 )))
             }),
         },
+        // "1/5" -> 0.2 (ruleFractions; Duckling puts this in the shared Numeral
+        // rules). notOkForAnyTime — a fraction is never a date/hour/year.
+        Rule {
+            name: "fractional number".into(),
+            pattern: vec![PatternItem::Regex(compile(r"(\d+)/(\d+)"))],
+            prod: Box::new(|tokens| {
+                let g = match tokens.first() {
+                    Some(Token::RegexMatch(g)) => g,
+                    _ => return None,
+                };
+                let n: f64 = g.first()?.parse().ok()?;
+                let d: f64 = g.get(1)?.parse().ok()?;
+                (d != 0.0).then(|| Token::Numeral(NumeralData::new(n / d, false)))
+            }),
+        },
         // "100K", "1.2M" (ruleSuffixes): <numeral> (k|m|g) at a word boundary.
         Rule {
             name: "suffixes (K,M,G)".into(),
