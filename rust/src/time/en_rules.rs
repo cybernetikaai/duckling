@@ -1145,6 +1145,22 @@ fn interval_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // "later than 3:30pm but before 6pm" / "from 9 to 11" (ruleIntervalTODFrom).
+        Rule {
+            name: "from <time-of-day> - <time-of-day> (interval)".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"(later than|from|(in[\s-])?between)")),
+                PatternItem::Predicate(Box::new(is_a_time_of_day)),
+                PatternItem::Regex(compile(r"((but )?before)|\-|to|th?ru|through|(un)?til(l)?")),
+                PatternItem::Predicate(Box::new(is_a_time_of_day)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(a), _, Token::Time(b)] => {
+                    interval_td(IntervalType::Closed, a, b).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
         // "hh(:mm) - <tod> am|pm": am/pm on the trailing time applies to both.
         Rule {
             name: "hh(:mm) - <time-of-day> am|pm".into(),
