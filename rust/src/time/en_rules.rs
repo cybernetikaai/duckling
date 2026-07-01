@@ -1073,6 +1073,68 @@ fn interval_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        Rule {
+            name: "for <duration> from <time>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"for")),
+                PatternItem::Predicate(Box::new(is_a_duration)),
+                PatternItem::Regex(compile(r"(from|starting|beginning|after|starting from)")),
+                PatternItem::Predicate(Box::new(is_not_latent)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, dur, _, Token::Time(td1)] => {
+                    let (v, g) = duration_of(dur)?;
+                    interval_td(IntervalType::Closed, td1, &duration_after_td(v, g, td1))
+                        .map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
+        // A time shifted by a duration: "15 minutes past 3pm", "10 mins before 5".
+        Rule {
+            name: "<duration> after|before|from|past <time>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_a_duration)),
+                PatternItem::Regex(compile(r"(after|before|from|past)")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [dur, Token::RegexMatch(g), Token::Time(td)] => {
+                    let (v, gr) = duration_of(dur)?;
+                    let signed = if g.first()?.eq_ignore_ascii_case("before") { -v } else { v };
+                    Some(Token::Time(duration_after_td(signed, gr, td)))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "<integer> <named-day> ago|back".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(|t| get_int_value(t).is_some_and(|v| v >= 0))),
+                PatternItem::Predicate(Box::new(is_a_day_of_week)),
+                PatternItem::Regex(compile(r"ago|back")),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [num, Token::Time(td), _] => {
+                    Some(Token::Time(pred_nth_td(-get_int_value(num)?, false, td)))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "<time> before last|after next".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_a_time)),
+                PatternItem::Regex(compile(r"(before last|after next)")),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(td), Token::RegexMatch(g)] => {
+                    let after_next = g.first()?.eq_ignore_ascii_case("after next");
+                    Some(Token::Time(pred_nth_td(1, after_next, td)))
+                }
+                _ => None,
+            }),
+        },
     ]
 }
 
