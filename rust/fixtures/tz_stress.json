@@ -1,115 +1,695 @@
 {
- "cases": [
-  {
-   "zone": "America/New_York",
-   "referenceTimeUtc": "2013-01-15T12:00:00Z",
-   "input": "in 4 months",
-   "expected": {
-    "value": "2013-05-15T00:00:00.000-04:00",
-    "grain": "day",
-    "type": "value"
-   },
-   "ambiguousCount": null
-  },
-  {
-   "zone": "America/New_York",
-   "referenceTimeUtc": "2013-01-15T12:00:00Z",
-   "input": "the 4th of July",
-   "expected": {
-    "value": "2013-07-04T00:00:00.000-04:00",
-    "grain": "day",
-    "type": "value"
-   },
-   "ambiguousCount": null
-  },
-  {
-   "zone": "America/New_York",
-   "referenceTimeUtc": "2013-01-15T12:00:00Z",
-   "input": "first Sunday of November",
-   "expected": {
-    "value": "2013-11-03T00:00:00.000-04:00",
-    "grain": "day",
-    "type": "value"
-   },
-   "ambiguousCount": null
-  },
-  {
-   "zone": "America/New_York",
-   "referenceTimeUtc": "2013-03-09T12:00:00Z",
-   "input": "tomorrow at 2:30am",
-   "expected": {
-    "value": "2013-03-10T02:30:00.000-05:00",
-    "grain": "minute",
-    "type": "value"
-   },
-   "ambiguousCount": null
-  },
-  {
-   "zone": "America/New_York",
-   "referenceTimeUtc": "2013-11-02T12:00:00Z",
-   "input": "tomorrow at 1:30am",
-   "expected": {
-    "value": "2013-11-03T01:30:00.000-04:00",
-    "grain": "minute",
-    "type": "value"
-   },
-   "ambiguousCount": null
-  },
-  {
-   "zone": "Europe/London",
-   "referenceTimeUtc": "2013-06-01T12:00:00Z",
-   "input": "3pm EST",
-   "expected": {
-    "value": "2013-06-01T21:00:00.000+01:00",
-    "grain": "minute",
-    "type": "value"
-   },
-   "ambiguousCount": null
-  },
-  {
-   "zone": "Europe/London",
-   "referenceTimeUtc": "2013-06-01T12:00:00Z",
-   "input": "Christmas",
-   "expected": {
-    "value": "2013-12-25T00:00:00.000+00:00",
-    "grain": "day",
-    "holidayBeta": "Christmas",
-    "type": "value"
-   },
-   "ambiguousCount": null
-  },
-  {
-   "zone": "Australia/Sydney",
-   "referenceTimeUtc": "2013-06-01T12:00:00Z",
-   "input": "in 6 months",
-   "expected": {
-    "value": "2013-12-01T00:00:00.000+11:00",
-    "grain": "day",
-    "type": "value"
-   },
-   "ambiguousCount": null
-  },
-  {
-   "zone": "Australia/Sydney",
-   "referenceTimeUtc": "2013-06-01T12:00:00Z",
-   "input": "December 25th",
-   "expected": {
-    "value": "2013-12-25T00:00:00.000+11:00",
-    "grain": "day",
-    "type": "value"
-   },
-   "ambiguousCount": null
-  },
-  {
-   "zone": "America/Los_Angeles",
-   "referenceTimeUtc": "2017-06-01T12:00:00Z",
-   "input": "the first Tuesday of October",
-   "expected": {
-    "value": "2017-10-03T00:00:00.000-07:00",
-    "grain": "day",
-    "type": "value"
-   },
-   "ambiguousCount": null
-  }
- ]
+  "cases": [
+    {
+      "zone": "America/New_York",
+      "referenceTimeUtc": "2013-01-15T12:00:00Z",
+      "input": "in 4 months",
+      "expected": {
+        "value": "2013-05-15T00:00:00.000-04:00",
+        "grain": "day",
+        "type": "value"
+      },
+      "ambiguousCount": null
+    },
+    {
+      "zone": "America/New_York",
+      "referenceTimeUtc": "2013-01-15T12:00:00Z",
+      "input": "the 4th of July",
+      "expected": {
+        "value": "2013-07-04T00:00:00.000-04:00",
+        "grain": "day",
+        "type": "value"
+      },
+      "ambiguousCount": null
+    },
+    {
+      "zone": "America/New_York",
+      "referenceTimeUtc": "2013-01-15T12:00:00Z",
+      "input": "first Sunday of November",
+      "expected": {
+        "value": "2013-11-03T00:00:00.000-04:00",
+        "grain": "day",
+        "type": "value"
+      },
+      "ambiguousCount": null
+    },
+    {
+      "zone": "America/New_York",
+      "referenceTimeUtc": "2013-03-09T12:00:00Z",
+      "input": "tomorrow at 2:30am",
+      "expected": {
+        "value": "2013-03-10T02:30:00.000-05:00",
+        "grain": "minute",
+        "type": "value"
+      },
+      "ambiguousCount": null
+    },
+    {
+      "zone": "America/New_York",
+      "referenceTimeUtc": "2013-11-02T12:00:00Z",
+      "input": "tomorrow at 1:30am",
+      "expected": {
+        "value": "2013-11-03T01:30:00.000-04:00",
+        "grain": "minute",
+        "type": "value"
+      },
+      "ambiguousCount": null
+    },
+    {
+      "zone": "Europe/London",
+      "referenceTimeUtc": "2013-06-01T12:00:00Z",
+      "input": "3pm EST",
+      "expected": {
+        "value": "2013-06-01T21:00:00.000+01:00",
+        "grain": "minute",
+        "type": "value"
+      },
+      "ambiguousCount": null
+    },
+    {
+      "zone": "Europe/London",
+      "referenceTimeUtc": "2013-06-01T12:00:00Z",
+      "input": "Christmas",
+      "expected": {
+        "value": "2013-12-25T00:00:00.000+00:00",
+        "grain": "day",
+        "holidayBeta": "Christmas",
+        "type": "value"
+      },
+      "ambiguousCount": null
+    },
+    {
+      "zone": "Australia/Sydney",
+      "referenceTimeUtc": "2013-06-01T12:00:00Z",
+      "input": "in 6 months",
+      "expected": {
+        "value": "2013-12-01T00:00:00.000+11:00",
+        "grain": "day",
+        "type": "value"
+      },
+      "ambiguousCount": null
+    },
+    {
+      "zone": "Australia/Sydney",
+      "referenceTimeUtc": "2013-06-01T12:00:00Z",
+      "input": "December 25th",
+      "expected": {
+        "value": "2013-12-25T00:00:00.000+11:00",
+        "grain": "day",
+        "type": "value"
+      },
+      "ambiguousCount": null
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "referenceTimeUtc": "2017-06-01T12:00:00Z",
+      "input": "the first Tuesday of October",
+      "expected": {
+        "value": "2017-10-03T00:00:00.000-07:00",
+        "grain": "day",
+        "type": "value"
+      },
+      "ambiguousCount": null
+    },
+    {
+      "zone": "America/New_York",
+      "referenceTimeUtc": "2024-03-09T12:00:00Z",
+      "input": "tomorrow at 2:30am",
+      "expected": {
+        "value": "2024-03-10T02:30:00.000-05:00",
+        "grain": "minute",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/New_York",
+      "referenceTimeUtc": "2024-03-09T12:00:00Z",
+      "input": "tomorrow at 1:30am",
+      "expected": {
+        "value": "2024-03-10T01:30:00.000-05:00",
+        "grain": "minute",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/New_York",
+      "referenceTimeUtc": "2024-03-09T12:00:00Z",
+      "input": "tomorrow at 2am",
+      "expected": {
+        "value": "2024-03-10T02:00:00.000-05:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/New_York",
+      "referenceTimeUtc": "2024-03-09T12:00:00Z",
+      "input": "tomorrow at noon",
+      "expected": {
+        "value": "2024-03-10T12:00:00.000-04:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/New_York",
+      "referenceTimeUtc": "2024-03-09T12:00:00Z",
+      "input": "tomorrow at 3pm",
+      "expected": {
+        "value": "2024-03-10T15:00:00.000-04:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/New_York",
+      "referenceTimeUtc": "2024-03-09T12:00:00Z",
+      "input": "in 2 days at 9am",
+      "expected": {
+        "value": "2024-03-11T09:00:00.000-04:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/New_York",
+      "referenceTimeUtc": "2024-03-09T12:00:00Z",
+      "input": "next monday at 8am",
+      "expected": {
+        "value": "2024-03-11T08:00:00.000-04:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/New_York",
+      "referenceTimeUtc": "2024-11-02T12:00:00Z",
+      "input": "tomorrow at 1:30am",
+      "expected": {
+        "value": "2024-11-03T01:30:00.000-04:00",
+        "grain": "minute",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/New_York",
+      "referenceTimeUtc": "2024-11-02T12:00:00Z",
+      "input": "tomorrow at noon",
+      "expected": {
+        "value": "2024-11-03T12:00:00.000-05:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/New_York",
+      "referenceTimeUtc": "2024-11-02T12:00:00Z",
+      "input": "tomorrow at 3pm",
+      "expected": {
+        "value": "2024-11-03T15:00:00.000-05:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/New_York",
+      "referenceTimeUtc": "2024-11-02T12:00:00Z",
+      "input": "in 2 days at 9am",
+      "expected": {
+        "value": "2024-11-04T09:00:00.000-05:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/New_York",
+      "referenceTimeUtc": "2024-11-02T12:00:00Z",
+      "input": "next monday at 8am",
+      "expected": {
+        "value": "2024-11-04T08:00:00.000-05:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "referenceTimeUtc": "2024-03-09T20:00:00Z",
+      "input": "tomorrow at 2:30am",
+      "expected": {
+        "value": "2024-03-10T02:30:00.000-08:00",
+        "grain": "minute",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "referenceTimeUtc": "2024-03-09T20:00:00Z",
+      "input": "tomorrow at 1:30am",
+      "expected": {
+        "value": "2024-03-10T01:30:00.000-08:00",
+        "grain": "minute",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "referenceTimeUtc": "2024-03-09T20:00:00Z",
+      "input": "tomorrow at 2am",
+      "expected": {
+        "value": "2024-03-10T02:00:00.000-08:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "referenceTimeUtc": "2024-03-09T20:00:00Z",
+      "input": "tomorrow at noon",
+      "expected": {
+        "value": "2024-03-10T12:00:00.000-07:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "referenceTimeUtc": "2024-03-09T20:00:00Z",
+      "input": "tomorrow at 3pm",
+      "expected": {
+        "value": "2024-03-10T15:00:00.000-07:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "referenceTimeUtc": "2024-03-09T20:00:00Z",
+      "input": "in 2 days at 9am",
+      "expected": {
+        "value": "2024-03-12T09:00:00.000-07:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "referenceTimeUtc": "2024-03-09T20:00:00Z",
+      "input": "next monday at 8am",
+      "expected": {
+        "value": "2024-03-11T08:00:00.000-07:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "referenceTimeUtc": "2024-11-02T20:00:00Z",
+      "input": "tomorrow at 1:30am",
+      "expected": {
+        "value": "2024-11-03T01:30:00.000-07:00",
+        "grain": "minute",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "referenceTimeUtc": "2024-11-02T20:00:00Z",
+      "input": "tomorrow at noon",
+      "expected": {
+        "value": "2024-11-03T12:00:00.000-08:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "referenceTimeUtc": "2024-11-02T20:00:00Z",
+      "input": "tomorrow at 3pm",
+      "expected": {
+        "value": "2024-11-03T15:00:00.000-08:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "referenceTimeUtc": "2024-11-02T20:00:00Z",
+      "input": "in 2 days at 9am",
+      "expected": {
+        "value": "2024-11-05T09:00:00.000-08:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "America/Los_Angeles",
+      "referenceTimeUtc": "2024-11-02T20:00:00Z",
+      "input": "next monday at 8am",
+      "expected": {
+        "value": "2024-11-04T08:00:00.000-08:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/London",
+      "referenceTimeUtc": "2024-03-30T12:00:00Z",
+      "input": "tomorrow at 2:30am",
+      "expected": {
+        "value": "2024-03-31T02:30:00.000+01:00",
+        "grain": "minute",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/London",
+      "referenceTimeUtc": "2024-03-30T12:00:00Z",
+      "input": "tomorrow at 2am",
+      "expected": {
+        "value": "2024-03-31T02:00:00.000+01:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/London",
+      "referenceTimeUtc": "2024-03-30T12:00:00Z",
+      "input": "tomorrow at 3am",
+      "expected": {
+        "value": "2024-03-31T03:00:00.000+01:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/London",
+      "referenceTimeUtc": "2024-03-30T12:00:00Z",
+      "input": "tomorrow at noon",
+      "expected": {
+        "value": "2024-03-31T12:00:00.000+01:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/London",
+      "referenceTimeUtc": "2024-03-30T12:00:00Z",
+      "input": "tomorrow at 3pm",
+      "expected": {
+        "value": "2024-03-31T15:00:00.000+01:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/London",
+      "referenceTimeUtc": "2024-03-30T12:00:00Z",
+      "input": "in 2 days at 9am",
+      "expected": {
+        "value": "2024-04-02T09:00:00.000+01:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/London",
+      "referenceTimeUtc": "2024-03-30T12:00:00Z",
+      "input": "next monday at 8am",
+      "expected": {
+        "value": "2024-04-01T08:00:00.000+01:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/London",
+      "referenceTimeUtc": "2024-10-26T12:00:00Z",
+      "input": "tomorrow at 2:30am",
+      "expected": {
+        "value": "2024-10-27T02:30:00.000+00:00",
+        "grain": "minute",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/London",
+      "referenceTimeUtc": "2024-10-26T12:00:00Z",
+      "input": "tomorrow at 2am",
+      "expected": {
+        "value": "2024-10-27T02:00:00.000+00:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/London",
+      "referenceTimeUtc": "2024-10-26T12:00:00Z",
+      "input": "tomorrow at 3am",
+      "expected": {
+        "value": "2024-10-27T03:00:00.000+00:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/London",
+      "referenceTimeUtc": "2024-10-26T12:00:00Z",
+      "input": "tomorrow at noon",
+      "expected": {
+        "value": "2024-10-27T12:00:00.000+00:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/London",
+      "referenceTimeUtc": "2024-10-26T12:00:00Z",
+      "input": "tomorrow at 3pm",
+      "expected": {
+        "value": "2024-10-27T15:00:00.000+00:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/London",
+      "referenceTimeUtc": "2024-10-26T12:00:00Z",
+      "input": "in 2 days at 9am",
+      "expected": {
+        "value": "2024-10-29T09:00:00.000+00:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/London",
+      "referenceTimeUtc": "2024-10-26T12:00:00Z",
+      "input": "next monday at 8am",
+      "expected": {
+        "value": "2024-10-28T08:00:00.000+00:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/Berlin",
+      "referenceTimeUtc": "2024-03-30T12:00:00Z",
+      "input": "tomorrow at 3am",
+      "expected": {
+        "value": "2024-03-31T03:00:00.000+02:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/Berlin",
+      "referenceTimeUtc": "2024-03-30T12:00:00Z",
+      "input": "tomorrow at noon",
+      "expected": {
+        "value": "2024-03-31T12:00:00.000+02:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/Berlin",
+      "referenceTimeUtc": "2024-03-30T12:00:00Z",
+      "input": "tomorrow at 3pm",
+      "expected": {
+        "value": "2024-03-31T15:00:00.000+02:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/Berlin",
+      "referenceTimeUtc": "2024-03-30T12:00:00Z",
+      "input": "in 2 days at 9am",
+      "expected": {
+        "value": "2024-04-02T09:00:00.000+02:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Europe/Berlin",
+      "referenceTimeUtc": "2024-03-30T12:00:00Z",
+      "input": "next monday at 8am",
+      "expected": {
+        "value": "2024-04-01T08:00:00.000+02:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Australia/Sydney",
+      "referenceTimeUtc": "2024-04-06T12:00:00Z",
+      "input": "tomorrow at 3am",
+      "expected": {
+        "value": "2024-04-07T03:00:00.000+10:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Australia/Sydney",
+      "referenceTimeUtc": "2024-04-06T12:00:00Z",
+      "input": "tomorrow at noon",
+      "expected": {
+        "value": "2024-04-07T12:00:00.000+10:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Australia/Sydney",
+      "referenceTimeUtc": "2024-04-06T12:00:00Z",
+      "input": "tomorrow at 3pm",
+      "expected": {
+        "value": "2024-04-07T15:00:00.000+10:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Australia/Sydney",
+      "referenceTimeUtc": "2024-04-06T12:00:00Z",
+      "input": "in 2 days at 9am",
+      "expected": {
+        "value": "2024-04-09T09:00:00.000+10:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Australia/Sydney",
+      "referenceTimeUtc": "2024-04-06T12:00:00Z",
+      "input": "next monday at 8am",
+      "expected": {
+        "value": "2024-04-08T08:00:00.000+10:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Australia/Sydney",
+      "referenceTimeUtc": "2024-10-05T12:00:00Z",
+      "input": "tomorrow at 3am",
+      "expected": {
+        "value": "2024-10-06T03:00:00.000+11:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Australia/Sydney",
+      "referenceTimeUtc": "2024-10-05T12:00:00Z",
+      "input": "tomorrow at noon",
+      "expected": {
+        "value": "2024-10-06T12:00:00.000+11:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Australia/Sydney",
+      "referenceTimeUtc": "2024-10-05T12:00:00Z",
+      "input": "tomorrow at 3pm",
+      "expected": {
+        "value": "2024-10-06T15:00:00.000+11:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Australia/Sydney",
+      "referenceTimeUtc": "2024-10-05T12:00:00Z",
+      "input": "in 2 days at 9am",
+      "expected": {
+        "value": "2024-10-08T09:00:00.000+11:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Australia/Sydney",
+      "referenceTimeUtc": "2024-10-05T12:00:00Z",
+      "input": "next monday at 8am",
+      "expected": {
+        "value": "2024-10-07T08:00:00.000+11:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Pacific/Auckland",
+      "referenceTimeUtc": "2024-04-06T00:00:00Z",
+      "input": "tomorrow at 3am",
+      "expected": {
+        "value": "2024-04-07T03:00:00.000+12:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Pacific/Auckland",
+      "referenceTimeUtc": "2024-04-06T00:00:00Z",
+      "input": "tomorrow at noon",
+      "expected": {
+        "value": "2024-04-07T12:00:00.000+12:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Pacific/Auckland",
+      "referenceTimeUtc": "2024-04-06T00:00:00Z",
+      "input": "tomorrow at 3pm",
+      "expected": {
+        "value": "2024-04-07T15:00:00.000+12:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Pacific/Auckland",
+      "referenceTimeUtc": "2024-04-06T00:00:00Z",
+      "input": "in 2 days at 9am",
+      "expected": {
+        "value": "2024-04-09T09:00:00.000+12:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    },
+    {
+      "zone": "Pacific/Auckland",
+      "referenceTimeUtc": "2024-04-06T00:00:00Z",
+      "input": "next monday at 8am",
+      "expected": {
+        "value": "2024-04-08T08:00:00.000+12:00",
+        "grain": "hour",
+        "type": "value"
+      }
+    }
+  ]
 }
