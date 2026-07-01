@@ -822,9 +822,9 @@ fn ordinal_corpus() {
 }
 
 /// Numeral dimension (`parse_numeral`) — the supported subset of
-/// Duckling/Numeral/EN/Corpus.hs (integers, written numbers, informal
-/// quantifiers, compounds). Decimals/negatives/fractions/magnitude-suffixes are
-/// deferred (see docs/REMAINING_DIMENSIONS.md), so they are not asserted here.
+/// Duckling/Numeral/EN/Corpus.hs, grown per red→green cycle. Values may be int
+/// or float; compared as f64 with tolerance. Still-deferred families (see
+/// docs/REMAINING_DIMENSIONS.md) are not yet in the fixture.
 #[test]
 fn numeral_corpus() {
     let data: Value =
@@ -835,13 +835,13 @@ fn numeral_corpus() {
         checked += 1;
         let input = c["input"].as_str().unwrap();
         let n = input.chars().count();
-        let want = c["value"].as_i64().unwrap();
-        let got: Vec<i64> = duckling::parse_numeral(input)
+        let want = c["value"].as_f64().unwrap();
+        let got: Vec<f64> = duckling::parse_numeral(input)
             .into_iter()
             .filter(|e| e.dim == "number" && e.start == 0 && e.end == n)
-            .filter_map(|e| e.value["value"].as_i64())
+            .filter_map(|e| e.value["value"].as_f64())
             .collect();
-        if !got.contains(&want) {
+        if !got.iter().any(|g| (g - want).abs() < 1e-9) {
             failures.push(format!("{input:?}\n  expected {want}\n  got      {got:?}"));
         }
     }

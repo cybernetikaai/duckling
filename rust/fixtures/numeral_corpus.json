@@ -1,5 +1,5 @@
 {
- "_comment": "Supported standalone Numeral forms (subset of Numeral/EN/Corpus.hs). parse_numeral must emit dim=number with this value on a full-span parse. Deferred (not asserted): decimals, negatives, fractions, K/M/G/lakh-abbrev suffixes, a/two dozen, nil.",
+ "_comment": "Subset of Numeral/EN/Corpus.hs, grown per red->green cycle. parse_numeral must emit dim=number with this value on a full-span parse. Values may be int or float.",
  "cases": [
   {
    "input": "zero",
@@ -72,6 +72,194 @@
   {
    "input": "two thousand",
    "value": 2000
+  },
+  {
+   "input": "1.1",
+   "value": 1.1
+  },
+  {
+   "input": "1.10",
+   "value": 1.1
+  },
+  {
+   "input": "01.10",
+   "value": 1.1
+  },
+  {
+   "input": ".77",
+   "value": 0.77
+  },
+  {
+   "input": "0.77",
+   "value": 0.77
+  },
+  {
+   "input": "1 point 1",
+   "value": 1.1
+  },
+  {
+   "input": "point 77",
+   "value": 0.77
+  },
+  {
+   "input": "100,000",
+   "value": 100000
+  },
+  {
+   "input": "100,000.0",
+   "value": 100000
+  },
+  {
+   "input": "3,000,000",
+   "value": 3000000
+  },
+  {
+   "input": "1,200,000",
+   "value": 1200000
+  },
+  {
+   "input": "100K",
+   "value": 100000
+  },
+  {
+   "input": "100k",
+   "value": 100000
+  },
+  {
+   "input": "3M",
+   "value": 3000000
+  },
+  {
+   "input": "3000K",
+   "value": 3000000
+  },
+  {
+   "input": "1.2M",
+   "value": 1200000
+  },
+  {
+   "input": "1200k",
+   "value": 1200000
+  },
+  {
+   "input": "1/5",
+   "value": 0.2
+  },
+  {
+   "input": "2/10",
+   "value": 0.2
+  },
+  {
+   "input": "3/15",
+   "value": 0.2
+  },
+  {
+   "input": "20/100",
+   "value": 0.2
+  },
+  {
+   "input": "naught",
+   "value": 0
+  },
+  {
+   "input": "nought",
+   "value": 0
+  },
+  {
+   "input": "nil",
+   "value": 0
+  },
+  {
+   "input": "none",
+   "value": 0
+  },
+  {
+   "input": "a dozen",
+   "value": 12
+  },
+  {
+   "input": "a dozen of",
+   "value": 12
+  },
+  {
+   "input": "two dozen",
+   "value": 24
+  },
+  {
+   "input": "2 dozens",
+   "value": 24
+  },
+  {
+   "input": "two hundred dozens",
+   "value": 2400
+  },
+  {
+   "input": "200 dozens",
+   "value": 2400
+  },
+  {
+   "input": "one twenty two",
+   "value": 122
+  },
+  {
+   "input": "ONE TwentY tWO",
+   "value": 122
+  },
+  {
+   "input": "-504",
+   "value": -504
+  },
+  {
+   "input": "negative five hundred and four",
+   "value": -504
+  },
+  {
+   "input": "- 1,200,000",
+   "value": -1200000
+  },
+  {
+   "input": "-1200000",
+   "value": -1200000
+  },
+  {
+   "input": "minus 1,200,000",
+   "value": -1200000
+  },
+  {
+   "input": "negative 1200000",
+   "value": -1200000
+  },
+  {
+   "input": "-1.2M",
+   "value": -1200000
+  },
+  {
+   "input": "-1200K",
+   "value": -1200000
+  },
+  {
+   "input": "-.0012G",
+   "value": -1200000
+  },
+  {
+   "input": "-3,200,000",
+   "value": -3200000
+  },
+  {
+   "input": "-3200000",
+   "value": -3200000
+  },
+  {
+   "input": "minus three million two hundred thousand",
+   "value": -3200000
+  },
+  {
+   "input": "forty-five (45)",
+   "value": 45
+  },
+  {
+   "input": "45 (forty five)",
+   "value": 45
   }
  ]
 }
