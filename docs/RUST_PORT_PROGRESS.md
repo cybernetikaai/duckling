@@ -115,6 +115,7 @@ Branch: `rust-port-en-time`.
 | + EN_GB locale (day-first dates) | 1069 / 1069 | 0 | 68 / 68 | **gb_locale 19**; `parse_locale` — UK "13/12/2013"→Dec 13, "3/4"→Apr 3; ported from EN/GB/Rules.hs; US unchanged |
 | + all-region date conventions | 1069 / 1069 | 0 | 68 / 68 | **region_dates 120**; 12 English regions × 3 conventions (month-first/day-first/ZA-hybrid); Locale enum + per-locale rule cache |
 | + regional holidays (11 regions) | 1069 / 1069 | 0 | 68 / 68 | **region_holidays 405**; Guy Fawkes/ANZAC/Melbourne Cup/Heritage Day… ported from per-region Rules.hs (subagent), oracle-verified across 3 years |
+| + US-region holidays (gap fix) | 1069 / 1069 | 0 | 68 / 68 | **region_holidays 726**; Independence/Memorial/Labor/Columbus Day, Cinco de Mayo, Juneteenth… (~96) were missing from base (Corpus.hs tests "4th of July" the date, not the holiday); now resolve |
 
 ## Rule-level coverage audit
 
@@ -169,15 +170,21 @@ nodes) for diminishing return; current latency is well within the use case's bud
 - **ref_stress** 1249 — ref-*sensitive* inputs across 21 reference instants
   (every weekday, month/year ends, leap days). Catches reference-dependent bugs
   (the "this tuesday at 3" class). Confirms all recent fixes are ref-robust.
-- **region_dates** 120 + **region_holidays** 405 — all 12 English regions via
-  `parse_locale(_, _, EnXx)`. Numeric-date convention (month-first US/CA/PH; day-first
-  GB/AU/NZ/IN/IE/BZ/JM/TT; ZA hybrid) + region-specific holidays (139/148, ported by
-  a subagent to fixtures/region_holidays.json, built by region_holiday_rules).
-  Cross-checked vs the oracle with locale=en_XX. 9 "other" holidays (Islamic-calendar,
-  nth-relative-to-a-date, conditional show days) skipped. **US-region holidays**
-  (Independence/Memorial/Labor/Columbus Day, Cinco de Mayo, …, ~111 in EN/US/Rules.hs,
-  absent from the base since Corpus.hs tests "4th of July" the *date*, not the holiday
-  name) are being added next.
+- **region_dates** 120 + **region_holidays** 726 — all 12 English regions via
+  `parse_locale(_, _, EnXx)` (`parse` = EnUs). Numeric-date convention (month-first
+  US/CA/PH; day-first GB/AU/NZ/IN/IE/BZ/JM/TT; ZA hybrid) + region-specific holidays
+  (subagent-extracted to fixtures/region_holidays.json, built by region_holiday_rules
+  from four date kinds: month/day, nth (or last) weekday of month, fixed interval,
+  easter offset). Cross-checked vs the oracle with locale=en_XX across 2013/2015/2018.
+  US-region holidays (Independence/Memorial/Labor/Columbus Day, Cinco de Mayo,
+  Juneteenth, …) — ~96 that were absent from the base (Corpus.hs tests "4th of July"
+  the date, not "Independence Day" the holiday) — now resolve.
+  **Known gap:** ~26 "other"-kind holidays are skipped (their verbatim Haskell is
+  kept in the fixture): nth-weekday-relative-to-a-*date* (Election Day = 1st Tue
+  after 1st Mon Nov; Cyber Monday = Mon after Thanksgiving; Victoria Day; Tax Day),
+  long-weekend intervals (Memorial/Labor Day weekend), calendar-computed (Hosay,
+  Hazrat Ali), and fixed single-year (Super Tuesday 2008). They need per-holiday
+  relative-date logic — a documented follow-up.
 - **gb_locale** 19 — EN_GB day-first numeric dates via `parse_locale(_, _, EnGb)`,
   vs the oracle with locale=en_GB. Day-first positives ("13/12/2013"→Dec 13,
   "3/4/2015"→Apr 3) + out-of-range-month rejections. The US default (`parse`) and
