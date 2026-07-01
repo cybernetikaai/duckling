@@ -31,6 +31,8 @@ Branch: `rust-port-en-time`.
 | + time_computed predicate | 334 / 984 | 650 | 3 / 10 | infra for computed holidays (explicit date list) |
 | + computed/lunar holidays (subagent) | 436 / 984 | 548 | 3 / 10 | 32 date tables (Easter/Diwali/Eid/...), subagent d69ae5ce, +102 |
 | + easter-relative holidays | 451 / 984 | 533 | 3 / 10 | Good Friday/Ascension/Pentecost... = easter±N days |
+| + interval-holiday infra + Lent | 453 / 984 | 531 | 3 / 10 | interval_days [base+s, base+e+1); Lent/Great Lent |
+| + interval computed holidays (subagent) | (in progress) | — | — | subagent aa591133: Hanukkah/Passover/Sukkot/Shavuot/Rosh Hashanah |
 
 ## How to run
 
@@ -48,7 +50,7 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru easter-relative holidays. **451/984** (46%). Diagnostic: unique-mode = 370 (ranking worth ~66). Next: interval-based computed holidays (Hanukkah/Ramadan/Passover), interval TOD-AMPM, then ranking.
+Cumulative thru interval-holiday infra + Lent. **453/984**. Subagent adding table-based interval holidays. Then: interval TOD-AMPM, <time> on <day>, ranking (unique-mode gap ~66).
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
