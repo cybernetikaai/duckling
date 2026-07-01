@@ -65,6 +65,8 @@ pub struct Node {
     pub range: Range,
     pub token: Token,
     pub rule: Option<String>,
+    /// The matched route (child nodes), for ranking feature extraction.
+    pub children: Vec<Node>,
 }
 
 /// A rule production: turn the matched route's tokens into a new token.

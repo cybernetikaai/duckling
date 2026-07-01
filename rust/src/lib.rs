@@ -13,6 +13,7 @@ pub mod engine;
 pub mod json;
 pub mod numeral;
 pub mod ordinal;
+pub mod ranking;
 pub mod resolve;
 pub mod time;
 pub mod timegrain;
@@ -20,7 +21,7 @@ pub mod timegrain;
 pub use resolve::{Entity, ResolveContext};
 
 use document::Document;
-use types::{Rule, Token};
+use types::{Node, Rule, Token};
 
 thread_local! {
     // Compile the rule set (regexes) once per thread, not once per parse.
@@ -34,26 +35,34 @@ thread_local! {
         r.extend(time::en_rules::en_rules());
         r
     };
+    static CLASSIFIERS: ranking::Classifiers = ranking::classifiers();
 }
 
-/// Parse `input` against the EN Time rules and return resolved entities.
+/// Parse `input` against the EN Time rules and return resolved entities,
+/// ranked (competing parses collapsed to the winner).
 pub fn parse(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
     let doc = Document::new(input);
     RULES.with(|rules| {
         let nodes = engine::parse_string(rules, &doc);
-        nodes
-            .iter()
-            .filter_map(|n| match &n.token {
-                Token::Time(td) => resolve::resolve_time(td, ctx).map(|value| Entity {
+        let scored: Vec<(Node, Entity)> = nodes
+            .into_iter()
+            .filter_map(|n| {
+                let td = match &n.token {
+                    Token::Time(td) => td.clone(),
+                    _ => return None,
+                };
+                let value = resolve::resolve_time(&td, ctx)?;
+                let e = Entity {
                     dim: "time".to_string(),
                     body: doc.substring(n.range.0, n.range.1),
                     start: n.range.0,
                     end: n.range.1,
                     value,
                     latent: td.latent,
-                }),
-                _ => None,
+                };
+                Some((n, e))
             })
-            .collect()
+            .collect();
+        CLASSIFIERS.with(|cl| ranking::rank(cl, scored))
     })
 }

@@ -35,6 +35,7 @@ pub fn parse_string(rules: &[Rule], doc: &Document) -> Vec<Node> {
                             range: Range(start, end),
                             token: tok,
                             rule: Some(rule.name.clone()),
+                            children: route,
                         });
                         added = true;
                     }
@@ -85,6 +86,7 @@ fn match_item(item: &PatternItem, doc: &Document, stash: &[Node], from: Option<u
                 range: Range(h.start, h.end),
                 token: Token::RegexMatch(h.groups),
                 rule: None,
+                children: Vec::new(),
             })
             .collect(),
         PatternItem::Predicate(f) => stash

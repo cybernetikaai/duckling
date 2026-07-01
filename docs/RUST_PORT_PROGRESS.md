@@ -43,6 +43,7 @@ Branch: `rust-port-en-time`.
 | + in-text timezones (8:00 PST, 4pm CET) | 610 / 984 | 374 | 3 / 10 | shiftTimezone via ref_offset in TimeContext |
 | + day-of-month intervals (Jul 13-15) | 621 / 984 | 363 | 3 / 10 | intersectDOM per endpoint + Closed interval |
 | + cycle after/before + ord cycle of time | 627 / 984 | 357 | 3 / 10 | day after tomorrow; first week of october |
+| + ranking machinery (stub model) | 627 / 984 | 357 | 3 / 10 | Node.children + score/rank; UNIQUE 370→512 via range-domination |
 
 ## How to run
 
@@ -60,7 +61,7 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru cycle after/before. **627/984 (64%)**. Next: fraction/half hours, computed-holiday leftovers (niche infra), week-of, then RANKING (unique gap ~75).
+Cumulative thru ranking machinery. contains **627/984 (64%)**, unique **512/984**. Next: transcribe EN classifier model (subagent) -> close unique gap; then fraction hours, computed-holiday leftovers.
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
