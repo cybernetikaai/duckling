@@ -125,6 +125,54 @@ pub fn computed_holiday_shift_rules() -> Vec<Rule> {
     ]
 }
 
+/// Each base date d becomes the interval [d+start_off, d+end_off+1) — the +1
+/// makes the end-day inclusive, matching Duckling's output (e.g. Passover with
+/// end_off=8 spans through the 9th day: Mar 30 -> Apr 8).
+fn interval_days(ymd: &[(i16, i8, i8)], start_off: i64, end_off: i64) -> Vec<TimeObject> {
+    days(ymd)
+        .into_iter()
+        .map(|t| TimeObject {
+            start: crate::grain::add(t.start, Grain::Day, start_off),
+            grain: Grain::Day,
+            end: Some(crate::grain::add(t.start, Grain::Day, end_off + 1)),
+        })
+        .collect()
+}
+
+pub(crate) fn computed_interval_holiday(
+    name: &'static str,
+    re: &str,
+    ymd: &'static [(i16, i8, i8)],
+    start_off: i64,
+    end_off: i64,
+) -> Rule {
+    let pred = time_computed(interval_days(ymd, start_off, end_off));
+    let make = move || TimeData {
+        pred: pred.clone(),
+        grain: Grain::Day,
+        latent: false,
+        not_immediate: false,
+        form: None,
+        direction: None,
+        holiday: Some(name.to_string()),
+    };
+    Rule {
+        name: format!("holiday: {name}"),
+        pattern: vec![PatternItem::Regex(compile(re))],
+        prod: Box::new(move |_| Some(Token::Time(make()))),
+    }
+}
+
+/// Interval-based computed holidays (multi-day spans). Ports of
+/// ruleComputedHolidays'. Those reusing already-ported easter tables are here;
+/// the rest (needing new base tables) are appended by a follow-up.
+pub fn computed_interval_holiday_rules() -> Vec<Rule> {
+    vec![
+        computed_interval_holiday("Lent", r"lent", EASTER_SUNDAY, -46, -1),
+        computed_interval_holiday("Great Lent", r"great\s+(fast|lent)", ORTHODOX_EASTER, -48, -9),
+    ]
+}
+
 const CHINESE_NEW_YEAR: &[(i16, i8, i8)] = &[
     (1950, 2, 17), (1951, 2, 6), (1952, 1, 27), (1953, 2, 14), (1954, 2, 3),
     (1955, 1, 24), (1956, 2, 12), (1957, 1, 31), (1958, 2, 18), (1959, 2, 8),

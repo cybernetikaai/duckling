@@ -1323,6 +1323,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(time_pod_rules());
     rules.extend(crate::time::computed::computed_holiday_rules());
     rules.extend(crate::time::computed::computed_holiday_shift_rules());
+    rules.extend(crate::time::computed::computed_interval_holiday_rules());
     rules.extend(intersect_rules());
     rules
 }
