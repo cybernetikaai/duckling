@@ -366,6 +366,21 @@ fn past_to_rules() -> Vec<Rule> {
             }),
         },
         Rule {
+            name: "<integer> minutes to|till|before <hour-of-day>".into(),
+            pattern: vec![
+                PatternItem::Predicate(is_integer_between(1, 59)),
+                PatternItem::Predicate(Box::new(|t| matches!(t, Token::TimeGrain(Grain::Minute)))),
+                PatternItem::Regex(compile(r"to|till|before|of")),
+                PatternItem::Predicate(Box::new(is_an_hour_of_day)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [num, _, _, Token::Time(td)] => {
+                    minutes_before(get_int_value(num)?, td).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
+        Rule {
             name: "integer after|past <hour-of-day>".into(),
             pattern: vec![
                 PatternItem::Predicate(is_integer_between(1, 59)),
@@ -872,8 +887,29 @@ fn dom_interval_rules() -> Vec<Rule> {
             }),
         },
         Rule {
-            name: "from dd-dd of <month> (interval)".into(),
-            pattern: vec![PatternItem::Regex(compile(r"from")), dv(), PatternItem::Regex(sep()), dv(), PatternItem::Regex(compile(r"of")), am()],
+            name: "from the <day-of-month> (ordinal or number) to the <day-of-month> (ordinal or number) <named-month> (interval)".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"from( the)?")),
+                dv(),
+                PatternItem::Regex(compile(r"\-|to( the)?|th?ru|through|(un)?til(l)?")),
+                dv(),
+                am(),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, t1, _, t2, Token::Time(m)] => dom_interval(m, t1, t2).map(Token::Time),
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "from the <day-of-month> (ordinal or number) to the <day-of-month> (ordinal or number) of <named-month> (interval)".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"from( the)?")),
+                dv(),
+                PatternItem::Regex(compile(r"\-|to( the)?|th?ru|through|(un)?til(l)?")),
+                dv(),
+                PatternItem::Regex(compile(r"of")),
+                am(),
+            ],
             prod: Box::new(|tokens| match tokens {
                 [_, t1, _, t2, _, Token::Time(m)] => dom_interval(m, t1, t2).map(Token::Time),
                 _ => None,
