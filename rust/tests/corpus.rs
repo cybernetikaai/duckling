@@ -1654,3 +1654,58 @@ fn quantity_corpus() {
         failures.join("\n")
     );
 }
+
+/// AmountOfMoney corpus (Duckling/AmountOfMoney/EN/Corpus.hs). Default mode
+/// (withLatent false): cents/lakh/billion arithmetic is float, so compared with
+/// tolerance; `latent` cases require withLatent true; negatives (bare number /
+/// bare currency word / "exactly dollars") produce none in default mode.
+#[test]
+fn amountofmoney_corpus() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/amountofmoney_corpus.json")).unwrap();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let want = &c["expected"];
+        let got: Vec<Value> = duckling::parse_amountofmoney(input)
+            .into_iter()
+            .map(|e| e.value)
+            .collect();
+        if !got.iter().any(|g| approx_eq(g, want)) {
+            failures.push(format!("{input:?}\n  expected {want}\n  got      {got:?}"));
+        }
+    }
+    for c in data["latent"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let want = &c["expected"];
+        let got: Vec<Value> = duckling::parse_amountofmoney_opts(input, true)
+            .into_iter()
+            .map(|e| e.value)
+            .collect();
+        if !got.iter().any(|g| approx_eq(g, want)) {
+            failures.push(format!(
+                "[latent] {input:?}\n  expected {want}\n  got      {got:?}"
+            ));
+        }
+    }
+    for neg in data["negatives"].as_array().unwrap() {
+        checked += 1;
+        let input = neg.as_str().unwrap();
+        if !duckling::parse_amountofmoney(input).is_empty() {
+            failures.push(format!("[negative] {input:?} parsed an amount"));
+        }
+    }
+    eprintln!(
+        "amountofmoney_corpus checked {checked}, {} failing",
+        failures.len()
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
+}

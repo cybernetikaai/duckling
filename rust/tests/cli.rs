@@ -104,6 +104,10 @@ fn each_dimension_dispatches() {
         parse(&["--dims", "quantity", "3 cups of sugar"])[0]["value"]["product"],
         "sugar"
     );
+    assert_eq!(
+        parse(&["--dims", "amount-of-money", "$10"])[0]["value"]["unit"],
+        "$"
+    );
 }
 
 #[test]

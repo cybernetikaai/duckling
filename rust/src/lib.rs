@@ -7,6 +7,7 @@
 // The port contains zero `unsafe`; forbid it so that stays true.
 #![forbid(unsafe_code)]
 
+pub mod amountofmoney;
 pub mod creditcard;
 pub mod distance;
 pub mod document;
@@ -410,6 +411,29 @@ pub fn parse_quantity_opts(input: &str, with_latent: bool) -> Vec<Entity> {
 /// Parse quantities, dropping latent bare-number quantities (Duckling default).
 pub fn parse_quantity(input: &str) -> Vec<Entity> {
     parse_quantity_opts(input, false)
+}
+
+/// Parse amounts of money ("$10", "20 euros", "$20 and 43c", "between 10 and 20
+/// dollars", "over $1.42"). `with_latent` controls whether a bare number resolves
+/// as an `unknown`-currency amount. Runs in AmountOfMoney's own rule set, so it
+/// never touches the Time ranker.
+pub fn parse_amountofmoney_opts(input: &str, with_latent: bool) -> Vec<Entity> {
+    let rules = dim_rules("amountofmoney", || {
+        let mut r = numeral::en::numeral_rules();
+        r.extend(amountofmoney::en::rules());
+        r
+    });
+    emit_entities(&rules, input, move |t| match t {
+        Token::AmountOfMoney(a) => {
+            resolve::amountofmoney_value(a, with_latent).map(|v| ("amount-of-money", v))
+        }
+        _ => None,
+    })
+}
+
+/// Parse amounts of money, dropping latent bare-number amounts (Duckling default).
+pub fn parse_amountofmoney(input: &str) -> Vec<Entity> {
+    parse_amountofmoney_opts(input, false)
 }
 
 /// Debug: every Time candidate (unranked) as "rule | range | score | value".

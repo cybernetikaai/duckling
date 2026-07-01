@@ -126,6 +126,29 @@ pub fn distance_value(d: &crate::distance::DistanceData) -> Option<serde_json::V
     })
 }
 
+/// Resolve an AmountOfMoney (port of the AmountOfMoneyData Resolve instance).
+/// `unit` holds the currency string. A latent amount (bare number) is dropped
+/// unless `with_latent`; an amount with no value/min/max resolves to nothing.
+pub fn amountofmoney_value(
+    a: &crate::amountofmoney::AmountOfMoneyData,
+    with_latent: bool,
+) -> Option<serde_json::Value> {
+    if a.latent && !with_latent {
+        return None;
+    }
+    let u = a.currency.as_str();
+    Some(match (a.value, a.min, a.max) {
+        (Some(v), _, _) => serde_json::json!({"value": num(v), "unit": u, "type": "value"}),
+        (None, Some(from), Some(to)) => serde_json::json!({
+            "type": "interval", "from": {"value": num(from), "unit": u}, "to": {"value": num(to), "unit": u}}),
+        (None, Some(from), None) => serde_json::json!({
+            "type": "interval", "from": {"value": num(from), "unit": u}}),
+        (None, None, Some(to)) => serde_json::json!({
+            "type": "interval", "to": {"value": num(to), "unit": u}}),
+        _ => return None,
+    })
+}
+
 /// A quantity single-value object: `{value, unit, product?}`.
 fn quantity_single(v: f64, unit: &str, product: &Option<String>) -> serde_json::Value {
     let mut o = serde_json::Map::new();
