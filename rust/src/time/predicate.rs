@@ -266,6 +266,14 @@ pub fn time_computed(dates: Vec<TimeObject>) -> Predicate {
     }))
 }
 
+/// The raw cycle of `grain` (all occurrences), rounded to `grain` at each query
+/// time. Used as the cyclic predicate for cycleNthAfter (e.g. quarters of a year).
+pub fn time_cycle(grain: Grain) -> Predicate {
+    Predicate::Series(Rc::new(move |t: TimeObject, _ctx| {
+        time_sequence(grain, 1, time_round(t, grain))
+    }))
+}
+
 /// An interval spanning n grain-cycles from the reference (port of cycleN/takeN).
 /// n>=0: [start, end) over the next n cycles (skipping the current if
 /// not_immediate); n<0: the last |n| cycles, ending at the current cycle.

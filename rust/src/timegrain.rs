@@ -12,7 +12,7 @@ pub fn timegrain_rules() -> Vec<Rule> {
         ("day", Grain::Day, r"days?"),
         ("week", Grain::Week, r"weeks?"),
         ("month", Grain::Month, r"months?"),
-        ("quarter", Grain::Quarter, r"quarters?"),
+        ("quarter", Grain::Quarter, r"quarters?|qtrs?"),
         ("year", Grain::Year, r"years?"),
     ];
     grains

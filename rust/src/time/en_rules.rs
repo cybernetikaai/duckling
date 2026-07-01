@@ -7,7 +7,7 @@ use crate::time::object::{IntervalDirection, IntervalType};
 use crate::time::predicate::{
     Predicate, ampm_predicate, cycle_nth, day_of_month, day_of_week, hour, hour_minute,
     hour_minute_second, in_duration, intersect, month, take_last_of, take_nth, take_nth_after,
-    time_intervals, year as year_pred, cycle_n,
+    time_cycle, time_intervals, year as year_pred, cycle_n,
 };
 use crate::types::{Form, PatternItem, Rule, TimeData, Token};
 
@@ -1193,6 +1193,73 @@ fn pred_nth_td(n: i64, not_immediate: bool, td: &TimeData) -> TimeData {
 fn is_ordinal(t: &Token) -> bool {
     matches!(t, Token::Ordinal(_))
 }
+fn is_grain_quarter(t: &Token) -> bool {
+    matches!(t, Token::TimeGrain(Grain::Quarter))
+}
+fn cycle_nth_after_td(not_immediate: bool, grain: Grain, n: i64, base: &TimeData) -> TimeData {
+    TimeData {
+        pred: take_nth_after(n, not_immediate, time_cycle(grain), base.pred.clone()),
+        grain,
+        latent: false,
+        not_immediate: false,
+        form: None,
+        direction: None,
+        holiday: None,
+    }
+}
+
+/// <ordinal> quarter [<year>], "the <ordinal> quarter", "Q<n>" (ruleQuarter*).
+fn quarter_rules() -> Vec<Rule> {
+    vec![
+        Rule {
+            name: "<ordinal> quarter".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_ordinal)),
+                PatternItem::Predicate(Box::new(is_grain_quarter)),
+            ],
+            prod: Box::new(|tokens| {
+                let n = get_int_value(tokens.first()?)?;
+                Some(Token::Time(cycle_nth_after_td(true, Grain::Quarter, n - 1, &cycle_nth_td(Grain::Year, 0))))
+            }),
+        },
+        Rule {
+            name: "the <ordinal> quarter".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"the")),
+                PatternItem::Predicate(Box::new(is_ordinal)),
+                PatternItem::Predicate(Box::new(is_grain_quarter)),
+            ],
+            prod: Box::new(|tokens| {
+                let n = get_int_value(tokens.get(1)?)?;
+                Some(Token::Time(cycle_nth_after_td(true, Grain::Quarter, n - 1, &cycle_nth_td(Grain::Year, 0))))
+            }),
+        },
+        Rule {
+            name: "<ordinal> quarter <year>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_ordinal)),
+                PatternItem::Predicate(Box::new(is_grain_quarter)),
+                PatternItem::Predicate(is_grain_of_time(Grain::Year)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [ord, _, Token::Time(td)] => {
+                    let n = get_int_value(ord)?;
+                    Some(Token::Time(cycle_nth_after_td(false, Grain::Quarter, n - 1, td)))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "Q<n>".into(),
+            pattern: vec![PatternItem::Regex(compile(r"q([1-4])"))],
+            prod: Box::new(|tokens| {
+                let g = regex_groups(tokens)?;
+                let n: i64 = g.first()?.parse().ok()?;
+                Some(Token::Time(cycle_nth_after_td(true, Grain::Quarter, n - 1, &cycle_nth_td(Grain::Year, 0))))
+            }),
+        },
+    ]
+}
 fn is_grain_month_or_coarser(t: &Token) -> bool {
     matches!(t, Token::Time(td) if td.grain >= Grain::Month)
 }
@@ -1658,6 +1725,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(end_beginning_year_week_rules());
     rules.extend(this_next_last_time_rules());
     rules.extend(nth_dow_of_time_rules());
+    rules.extend(quarter_rules());
     rules.extend(time_pod_rules());
     rules.extend(crate::time::computed::computed_holiday_rules());
     rules.extend(crate::time::computed::computed_holiday_shift_rules());
