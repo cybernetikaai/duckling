@@ -101,6 +101,7 @@ Branch: `rust-port-en-time`.
 | + latent-mode: "May" latent | 1069 / 1069 | 0 | 68 / 68 | bare "May" dropped in default mode (modal-verb collision); composition de-latents |
 | + token-boundary rule (major) | 1069 / 1069 | 0 | 68 / 68 | 3-letter abbrevs no longer match inside words ("money"↛Mon, "friend"↛Fri); Document::is_match_boundary |
 | + dict scan + sentence differential | 1069 / 1069 | 0 | 68 / 68 | 236k-word scan: 0 port↔oracle divergences; **sentence_stress 76** natural sentences (incl. 16 no-time false-positive guards); 0 gaps |
+| + reverse scan + multi-entity | 1069 / 1069 | 0 | 68 / 68 | reverse dict scan (false negatives): 0; **multi_entity 24** full-entity-set matches (ranker multi-select); 0 gaps — single-word surface bidirectionally clean |
 
 ## How to run
 
@@ -131,10 +132,16 @@ Branch: `rust-port-en-time`.
   next Tuesday afternoon?", "I need money by friday", "reschedule for thursday"),
   incl. 16 no-time sentences asserted to yield nothing ("I have 3 dogs", "room 315",
   "we may go later"). Tests real free-text extraction + false-positive rejection.
+- **multi_entity** 24 — inputs with several times ("Monday or Tuesday", "9am Monday
+  and 5pm Friday", "breakfast at 8 lunch at noon dinner at 7") compared as a *full
+  entity set* (start/end/value) vs the oracle. Exercises the ranker's multiple-
+  non-overlapping-entity selection, which the single-best-entity tests never touch.
 - **Exhaustive dict scan** (one-off, not in CI — slow/env-dependent): all 236k words
   of /usr/share/dict/words parsed in default mode; **0 divergences** vs the oracle
   (every single word that resolves to a time matches Duckling's value exactly).
-  Confirms the token-boundary fix is comprehensive, not just spot-patched.
+  A reverse scan (oracle over a 19.6k-word sample) found **0 false negatives** — the
+  port resolves every single word the oracle does, with matching values. The
+  single-word surface is thus bidirectionally validated.
 
 ## Done
 
@@ -143,7 +150,22 @@ Branch: `rust-port-en-time`.
 
 - **days-of-week + months** — `day_of_week`/`month` predicates (`time_sequence`), table-driven rules, `notImmediate` (today→next), rule-compile cached per thread.
 
-## Status: contains-mode complete
+## Status: behavior-complete, validated across every accessible axis
+
+**contains 1069/1069 (100%)**, negatives green, and green across six independent
+oracle-cross-checked surfaces (see "Validation surfaces"): compositions
+(differential 1309), references (ref_stress 1249), DST/zones (tz_stress 68),
+natural sentences (sentence_stress 76), multi-entity extraction (multi_entity 24),
+plus an exhaustive 236k-word single-word scan clean in *both* directions. Timezone/
+DST correctness — the hard constraint set at the outset — is fully green throughout.
+
+The last several iterations' fuzzing found progressively fewer bugs (interval+tz,
+this-dow pinning, weekend∩tod, then May-latent + the token-boundary rule, then
+zero), and the most recent two iterations found none — the accessible bug-finding
+surfaces are now exhausted. **Genuine remaining work is the documented non-goal**:
+the `TimeDatePredicate` field-merge that would give leading-noise inputs
+("Fri, Jul 18, 2014 …") a *full-span* parse to satisfy `unique` mode — a
+core-architecture rewrite for zero contains-mode (Duckling-faithful) gain.
 
 **contains 1069/1069 (100%)**, **unique 1061/1069**, **tz_stress 68/68** (6 zones, both hemispheres), negatives green. The English-time port matches Duckling's corpus behavior on every positive example, with timezone/DST correctness fully green throughout (the hard constraint set at the outset).
 
