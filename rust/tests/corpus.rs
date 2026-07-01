@@ -940,6 +940,52 @@ fn url_corpus() {
     );
 }
 
+/// CreditCardNumber dimension (`parse_creditcard`) — port of
+/// Duckling/CreditCardNumber. A positive must produce an entity with the
+/// expected digits-only value + issuer (dashed and undashed forms); negatives
+/// (Luhn/length failures, non-numbers) produce none.
+#[test]
+fn creditcard_corpus() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/creditcard_corpus.json")).unwrap();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let (wv, wi) = (c["value"].as_str().unwrap(), c["issuer"].as_str().unwrap());
+        let ok = duckling::parse_creditcard(input).iter().any(|e| {
+            e.value["value"].as_str() == Some(wv) && e.value["issuer"].as_str() == Some(wi)
+        });
+        if !ok {
+            let got: Vec<_> = duckling::parse_creditcard(input)
+                .into_iter()
+                .map(|e| e.value)
+                .collect();
+            failures.push(format!(
+                "{input:?}\n  expected ({wv}, {wi})\n  got      {got:?}"
+            ));
+        }
+    }
+    for neg in data["negatives"].as_array().unwrap() {
+        checked += 1;
+        let input = neg.as_str().unwrap();
+        if !duckling::parse_creditcard(input).is_empty() {
+            failures.push(format!("[negative] {input:?} parsed a card"));
+        }
+    }
+    eprintln!(
+        "creditcard_corpus checked {checked}, {} failing",
+        failures.len()
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
+}
+
 /// Combined Time+Duration (`parse_all`) — the `dims:["time","duration"]` surface.
 /// Time and Duration compete in one pool by dimension-agnostic range domination,
 /// exactly as Duckling: the widest match per position wins, disjoint matches all

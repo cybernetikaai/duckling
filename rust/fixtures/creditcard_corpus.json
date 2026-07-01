@@ -1,0 +1,78 @@
+{
+ "_comment": "Duckling/CreditCardNumber/Corpus.hs. parse_creditcard must produce an entity with the expected digits-only value + issuer; negatives fail the Luhn/length check.",
+ "cases": [
+  {
+   "input": "4111111111111111",
+   "value": "4111111111111111",
+   "issuer": "visa"
+  },
+  {
+   "input": "4111-1111-1111-1111",
+   "value": "4111111111111111",
+   "issuer": "visa"
+  },
+  {
+   "input": "371449635398431",
+   "value": "371449635398431",
+   "issuer": "amex"
+  },
+  {
+   "input": "3714-496353-98431",
+   "value": "371449635398431",
+   "issuer": "amex"
+  },
+  {
+   "input": "6011111111111117",
+   "value": "6011111111111117",
+   "issuer": "discover"
+  },
+  {
+   "input": "6011-1111-1111-1117",
+   "value": "6011111111111117",
+   "issuer": "discover"
+  },
+  {
+   "input": "5555555555554444",
+   "value": "5555555555554444",
+   "issuer": "mastercard"
+  },
+  {
+   "input": "5555-5555-5555-4444",
+   "value": "5555555555554444",
+   "issuer": "mastercard"
+  },
+  {
+   "input": "30569309025904",
+   "value": "30569309025904",
+   "issuer": "dinerclub"
+  },
+  {
+   "input": "3056-930902-5904",
+   "value": "30569309025904",
+   "issuer": "dinerclub"
+  },
+  {
+   "input": "3530111333300000",
+   "value": "3530111333300000",
+   "issuer": "other"
+  },
+  {
+   "input": "my card is 4111111111111111 ok",
+   "value": "4111111111111111",
+   "issuer": "visa"
+  }
+ ],
+ "negatives": [
+  "0",
+  "invalid",
+  "4111111111111110",
+  "41111111-1111-1111",
+  "371449635398430",
+  "3714496353-98431",
+  "6011111111111110",
+  "5555555555554440",
+  "55555555-5555-4444",
+  "30569309025900",
+  "3056930902-5904"
+ ]
+}

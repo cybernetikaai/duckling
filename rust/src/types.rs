@@ -3,6 +3,7 @@
 //! Duckling's existential GADT `Token` collapses to a Rust enum. More arms
 //! (Numeral, Ordinal, Duration, TimeGrain) are added as dependencies land.
 
+use crate::creditcard::CreditCardData;
 use crate::duration::DurationData;
 use crate::email::EmailData;
 use crate::grain::Grain;
@@ -116,6 +117,7 @@ pub enum Token {
     Duration(DurationData),
     Email(EmailData),
     Url(UrlData),
+    CreditCard(CreditCardData),
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]

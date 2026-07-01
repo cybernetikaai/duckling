@@ -61,6 +61,11 @@ pub fn url_value(u: &crate::url::UrlData) -> serde_json::Value {
     serde_json::json!({"value": u.value, "domain": u.domain, "type": "value"})
 }
 
+/// Resolve a CreditCardNumber to Duckling's JSON: `{value, issuer}` (no `type`).
+pub fn creditcard_value(c: &crate::creditcard::CreditCardData) -> serde_json::Value {
+    serde_json::json!({"value": c.number, "issuer": c.issuer})
+}
+
 /// Resolve a Duration to Duckling's JSON: `{value, unit, <unit>: value, type,
 /// normalized: {value: <seconds>, unit: "second"}}` (port of the DurationData
 /// ToJSON instance). The `<unit>` key is dynamic — e.g. `"minute": 30`.

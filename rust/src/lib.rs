@@ -7,6 +7,7 @@
 // The port contains zero `unsafe`; forbid it so that stays true.
 #![forbid(unsafe_code)]
 
+pub mod creditcard;
 pub mod document;
 pub mod duration;
 pub mod email;
@@ -314,6 +315,17 @@ pub fn parse_url(input: &str) -> Vec<Entity> {
     let rules = dim_rules("url", url::url_rules);
     emit_entities(&rules, input, |t| match t {
         Token::Url(u) => Some(("url", resolve::url_value(u))),
+        _ => None,
+    })
+}
+
+/// Parse `input` and return resolved **CreditCardNumber** entities (dim
+/// `"credit-card-number"`, `{value, issuer}`) — the `dims:["credit-card-number"]`
+/// surface. Language-agnostic; validated with the Luhn checksum.
+pub fn parse_creditcard(input: &str) -> Vec<Entity> {
+    let rules = dim_rules("credit-card-number", creditcard::creditcard_rules);
+    emit_entities(&rules, input, |t| match t {
+        Token::CreditCard(c) => Some(("credit-card-number", resolve::creditcard_value(c))),
         _ => None,
     })
 }
