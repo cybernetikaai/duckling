@@ -82,6 +82,7 @@ Branch: `rust-port-en-time`.
 | + the ides of <named-month> | 958 / 984 | 26 | 10 / 10 | "the ides of march" -> Mar 15 |
 | + interval timezone (has_timezone flag) | 961 / 984 | 23 | 10 / 10 | "9:30 - 11:00 CST"; guard prevents double-tz on "15:00 GMT - 18:00 GMT" |
 | + after <duration> interval + <time> (timezone) | 963 / 984 | 21 | 10 / 10 | "after 5 days" open interval; "9 am (BST)" bracketed tz |
+| + <ordinal> <cycle> of <time> notImmediate | 964 / 984 | 20 | 10 / 10 | "first week of October 2014" -> Oct 6 (skips covering week) |
 
 ## How to run
 
@@ -99,9 +100,9 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru hh:mm am/pm fold. contains **957/984 (97.3%)**, unique **954/984**, tz_stress **10/10** (timezone/DST fully green — the hard constraint). The holiday subagent's Islamic/Hindu/Jewish/Orthodox + fixed-date holidays are committed.
+Cumulative thru ordinal-cycle notImmediate. contains **964/984 (97.9%)**, unique **961/984**, tz_stress **10/10** (timezone/DST fully green — the hard constraint). The holiday subagent's Islamic/Hindu/Jewish/Orthodox + fixed-date holidays are committed.
 
-Remaining **27** failures (the hard tail; each needs new infra or is a harness artifact):
+Remaining **20** failures (the hard tail; each needs new infra or is a harness artifact):
 - **day-of-week + pinned specific date** (~3): "Fri, Jul 18, 2014 07:00 PM" (+19h00/19h). "Jul 18, 2014 07:00 PM" (no dow) now composes, but the leading "Fri," makes it dow ∩ a Minute-grain *specific dated instant*. Making the dow the inner predicate would fix it but regresses dow ∩ *recurring* tz time ("Thursday 8:00 PST" → wrong value) — opaque predicates can't distinguish the two. Real fix needs Duckling's TimeDatePredicate field-merge (dow+month+day+year+hour as one predicate ordered coarsest-first) rather than nested runCompose intersects.
 - **timezone-tagged intervals** (~3): "9:30 - 11:00 CST" — needs `<datetime>-<datetime> (interval) timezone` with a `has_timezone` flag on TimeData (my attempt double-applied tz to "15:00 GMT - 18:00 GMT" and regressed).
 - **harness-strictness artifacts** (~7, NOT rule gaps): "right now"/"just now", "for a quarter past 3pm"×5 — the correct entity is a substring; Duckling checks best-entity, our harness requires full-span.
