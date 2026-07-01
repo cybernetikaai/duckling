@@ -1099,6 +1099,22 @@ fn interval_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // "2015-03-28 17:00:00/2015-03-29 21:00:00" (ruleIntervalSlash). The
+        // sameGrain guard keeps "/" from matching mismatched-grain operands.
+        Rule {
+            name: "<datetime>/<datetime> (interval)".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_not_latent)),
+                PatternItem::Regex(compile(r"/")),
+                PatternItem::Predicate(Box::new(is_not_latent)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(a), _, Token::Time(b)] if a.grain == b.grain => {
+                    interval_td(IntervalType::Closed, a, b).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
         Rule {
             name: "from <datetime> - <datetime> (interval)".into(),
             pattern: vec![
