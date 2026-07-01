@@ -1322,6 +1322,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(nth_dow_of_time_rules());
     rules.extend(time_pod_rules());
     rules.extend(crate::time::computed::computed_holiday_rules());
+    rules.extend(crate::time::computed::computed_holiday_shift_rules());
     rules.extend(intersect_rules());
     rules
 }

@@ -30,6 +30,7 @@ Branch: `rust-port-en-time`.
 | + end/beginning of month (EOM/BOM) | 334 / 984 | 650 | 3 / 10 | oracle-verified interval bounds; by-variant from now |
 | + time_computed predicate | 334 / 984 | 650 | 3 / 10 | infra for computed holidays (explicit date list) |
 | + computed/lunar holidays (subagent) | 436 / 984 | 548 | 3 / 10 | 32 date tables (Easter/Diwali/Eid/...), subagent d69ae5ce, +102 |
+| + easter-relative holidays | 451 / 984 | 533 | 3 / 10 | Good Friday/Ascension/Pentecost... = easter±N days |
 
 ## How to run
 
@@ -47,7 +48,7 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru computed holidays. **436/984** (44%). Next: interval-based computed holidays (Hanukkah/Ramadan/Passover) + easter-relative (Good Friday); interval TOD-AMPM; then ranking (unique mode).
+Cumulative thru easter-relative holidays. **451/984** (46%). Diagnostic: unique-mode = 370 (ranking worth ~66). Next: interval-based computed holidays (Hanukkah/Ramadan/Passover), interval TOD-AMPM, then ranking.
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &

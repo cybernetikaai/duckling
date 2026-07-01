@@ -41,6 +41,90 @@ fn computed_holiday(name: &'static str, re: &str, ymd: &'static [(i16, i8, i8)])
     }
 }
 
+fn shifted_days(ymd: &[(i16, i8, i8)], n: i64) -> Vec<TimeObject> {
+    days(ymd)
+        .into_iter()
+        .map(|t| TimeObject { start: crate::grain::add(t.start, Grain::Day, n), ..t })
+        .collect()
+}
+
+fn computed_holiday_shift(
+    name: &'static str,
+    re: &str,
+    ymd: &'static [(i16, i8, i8)],
+    n: i64,
+) -> Rule {
+    let pred = time_computed(shifted_days(ymd, n));
+    let make = move || TimeData {
+        pred: pred.clone(),
+        grain: Grain::Day,
+        latent: false,
+        not_immediate: false,
+        form: None,
+        direction: None,
+        holiday: Some(name.to_string()),
+    };
+    Rule {
+        name: format!("holiday: {name}"),
+        pattern: vec![PatternItem::Regex(compile(re))],
+        prod: Box::new(move |_| Some(Token::Time(make()))),
+    }
+}
+
+/// Holidays defined as a fixed day-offset from Easter / Orthodox Easter /
+/// Dhanteras (ports of the cycleNthAfter-based ruleComputedHolidays entries).
+pub fn computed_holiday_shift_rules() -> Vec<Rule> {
+    vec![
+        computed_holiday_shift("Ascension Day", r"ascension\s+(thurs)?day", EASTER_SUNDAY, 39),
+        computed_holiday_shift("Ash Wednesday", r"ash\s+wednesday|carnival", EASTER_SUNDAY, -46),
+        computed_holiday_shift("Corpus Christi", r"(the feast of )?corpus\s+christi", EASTER_SUNDAY, 60),
+        computed_holiday_shift("Easter Monday", r"easter\s+mon(day)?", EASTER_SUNDAY, 1),
+        computed_holiday_shift("Good Friday", r"(good|great|holy)\s+fri(day)?", EASTER_SUNDAY, -2),
+        computed_holiday_shift(
+            "Holy Saturday",
+            r"(black|holy (and great )?|joyous)sat(urday)?|the great sabbath|easter eve",
+            EASTER_SUNDAY,
+            -1,
+        ),
+        computed_holiday_shift(
+            "Maundy Thursday",
+            r"(covenant|(great and )?holy|maundy|sheer)\s+thu(rsday)?|thu(rsday)? of mysteries",
+            EASTER_SUNDAY,
+            -3,
+        ),
+        computed_holiday_shift("Palm Sunday", r"(branch|palm|yew)\s+sunday", EASTER_SUNDAY, -7),
+        computed_holiday_shift("Pentecost", r"pentecost|white sunday|whitsunday", EASTER_SUNDAY, 49),
+        computed_holiday_shift(
+            "Shrove Tuesday",
+            r"pancake (tues)?day|shrove tuesday|mardi gras",
+            EASTER_SUNDAY,
+            -47,
+        ),
+        computed_holiday_shift("Trinity Sunday", r"trinity\s+sunday", EASTER_SUNDAY, 56),
+        computed_holiday_shift(
+            "Whit Monday",
+            r"(pentecost|whit)\s+monday|monday of the holy spirit",
+            EASTER_SUNDAY,
+            50,
+        ),
+        computed_holiday_shift("Orthodox Easter Monday", r"orthodox\s+easter\s+mon(day)?", ORTHODOX_EASTER, 1),
+        computed_holiday_shift("Orthodox Holy Saturday", r"orthodox\s+holy\s+sat(urday)?", ORTHODOX_EASTER, -1),
+        computed_holiday_shift(
+            "Orthodox Good Friday",
+            r"orthodox\s+(great|good)(\s+and\s+holy)?\s+friday",
+            ORTHODOX_EASTER,
+            -2,
+        ),
+        computed_holiday_shift("Orthodox Palm Sunday", r"orthodox\s+(branch|palm|yew)\s+sunday", ORTHODOX_EASTER, -7),
+        computed_holiday_shift(
+            "Naraka Chaturdashi",
+            r"naraka? (nivaran )?chaturdashi|(kali|roop) chaudas|choti diwali",
+            DHANTERAS,
+            1,
+        ),
+    ]
+}
+
 const CHINESE_NEW_YEAR: &[(i16, i8, i8)] = &[
     (1950, 2, 17), (1951, 2, 6), (1952, 1, 27), (1953, 2, 14), (1954, 2, 3),
     (1955, 1, 24), (1956, 2, 12), (1957, 1, 31), (1958, 2, 18), (1959, 2, 8),
