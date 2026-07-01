@@ -8,6 +8,7 @@
 #![forbid(unsafe_code)]
 
 pub mod creditcard;
+pub mod distance;
 pub mod document;
 pub mod duration;
 pub mod email;
@@ -370,6 +371,21 @@ pub fn parse_volume(input: &str) -> Vec<Entity> {
     });
     emit_entities(&rules, input, |t| match t {
         Token::Volume(vd) => resolve::volume_value(vd).map(|v| ("volume", v)),
+        _ => None,
+    })
+}
+
+/// Parse distances ("3 km", "7 feet 10 inches", "between 3 and 5 km", "over 5\"").
+/// Runs in Distance's own rule set (numerals + distance rules), so it never
+/// touches the Time ranker.
+pub fn parse_distance(input: &str) -> Vec<Entity> {
+    let rules = dim_rules("distance", || {
+        let mut r = numeral::en::numeral_rules();
+        r.extend(distance::en::distance_rules());
+        r
+    });
+    emit_entities(&rules, input, |t| match t {
+        Token::Distance(dd) => resolve::distance_value(dd).map(|v| ("distance", v)),
         _ => None,
     })
 }

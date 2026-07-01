@@ -1537,3 +1537,65 @@ fn volume_corpus() {
         failures.join("\n")
     );
 }
+
+/// Structural JSON equality with numeric tolerance — composite distance values
+/// go through metric<->imperial conversions in f64, so e.g. "3m and 5cm" resolves
+/// as 304.99999999999994. Duckling works in Double too; the corpus values are the
+/// intended reals, matched here within a relative+absolute epsilon.
+fn approx_eq(a: &Value, b: &Value) -> bool {
+    match (a, b) {
+        (Value::Number(x), Value::Number(y)) => {
+            let (x, y) = (x.as_f64().unwrap(), y.as_f64().unwrap());
+            (x - y).abs() <= 1e-6 * x.abs().max(y.abs()).max(1.0)
+        }
+        (Value::Object(x), Value::Object(y)) => {
+            x.len() == y.len()
+                && x.iter()
+                    .all(|(k, xv)| y.get(k).is_some_and(|yv| approx_eq(xv, yv)))
+        }
+        (Value::Array(x), Value::Array(y)) => {
+            x.len() == y.len() && x.iter().zip(y).all(|(xv, yv)| approx_eq(xv, yv))
+        }
+        _ => a == b,
+    }
+}
+
+/// Distance corpus (Duckling/Distance/EN/Corpus.hs). Numeric values compared with
+/// tolerance (composite unit conversions are float). Negatives (bare number /
+/// unit word alone) produce none.
+#[test]
+fn distance_corpus() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/distance_corpus.json")).unwrap();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let want = &c["expected"];
+        let got: Vec<Value> = duckling::parse_distance(input)
+            .into_iter()
+            .map(|e| e.value)
+            .collect();
+        if !got.iter().any(|g| approx_eq(g, want)) {
+            failures.push(format!("{input:?}\n  expected {want}\n  got      {got:?}"));
+        }
+    }
+    for neg in data["negatives"].as_array().unwrap() {
+        checked += 1;
+        let input = neg.as_str().unwrap();
+        if !duckling::parse_distance(input).is_empty() {
+            failures.push(format!("[negative] {input:?} parsed a distance"));
+        }
+    }
+    eprintln!(
+        "distance_corpus checked {checked}, {} failing",
+        failures.len()
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
+}

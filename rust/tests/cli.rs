@@ -96,6 +96,10 @@ fn each_dimension_dispatches() {
         parse(&["--dims", "volume", "2 liters"])[0]["value"]["unit"],
         "litre"
     );
+    assert_eq!(
+        parse(&["--dims", "distance", "3 km"])[0]["value"]["unit"],
+        "kilometre"
+    );
 }
 
 #[test]

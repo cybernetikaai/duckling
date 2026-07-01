@@ -35,7 +35,7 @@ they never touch the Time ranker.
 |---|---|---|---|
 | ~~Temperature~~ ✅ | 161 L | done — temperature_corpus (31+3 neg) | — |
 | ~~Volume~~ ✅ | 166 L | done — volume_corpus (54+4 neg) | — |
-| Distance | 213 L | 13 | ~1 day |
+| ~~Distance~~ ✅ | 213 L | done — distance_corpus (51+4 neg); incl. composite feet/inch + metric↔imperial fold + ambiguous "m" | — |
 | Quantity | 256 L | 21 | ~1 day |
 | AmountOfMoney | 432 L | 20 | ~1.5 days |
 
@@ -85,7 +85,7 @@ product actually needs to extract those quantities.
 2. ~~Email → Url → CreditCardNumber → PhoneNumber (quick wins)~~ — ✅ done.
 3. ~~Finish Numeral~~ ✅ — corpus-complete (105/105); one documented omission
    (ruleSkipHundreds1). Prerequisite for Bucket B now cleared.
-4. ~~Temperature~~ ✅ → ~~Volume~~ ✅ → Distance → Quantity → AmountOfMoney.
-   **Next: Distance** (Duckling/Distance/EN — km/mi/m/cm/in/yd/ft, `<numeral> <unit>`,
-   feet-and-inches "5'9\"", intervals). Same isolated-rule-set pattern as Volume:
-   its own `numeral + distance` set via `dim_rules`, so zero Time-corpus risk.
+4. ~~Temperature~~ ✅ → ~~Volume~~ ✅ → ~~Distance~~ ✅ → Quantity → AmountOfMoney.
+   **Next: Quantity** (Duckling/Quantity/EN — `<numeral> <unit> [of <product>]`,
+   e.g. "2 cups of sugar", "3 grams", intervals). Same isolated-rule-set pattern:
+   its own `numeral + quantity` set via `dim_rules`, so zero Time-corpus risk.

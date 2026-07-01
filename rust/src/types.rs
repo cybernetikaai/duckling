@@ -4,6 +4,7 @@
 //! (Numeral, Ordinal, Duration, TimeGrain) are added as dependencies land.
 
 use crate::creditcard::CreditCardData;
+use crate::distance::DistanceData;
 use crate::duration::DurationData;
 use crate::email::EmailData;
 use crate::grain::Grain;
@@ -124,6 +125,7 @@ pub enum Token {
     Phone(PhoneNumberData),
     Temperature(TemperatureData),
     Volume(VolumeData),
+    Distance(DistanceData),
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]

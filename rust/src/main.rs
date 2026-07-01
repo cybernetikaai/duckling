@@ -13,7 +13,7 @@
 //!
 //! Options:
 //!   --dims <D>  dimension: time | duration | ordinal | number | email | url |
-//!               credit-card-number | phone-number | temperature | volume | all   (default: time)
+//!               credit-card-number | phone-number | temperature | volume | distance | all   (default: time)
 //!   --ref  <RFC3339>                    reference "now" instant (default: system now)
 //!   --tz   <IANA zone>                  target timezone, e.g. America/New_York (default: UTC)
 //!   --locale <en_US|en_GB|en_CA|en_AU|en_NZ|en_IN|en_IE|en_ZA|en_PH|en_BZ|en_JM|en_TT>
@@ -21,8 +21,9 @@
 //!   -h, --help                          print this help
 
 use duckling::{
-    Locale, ResolveContext, parse_all, parse_creditcard, parse_duration, parse_email, parse_locale,
-    parse_numeral, parse_ordinal, parse_phonenumber, parse_temperature, parse_url, parse_volume,
+    Locale, ResolveContext, parse_all, parse_creditcard, parse_distance, parse_duration,
+    parse_email, parse_locale, parse_numeral, parse_ordinal, parse_phonenumber, parse_temperature,
+    parse_url, parse_volume,
 };
 
 const HELP: &str = "\
@@ -35,7 +36,7 @@ USAGE:
 
 OPTIONS:
     --dims <D>      time | duration | ordinal | number | email | url |
-                    credit-card-number | phone-number | temperature | volume | all   (default: time)
+                    credit-card-number | phone-number | temperature | volume | distance | all   (default: time)
     --ref <TS>      reference instant, RFC 3339            (default: system now)
                     e.g. 2013-02-12T04:30:00-02:00
     --tz <ZONE>     target IANA timezone                   (default: UTC)
@@ -143,10 +144,11 @@ fn main() {
         "phone-number" => parse_phonenumber(&text),
         "temperature" => parse_temperature(&text),
         "volume" => parse_volume(&text),
+        "distance" => parse_distance(&text),
         "all" => parse_all(&text, &ctx),
         other => fail(&format!(
             "unknown --dims {other:?} (want time|duration|ordinal|number|email|url|\
-             credit-card-number|phone-number|temperature|volume|all)"
+             credit-card-number|phone-number|temperature|volume|distance|all)"
         )),
     };
 

@@ -1,0 +1,78 @@
+{
+ "_comment": "Transcribed from Duckling/Distance/EN/Corpus.hs. parse_distance must produce an entity whose value ~= expected (numeric tolerance, since composite metric<->imperial conversions are float). negatives produce none. Unit 'm' is the ambiguous mile/metre unit, preserved unless composed with a definite unit.",
+ "cases": [
+  { "input": "3 kilometers", "expected": {"value": 3, "unit": "kilometre", "type": "value"} },
+  { "input": "3 km",         "expected": {"value": 3, "unit": "kilometre", "type": "value"} },
+  { "input": "3km",          "expected": {"value": 3, "unit": "kilometre", "type": "value"} },
+  { "input": "3k",           "expected": {"value": 3, "unit": "kilometre", "type": "value"} },
+  { "input": "3.0 km",       "expected": {"value": 3, "unit": "kilometre", "type": "value"} },
+
+  { "input": "8 miles",   "expected": {"value": 8, "unit": "mile", "type": "value"} },
+  { "input": "eight mile","expected": {"value": 8, "unit": "mile", "type": "value"} },
+  { "input": "8 mi",      "expected": {"value": 8, "unit": "mile", "type": "value"} },
+
+  { "input": "9m", "expected": {"value": 9, "unit": "m", "type": "value"} },
+
+  { "input": "2cm",           "expected": {"value": 2, "unit": "centimetre", "type": "value"} },
+  { "input": "2 centimeters", "expected": {"value": 2, "unit": "centimetre", "type": "value"} },
+
+  { "input": "5 in",       "expected": {"value": 5, "unit": "inch", "type": "value"} },
+  { "input": "5''",        "expected": {"value": 5, "unit": "inch", "type": "value"} },
+  { "input": "five inches","expected": {"value": 5, "unit": "inch", "type": "value"} },
+  { "input": "5\"",        "expected": {"value": 5, "unit": "inch", "type": "value"} },
+
+  { "input": "1.87 meters", "expected": {"value": 1.87, "unit": "metre", "type": "value"} },
+
+  { "input": "7 feet and 10 inches","expected": {"value": 94, "unit": "inch", "type": "value"} },
+  { "input": "7 feet, 10 inches",   "expected": {"value": 94, "unit": "inch", "type": "value"} },
+  { "input": "7 feet 10 inches",    "expected": {"value": 94, "unit": "inch", "type": "value"} },
+
+  { "input": "2 km and 1 meter",   "expected": {"value": 2001, "unit": "metre", "type": "value"} },
+  { "input": "2 kilometer, 1 metre","expected": {"value": 2001, "unit": "metre", "type": "value"} },
+  { "input": "2 kilometer 1 metre", "expected": {"value": 2001, "unit": "metre", "type": "value"} },
+
+  { "input": "2 yards 7 ft 10 inches",       "expected": {"value": 166, "unit": "inch", "type": "value"} },
+  { "input": "2 yds, 7 feet and 10 inches",  "expected": {"value": 166, "unit": "inch", "type": "value"} },
+  { "input": "2 yards, 7 feet, 10 in",       "expected": {"value": 166, "unit": "inch", "type": "value"} },
+
+  { "input": "2 yards and 7 feet","expected": {"value": 13, "unit": "foot", "type": "value"} },
+  { "input": "2 yards, 7 feet",   "expected": {"value": 13, "unit": "foot", "type": "value"} },
+  { "input": "2 yd 7'",           "expected": {"value": 13, "unit": "foot", "type": "value"} },
+
+  { "input": "10 kms 8 metres 6 cm",              "expected": {"value": 1000806, "unit": "centimetre", "type": "value"} },
+  { "input": "10 kms, 8 meters, 6 cm",            "expected": {"value": 1000806, "unit": "centimetre", "type": "value"} },
+  { "input": "10 kms, 8 meters and 6 centimeters","expected": {"value": 1000806, "unit": "centimetre", "type": "value"} },
+
+  { "input": "1 meter and 1 foot",   "expected": {"value": 1.3048, "unit": "metre", "type": "value"} },
+  { "input": "1 kilometer and 1 mile","expected": {"value": 2.609344, "unit": "kilometre", "type": "value"} },
+
+  { "input": "3m",         "expected": {"value": 3, "unit": "m", "type": "value"} },
+  { "input": "3m and 5cm", "expected": {"value": 305, "unit": "centimetre", "type": "value"} },
+  { "input": "1m and 1ft", "expected": {"value": 5281, "unit": "foot", "type": "value"} },
+
+  { "input": "between 3 and 5 kilometers","expected": {"type": "interval", "from": {"value": 3, "unit": "kilometre"}, "to": {"value": 5, "unit": "kilometre"}} },
+  { "input": "from 3km to 5km",           "expected": {"type": "interval", "from": {"value": 3, "unit": "kilometre"}, "to": {"value": 5, "unit": "kilometre"}} },
+  { "input": "around 3-5 kilometers",     "expected": {"type": "interval", "from": {"value": 3, "unit": "kilometre"}, "to": {"value": 5, "unit": "kilometre"}} },
+  { "input": "about 3km-5km",             "expected": {"type": "interval", "from": {"value": 3, "unit": "kilometre"}, "to": {"value": 5, "unit": "kilometre"}} },
+  { "input": "3-5 kilometers",            "expected": {"type": "interval", "from": {"value": 3, "unit": "kilometre"}, "to": {"value": 5, "unit": "kilometre"}} },
+
+  { "input": "under 3.5 miles",                 "expected": {"type": "interval", "to": {"value": 3.5, "unit": "mile"}} },
+  { "input": "less than 3.5mi",                 "expected": {"type": "interval", "to": {"value": 3.5, "unit": "mile"}} },
+  { "input": "lower than three point five miles","expected": {"type": "interval", "to": {"value": 3.5, "unit": "mile"}} },
+
+  { "input": "more than five inches","expected": {"type": "interval", "from": {"value": 5, "unit": "inch"}} },
+  { "input": "at least 5''",         "expected": {"type": "interval", "from": {"value": 5, "unit": "inch"}} },
+  { "input": "over 5\"",             "expected": {"type": "interval", "from": {"value": 5, "unit": "inch"}} },
+  { "input": "above 5 in",           "expected": {"type": "interval", "from": {"value": 5, "unit": "inch"}} },
+
+  { "input": "between 5 and six millimeters", "expected": {"type": "interval", "from": {"value": 5, "unit": "millimetre"}, "to": {"value": 6, "unit": "millimetre"}} },
+  { "input": "between 5 and six millimetres", "expected": {"type": "interval", "from": {"value": 5, "unit": "millimetre"}, "to": {"value": 6, "unit": "millimetre"}} },
+  { "input": "5-6 mm",                        "expected": {"type": "interval", "from": {"value": 5, "unit": "millimetre"}, "to": {"value": 6, "unit": "millimetre"}} }
+ ],
+ "negatives": [
+  "5",
+  "km",
+  "meters",
+  "hello world"
+ ]
+}
