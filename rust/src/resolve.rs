@@ -61,6 +61,14 @@ pub fn url_value(u: &crate::url::UrlData) -> serde_json::Value {
     serde_json::json!({"value": u.value, "domain": u.domain, "type": "value"})
 }
 
+/// Resolve a PhoneNumber to Duckling's JSON: `{value, type:"value"}` — the
+/// normalized "(+<code>) <digits> ext <ext>" string.
+pub fn phonenumber_value(p: &crate::phonenumber::PhoneNumberData) -> serde_json::Value {
+    let prefix = p.prefix.map(|c| format!("(+{c}) ")).unwrap_or_default();
+    let ext = p.extension.map(|e| format!(" ext {e}")).unwrap_or_default();
+    serde_json::json!({"value": format!("{prefix}{}{ext}", p.number), "type": "value"})
+}
+
 /// Resolve a CreditCardNumber to Duckling's JSON: `{value, issuer}` (no `type`).
 pub fn creditcard_value(c: &crate::creditcard::CreditCardData) -> serde_json::Value {
     serde_json::json!({"value": c.number, "issuer": c.issuer})

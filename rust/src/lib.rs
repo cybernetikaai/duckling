@@ -16,6 +16,7 @@ pub mod grain;
 pub mod json;
 pub mod numeral;
 pub mod ordinal;
+pub mod phonenumber;
 pub mod ranking;
 pub mod regex;
 pub mod resolve;
@@ -326,6 +327,17 @@ pub fn parse_creditcard(input: &str) -> Vec<Entity> {
     let rules = dim_rules("credit-card-number", creditcard::creditcard_rules);
     emit_entities(&rules, input, |t| match t {
         Token::CreditCard(c) => Some(("credit-card-number", resolve::creditcard_value(c))),
+        _ => None,
+    })
+}
+
+/// Parse `input` and return resolved **PhoneNumber** entities (dim
+/// `"phone-number"`, `{value, type:"value"}`) — the `dims:["phone-number"]`
+/// surface. Language-agnostic; value is the normalized number string.
+pub fn parse_phonenumber(input: &str) -> Vec<Entity> {
+    let rules = dim_rules("phone-number", phonenumber::phonenumber_rules);
+    emit_entities(&rules, input, |t| match t {
+        Token::Phone(p) => Some(("phone-number", resolve::phonenumber_value(p))),
         _ => None,
     })
 }

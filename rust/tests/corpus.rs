@@ -986,6 +986,47 @@ fn creditcard_corpus() {
     );
 }
 
+/// PhoneNumber dimension (`parse_phonenumber`) — port of
+/// Duckling/PhoneNumber/Corpus.hs. A positive must produce an entity whose value
+/// equals the normalized "(+<code>) <digits> ext <ext>" string; negatives
+/// (too short / too long) produce none.
+#[test]
+fn phonenumber_corpus() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/phonenumber_corpus.json")).unwrap();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let want = c["value"].as_str().unwrap();
+        let got: Vec<String> = duckling::parse_phonenumber(input)
+            .into_iter()
+            .filter_map(|e| e.value["value"].as_str().map(str::to_string))
+            .collect();
+        if !got.iter().any(|g| g == want) {
+            failures.push(format!("{input:?}\n  expected {want}\n  got      {got:?}"));
+        }
+    }
+    for neg in data["negatives"].as_array().unwrap() {
+        checked += 1;
+        let input = neg.as_str().unwrap();
+        if !duckling::parse_phonenumber(input).is_empty() {
+            failures.push(format!("[negative] {input:?} parsed a phone number"));
+        }
+    }
+    eprintln!(
+        "phonenumber_corpus checked {checked}, {} failing",
+        failures.len()
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
+}
+
 /// Combined Time+Duration (`parse_all`) — the `dims:["time","duration"]` surface.
 /// Time and Duration compete in one pool by dimension-agnostic range domination,
 /// exactly as Duckling: the widest match per position wins, disjoint matches all

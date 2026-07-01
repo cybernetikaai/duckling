@@ -9,6 +9,7 @@ use crate::email::EmailData;
 use crate::grain::Grain;
 use crate::numeral::NumeralData;
 use crate::ordinal::OrdinalData;
+use crate::phonenumber::PhoneNumberData;
 use crate::regex::Re;
 use crate::time::object::IntervalDirection;
 use crate::time::predicate::Predicate;
@@ -118,6 +119,7 @@ pub enum Token {
     Email(EmailData),
     Url(UrlData),
     CreditCard(CreditCardData),
+    Phone(PhoneNumberData),
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
