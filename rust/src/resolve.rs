@@ -66,21 +66,20 @@ pub fn resolve_time(td: &TimeData, ctx: &ResolveContext) -> Option<serde_json::V
         max_time: TimeObject { start: add(ref_dt, Grain::Year, 2000), grain: Grain::Second, end: None },
         ref_offset_minutes,
     };
+    // --- Primary resolution (`chosen`) — the validated single-occurrence logic. ---
     let (mut past, mut future) = td.pred.run(ref_time, &tc);
     let chosen = match future.next() {
         None => past.next()?,
         Some(ahead) => {
             let ahead_covers = time_intersect(ahead, ref_time).is_some();
             if td.not_immediate && ahead_covers {
-                // notImmediate: if the first future occurrence covers "now", use the next.
+                // notImmediate: the first future occurrence covers "now"; use the next.
                 future.next().unwrap_or(ahead)
             } else if !ahead_covers {
-                // The next occurrence starts strictly after "now". If the most recent
-                // past occurrence is an *interval* still covering "now" (an ongoing
-                // multi-day holiday — Ramadan/Hanukkah/Lent asked during it), return
-                // that current one, as Duckling does, rather than skipping a year.
-                // Seasons/weekend already surface the covering occurrence as `ahead`,
-                // so this only fires for predicates that don't.
+                // Ongoing multi-day holiday (Ramadan/Hanukkah/Lent asked during it):
+                // return the covering interval rather than skipping a year. Seasons/
+                // weekend surface it as `ahead`, so this only fires for predicates
+                // that don't. (end.is_some() → a real interval, not a day/hour point.)
                 match past.next() {
                     Some(behind)
                         if behind.end.is_some() && time_intersect(behind, ref_time).is_some() =>
@@ -94,25 +93,54 @@ pub fn resolve_time(td: &TimeData, ctx: &ResolveContext) -> Option<serde_json::V
             }
         }
     };
-    // Offset for this resolved local instant, from the zone (DST-correct).
-    let off = zone_offset(chosen.start, &ctx.zone);
-    let mut value = if let Some(dir) = td.direction {
-        // Open-ended interval ("after christmas", "before 3pm"). Duckling keeps
-        // the holidayBeta tag on these, so fall through to the attach below.
-        open_interval_value(chosen.start, off, chosen.grain, matches!(dir, IntervalDirection::After))
-    } else {
-        match chosen.end {
-            Some(end) => {
-                let off_end = zone_offset(end, &ctx.zone);
-                interval_value(chosen.start, off, end, off_end, chosen.grain)
+
+    // --- `values` alternatives (Duckling's array): a *separate* enumeration from a
+    // fresh run, so it never perturbs `chosen`. Take up to 3 occurrences forward
+    // from the current one: the occurrence covering "now" (if any) then the future
+    // ones. Recurring predicates yield 3; single-occurrence / past-direction ones
+    // ("next week", "today", "last monday") yield 1. Note values[0] can differ from
+    // `chosen` — "tuesday" on a Tuesday resolves (notImmediate) to next Tuesday, but
+    // its alternatives list today first: [today, +1wk, +2wk].
+    let occs: Vec<TimeObject> = {
+        let (mut vpast, mut vfut) = td.pred.run(ref_time, &tc);
+        let first_past = vpast.next();
+        let mut v: Vec<TimeObject> = Vec::new();
+        if let Some(c) = first_past.filter(|b| time_intersect(*b, ref_time).is_some()) {
+            v.push(c);
+        }
+        v.extend(vfut.by_ref().take(3usize.saturating_sub(v.len())));
+        if v.is_empty() {
+            if let Some(b) = first_past {
+                v.push(b);
             }
-            None => simple_value(chosen.start, off, chosen.grain),
+        }
+        v
+    };
+
+    // Build the JSON for one occurrence (value / interval / open-interval), with
+    // per-instant DST-correct offsets. No holidayBeta or nested values here —
+    // those live only on the top-level object.
+    let occ_json = |occ: &TimeObject| -> serde_json::Value {
+        let off = zone_offset(occ.start, &ctx.zone);
+        if let Some(dir) = td.direction {
+            open_interval_value(occ.start, off, occ.grain, matches!(dir, IntervalDirection::After))
+        } else {
+            match occ.end {
+                Some(end) => {
+                    interval_value(occ.start, off, end, zone_offset(end, &ctx.zone), occ.grain)
+                }
+                None => simple_value(occ.start, off, occ.grain),
+            }
         }
     };
-    if let Some(h) = &td.holiday {
-        if let serde_json::Value::Object(o) = &mut value {
+    let values: Vec<serde_json::Value> = occs.iter().map(&occ_json).collect();
+
+    let mut value = occ_json(&chosen);
+    if let serde_json::Value::Object(o) = &mut value {
+        if let Some(h) = &td.holiday {
             o.insert("holidayBeta".to_string(), serde_json::Value::String(h.clone()));
         }
+        o.insert("values".to_string(), serde_json::Value::Array(values));
     }
     Some(value)
 }

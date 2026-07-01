@@ -272,6 +272,39 @@ fn tz_truth() {
         failures.iter().take(200).cloned().collect::<Vec<_>>().join("\n"));
 }
 
+/// The `values` alternatives array: Duckling returns `value` plus a `values` list
+/// of the next occurrences (3 for recurring predicates, 1 for past/single ones).
+/// The port now emits this; here we check the full array matches the oracle,
+/// element-by-element — including the 12h-ambiguous interleaving ("10:30" →
+/// 10:30 / 22:30 / next-day) and holiday/interval alternatives.
+#[test]
+fn values_array() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/values_array.json")).unwrap();
+    let ctx = ctx();
+    let n_of = |input: &str| -> Option<Vec<Value>> {
+        // the full-span time entity's `values` array
+        let count = input.chars().count();
+        duckling::parse(input, &ctx).into_iter()
+            .find(|e| e.dim == "time" && e.start == 0 && e.end == count)
+            .and_then(|e| e.value.get("values").and_then(|v| v.as_array()).cloned())
+    };
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let want = c["values"].as_array().unwrap();
+        match n_of(input) {
+            Some(got) if got.as_slice() == want.as_slice() => {}
+            got => failures.push(format!("{input:?}\n  expected {want:?}\n  got      {got:?}")),
+        }
+    }
+    eprintln!("values_array checked {checked}, {} failing", failures.len());
+    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
+        failures.iter().take(50).cloned().collect::<Vec<_>>().join("\n"));
+}
+
 /// Robustness: adversarial / untrusted input must never panic or hang. Huge
 /// magnitudes blew up two ways — jiff's Span setters panic above their per-unit
 /// range (fixed: fallible `try_*` in grain::add), and predNth/predNthAfter walked
