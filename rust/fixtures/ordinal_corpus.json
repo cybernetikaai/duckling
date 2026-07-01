@@ -1,0 +1,133 @@
+{
+ "_comment": "Duckling/Ordinal/EN/Corpus.hs, transcribed. parse_ordinal must produce a full-span ordinal entity with the expected value. Validates the composite-ordinal port (twenty-fifth etc.) against Duckling directly, not just via the time path.",
+ "cases": [
+  {
+   "input": "first",
+   "value": 1
+  },
+  {
+   "input": "1st",
+   "value": 1
+  },
+  {
+   "input": "second",
+   "value": 2
+  },
+  {
+   "input": "2nd",
+   "value": 2
+  },
+  {
+   "input": "third",
+   "value": 3
+  },
+  {
+   "input": "3rd",
+   "value": 3
+  },
+  {
+   "input": "fourth",
+   "value": 4
+  },
+  {
+   "input": "4th",
+   "value": 4
+  },
+  {
+   "input": "eighth",
+   "value": 8
+  },
+  {
+   "input": "8th",
+   "value": 8
+  },
+  {
+   "input": "twenty-fifth",
+   "value": 25
+  },
+  {
+   "input": "twenty—fifth",
+   "value": 25
+  },
+  {
+   "input": "twenty fifth",
+   "value": 25
+  },
+  {
+   "input": "twentyfifth",
+   "value": 25
+  },
+  {
+   "input": "25th",
+   "value": 25
+  },
+  {
+   "input": "thirty-first",
+   "value": 31
+  },
+  {
+   "input": "thirty—first",
+   "value": 31
+  },
+  {
+   "input": "thirty first",
+   "value": 31
+  },
+  {
+   "input": "thirtyfirst",
+   "value": 31
+  },
+  {
+   "input": "31st",
+   "value": 31
+  },
+  {
+   "input": "forty-second",
+   "value": 42
+  },
+  {
+   "input": "forty—second",
+   "value": 42
+  },
+  {
+   "input": "forty second",
+   "value": 42
+  },
+  {
+   "input": "fortysecond",
+   "value": 42
+  },
+  {
+   "input": "42nd",
+   "value": 42
+  },
+  {
+   "input": "seventy-third",
+   "value": 73
+  },
+  {
+   "input": "seventy—third",
+   "value": 73
+  },
+  {
+   "input": "seventy third",
+   "value": 73
+  },
+  {
+   "input": "seventythird",
+   "value": 73
+  },
+  {
+   "input": "73rd",
+   "value": 73
+  },
+  {
+   "input": "ninetieth",
+   "value": 90
+  },
+  {
+   "input": "90th",
+   "value": 90
+  }
+ ]
+}

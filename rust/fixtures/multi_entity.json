@@ -1,0 +1,603 @@
+{
+ "cases": [
+  {
+   "input": "Monday or Tuesday",
+   "entities": [
+    {
+     "start": 0,
+     "end": 6,
+     "value": {
+      "value": "2013-02-18T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    },
+    {
+     "start": 10,
+     "end": 17,
+     "value": {
+      "value": "2013-02-19T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "meet at 3pm or 4pm",
+   "entities": [
+    {
+     "start": 5,
+     "end": 11,
+     "value": {
+      "value": "2013-02-12T15:00:00.000-02:00",
+      "grain": "hour",
+      "type": "value"
+     }
+    },
+    {
+     "start": 15,
+     "end": 18,
+     "value": {
+      "value": "2013-02-12T16:00:00.000-02:00",
+      "grain": "hour",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "the 3rd and the 10th",
+   "entities": [
+    {
+     "start": 0,
+     "end": 7,
+     "value": {
+      "value": "2013-03-03T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    },
+    {
+     "start": 12,
+     "end": 20,
+     "value": {
+      "value": "2013-03-10T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "Monday Wednesday and Friday",
+   "entities": [
+    {
+     "start": 0,
+     "end": 6,
+     "value": {
+      "value": "2013-02-18T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    },
+    {
+     "start": 7,
+     "end": 16,
+     "value": {
+      "value": "2013-02-13T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    },
+    {
+     "start": 21,
+     "end": 27,
+     "value": {
+      "value": "2013-02-15T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "tomorrow and next week",
+   "entities": [
+    {
+     "start": 0,
+     "end": 8,
+     "value": {
+      "value": "2013-02-13T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    },
+    {
+     "start": 13,
+     "end": 22,
+     "value": {
+      "value": "2013-02-18T00:00:00.000-02:00",
+      "grain": "week",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "9am Monday and 5pm Friday",
+   "entities": [
+    {
+     "start": 0,
+     "end": 10,
+     "value": {
+      "value": "2013-02-18T09:00:00.000-02:00",
+      "grain": "hour",
+      "type": "value"
+     }
+    },
+    {
+     "start": 15,
+     "end": 25,
+     "value": {
+      "value": "2013-02-15T17:00:00.000-02:00",
+      "grain": "hour",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "call me at 3 or text me at 5",
+   "entities": [
+    {
+     "start": 8,
+     "end": 12,
+     "value": {
+      "value": "2013-02-12T15:00:00.000-02:00",
+      "grain": "hour",
+      "type": "value"
+     }
+    },
+    {
+     "start": 24,
+     "end": 28,
+     "value": {
+      "value": "2013-02-12T05:00:00.000-02:00",
+      "grain": "hour",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "either the 1st or the 15th",
+   "entities": [
+    {
+     "start": 7,
+     "end": 14,
+     "value": {
+      "value": "2013-03-01T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    },
+    {
+     "start": 18,
+     "end": 26,
+     "value": {
+      "value": "2013-02-15T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "today tomorrow and the day after",
+   "entities": [
+    {
+     "start": 0,
+     "end": 5,
+     "value": {
+      "value": "2013-02-12T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    },
+    {
+     "start": 6,
+     "end": 14,
+     "value": {
+      "value": "2013-02-13T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    },
+    {
+     "start": 19,
+     "end": 26,
+     "value": {
+      "value": "2013-02-12T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "this week or next week",
+   "entities": [
+    {
+     "start": 0,
+     "end": 9,
+     "value": {
+      "value": "2013-02-11T00:00:00.000-02:00",
+      "grain": "week",
+      "type": "value"
+     }
+    },
+    {
+     "start": 13,
+     "end": 22,
+     "value": {
+      "value": "2013-02-18T00:00:00.000-02:00",
+      "grain": "week",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "March April and May",
+   "entities": [
+    {
+     "start": 0,
+     "end": 5,
+     "value": {
+      "value": "2013-03-01T00:00:00.000-02:00",
+      "grain": "month",
+      "type": "value"
+     }
+    },
+    {
+     "start": 6,
+     "end": 11,
+     "value": {
+      "value": "2013-04-01T00:00:00.000-02:00",
+      "grain": "month",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "9, 10, or 11 am",
+   "entities": [
+    {
+     "start": 10,
+     "end": 15,
+     "value": {
+      "value": "2013-02-12T11:00:00.000-02:00",
+      "grain": "hour",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "breakfast at 8 lunch at noon dinner at 7",
+   "entities": [
+    {
+     "start": 10,
+     "end": 14,
+     "value": {
+      "value": "2013-02-12T08:00:00.000-02:00",
+      "grain": "hour",
+      "type": "value"
+     }
+    },
+    {
+     "start": 15,
+     "end": 28,
+     "value": {
+      "value": "2013-02-12T12:00:00.000-02:00",
+      "grain": "hour",
+      "type": "value"
+     }
+    },
+    {
+     "start": 36,
+     "end": 40,
+     "value": {
+      "value": "2013-02-12T07:00:00.000-02:00",
+      "grain": "hour",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "next Monday next Tuesday next Wednesday",
+   "entities": [
+    {
+     "start": 0,
+     "end": 11,
+     "value": {
+      "value": "2013-02-18T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    },
+    {
+     "start": 12,
+     "end": 24,
+     "value": {
+      "value": "2013-02-19T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    },
+    {
+     "start": 25,
+     "end": 39,
+     "value": {
+      "value": "2013-02-20T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "from 9 to 5 or 10 to 6",
+   "entities": [
+    {
+     "start": 0,
+     "end": 11,
+     "value": {
+      "to": {
+       "value": "2013-02-12T06:00:00.000-02:00",
+       "grain": "hour"
+      },
+      "from": {
+       "value": "2013-02-11T21:00:00.000-02:00",
+       "grain": "hour"
+      },
+      "type": "interval"
+     }
+    },
+    {
+     "start": 15,
+     "end": 22,
+     "value": {
+      "value": "2013-02-12T05:50:00.000-02:00",
+      "grain": "minute",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "Jan Feb Mar",
+   "entities": [
+    {
+     "start": 0,
+     "end": 3,
+     "value": {
+      "value": "2014-01-01T00:00:00.000-02:00",
+      "grain": "month",
+      "type": "value"
+     }
+    },
+    {
+     "start": 4,
+     "end": 7,
+     "value": {
+      "value": "2013-02-01T00:00:00.000-02:00",
+      "grain": "month",
+      "type": "value"
+     }
+    },
+    {
+     "start": 8,
+     "end": 11,
+     "value": {
+      "value": "2013-03-01T00:00:00.000-02:00",
+      "grain": "month",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "the 1st 2nd and 3rd",
+   "entities": [
+    {
+     "start": 0,
+     "end": 7,
+     "value": {
+      "value": "2013-03-01T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "last week this week next week",
+   "entities": [
+    {
+     "start": 0,
+     "end": 9,
+     "value": {
+      "value": "2013-02-04T00:00:00.000-02:00",
+      "grain": "week",
+      "type": "value"
+     }
+    },
+    {
+     "start": 10,
+     "end": 19,
+     "value": {
+      "value": "2013-02-11T00:00:00.000-02:00",
+      "grain": "week",
+      "type": "value"
+     }
+    },
+    {
+     "start": 20,
+     "end": 29,
+     "value": {
+      "value": "2013-02-18T00:00:00.000-02:00",
+      "grain": "week",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "morning noon and night",
+   "entities": [
+    {
+     "start": 8,
+     "end": 12,
+     "value": {
+      "value": "2013-02-12T12:00:00.000-02:00",
+      "grain": "hour",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "New Year and Christmas",
+   "entities": [
+    {
+     "start": 0,
+     "end": 8,
+     "value": {
+      "value": "2014-01-01T00:00:00.000-02:00",
+      "grain": "day",
+      "holidayBeta": "New Year's Day",
+      "type": "value"
+     }
+    },
+    {
+     "start": 13,
+     "end": 22,
+     "value": {
+      "value": "2013-12-25T00:00:00.000-02:00",
+      "grain": "day",
+      "holidayBeta": "Christmas",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "5pm today or 9am tomorrow",
+   "entities": [
+    {
+     "start": 0,
+     "end": 9,
+     "value": {
+      "value": "2013-02-12T17:00:00.000-02:00",
+      "grain": "hour",
+      "type": "value"
+     }
+    },
+    {
+     "start": 13,
+     "end": 25,
+     "value": {
+      "value": "2013-02-13T09:00:00.000-02:00",
+      "grain": "hour",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "between 1 and 2 or between 3 and 4",
+   "entities": [
+    {
+     "start": 0,
+     "end": 15,
+     "value": {
+      "to": {
+       "value": "2013-02-12T15:00:00.000-02:00",
+       "grain": "hour"
+      },
+      "from": {
+       "value": "2013-02-12T13:00:00.000-02:00",
+       "grain": "hour"
+      },
+      "type": "interval"
+     }
+    },
+    {
+     "start": 19,
+     "end": 34,
+     "value": {
+      "to": {
+       "value": "2013-02-12T05:00:00.000-02:00",
+       "grain": "hour"
+      },
+      "from": {
+       "value": "2013-02-12T03:00:00.000-02:00",
+       "grain": "hour"
+      },
+      "type": "interval"
+     }
+    }
+   ]
+  },
+  {
+   "input": "meeting Monday deadline Friday",
+   "entities": [
+    {
+     "start": 8,
+     "end": 14,
+     "value": {
+      "value": "2013-02-18T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    },
+    {
+     "start": 24,
+     "end": 30,
+     "value": {
+      "value": "2013-02-15T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    }
+   ]
+  },
+  {
+   "input": "arrive on the 5th leave on the 12th",
+   "entities": [
+    {
+     "start": 7,
+     "end": 17,
+     "value": {
+      "value": "2013-03-05T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    },
+    {
+     "start": 24,
+     "end": 35,
+     "value": {
+      "value": "2013-02-12T00:00:00.000-02:00",
+      "grain": "day",
+      "type": "value"
+     }
+    }
+   ]
+  }
+ ]
+}

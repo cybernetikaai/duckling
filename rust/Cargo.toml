@@ -1,0 +1,14 @@
+[package]
+name = "duckling"
+version = "0.0.0"
+edition = "2024"
+license = "BSD-3-Clause"                       # matches upstream Duckling (see ../LICENSE)
+description = "Behavior-compatible Rust port of Duckling's English Time/Duration/Ordinal parsing."
+repository = "https://github.com/cybernetikaai/duckling"
+publish = false
+
+[dependencies]
+jiff = "0.2"          # civil + zoned datetime, IANA tz, DST handling
+fancy-regex = "0.13"  # PCRE-style lookaround (stdlib `regex` rejects it)
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

@@ -1,0 +1,54 @@
+name: Rust CI
+
+# Runs the hygiene gates for the Rust port (rust/). Kept separate from the
+# Haskell `ci.yml` and scoped to changes under rust/.
+on:
+  push:
+    paths: ["rust/**", ".github/workflows/rust-ci.yml"]
+  pull_request:
+    paths: ["rust/**", ".github/workflows/rust-ci.yml"]
+
+defaults:
+  run:
+    working-directory: rust
+
+jobs:
+  check:
+    name: fmt · clippy · test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust (stable + clippy + rustfmt)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust
+
+      - name: Format (cargo fmt --check)
+        run: cargo fmt --check
+
+      - name: Lint (clippy -D warnings)
+        run: cargo clippy --all-targets -- -D warnings
+
+      - name: Build (release)
+        run: cargo build --release
+
+      - name: Test
+        run: cargo test
+
+  supply-chain:
+    name: cargo deny (advisories · licenses · bans · sources)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # One comprehensive supply-chain gate (supersedes cargo-audit): CVEs +
+      # license policy + banned/wildcard deps + source allow-list. Config: deny.toml.
+      - uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          manifest-path: rust/Cargo.toml
+          command: check

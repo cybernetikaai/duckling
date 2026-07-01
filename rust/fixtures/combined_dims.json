@@ -1,0 +1,959 @@
+{
+ "_comment": "Combined time+duration (parse_all) cross-dimension range-domination, vs the oracle dims=[time,duration] at ref 2013-02-12 04:30. Each case lists the expected surviving entities as [dim,start,end]; the widest match per position wins, disjoint matches all surface. Includes single expressions and realistic multi-entity spoken sentences. Also covers prose false-positive parity (temporal homographs like \"the second option\", \"a quarter of the students\").",
+ "cases": [
+  {
+   "input": "in 2 hours",
+   "expected": [
+    [
+     "time",
+     0,
+     10
+    ]
+   ]
+  },
+  {
+   "input": "2 hours",
+   "expected": [
+    [
+     "duration",
+     0,
+     7
+    ]
+   ]
+  },
+  {
+   "input": "for 2 hours",
+   "expected": [
+    [
+     "duration",
+     4,
+     11
+    ]
+   ]
+  },
+  {
+   "input": "3 days",
+   "expected": [
+    [
+     "duration",
+     0,
+     6
+    ]
+   ]
+  },
+  {
+   "input": "in 3 days",
+   "expected": [
+    [
+     "time",
+     0,
+     9
+    ]
+   ]
+  },
+  {
+   "input": "2 hours and 30 minutes",
+   "expected": [
+    [
+     "duration",
+     0,
+     22
+    ]
+   ]
+  },
+  {
+   "input": "2 hours and 30 minutes from now",
+   "expected": [
+    [
+     "time",
+     0,
+     31
+    ]
+   ]
+  },
+  {
+   "input": "set a timer for 20 minutes and wake me at 7am",
+   "expected": [
+    [
+     "duration",
+     16,
+     26
+    ],
+    [
+     "time",
+     39,
+     45
+    ]
+   ]
+  },
+  {
+   "input": "at 3pm for 2 hours",
+   "expected": [
+    [
+     "time",
+     0,
+     18
+    ]
+   ]
+  },
+  {
+   "input": "half an hour",
+   "expected": [
+    [
+     "duration",
+     0,
+     12
+    ]
+   ]
+  },
+  {
+   "input": "meeting in 30 minutes",
+   "expected": [
+    [
+     "time",
+     8,
+     21
+    ]
+   ]
+  },
+  {
+   "input": "call me in 15 minutes",
+   "expected": [
+    [
+     "time",
+     8,
+     21
+    ]
+   ]
+  },
+  {
+   "input": "wake me up in 8 hours",
+   "expected": [
+    [
+     "time",
+     11,
+     21
+    ]
+   ]
+  },
+  {
+   "input": "the meeting lasts 2 hours",
+   "expected": [
+    [
+     "duration",
+     18,
+     25
+    ]
+   ]
+  },
+  {
+   "input": "see you in a week",
+   "expected": [
+    [
+     "time",
+     8,
+     17
+    ]
+   ]
+  },
+  {
+   "input": "remind me in half an hour",
+   "expected": [
+    [
+     "time",
+     10,
+     25
+    ]
+   ]
+  },
+  {
+   "input": "30 minutes",
+   "expected": [
+    [
+     "duration",
+     0,
+     10
+    ]
+   ]
+  },
+  {
+   "input": "a day",
+   "expected": [
+    [
+     "duration",
+     0,
+     5
+    ]
+   ]
+  },
+  {
+   "input": "in a day",
+   "expected": [
+    [
+     "time",
+     0,
+     8
+    ]
+   ]
+  },
+  {
+   "input": "lunch at noon for an hour",
+   "expected": [
+    [
+     "time",
+     0,
+     25
+    ]
+   ]
+  },
+  {
+   "input": "in 3 days at 5pm",
+   "expected": [
+    [
+     "time",
+     0,
+     16
+    ]
+   ]
+  },
+  {
+   "input": "3 weeks from now",
+   "expected": [
+    [
+     "time",
+     0,
+     16
+    ]
+   ]
+  },
+  {
+   "input": "20 minutes before 3pm",
+   "expected": [
+    [
+     "time",
+     0,
+     21
+    ]
+   ]
+  },
+  {
+   "input": "for the next 2 hours",
+   "expected": [
+    [
+     "time",
+     8,
+     20
+    ]
+   ]
+  },
+  {
+   "input": "two days ago",
+   "expected": [
+    [
+     "time",
+     0,
+     12
+    ]
+   ]
+  },
+  {
+   "input": "5 minutes",
+   "expected": [
+    [
+     "duration",
+     0,
+     9
+    ]
+   ]
+  },
+  {
+   "input": "tomorrow for 3 days",
+   "expected": [
+    [
+     "time",
+     0,
+     19
+    ]
+   ]
+  },
+  {
+   "input": "every 2 hours",
+   "expected": [
+    [
+     "duration",
+     6,
+     13
+    ]
+   ]
+  },
+  {
+   "input": "wake me at 7am and remind me in 2 hours",
+   "expected": [
+    [
+     "time",
+     8,
+     14
+    ],
+    [
+     "time",
+     29,
+     39
+    ]
+   ]
+  },
+  {
+   "input": "the meeting is tomorrow at 3 for 2 hours",
+   "expected": [
+    [
+     "time",
+     15,
+     40
+    ]
+   ]
+  },
+  {
+   "input": "set a timer for 20 minutes then another for half an hour",
+   "expected": [
+    [
+     "duration",
+     16,
+     26
+    ],
+    [
+     "duration",
+     44,
+     56
+    ]
+   ]
+  },
+  {
+   "input": "book it from 9 to 5 on monday",
+   "expected": [
+    [
+     "time",
+     8,
+     29
+    ]
+   ]
+  },
+  {
+   "input": "call me back in 15 minutes or at noon",
+   "expected": [
+    [
+     "time",
+     13,
+     26
+    ],
+    [
+     "time",
+     30,
+     37
+    ]
+   ]
+  },
+  {
+   "input": "lunch at noon and dinner at 8",
+   "expected": [
+    [
+     "time",
+     0,
+     13
+    ],
+    [
+     "time",
+     25,
+     29
+    ]
+   ]
+  },
+  {
+   "input": "i'll be there in 10 minutes, see you at 3pm",
+   "expected": [
+    [
+     "time",
+     14,
+     27
+    ],
+    [
+     "time",
+     37,
+     43
+    ]
+   ]
+  },
+  {
+   "input": "the flight leaves at 6am and lands 5 hours later",
+   "expected": [
+    [
+     "duration",
+     35,
+     42
+    ],
+    [
+     "time",
+     18,
+     24
+    ]
+   ]
+  },
+  {
+   "input": "remind me next monday and again on friday",
+   "expected": [
+    [
+     "time",
+     10,
+     21
+    ],
+    [
+     "time",
+     32,
+     41
+    ]
+   ]
+  },
+  {
+   "input": "practice runs from 4pm to 6pm every tuesday",
+   "expected": [
+    [
+     "time",
+     14,
+     29
+    ],
+    [
+     "time",
+     36,
+     43
+    ]
+   ]
+  },
+  {
+   "input": "leave in 30 minutes to arrive by 9",
+   "expected": [
+    [
+     "time",
+     6,
+     19
+    ],
+    [
+     "time",
+     30,
+     34
+    ]
+   ]
+  },
+  {
+   "input": "we met two days ago and will meet again next week",
+   "expected": [
+    [
+     "time",
+     7,
+     19
+    ],
+    [
+     "time",
+     40,
+     49
+    ]
+   ]
+  },
+  {
+   "input": "the sale starts december 1st and ends december 24th",
+   "expected": [
+    [
+     "time",
+     16,
+     28
+    ],
+    [
+     "time",
+     38,
+     51
+    ]
+   ]
+  },
+  {
+   "input": "class is at 9am for an hour and a half",
+   "expected": [
+    [
+     "time",
+     9,
+     38
+    ]
+   ]
+  },
+  {
+   "input": "check in at 3pm on saturday and check out at 11am sunday",
+   "expected": [
+    [
+     "time",
+     9,
+     27
+    ],
+    [
+     "time",
+     42,
+     56
+    ]
+   ]
+  },
+  {
+   "input": "it takes 2 hours to get there so leave at 5",
+   "expected": [
+    [
+     "duration",
+     9,
+     16
+    ],
+    [
+     "time",
+     39,
+     43
+    ]
+   ]
+  },
+  {
+   "input": "my birthday is march 3rd and hers is in april",
+   "expected": [
+    [
+     "time",
+     15,
+     24
+    ],
+    [
+     "time",
+     37,
+     45
+    ]
+   ]
+  },
+  {
+   "input": "call at half past nine or a quarter to ten",
+   "expected": [
+    [
+     "time",
+     5,
+     22
+    ],
+    [
+     "time",
+     26,
+     42
+    ]
+   ]
+  },
+  {
+   "input": "wait 5 minutes then try again in an hour",
+   "expected": [
+    [
+     "duration",
+     5,
+     14
+    ],
+    [
+     "time",
+     30,
+     40
+    ]
+   ]
+  },
+  {
+   "input": "from monday to friday i work nine to five",
+   "expected": [
+    [
+     "time",
+     0,
+     21
+    ],
+    [
+     "time",
+     29,
+     41
+    ]
+   ]
+  },
+  {
+   "input": "the movie is at 7 and runs for two and a half hours",
+   "expected": [
+    [
+     "duration",
+     31,
+     51
+    ],
+    [
+     "time",
+     13,
+     17
+    ]
+   ]
+  },
+  {
+   "input": "set an alarm for 6:30am and a reminder for 8pm tonight",
+   "expected": [
+    [
+     "time",
+     17,
+     23
+    ],
+    [
+     "time",
+     43,
+     54
+    ]
+   ]
+  },
+  {
+   "input": "in 3 days at 5pm we have the review",
+   "expected": [
+    [
+     "time",
+     0,
+     16
+    ]
+   ]
+  },
+  {
+   "input": "he arrives tomorrow morning and leaves sunday evening",
+   "expected": [
+    [
+     "time",
+     11,
+     27
+    ],
+    [
+     "time",
+     39,
+     53
+    ]
+   ]
+  },
+  {
+   "input": "take the medicine every 4 hours for 3 days",
+   "expected": [
+    [
+     "duration",
+     24,
+     31
+    ],
+    [
+     "duration",
+     36,
+     42
+    ]
+   ]
+  },
+  {
+   "input": "the deadline is friday at 5pm sharp",
+   "expected": [
+    [
+     "time",
+     16,
+     35
+    ]
+   ]
+  },
+  {
+   "input": "i slept for 8 hours and woke up at 7",
+   "expected": [
+    [
+     "duration",
+     12,
+     19
+    ],
+    [
+     "time",
+     32,
+     36
+    ]
+   ]
+  },
+  {
+   "input": "meet me at the cafe at 2 or 3 o'clock",
+   "expected": [
+    [
+     "time",
+     20,
+     24
+    ],
+    [
+     "time",
+     28,
+     37
+    ]
+   ]
+  },
+  {
+   "input": "the call is scheduled for 30 minutes starting at noon",
+   "expected": [
+    [
+     "time",
+     22,
+     53
+    ]
+   ]
+  },
+  {
+   "input": "vacation from july 1st through july 15th",
+   "expected": [
+    [
+     "time",
+     9,
+     40
+    ]
+   ]
+  },
+  {
+   "input": "the second option is better",
+   "expected": [
+    [
+     "time",
+     0,
+     10
+    ]
+   ]
+  },
+  {
+   "input": "she is second in line",
+   "expected": []
+  },
+  {
+   "input": "he came in third",
+   "expected": []
+  },
+  {
+   "input": "the third quarter earnings were strong",
+   "expected": [
+    [
+     "time",
+     0,
+     17
+    ]
+   ]
+  },
+  {
+   "input": "first come first served",
+   "expected": []
+  },
+  {
+   "input": "the first lady spoke",
+   "expected": [
+    [
+     "time",
+     0,
+     9
+    ]
+   ]
+  },
+  {
+   "input": "he finished in fourth place",
+   "expected": []
+  },
+  {
+   "input": "a quarter of the students passed",
+   "expected": [
+    [
+     "duration",
+     0,
+     9
+    ]
+   ]
+  },
+  {
+   "input": "half the team is out",
+   "expected": []
+  },
+  {
+   "input": "minutes of the meeting",
+   "expected": []
+  },
+  {
+   "input": "seconds please",
+   "expected": []
+  },
+  {
+   "input": "the minute details matter",
+   "expected": [
+    [
+     "time",
+     0,
+     10
+    ]
+   ]
+  },
+  {
+   "input": "he is second to none",
+   "expected": []
+  },
+  {
+   "input": "days go by so fast",
+   "expected": []
+  },
+  {
+   "input": "for hours she waited",
+   "expected": []
+  },
+  {
+   "input": "months went by",
+   "expected": []
+  },
+  {
+   "input": "give me a second",
+   "expected": [
+    [
+     "duration",
+     8,
+     16
+    ]
+   ]
+  },
+  {
+   "input": "wait a minute",
+   "expected": [
+    [
+     "duration",
+     5,
+     13
+    ]
+   ]
+  },
+  {
+   "input": "just a moment",
+   "expected": []
+  },
+  {
+   "input": "hang on a sec",
+   "expected": [
+    [
+     "duration",
+     8,
+     13
+    ]
+   ]
+  },
+  {
+   "input": "back in the day",
+   "expected": [
+    [
+     "time",
+     8,
+     15
+    ]
+   ]
+  },
+  {
+   "input": "once in a blue moon",
+   "expected": []
+  },
+  {
+   "input": "in a bit",
+   "expected": []
+  },
+  {
+   "input": "in no time",
+   "expected": []
+  },
+  {
+   "input": "a couple came to dinner",
+   "expected": []
+  },
+  {
+   "input": "several people showed up",
+   "expected": []
+  },
+  {
+   "input": "two of them left",
+   "expected": []
+  },
+  {
+   "input": "a week is a long time",
+   "expected": [
+    [
+     "duration",
+     0,
+     6
+    ]
+   ]
+  },
+  {
+   "input": "it lasted an hour",
+   "expected": [
+    [
+     "duration",
+     10,
+     17
+    ]
+   ]
+  },
+  {
+   "input": "i waited two hours",
+   "expected": [
+    [
+     "duration",
+     9,
+     18
+    ]
+   ]
+  },
+  {
+   "input": "give it a month",
+   "expected": [
+    [
+     "duration",
+     8,
+     15
+    ]
+   ]
+  },
+  {
+   "input": "the trip takes 3 days",
+   "expected": [
+    [
+     "duration",
+     15,
+     21
+    ]
+   ]
+  },
+  {
+   "input": "the year 2020 was hard",
+   "expected": [
+    [
+     "time",
+     0,
+     8
+    ]
+   ]
+  },
+  {
+   "input": "see you next fall",
+   "expected": [
+    [
+     "time",
+     8,
+     17
+    ]
+   ]
+  },
+  {
+   "input": "spring is coming",
+   "expected": [
+    [
+     "time",
+     0,
+     6
+    ]
+   ]
+  },
+  {
+   "input": "i'll take seconds",
+   "expected": []
+  },
+  {
+   "input": "time flies",
+   "expected": []
+  },
+  {
+   "input": "a moment of silence",
+   "expected": []
+  }
+ ]
+}

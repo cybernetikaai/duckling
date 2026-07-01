@@ -1,0 +1,4 @@
+/target
+# Cargo.lock is committed: this crate ships a binary (src/main.rs), so pinning
+# exact dependency versions gives reproducible builds and a stable supply-chain
+# surface for `cargo deny` / `cargo audit`.

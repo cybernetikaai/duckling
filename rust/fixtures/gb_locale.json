@@ -1,0 +1,144 @@
+{
+ "cases": [
+  {
+   "input": "3/4/2015",
+   "expected": {
+    "value": "2015-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "13/12/2013",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "12/11/2013",
+   "expected": {
+    "value": "2013-11-12T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "1/2/2013",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "25/12/2013",
+   "expected": {
+    "value": "2013-12-25T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "29/2/2016",
+   "expected": {
+    "value": "2016-02-29T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "31/1/2013",
+   "expected": {
+    "value": "2013-01-31T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "4/5",
+   "expected": {
+    "value": "2013-05-04T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "13/12",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "1.2.2013",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "25.12.2013",
+   "expected": {
+    "value": "2013-12-25T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "30/6/2014",
+   "expected": {
+    "value": "2014-06-30T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "15/8/2015",
+   "expected": {
+    "value": "2015-08-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "6/15/2014",
+   "expected": null
+  },
+  {
+   "input": "2/29/2016",
+   "expected": null
+  },
+  {
+   "input": "1/13/2013",
+   "expected": null
+  },
+  {
+   "input": "3/4",
+   "expected": {
+    "value": "2013-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "10/11",
+   "expected": {
+    "value": "2013-11-10T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "28/2/2013",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  }
+ ]
+}

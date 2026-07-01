@@ -1,0 +1,1355 @@
+{
+ "cases": [
+  {
+   "input": "monday",
+   "values": [
+    {
+     "value": "2013-02-18T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-25T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-03-04T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "tuesday",
+   "values": [
+    {
+     "value": "2013-02-12T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-19T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-26T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "friday",
+   "values": [
+    {
+     "value": "2013-02-15T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-22T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-03-01T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "3pm",
+   "values": [
+    {
+     "value": "2013-02-12T15:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-13T15:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-14T15:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "9am",
+   "values": [
+    {
+     "value": "2013-02-12T09:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-13T09:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-14T09:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "noon",
+   "values": [
+    {
+     "value": "2013-02-12T12:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-13T12:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-14T12:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "midnight",
+   "values": [
+    {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-14T00:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-15T00:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "10:30",
+   "values": [
+    {
+     "value": "2013-02-12T10:30:00.000-02:00",
+     "grain": "minute",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-12T22:30:00.000-02:00",
+     "grain": "minute",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-13T10:30:00.000-02:00",
+     "grain": "minute",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "3:15pm",
+   "values": [
+    {
+     "value": "2013-02-12T15:15:00.000-02:00",
+     "grain": "minute",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-13T15:15:00.000-02:00",
+     "grain": "minute",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-14T15:15:00.000-02:00",
+     "grain": "minute",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "christmas",
+   "values": [
+    {
+     "value": "2013-12-25T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2014-12-25T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2015-12-25T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "easter",
+   "values": [
+    {
+     "value": "2013-03-31T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2014-04-20T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2015-04-05T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "thanksgiving",
+   "values": [
+    {
+     "value": "2013-11-28T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2014-11-27T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2015-11-26T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "halloween",
+   "values": [
+    {
+     "value": "2013-10-31T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2014-10-31T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2015-10-31T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "the 3rd",
+   "values": [
+    {
+     "value": "2013-03-03T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-04-03T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-05-03T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "the 15th",
+   "values": [
+    {
+     "value": "2013-02-15T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-03-15T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-04-15T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "march",
+   "values": [
+    {
+     "value": "2013-03-01T00:00:00.000-02:00",
+     "grain": "month",
+     "type": "value"
+    },
+    {
+     "value": "2014-03-01T00:00:00.000-02:00",
+     "grain": "month",
+     "type": "value"
+    },
+    {
+     "value": "2015-03-01T00:00:00.000-02:00",
+     "grain": "month",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "july",
+   "values": [
+    {
+     "value": "2013-07-01T00:00:00.000-02:00",
+     "grain": "month",
+     "type": "value"
+    },
+    {
+     "value": "2014-07-01T00:00:00.000-02:00",
+     "grain": "month",
+     "type": "value"
+    },
+    {
+     "value": "2015-07-01T00:00:00.000-02:00",
+     "grain": "month",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "december",
+   "values": [
+    {
+     "value": "2013-12-01T00:00:00.000-02:00",
+     "grain": "month",
+     "type": "value"
+    },
+    {
+     "value": "2014-12-01T00:00:00.000-02:00",
+     "grain": "month",
+     "type": "value"
+    },
+    {
+     "value": "2015-12-01T00:00:00.000-02:00",
+     "grain": "month",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "summer",
+   "values": [
+    {
+     "to": {
+      "value": "2013-09-24T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2013-06-21T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2014-09-24T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2014-06-21T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2015-09-24T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2015-06-21T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    }
+   ]
+  },
+  {
+   "input": "winter",
+   "values": [
+    {
+     "to": {
+      "value": "2013-03-21T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2012-12-21T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2014-03-21T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2013-12-21T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2015-03-21T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2014-12-21T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    }
+   ]
+  },
+  {
+   "input": "next week",
+   "values": [
+    {
+     "value": "2013-02-18T00:00:00.000-02:00",
+     "grain": "week",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "last week",
+   "values": [
+    {
+     "value": "2013-02-04T00:00:00.000-02:00",
+     "grain": "week",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "this month",
+   "values": [
+    {
+     "value": "2013-02-01T00:00:00.000-02:00",
+     "grain": "month",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "next month",
+   "values": [
+    {
+     "value": "2013-03-01T00:00:00.000-02:00",
+     "grain": "month",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "last month",
+   "values": [
+    {
+     "value": "2013-01-01T00:00:00.000-02:00",
+     "grain": "month",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "this year",
+   "values": [
+    {
+     "value": "2013-01-01T00:00:00.000-02:00",
+     "grain": "year",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "next year",
+   "values": [
+    {
+     "value": "2014-01-01T00:00:00.000-02:00",
+     "grain": "year",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "last year",
+   "values": [
+    {
+     "value": "2012-01-01T00:00:00.000-02:00",
+     "grain": "year",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "tomorrow",
+   "values": [
+    {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "yesterday",
+   "values": [
+    {
+     "value": "2013-02-11T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "today",
+   "values": [
+    {
+     "value": "2013-02-12T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "tonight",
+   "values": [
+    {
+     "to": {
+      "value": "2013-02-13T00:00:00.000-02:00",
+      "grain": "hour"
+     },
+     "from": {
+      "value": "2013-02-12T18:00:00.000-02:00",
+      "grain": "hour"
+     },
+     "type": "interval"
+    }
+   ]
+  },
+  {
+   "input": "this weekend",
+   "values": [
+    {
+     "to": {
+      "value": "2013-02-18T00:00:00.000-02:00",
+      "grain": "hour"
+     },
+     "from": {
+      "value": "2013-02-15T18:00:00.000-02:00",
+      "grain": "hour"
+     },
+     "type": "interval"
+    }
+   ]
+  },
+  {
+   "input": "after 3pm",
+   "values": [
+    {
+     "from": {
+      "value": "2013-02-12T15:00:00.000-02:00",
+      "grain": "hour"
+     },
+     "type": "interval"
+    },
+    {
+     "from": {
+      "value": "2013-02-13T15:00:00.000-02:00",
+      "grain": "hour"
+     },
+     "type": "interval"
+    },
+    {
+     "from": {
+      "value": "2013-02-14T15:00:00.000-02:00",
+      "grain": "hour"
+     },
+     "type": "interval"
+    }
+   ]
+  },
+  {
+   "input": "before 5pm",
+   "values": [
+    {
+     "to": {
+      "value": "2013-02-12T17:00:00.000-02:00",
+      "grain": "hour"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2013-02-13T17:00:00.000-02:00",
+      "grain": "hour"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2013-02-14T17:00:00.000-02:00",
+      "grain": "hour"
+     },
+     "type": "interval"
+    }
+   ]
+  },
+  {
+   "input": "last monday",
+   "values": [
+    {
+     "value": "2013-02-11T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "next friday",
+   "values": [
+    {
+     "value": "2013-02-22T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "this friday",
+   "values": [
+    {
+     "value": "2013-02-15T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "2 weeks from now",
+   "values": [
+    {
+     "value": "2013-02-26T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "in 2 hours",
+   "values": [
+    {
+     "value": "2013-02-12T06:30:00.000-02:00",
+     "grain": "minute",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "the ides of march",
+   "values": [
+    {
+     "value": "2013-03-15T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2014-03-15T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2015-03-15T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "monday morning",
+   "values": [
+    {
+     "to": {
+      "value": "2013-02-18T12:00:00.000-02:00",
+      "grain": "hour"
+     },
+     "from": {
+      "value": "2013-02-18T00:00:00.000-02:00",
+      "grain": "hour"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2013-02-25T12:00:00.000-02:00",
+      "grain": "hour"
+     },
+     "from": {
+      "value": "2013-02-25T00:00:00.000-02:00",
+      "grain": "hour"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2013-03-04T12:00:00.000-02:00",
+      "grain": "hour"
+     },
+     "from": {
+      "value": "2013-03-04T00:00:00.000-02:00",
+      "grain": "hour"
+     },
+     "type": "interval"
+    }
+   ]
+  },
+  {
+   "input": "first monday of march",
+   "values": [
+    {
+     "value": "2013-03-04T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "3 o'clock",
+   "values": [
+    {
+     "value": "2013-02-12T15:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-13T03:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-13T15:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "quarter past 3",
+   "values": [
+    {
+     "value": "2013-02-12T15:15:00.000-02:00",
+     "grain": "minute",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-13T03:15:00.000-02:00",
+     "grain": "minute",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-13T15:15:00.000-02:00",
+     "grain": "minute",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "half past 4",
+   "values": [
+    {
+     "value": "2013-02-12T04:30:00.000-02:00",
+     "grain": "minute",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-12T16:30:00.000-02:00",
+     "grain": "minute",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-13T04:30:00.000-02:00",
+     "grain": "minute",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "ramadan",
+   "values": [
+    {
+     "to": {
+      "value": "2013-08-08T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2013-07-09T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2014-07-28T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2014-06-28T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2015-07-17T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2015-06-18T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    }
+   ]
+  },
+  {
+   "input": "diwali",
+   "values": [
+    {
+     "value": "2013-11-03T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2014-10-23T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2015-11-11T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "4:30",
+   "values": [
+    {
+     "value": "2013-02-12T04:30:00.000-02:00",
+     "grain": "minute",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-12T16:30:00.000-02:00",
+     "grain": "minute",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-13T04:30:00.000-02:00",
+     "grain": "minute",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "wednesday",
+   "values": [
+    {
+     "value": "2013-02-13T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-20T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-27T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "sunday",
+   "values": [
+    {
+     "value": "2013-02-17T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-24T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-03-03T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "saturday",
+   "values": [
+    {
+     "value": "2013-02-16T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-23T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-03-02T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "october",
+   "values": [
+    {
+     "value": "2013-10-01T00:00:00.000-02:00",
+     "grain": "month",
+     "type": "value"
+    },
+    {
+     "value": "2014-10-01T00:00:00.000-02:00",
+     "grain": "month",
+     "type": "value"
+    },
+    {
+     "value": "2015-10-01T00:00:00.000-02:00",
+     "grain": "month",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "in a week",
+   "values": [
+    {
+     "value": "2013-02-19T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "next tuesday",
+   "values": [
+    {
+     "value": "2013-02-19T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "the 12th",
+   "values": [
+    {
+     "value": "2013-02-12T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-03-12T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-04-12T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "this tuesday",
+   "values": [
+    {
+     "value": "2013-02-19T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "new year's day",
+   "values": [
+    {
+     "value": "2014-01-01T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2015-01-01T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2016-01-01T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "valentine's day",
+   "values": [
+    {
+     "value": "2013-02-14T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2014-02-14T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2015-02-14T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "easter monday",
+   "values": [
+    {
+     "value": "2013-04-01T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2014-04-21T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2015-04-06T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "Ramadan",
+   "ref": "2013-07-15T14:00:00Z",
+   "values": [
+    {
+     "to": {
+      "value": "2013-08-08T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2013-07-09T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2014-07-28T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2014-06-28T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2015-07-17T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2015-06-18T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    }
+   ]
+  },
+  {
+   "input": "Hanukkah",
+   "ref": "2025-01-01T14:00:00Z",
+   "values": [
+    {
+     "to": {
+      "value": "2025-01-02T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2024-12-25T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2025-12-22T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2025-12-14T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2026-12-12T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2026-12-04T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    }
+   ]
+  },
+  {
+   "input": "summer",
+   "ref": "2013-07-15T14:00:00Z",
+   "values": [
+    {
+     "to": {
+      "value": "2013-09-24T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2013-06-21T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2014-09-24T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2014-06-21T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2015-09-24T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2015-06-21T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    }
+   ]
+  },
+  {
+   "input": "3pm",
+   "ref": "2013-02-12T17:30:00Z",
+   "values": [
+    {
+     "value": "2013-02-12T15:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-13T15:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-14T15:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "9am",
+   "ref": "2013-02-12T17:00:00Z",
+   "values": [
+    {
+     "value": "2013-02-13T09:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-14T09:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-15T09:00:00.000-02:00",
+     "grain": "hour",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "monday",
+   "ref": "2013-02-15T14:00:00Z",
+   "values": [
+    {
+     "value": "2013-02-18T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-02-25T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    },
+    {
+     "value": "2013-03-04T00:00:00.000-02:00",
+     "grain": "day",
+     "type": "value"
+    }
+   ]
+  },
+  {
+   "input": "tonight",
+   "ref": "2013-02-12T23:00:00Z",
+   "values": [
+    {
+     "to": {
+      "value": "2013-02-13T00:00:00.000-02:00",
+      "grain": "hour"
+     },
+     "from": {
+      "value": "2013-02-12T18:00:00.000-02:00",
+      "grain": "hour"
+     },
+     "type": "interval"
+    }
+   ]
+  },
+  {
+   "input": "winter",
+   "ref": "2013-01-15T14:00:00Z",
+   "values": [
+    {
+     "to": {
+      "value": "2013-03-21T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2012-12-21T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2014-03-21T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2013-12-21T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2015-03-21T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2014-12-21T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    }
+   ]
+  },
+  {
+   "input": "Lent",
+   "ref": "2013-03-01T14:00:00Z",
+   "values": [
+    {
+     "to": {
+      "value": "2013-03-31T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2013-02-13T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2014-04-20T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2014-03-05T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    },
+    {
+     "to": {
+      "value": "2015-04-05T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "from": {
+      "value": "2015-02-18T00:00:00.000-02:00",
+      "grain": "day"
+     },
+     "type": "interval"
+    }
+   ]
+  }
+ ]
+}

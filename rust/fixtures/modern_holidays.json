@@ -1,0 +1,129 @@
+{
+  "_comment": "Beyond-Duckling extension: holidays introduced or federally recognized after Duckling's holiday data froze (~2020-03). The Duckling oracle returns nothing for these, so expected values are hand-authored against official government dates rather than oracle-verified. Reference date 2013-02-12 (same as the corpus ctx()); dates are the recurring calendar date for that year.",
+  "cases": [
+    {
+      "input": "juneteenth national independence day",
+      "locale": "EnUs",
+      "note": "US federal holiday since June 2021; formal name for the June 19 date Duckling already had under 'juneteenth'",
+      "expected": {"grain": "day", "holidayBeta": "Juneteenth National Independence Day", "type": "value", "value": "2013-06-19T00:00:00.000-02:00"}
+    },
+    {
+      "input": "indigenous peoples' day",
+      "locale": "EnUs",
+      "note": "2nd Monday of October; plural/apostrophe spelling Duckling's 'indigenous people's day' regex missed",
+      "expected": {"grain": "day", "holidayBeta": "Indigenous Peoples' Day", "type": "value", "value": "2013-10-14T00:00:00.000-02:00"}
+    },
+    {
+      "input": "indigenous peoples day",
+      "locale": "EnUs",
+      "note": "no-apostrophe spelling",
+      "expected": {"grain": "day", "holidayBeta": "Indigenous Peoples' Day", "type": "value", "value": "2013-10-14T00:00:00.000-02:00"}
+    },
+    {
+      "input": "national day for truth and reconciliation",
+      "locale": "EnCa",
+      "note": "Canadian federal statutory holiday since 2021, September 30",
+      "expected": {"grain": "day", "holidayBeta": "National Day for Truth and Reconciliation", "type": "value", "value": "2013-09-30T00:00:00.000-02:00"}
+    },
+    {
+      "input": "truth and reconciliation day",
+      "locale": "EnCa",
+      "note": "common short name",
+      "expected": {"grain": "day", "holidayBeta": "National Day for Truth and Reconciliation", "type": "value", "value": "2013-09-30T00:00:00.000-02:00"}
+    },
+    {
+      "input": "orange shirt day",
+      "locale": "EnCa",
+      "note": "observed on the same date as Truth and Reconciliation, September 30",
+      "expected": {"grain": "day", "holidayBeta": "National Day for Truth and Reconciliation", "type": "value", "value": "2013-09-30T00:00:00.000-02:00"}
+    },
+    {
+      "input": "emancipation day",
+      "locale": "EnCa",
+      "note": "federally designated in Canada since 2021, August 1 (distinct from the US April date)",
+      "expected": {"grain": "day", "holidayBeta": "Emancipation Day", "type": "value", "value": "2013-08-01T00:00:00.000-02:00"}
+    },
+    {
+      "input": "national indigenous peoples day",
+      "locale": "EnCa",
+      "note": "observed in Canada on June 21",
+      "expected": {"grain": "day", "holidayBeta": "National Indigenous Peoples Day", "type": "value", "value": "2013-06-21T00:00:00.000-02:00"}
+    },
+    {
+      "input": "queen's birthday",
+      "locale": "EnAu",
+      "note": "major AU public holiday Duckling never included; 2nd Monday of June (majority-state convention); June 10 in 2013",
+      "expected": {"grain": "day", "holidayBeta": "Queen's Birthday", "type": "value", "value": "2013-06-10T00:00:00.000-02:00"}
+    },
+    {
+      "input": "king's birthday",
+      "locale": "EnAu",
+      "note": "renamed King's Birthday after the 2022 accession of Charles III; same date as Queen's Birthday",
+      "expected": {"grain": "day", "holidayBeta": "Queen's Birthday", "type": "value", "value": "2013-06-10T00:00:00.000-02:00"}
+    },
+    {
+      "input": "the queen's official birthday",
+      "locale": "EnAu",
+      "note": "full formal name",
+      "expected": {"grain": "day", "holidayBeta": "Queen's Birthday", "type": "value", "value": "2013-06-10T00:00:00.000-02:00"}
+    },
+    {
+      "input": "king's birthday",
+      "locale": "EnNz",
+      "note": "NZ observes the sovereign's birthday 1st Monday of June (distinct from AU 2nd Monday); post-2022 King's Birthday rename of Duckling's NZ Queen's Birthday; June 3 in 2013",
+      "expected": {"grain": "day", "holidayBeta": "King's Birthday", "type": "value", "value": "2013-06-03T00:00:00.000-02:00"}
+    },
+    {
+      "input": "matariki",
+      "locale": "EnNz",
+      "note": "NZ public holiday since 2022 (Te Kāhui o Matariki Public Holiday Act); legislated Friday. From the 2013 default ref, next table entry is 2022-06-24",
+      "expected": {"grain": "day", "holidayBeta": "Matariki", "type": "value", "value": "2022-06-24T00:00:00.000-02:00"}
+    },
+    {
+      "input": "matariki",
+      "locale": "EnNz",
+      "ref": "2024-03-01T00:00:00-02:00",
+      "note": "legislated 2024 date",
+      "expected": {"grain": "day", "holidayBeta": "Matariki", "type": "value", "value": "2024-06-28T00:00:00.000-02:00"}
+    },
+    {
+      "input": "matariki",
+      "locale": "EnNz",
+      "ref": "2025-03-01T00:00:00-02:00",
+      "note": "legislated 2025 date",
+      "expected": {"grain": "day", "holidayBeta": "Matariki", "type": "value", "value": "2025-06-20T00:00:00.000-02:00"}
+    },
+    {
+      "input": "st brigid's day",
+      "locale": "EnIe",
+      "note": "IE public holiday since 2023; 1st Monday of Feb. From the 2013 default ref, next table entry is 2023-02-06",
+      "expected": {"grain": "day", "holidayBeta": "St Brigid's Day", "type": "value", "value": "2023-02-06T00:00:00.000-02:00"}
+    },
+    {
+      "input": "saint brigid's day",
+      "locale": "EnIe",
+      "note": "full-word variant",
+      "expected": {"grain": "day", "holidayBeta": "St Brigid's Day", "type": "value", "value": "2023-02-06T00:00:00.000-02:00"}
+    },
+    {
+      "input": "lá fhéile bríde",
+      "locale": "EnIe",
+      "note": "Irish-language name",
+      "expected": {"grain": "day", "holidayBeta": "St Brigid's Day", "type": "value", "value": "2023-02-06T00:00:00.000-02:00"}
+    },
+    {
+      "input": "st brigid's day",
+      "locale": "EnIe",
+      "ref": "2025-01-01T00:00:00-02:00",
+      "note": "legislated 2025 date (1st Monday = Feb 3)",
+      "expected": {"grain": "day", "holidayBeta": "St Brigid's Day", "type": "value", "value": "2025-02-03T00:00:00.000-02:00"}
+    },
+    {
+      "input": "st brigid's day",
+      "locale": "EnIe",
+      "ref": "2030-01-15T00:00:00-02:00",
+      "note": "Friday exception: 1 Feb 2030 is a Friday, so the holiday is Feb 1 (not the first Monday)",
+      "expected": {"grain": "day", "holidayBeta": "St Brigid's Day", "type": "value", "value": "2030-02-01T00:00:00.000-02:00"}
+    }
+  ]
+}
