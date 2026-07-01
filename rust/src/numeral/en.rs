@@ -295,5 +295,20 @@ pub fn numeral_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // "100,000", "3,000,000" (ruleCommas): strip commas, parse.
+        Rule {
+            name: "comma-separated numbers".into(),
+            pattern: vec![PatternItem::Regex(compile(r"(\d+(,\d\d\d)+(\.\d+)?)"))],
+            prod: Box::new(|tokens| {
+                let g = match tokens.first() {
+                    Some(Token::RegexMatch(g)) => g,
+                    _ => return None,
+                };
+                Some(Token::Numeral(NumeralData::new(
+                    parse_double(&g.first()?.replace(',', ""))?,
+                    true,
+                )))
+            }),
+        },
     ]
 }
