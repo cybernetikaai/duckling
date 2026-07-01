@@ -108,6 +108,7 @@ Branch: `rust-port-en-time`.
 | + holiday-years audit (1 fix) | 1069 / 1069 | 0 | 68 / 68 | **holiday_years 2730** (183 holidays × 2013–2027); fixed ongoing interval holidays ("Ramadan" during Ramadan→current, not next year) |
 | + reference-time-of-day audit | 1069 / 1069 | 0 | 68 / 68 | **tod_ref 406** (time-sensitive inputs × 10 ref-times, 00:30→23:45) + format-variant spot-check; 0 gaps — past/future/rollover across the day is correct |
 | + robustness audit (2 fixes) | 1069 / 1069 | 0 | 68 / 68 | adversarial-input fuzz; fixed panic (jiff Span overflow in add → try_*) + hang (predNth take(n+2) over infinite series → MAX_NTH cap) |
+| + `values` alternatives array | 1069 / 1069 | 0 | 68 / 68 | **values_array 60**; emit Duckling's `values` (next-occurrence alternatives); last output feature, oracle-verified |
 
 ## Rule-level coverage audit
 
@@ -162,6 +163,12 @@ nodes) for diminishing return; current latency is well within the use case's bud
 - **ref_stress** 1249 — ref-*sensitive* inputs across 21 reference instants
   (every weekday, month/year ends, leap days). Catches reference-dependent bugs
   (the "this tuesday at 3" class). Confirms all recent fixes are ref-robust.
+- **values_array** 60 — the port emits Duckling's `values` array (up to 3 next-
+  occurrence alternatives: 3 for recurring predicates, 1 for single/past ones); this
+  test cross-checks the full array element-by-element vs the oracle, incl. the 12h
+  interleaving ("10:30" → 10:30/22:30/next-day), covering-point ("half past 4" at
+  04:30), holiday/interval/season, and past-direction cases. Computed from a
+  separate predicate run so the primary `value` is unchanged.
 - **robustness** — adversarial/untrusted input must never panic or hang (the port
   parses free user speech). Fuzzing found two crash/DoS bugs, both fixed: jiff's
   Span setters panic above their per-unit range ("50000 years from now") → fallible
