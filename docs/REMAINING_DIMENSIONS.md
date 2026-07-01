@@ -34,10 +34,14 @@ they never touch the Time ranker.
 | Dimension | Haskell | Numeral refs | Estimate |
 |---|---|---|---|
 | ~~Temperature~~ ✅ | 161 L | done — temperature_corpus (31+3 neg) | — |
-| Volume | 166 L | 7 | ~½–1 day |
-| Distance | 213 L | 13 | ~1 day |
-| Quantity | 256 L | 21 | ~1 day |
-| AmountOfMoney | 432 L | 20 | ~1.5 days |
+| ~~Volume~~ ✅ | 166 L | done — volume_corpus (54+4 neg) | — |
+| ~~Distance~~ ✅ | 213 L | done — distance_corpus (51+4 neg); incl. composite feet/inch + metric↔imperial fold + ambiguous "m" | — |
+| ~~Quantity~~ ✅ | 256 L | done — quantity_corpus (50+4 latent+4 neg); mg/kg scaling, product, latent, intervals | — |
+| ~~AmountOfMoney~~ ✅ | 432 L | done — amountofmoney_corpus (140+5 latent+3 neg); ~50 currencies, cents composition, lakh/crore/billion, intervals, latent | — |
+
+**Bucket B COMPLETE.** All value/unit dimensions ported: Temperature, Volume,
+Distance, Quantity, AmountOfMoney — each in its own isolated `dim_rules` set
+(numeral + dimension rules), zero Time-corpus risk. Time remains 1069/1069.
 
 **Shared prerequisite: finish Numeral** (~1 day) — their corpora test `$1.2M`,
 `1.5 million`, `30 lakh`, etc., which the current Time-subset numeral doesn't cover.
@@ -85,4 +89,8 @@ product actually needs to extract those quantities.
 2. ~~Email → Url → CreditCardNumber → PhoneNumber (quick wins)~~ — ✅ done.
 3. ~~Finish Numeral~~ ✅ — corpus-complete (105/105); one documented omission
    (ruleSkipHundreds1). Prerequisite for Bucket B now cleared.
-4. Temperature → Volume → Distance → Quantity → AmountOfMoney.
+4. ~~Temperature~~ ✅ → ~~Volume~~ ✅ → ~~Distance~~ ✅ → ~~Quantity~~ ✅ → ~~AmountOfMoney~~ ✅.
+   **Bucket B complete.** Remaining Duckling EN dimensions not yet ported are the
+   long-tail ones (Duration as first-class output is already done; the rest are
+   niche). Next high-value work is orthogonal: flip the Time corpus to `unique`
+   ranking mode, or expand real-IANA-zone coverage.

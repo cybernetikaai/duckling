@@ -94,6 +94,106 @@ pub fn temperature_value(t: &crate::temperature::TemperatureData) -> Option<serd
     })
 }
 
+/// Resolve a Volume (port of the VolumeData Resolve instance). None when there
+/// is no unit (a latent value-only or unit-only volume is never emitted).
+pub fn volume_value(v: &crate::volume::VolumeData) -> Option<serde_json::Value> {
+    let u = v.unit?.as_str();
+    Some(match (v.value, v.min, v.max) {
+        (Some(val), _, _) => serde_json::json!({"value": num(val), "unit": u, "type": "value"}),
+        (None, Some(from), Some(to)) => serde_json::json!({
+            "type": "interval", "from": {"value": num(from), "unit": u}, "to": {"value": num(to), "unit": u}}),
+        (None, Some(from), None) => serde_json::json!({
+            "type": "interval", "from": {"value": num(from), "unit": u}}),
+        (None, None, Some(to)) => serde_json::json!({
+            "type": "interval", "to": {"value": num(to), "unit": u}}),
+        _ => return None,
+    })
+}
+
+/// Resolve a Distance (port of the DistanceData Resolve instance). None when
+/// there is no unit (a latent value-only distance is never emitted).
+pub fn distance_value(d: &crate::distance::DistanceData) -> Option<serde_json::Value> {
+    let u = d.unit?.as_str();
+    Some(match (d.value, d.min, d.max) {
+        (Some(val), _, _) => serde_json::json!({"value": num(val), "unit": u, "type": "value"}),
+        (None, Some(from), Some(to)) => serde_json::json!({
+            "type": "interval", "from": {"value": num(from), "unit": u}, "to": {"value": num(to), "unit": u}}),
+        (None, Some(from), None) => serde_json::json!({
+            "type": "interval", "from": {"value": num(from), "unit": u}}),
+        (None, None, Some(to)) => serde_json::json!({
+            "type": "interval", "to": {"value": num(to), "unit": u}}),
+        _ => return None,
+    })
+}
+
+/// Resolve an AmountOfMoney (port of the AmountOfMoneyData Resolve instance).
+/// `unit` holds the currency string. A latent amount (bare number) is dropped
+/// unless `with_latent`; an amount with no value/min/max resolves to nothing.
+pub fn amountofmoney_value(
+    a: &crate::amountofmoney::AmountOfMoneyData,
+    with_latent: bool,
+) -> Option<serde_json::Value> {
+    if a.latent && !with_latent {
+        return None;
+    }
+    let u = a.currency.as_str();
+    Some(match (a.value, a.min, a.max) {
+        (Some(v), _, _) => serde_json::json!({"value": num(v), "unit": u, "type": "value"}),
+        (None, Some(from), Some(to)) => serde_json::json!({
+            "type": "interval", "from": {"value": num(from), "unit": u}, "to": {"value": num(to), "unit": u}}),
+        (None, Some(from), None) => serde_json::json!({
+            "type": "interval", "from": {"value": num(from), "unit": u}}),
+        (None, None, Some(to)) => serde_json::json!({
+            "type": "interval", "to": {"value": num(to), "unit": u}}),
+        _ => return None,
+    })
+}
+
+/// A quantity single-value object: `{value, unit, product?}`.
+fn quantity_single(v: f64, unit: &str, product: &Option<String>) -> serde_json::Value {
+    let mut o = serde_json::Map::new();
+    o.insert("value".to_string(), num(v));
+    o.insert("unit".to_string(), serde_json::json!(unit));
+    if let Some(p) = product {
+        o.insert("product".to_string(), serde_json::json!(p));
+    }
+    serde_json::Value::Object(o)
+}
+
+/// Resolve a Quantity (port of the QuantityData Resolve instance). A latent
+/// quantity (bare number) is dropped unless `with_latent`; a value with no unit
+/// resolves as the `unnamed` unit.
+pub fn quantity_value(
+    q: &crate::quantity::QuantityData,
+    with_latent: bool,
+) -> Option<serde_json::Value> {
+    if q.latent && !with_latent {
+        return None;
+    }
+    let product = &q.product;
+    Some(match (q.value, q.unit, q.min, q.max) {
+        (Some(v), None, _, _) => {
+            let mut o = quantity_single(v, "unnamed", product);
+            o["type"] = serde_json::json!("value");
+            o
+        }
+        (Some(v), Some(u), _, _) => {
+            let mut o = quantity_single(v, u.as_str(), product);
+            o["type"] = serde_json::json!("value");
+            o
+        }
+        (None, Some(u), Some(from), Some(to)) => serde_json::json!({
+            "type": "interval",
+            "from": quantity_single(from, u.as_str(), product),
+            "to": quantity_single(to, u.as_str(), product)}),
+        (None, Some(u), Some(from), None) => serde_json::json!({
+            "type": "interval", "from": quantity_single(from, u.as_str(), product)}),
+        (None, Some(u), None, Some(to)) => serde_json::json!({
+            "type": "interval", "to": quantity_single(to, u.as_str(), product)}),
+        _ => return None,
+    })
+}
+
 /// Resolve a CreditCardNumber to Duckling's JSON: `{value, issuer}` (no `type`).
 pub fn creditcard_value(c: &crate::creditcard::CreditCardData) -> serde_json::Value {
     serde_json::json!({"value": c.number, "issuer": c.issuer})

@@ -7,7 +7,9 @@
 // The port contains zero `unsafe`; forbid it so that stays true.
 #![forbid(unsafe_code)]
 
+pub mod amountofmoney;
 pub mod creditcard;
+pub mod distance;
 pub mod document;
 pub mod duration;
 pub mod email;
@@ -17,6 +19,7 @@ pub mod json;
 pub mod numeral;
 pub mod ordinal;
 pub mod phonenumber;
+pub mod quantity;
 pub mod ranking;
 pub mod regex;
 pub mod resolve;
@@ -25,6 +28,7 @@ pub mod time;
 pub mod timegrain;
 pub mod types;
 pub mod url;
+pub mod volume;
 
 pub use resolve::{Entity, ResolveContext};
 
@@ -356,6 +360,80 @@ pub fn parse_temperature(input: &str) -> Vec<Entity> {
         Token::Temperature(td) => resolve::temperature_value(td).map(|v| ("temperature", v)),
         _ => None,
     })
+}
+
+/// Parse volumes ("2 liters", "between 100 and 1000 l", "at least 4 ml"). Runs
+/// in Volume's own rule set (numerals + volume rules), so it never touches the
+/// Time ranker.
+pub fn parse_volume(input: &str) -> Vec<Entity> {
+    let rules = dim_rules("volume", || {
+        let mut r = numeral::en::numeral_rules();
+        r.extend(volume::en::volume_rules());
+        r
+    });
+    emit_entities(&rules, input, |t| match t {
+        Token::Volume(vd) => resolve::volume_value(vd).map(|v| ("volume", v)),
+        _ => None,
+    })
+}
+
+/// Parse distances ("3 km", "7 feet 10 inches", "between 3 and 5 km", "over 5\"").
+/// Runs in Distance's own rule set (numerals + distance rules), so it never
+/// touches the Time ranker.
+pub fn parse_distance(input: &str) -> Vec<Entity> {
+    let rules = dim_rules("distance", || {
+        let mut r = numeral::en::numeral_rules();
+        r.extend(distance::en::distance_rules());
+        r
+    });
+    emit_entities(&rules, input, |t| match t {
+        Token::Distance(dd) => resolve::distance_value(dd).map(|v| ("distance", v)),
+        _ => None,
+    })
+}
+
+/// Parse quantities ("2 cups of sugar", "500g", "between 100 and 1000 grams").
+/// `with_latent` controls whether a bare number resolves as an `unnamed`
+/// quantity (Duckling's `withLatent` option). Runs in Quantity's own rule set,
+/// so it never touches the Time ranker.
+pub fn parse_quantity_opts(input: &str, with_latent: bool) -> Vec<Entity> {
+    let rules = dim_rules("quantity", || {
+        let mut r = numeral::en::numeral_rules();
+        r.extend(quantity::en::quantity_rules());
+        r
+    });
+    emit_entities(&rules, input, move |t| match t {
+        Token::Quantity(qd) => resolve::quantity_value(qd, with_latent).map(|v| ("quantity", v)),
+        _ => None,
+    })
+}
+
+/// Parse quantities, dropping latent bare-number quantities (Duckling default).
+pub fn parse_quantity(input: &str) -> Vec<Entity> {
+    parse_quantity_opts(input, false)
+}
+
+/// Parse amounts of money ("$10", "20 euros", "$20 and 43c", "between 10 and 20
+/// dollars", "over $1.42"). `with_latent` controls whether a bare number resolves
+/// as an `unknown`-currency amount. Runs in AmountOfMoney's own rule set, so it
+/// never touches the Time ranker.
+pub fn parse_amountofmoney_opts(input: &str, with_latent: bool) -> Vec<Entity> {
+    let rules = dim_rules("amountofmoney", || {
+        let mut r = numeral::en::numeral_rules();
+        r.extend(amountofmoney::en::rules());
+        r
+    });
+    emit_entities(&rules, input, move |t| match t {
+        Token::AmountOfMoney(a) => {
+            resolve::amountofmoney_value(a, with_latent).map(|v| ("amount-of-money", v))
+        }
+        _ => None,
+    })
+}
+
+/// Parse amounts of money, dropping latent bare-number amounts (Duckling default).
+pub fn parse_amountofmoney(input: &str) -> Vec<Entity> {
+    parse_amountofmoney_opts(input, false)
 }
 
 /// Debug: every Time candidate (unranked) as "rule | range | score | value".

@@ -1,0 +1,193 @@
+{
+ "_comment": "Transcribed from Duckling/AmountOfMoney/EN/Corpus.hs. parse_amountofmoney (withLatent=false) must produce an entity whose value ~= expected (tolerance; cents/lakh/billion are float). 'latent' cases use withLatent=true. 'unit' is the currency string ($, cent, USD, £, unknown, ...). negatives produce none in default mode.",
+ "cases": [
+  { "input": "$1",          "expected": {"value": 1, "unit": "$", "type": "value"} },
+  { "input": "one dollar",  "expected": {"value": 1, "unit": "$", "type": "value"} },
+  { "input": "a dollar",    "expected": {"value": 1, "unit": "$", "type": "value"} },
+
+  { "input": "$10",         "expected": {"value": 10, "unit": "$", "type": "value"} },
+  { "input": "$ 10",        "expected": {"value": 10, "unit": "$", "type": "value"} },
+  { "input": "10$",         "expected": {"value": 10, "unit": "$", "type": "value"} },
+  { "input": "10 dollars",  "expected": {"value": 10, "unit": "$", "type": "value"} },
+  { "input": "ten dollars", "expected": {"value": 10, "unit": "$", "type": "value"} },
+
+  { "input": "10 cent",    "expected": {"value": 10, "unit": "cent", "type": "value"} },
+  { "input": "ten pennies","expected": {"value": 10, "unit": "cent", "type": "value"} },
+  { "input": "ten cents",  "expected": {"value": 10, "unit": "cent", "type": "value"} },
+  { "input": "10 c",       "expected": {"value": 10, "unit": "cent", "type": "value"} },
+  { "input": "10¢",        "expected": {"value": 10, "unit": "cent", "type": "value"} },
+
+  { "input": "$10K",     "expected": {"value": 10000, "unit": "$", "type": "value"} },
+  { "input": "10k$",     "expected": {"value": 10000, "unit": "$", "type": "value"} },
+  { "input": "$10,000",  "expected": {"value": 10000, "unit": "$", "type": "value"} },
+
+  { "input": "USD3.14",           "expected": {"value": 3.14, "unit": "USD", "type": "value"} },
+  { "input": "3.14US$",           "expected": {"value": 3.14, "unit": "USD", "type": "value"} },
+  { "input": "US$ 3.14",          "expected": {"value": 3.14, "unit": "USD", "type": "value"} },
+  { "input": "US$3 and fourteen", "expected": {"value": 3.14, "unit": "USD", "type": "value"} },
+
+  { "input": "20€",     "expected": {"value": 20, "unit": "EUR", "type": "value"} },
+  { "input": "20 euros","expected": {"value": 20, "unit": "EUR", "type": "value"} },
+  { "input": "20 Euro", "expected": {"value": 20, "unit": "EUR", "type": "value"} },
+  { "input": "20 Euros","expected": {"value": 20, "unit": "EUR", "type": "value"} },
+  { "input": "EUR 20",  "expected": {"value": 20, "unit": "EUR", "type": "value"} },
+  { "input": "EUR 20.0","expected": {"value": 20, "unit": "EUR", "type": "value"} },
+  { "input": "20 €ur",  "expected": {"value": 20, "unit": "EUR", "type": "value"} },
+
+  { "input": "£10",       "expected": {"value": 10, "unit": "£", "type": "value"} },
+  { "input": "ten pounds","expected": {"value": 10, "unit": "£", "type": "value"} },
+
+  { "input": "Rs. 20",   "expected": {"value": 20, "unit": "INR", "type": "value"} },
+  { "input": "Rs 20",    "expected": {"value": 20, "unit": "INR", "type": "value"} },
+  { "input": "20 Rupees","expected": {"value": 20, "unit": "INR", "type": "value"} },
+  { "input": "20Rs",     "expected": {"value": 20, "unit": "INR", "type": "value"} },
+  { "input": "Rs20",     "expected": {"value": 20, "unit": "INR", "type": "value"} },
+
+  { "input": "20 Rupees 43",  "expected": {"value": 20.43, "unit": "INR", "type": "value"} },
+  { "input": "twenty rupees 43","expected": {"value": 20.43, "unit": "INR", "type": "value"} },
+
+  { "input": "$20 and 43c",         "expected": {"value": 20.43, "unit": "$", "type": "value"} },
+  { "input": "$20 43",              "expected": {"value": 20.43, "unit": "$", "type": "value"} },
+  { "input": "20 dollar 43c",       "expected": {"value": 20.43, "unit": "$", "type": "value"} },
+  { "input": "20 dollars 43 cents", "expected": {"value": 20.43, "unit": "$", "type": "value"} },
+  { "input": "twenty dollar 43 cents","expected": {"value": 20.43, "unit": "$", "type": "value"} },
+  { "input": "20 dollar 43",        "expected": {"value": 20.43, "unit": "$", "type": "value"} },
+  { "input": "twenty dollar and 43","expected": {"value": 20.43, "unit": "$", "type": "value"} },
+
+  { "input": "GBP3.01",       "expected": {"value": 3.01, "unit": "GBP", "type": "value"} },
+  { "input": "GBP 3.01",      "expected": {"value": 3.01, "unit": "GBP", "type": "value"} },
+  { "input": "3 GBP 1 pence", "expected": {"value": 3.01, "unit": "GBP", "type": "value"} },
+  { "input": "3 GBP and one", "expected": {"value": 3.01, "unit": "GBP", "type": "value"} },
+
+  { "input": "CAD3.03",       "expected": {"value": 3.03, "unit": "CAD", "type": "value"} },
+  { "input": "CAD 3.03",      "expected": {"value": 3.03, "unit": "CAD", "type": "value"} },
+  { "input": "3 CAD 3 cents", "expected": {"value": 3.03, "unit": "CAD", "type": "value"} },
+
+  { "input": "CHF3.04",       "expected": {"value": 3.04, "unit": "CHF", "type": "value"} },
+  { "input": "CHF 3.04",      "expected": {"value": 3.04, "unit": "CHF", "type": "value"} },
+  { "input": "3 CHF 4 cents", "expected": {"value": 3.04, "unit": "CHF", "type": "value"} },
+
+  { "input": "CNY3",  "expected": {"value": 3, "unit": "CNY", "type": "value"} },
+  { "input": "CNY 3", "expected": {"value": 3, "unit": "CNY", "type": "value"} },
+  { "input": "3 CNY", "expected": {"value": 3, "unit": "CNY", "type": "value"} },
+  { "input": "3 yuan","expected": {"value": 3, "unit": "CNY", "type": "value"} },
+
+  { "input": "42 bucks",       "expected": {"value": 42, "unit": "unknown", "type": "value"} },
+  { "input": "around 42 bucks","expected": {"value": 42, "unit": "unknown", "type": "value"} },
+  { "input": "exactly 42 bucks","expected": {"value": 42, "unit": "unknown", "type": "value"} },
+
+  { "input": "42 KWD",          "expected": {"value": 42, "unit": "KWD", "type": "value"} },
+  { "input": "42 kuwaiti Dinar","expected": {"value": 42, "unit": "KWD", "type": "value"} },
+
+  { "input": "42 LBP",            "expected": {"value": 42, "unit": "LBP", "type": "value"} },
+  { "input": "42 Lebanese Pounds","expected": {"value": 42, "unit": "LBP", "type": "value"} },
+
+  { "input": "42 EGP",              "expected": {"value": 42, "unit": "EGP", "type": "value"} },
+  { "input": "42 egyptianpound",    "expected": {"value": 42, "unit": "EGP", "type": "value"} },
+  { "input": "42 LE",               "expected": {"value": 42, "unit": "EGP", "type": "value"} },
+  { "input": "42 L.E",              "expected": {"value": 42, "unit": "EGP", "type": "value"} },
+  { "input": "42 l.e.",             "expected": {"value": 42, "unit": "EGP", "type": "value"} },
+  { "input": "42 le",               "expected": {"value": 42, "unit": "EGP", "type": "value"} },
+  { "input": "42 geneh",            "expected": {"value": 42, "unit": "EGP", "type": "value"} },
+  { "input": "42 genihat masriya",  "expected": {"value": 42, "unit": "EGP", "type": "value"} },
+
+  { "input": "42 QAR",          "expected": {"value": 42, "unit": "QAR", "type": "value"} },
+  { "input": "42 qatari riyals","expected": {"value": 42, "unit": "QAR", "type": "value"} },
+
+  { "input": "42 SAR",       "expected": {"value": 42, "unit": "SAR", "type": "value"} },
+  { "input": "42 Saudiriyal","expected": {"value": 42, "unit": "SAR", "type": "value"} },
+
+  { "input": "42 BGN", "expected": {"value": 42, "unit": "BGN", "type": "value"} },
+
+  { "input": "42 MYR",              "expected": {"value": 42, "unit": "MYR", "type": "value"} },
+  { "input": "42 RM",               "expected": {"value": 42, "unit": "MYR", "type": "value"} },
+  { "input": "RM 42",               "expected": {"value": 42, "unit": "MYR", "type": "value"} },
+  { "input": "MYR 42",              "expected": {"value": 42, "unit": "MYR", "type": "value"} },
+  { "input": "42MYR",               "expected": {"value": 42, "unit": "MYR", "type": "value"} },
+  { "input": "42RM",                "expected": {"value": 42, "unit": "MYR", "type": "value"} },
+  { "input": "RM42",                "expected": {"value": 42, "unit": "MYR", "type": "value"} },
+  { "input": "MYR42",               "expected": {"value": 42, "unit": "MYR", "type": "value"} },
+  { "input": "ringgit 42",          "expected": {"value": 42, "unit": "MYR", "type": "value"} },
+  { "input": "42 ringgit",          "expected": {"value": 42, "unit": "MYR", "type": "value"} },
+  { "input": "42 malaysia ringgit", "expected": {"value": 42, "unit": "MYR", "type": "value"} },
+  { "input": "malaysia ringgit 42", "expected": {"value": 42, "unit": "MYR", "type": "value"} },
+  { "input": "42 malaysian ringgit","expected": {"value": 42, "unit": "MYR", "type": "value"} },
+  { "input": "malaysian ringgit 42","expected": {"value": 42, "unit": "MYR", "type": "value"} },
+  { "input": "42 malaysia ringgits","expected": {"value": 42, "unit": "MYR", "type": "value"} },
+  { "input": "malaysia ringgits 42","expected": {"value": 42, "unit": "MYR", "type": "value"} },
+  { "input": "42 malaysian ringgits","expected": {"value": 42, "unit": "MYR", "type": "value"} },
+  { "input": "malaysian ringgits 42","expected": {"value": 42, "unit": "MYR", "type": "value"} },
+
+  { "input": "20 ringgit and 43c",  "expected": {"value": 20.43, "unit": "MYR", "type": "value"} },
+  { "input": "20 ringgit and 43 sen","expected": {"value": 20.43, "unit": "MYR", "type": "value"} },
+  { "input": "twenty ringgit 43 sens","expected": {"value": 20.43, "unit": "MYR", "type": "value"} },
+  { "input": "20 ringgit 43",       "expected": {"value": 20.43, "unit": "MYR", "type": "value"} },
+  { "input": "twenty ringgit and 43","expected": {"value": 20.43, "unit": "MYR", "type": "value"} },
+
+  { "input": "10 dinars", "expected": {"value": 10, "unit": "dinar", "type": "value"} },
+
+  { "input": "ten shekels","expected": {"value": 10, "unit": "ILS", "type": "value"} },
+  { "input": "10 ILS",     "expected": {"value": 10, "unit": "ILS", "type": "value"} },
+
+  { "input": "ten riyals","expected": {"value": 10, "unit": "riyal", "type": "value"} },
+  { "input": "10 riyals", "expected": {"value": 10, "unit": "riyal", "type": "value"} },
+
+  { "input": "ten rials","expected": {"value": 10, "unit": "rial", "type": "value"} },
+  { "input": "10 rials", "expected": {"value": 10, "unit": "rial", "type": "value"} },
+
+  { "input": "between 10 and 20 dollars",       "expected": {"type": "interval", "from": {"value": 10, "unit": "$"}, "to": {"value": 20, "unit": "$"}} },
+  { "input": "from 10 dollars to 20 dollars",   "expected": {"type": "interval", "from": {"value": 10, "unit": "$"}, "to": {"value": 20, "unit": "$"}} },
+  { "input": "around 10-20 dollars",            "expected": {"type": "interval", "from": {"value": 10, "unit": "$"}, "to": {"value": 20, "unit": "$"}} },
+  { "input": "between 10 dollars and 20 dollars","expected": {"type": "interval", "from": {"value": 10, "unit": "$"}, "to": {"value": 20, "unit": "$"}} },
+  { "input": "from 10 to 20 dollars",           "expected": {"type": "interval", "from": {"value": 10, "unit": "$"}, "to": {"value": 20, "unit": "$"}} },
+  { "input": "about $10-$20",                   "expected": {"type": "interval", "from": {"value": 10, "unit": "$"}, "to": {"value": 20, "unit": "$"}} },
+  { "input": "10-20 dollars",                   "expected": {"type": "interval", "from": {"value": 10, "unit": "$"}, "to": {"value": 20, "unit": "$"}} },
+
+  { "input": "between 1.1 and 1.3 dollars",              "expected": {"type": "interval", "from": {"value": 1.1, "unit": "$"}, "to": {"value": 1.3, "unit": "$"}} },
+  { "input": "from 1 point 1 and one point three dollars","expected": {"type": "interval", "from": {"value": 1.1, "unit": "$"}, "to": {"value": 1.3, "unit": "$"}} },
+
+  { "input": "under seven euros","expected": {"type": "interval", "to": {"value": 7, "unit": "EUR"}} },
+  { "input": "less than 7 EUR",  "expected": {"type": "interval", "to": {"value": 7, "unit": "EUR"}} },
+  { "input": "lower than 7€",    "expected": {"type": "interval", "to": {"value": 7, "unit": "EUR"}} },
+  { "input": "no more than 7 euros","expected": {"type": "interval", "to": {"value": 7, "unit": "EUR"}} },
+  { "input": "at most 7€",       "expected": {"type": "interval", "to": {"value": 7, "unit": "EUR"}} },
+
+  { "input": "more than 1 dollar and forty-two cents","expected": {"type": "interval", "from": {"value": 1.42, "unit": "$"}} },
+  { "input": "at least $1.42",                        "expected": {"type": "interval", "from": {"value": 1.42, "unit": "$"}} },
+  { "input": "over 1.42 dollars",                     "expected": {"type": "interval", "from": {"value": 1.42, "unit": "$"}} },
+  { "input": "above a dollar and 42 cents",           "expected": {"type": "interval", "from": {"value": 1.42, "unit": "$"}} },
+  { "input": "no less than $1.42",                    "expected": {"type": "interval", "from": {"value": 1.42, "unit": "$"}} },
+
+  { "input": "5 lakh rupees",   "expected": {"value": 500000, "unit": "INR", "type": "value"} },
+  { "input": "five lakhs rupees","expected": {"value": 500000, "unit": "INR", "type": "value"} },
+
+  { "input": "7-9 lakh rupees", "expected": {"type": "interval", "from": {"value": 7, "unit": "INR"}, "to": {"value": 900000, "unit": "INR"}} },
+
+  { "input": "four crore rupees","expected": {"value": 40000000, "unit": "INR", "type": "value"} },
+  { "input": "4 crores rupees",  "expected": {"value": 40000000, "unit": "INR", "type": "value"} },
+
+  { "input": "ten tugriks","expected": {"value": 10, "unit": "MNT", "type": "value"} },
+  { "input": "10 Tugrik",  "expected": {"value": 10, "unit": "MNT", "type": "value"} },
+  { "input": "10MNT",      "expected": {"value": 10, "unit": "MNT", "type": "value"} },
+
+  { "input": "US$4.7 billion",   "expected": {"value": 4700000000, "unit": "USD", "type": "value"} },
+  { "input": "a US$4.7 billion", "expected": {"value": 4700000000, "unit": "USD", "type": "value"} },
+  { "input": "a US$ 4.7 billion","expected": {"value": 4700000000, "unit": "USD", "type": "value"} },
+
+  { "input": "UAH3.04",          "expected": {"value": 3.04, "unit": "UAH", "type": "value"} },
+  { "input": "UAH 3.04",         "expected": {"value": 3.04, "unit": "UAH", "type": "value"} },
+  { "input": "3 UAH 4 kopiykas", "expected": {"value": 3.04, "unit": "UAH", "type": "value"} }
+ ],
+ "latent": [
+  { "input": "five",   "expected": {"value": 5, "unit": "unknown", "type": "value"} },
+  { "input": "5",      "expected": {"value": 5, "unit": "unknown", "type": "value"} },
+  { "input": "about 5","expected": {"value": 5, "unit": "unknown", "type": "value"} },
+  { "input": "7.2",    "expected": {"value": 7.2, "unit": "unknown", "type": "value"} },
+  { "input": "7.20000","expected": {"value": 7.2, "unit": "unknown", "type": "value"} }
+ ],
+ "negatives": [
+  "exactly dollars",
+  "5",
+  "hello world"
+ ]
+}

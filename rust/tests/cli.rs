@@ -92,6 +92,22 @@ fn each_dimension_dispatches() {
         parse(&["--dims", "temperature", "70 degrees"])[0]["value"]["unit"],
         "degree"
     );
+    assert_eq!(
+        parse(&["--dims", "volume", "2 liters"])[0]["value"]["unit"],
+        "litre"
+    );
+    assert_eq!(
+        parse(&["--dims", "distance", "3 km"])[0]["value"]["unit"],
+        "kilometre"
+    );
+    assert_eq!(
+        parse(&["--dims", "quantity", "3 cups of sugar"])[0]["value"]["product"],
+        "sugar"
+    );
+    assert_eq!(
+        parse(&["--dims", "amount-of-money", "$10"])[0]["value"]["unit"],
+        "$"
+    );
 }
 
 #[test]
