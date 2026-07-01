@@ -463,6 +463,23 @@ fn time_of_day_rules() -> Vec<Rule> {
             }),
         },
         Rule {
+            name: "hhmm (latent)".into(),
+            pattern: vec![PatternItem::Regex(compile(
+                r"((?:[01]?\d)|(?:2[0-3]))([0-5]\d)(?!.\d)",
+            ))],
+            prod: Box::new(|tokens| {
+                let g = regex_groups(tokens)?;
+                let h: i64 = g.first()?.parse().ok()?;
+                let m: i64 = g.get(1)?.parse().ok()?;
+                Some(Token::Time(mk_latent(tod(
+                    hour_minute(h < 12, h, m),
+                    Grain::Minute,
+                    Some(h),
+                    h < 12,
+                ))))
+            }),
+        },
+        Rule {
             name: "hh:mm:ss".into(),
             pattern: vec![PatternItem::Regex(compile(
                 r"((?:[01]?\d)|(?:2[0-3]))[:.]([0-5]\d)[:.]([0-5]\d)",
@@ -1177,7 +1194,8 @@ fn interval_rules() -> Vec<Rule> {
             ],
             prod: Box::new(|tokens| match tokens {
                 [num, Token::Time(td), _] => {
-                    Some(Token::Time(pred_nth_td(get_int_value(num)? - 1, false, td)))
+                    // notImmediate: on a Tuesday, "4 tuesdays from now" skips today.
+                    Some(Token::Time(pred_nth_td(get_int_value(num)? - 1, true, td)))
                 }
                 _ => None,
             }),
