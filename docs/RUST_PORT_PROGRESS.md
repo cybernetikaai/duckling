@@ -96,6 +96,7 @@ Branch: `rust-port-en-time`.
 | + composition fuzz → 3 real fixes | 1069 / 1069 | 0 | 68 / 68 | 771 probes; fixed holidayBeta-on-open-interval, directional∩pod collapse, trailing-date-on-interval |
 | + this-dow pinning + coming split | 1069 / 1069 | 0 | 68 / 68 | 1223 probes; "this tuesday at 3"→next Tue (predNth); "coming" stays bare-dow |
 | + weekend ∩ time-of-day | 1069 / 1069 | 0 | 68 / 68 | 1227 probes; "weekend at 3pm"→Sat 3pm (Day-grain coarse + same-day-pod sentinel) |
+| + interval + trailing timezone | 1069 / 1069 | 0 | 68 / 68 | 1279 probes; "from 3pm to 5pm PST"→both ends PST; minute-grain exclusive end |
 
 ## How to run
 
