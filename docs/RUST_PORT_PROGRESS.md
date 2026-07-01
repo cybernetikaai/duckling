@@ -103,6 +103,25 @@ Branch: `rust-port-en-time`.
 | + dict scan + sentence differential | 1069 / 1069 | 0 | 68 / 68 | 236k-word scan: 0 port↔oracle divergences; **sentence_stress 76** natural sentences (incl. 16 no-time false-positive guards); 0 gaps |
 | + reverse scan + multi-entity | 1069 / 1069 | 0 | 68 / 68 | reverse dict scan (false negatives): 0; **multi_entity 24** full-entity-set matches (ranker multi-select); 0 gaps — single-word surface bidirectionally clean |
 | + tz ground-truth (vs IANA tzdata) | 1069 / 1069 | 0 | 68 / 68 | **tz_truth 270** (9 zones × all dates) + **tz_gapfold 12** (PEP-495 fold=0); offsets correct vs authoritative tzdata, not just Duckling |
+| + engine perf (chart parser) | 1069 / 1069 | 0 | 68 / 68 | per-parse latency −42–53% (regex-hit cache + skip regex-only rules + no per-round stash clone); behavior unchanged |
+
+## Performance
+
+Profiled in release (per-parse latency, warm rule-compile cache). Baseline was
+0.16–1.8ms/parse; after optimizing the chart parser it is **0.09–1.0ms** (−42–53%):
+`3pm` 162→94µs, `next tuesday at 3pm` 568→301µs, a 25-char interval 1767→1024µs, an
+86-char sentence 1067→499µs. Three behavior-preserving fixes in `engine.rs`:
+(1) precompute each regex's hits **once per parse** (was re-scanning ~250 regexes
+every fixpoint round and recursive route branch); (2) collect each round's new nodes
+separately instead of deep-cloning the growing stash; (3) skip regex-only rules
+(months/days/holidays/instants) after round 1 — their matches are fixed.
+
+Bottleneck analysis: the engine dominates (70–98%), not resolve+rank. What remains
+is a ~90µs floor of ~250 distinct fancy-regex scans (deduping by pattern didn't help
+— patterns are genuinely distinct; a `regex`-crate swap would help but many rules
+need lookaround) and route-combinatorics for ambiguous inputs (an interval yields
+~23 candidate parses). Both need higher-risk changes (regex-engine swap, Rc-shared
+nodes) for diminishing return; current latency is well within the use case's budget.
 
 ## How to run
 
