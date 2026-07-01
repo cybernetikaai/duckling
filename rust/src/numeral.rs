@@ -67,14 +67,19 @@ pub fn numeral_rules() -> Vec<Rule> {
         Rule {
             name: "integer (0..19)".into(),
             pattern: vec![PatternItem::Regex(compile(
-                r"(nineteen|eighteen|seventeen|sixteen|fifteen|fourteen|thirteen|twelve|eleven|ten|nine|eight|seven|six|five|four|three|two|one|zero|single|couples?|pair|few|dozens?)",
+                r"(nineteen|eighteen|seventeen|sixteen|fifteen|fourteen|thirteen|twelve|eleven|ten|nine|eight|seven|six|five|four|three|two|one|zero|single|(a )?(pair|couple)s?( of)?|(a )?few|dozens?)",
             ))],
             prod: Box::new(|tokens| {
                 let g = match tokens.first() {
                     Some(Token::RegexMatch(g)) => g,
                     _ => return None,
                 };
-                let w = g.first()?.trim_end_matches('s');
+                // Normalize informal wrappers: "a couple of" -> "couple",
+                // "a pair" -> "pair", "a few" -> "few", "couples" -> "couple".
+                let raw = g.first()?.to_lowercase();
+                let w = raw.strip_prefix("a ").unwrap_or(&raw);
+                let w = w.strip_suffix(" of").unwrap_or(w);
+                let w = w.trim_end_matches('s');
                 let v = from_table(UNITS, w)?;
                 Some(Token::Numeral(NumeralData {
                     value: v as f64,
