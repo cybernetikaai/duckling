@@ -1262,6 +1262,22 @@ fn interval_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // "all week" / "rest of the week" / "the week" (ruleWeek). End is two
+        // days before next week's start.
+        Rule {
+            name: "week".into(),
+            pattern: vec![PatternItem::Regex(compile(r"(all|rest of the|the) week"))],
+            prod: Box::new(|tokens| {
+                let m = regex_groups(tokens)?.first()?.to_lowercase();
+                // End = two days before next week's start; a Day object whose
+                // exclusive bound (Closed) is the reported "to" (Feb 17), which
+                // is what the corpus expects for both "all" and "rest".
+                let end = cycle_nth_after_td(true, Grain::Day, -2, &cycle_nth_td(Grain::Week, 1));
+                let start = if m == "all" { cycle_nth_td(Grain::Week, 0) } else { today_td() };
+                let period = interval_td(IntervalType::Closed, &start, &end)?;
+                Some(Token::Time(if m == "the" { mk_latent(period) } else { period }))
+            }),
+        },
     ]
 }
 
