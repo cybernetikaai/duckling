@@ -58,6 +58,11 @@ Branch: `rust-port-en-time`.
 | + from-the dd-to-dd month + <n> minutes to hod | 756 / 984 | 228 | 10 / 10 | "from the 13 to 15 July"; "20 minutes to 2pm" |
 | + <part-of-day> at <time-of-day> am/pm disambig | 764 / 984 | 220 | 10 / 10 | "this evening at 2"->2pm; Form::PartOfDay{start_hour} |
 | + <dom> of <month> (grain, relative months) | 769 / 984 | 215 | 10 / 10 | "20 of next month", "20th of the previous month" |
+| + <time> for <duration> (durationAfter) | 774 / 984 | 210 | 10 / 10 | mergeDuration/shiftDuration; "from 4pm for 30 mins" |
+| + yyyy-mm / yyyy-mm-dd / yyyyqq | 780 / 984 | 204 | 10 / 10 | "2014-10", "2015-3-3", "2018Q4" |
+| + the (nth) closest <day> to <time> | 785 / 984 | 199 | 10 / 10 | predNthClosest; "closest Monday to Oct 5th" |
+| + <duration> after/before/from/past + ago/after-next | 803 / 984 | 181 | 10 / 10 | "15 minutes past 3pm", "2 thursdays ago", "friday after next" |
+| + last weekend of <named-month> | 808 / 984 | 176 | 10 / 10 | weekend predicate (Fri 18:00->Mon 00:00); predLastOf |
 
 ## How to run
 
@@ -75,9 +80,11 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru <dom> of <month>. contains **769/984**, unique **767/984**, tz_stress **10/10** (timezone/DST fully green — the hard constraint).
+Cumulative thru last-weekend-of-month. contains **808/984**, unique **806/984**, tz_stress **10/10** (timezone/DST fully green — the hard constraint).
 
-Remaining ~215 failures cluster as: **holidays ~42** (computed/niche: Ramadan/Eid/Diwali two-table, Christmas-relative, King's Day, ides — long-tail, mostly needs per-holiday date infra); **`<time> for <duration>` ~8** (needs durationAfter/mergeDuration: shift a time by a duration — "from 4pm for 30 mins", "for 10 days from 18th Dec"); **numeric-date variants ~8** (yyyy-mm "2014-10", yyyy-mm-dd single-digit "2015-3-3", yyyyqq "2018Q4"); **closest ~5** ("the closest Monday to Oct 5th" — needs predNthClosest); **o'clock am/pm ~4** ("3 oclock am"); long tail (spurious "mon" in "month" partial-match; "for a quarter past 3pm" filler-for). Next best targets: durationAfter -> "<time> for <duration>" (8, systematic); yyyy-mm / yyyyqq numeric dates (8); predNthClosest (5).
+**A holiday subagent is running** (owns computed.rs + en_rules.rs holiday_rules): porting the ~62 computed/niche holidays (Ramadan/Islamic Hijri lists, Hindu lunar: diwali/holi/dussehra/pongal, Jewish: yom kippur/purim, Orthodox/Easter-relative: mardi gras/clean monday/lazarus, King's Day/Koningsdag shift, black friday, boss's day, ides, earth hour, GYSD). Duckling data lives in `Duckling/Time/Computed.hs` + `HolidayHelpers.hs`.
+
+Remaining NON-holiday failures (do NOT touch en_rules.rs until the holiday subagent finishes): **spelled-out clock times** ("ten thirty am", "nine fifty nine a m", "at three twenty", "half three"); **o'clock am/pm** ("3 oclock am", "3 o'clock in the afternoon"); **"X yr"** (last/this/next yr); **midday / mid day**; **early/mid/late <named-month>** ("early March"); **at the beginning|end of <named-month>** ("end of April", "beginning of January"); **N <dow> from now** forward ("3 fridays from now"); **"for a quarter past 3pm"** (for-filler); datetime combos ("Fri, Jul 18, 2014 07:00 PM"); "all week"/"rest of the week". Next targets after subagent: at-the-beginning/end-of-named-month; midday; early/mid/late month; spelled-out times.
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
