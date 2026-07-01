@@ -1623,6 +1623,23 @@ fn timezone_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // "9 am (BST)": timezone in parentheses (ruleTimezoneBracket).
+        Rule {
+            name: "<time> (timezone)".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(|t| {
+                    is_not_latent(t) && is_a_time_of_day(t) && has_no_timezone(t)
+                })),
+                PatternItem::Regex(compile(&format!(r"\(({alt})\)"))),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(td), Token::RegexMatch(g)] => {
+                    let off = tz_offset(g.first()?)?;
+                    Some(Token::Time(in_timezone_td(off, td)))
+                }
+                _ => None,
+            }),
+        },
         // "9:30 - 11:00 CST": one trailing timezone applies to both ends. The
         // hasNoTimezone guards skip already-tz'd ends ("15:00 GMT - 18:00 GMT",
         // handled per-end) so the tz isn't applied twice.
