@@ -70,9 +70,25 @@ pub fn resolve_time(td: &TimeData, ctx: &ResolveContext) -> Option<serde_json::V
     let chosen = match future.next() {
         None => past.next()?,
         Some(ahead) => {
-            // notImmediate: if the first future occurrence covers "now", use the next.
-            if td.not_immediate && time_intersect(ahead, ref_time).is_some() {
+            let ahead_covers = time_intersect(ahead, ref_time).is_some();
+            if td.not_immediate && ahead_covers {
+                // notImmediate: if the first future occurrence covers "now", use the next.
                 future.next().unwrap_or(ahead)
+            } else if !ahead_covers {
+                // The next occurrence starts strictly after "now". If the most recent
+                // past occurrence is an *interval* still covering "now" (an ongoing
+                // multi-day holiday — Ramadan/Hanukkah/Lent asked during it), return
+                // that current one, as Duckling does, rather than skipping a year.
+                // Seasons/weekend already surface the covering occurrence as `ahead`,
+                // so this only fires for predicates that don't.
+                match past.next() {
+                    Some(behind)
+                        if behind.end.is_some() && time_intersect(behind, ref_time).is_some() =>
+                    {
+                        behind
+                    }
+                    _ => ahead,
+                }
             } else {
                 ahead
             }

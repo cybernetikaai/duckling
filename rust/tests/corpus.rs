@@ -272,6 +272,34 @@ fn tz_truth() {
         failures.iter().take(200).cloned().collect::<Vec<_>>().join("\n"));
 }
 
+/// Holidays across years: every holiday the port knows, resolved at reference =
+/// Jan 1 of each year 2013–2020, checked against the oracle. The corpus only tests
+/// holidays at one reference year (2013); the *computed* holidays (Easter-relative,
+/// Islamic/Hindu/Jewish lunar) shift yearly via date tables/algorithms, so a table
+/// error in another year would otherwise go undetected. Best-entity semantics.
+#[test]
+fn holiday_years() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/holiday_years.json")).unwrap();
+    let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(-2));
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let reference: jiff::Timestamp = c["ref"].as_str().unwrap().parse().expect("ref");
+        let ctx = duckling::ResolveContext { reference, zone: zone.clone(), with_latent: false };
+        let exp = strip_values(c["expected"].clone());
+        if !best_time_values(input, &ctx).iter().any(|g| g == &exp) {
+            failures.push(format!("[{}] {input:?}\n  expected {exp}\n  got      {:?}",
+                c["year"], best_time_values(input, &ctx)));
+        }
+    }
+    eprintln!("holiday_years checked {checked}, {} failing", failures.len());
+    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
+        failures.iter().take(200).cloned().collect::<Vec<_>>().join("\n"));
+}
+
 /// DST gap/fold ground-truth: the hardest offset case. A spring-forward gap time
 /// (2:30am, nonexistent) and a fall-back fold time (1:30am, repeated) are ambiguous;
 /// the port resolves them by picking the pre-transition ("before") offset. This
