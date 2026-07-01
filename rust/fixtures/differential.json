@@ -13120,6 +13120,54 @@
     },
     "type": "interval"
    }
+  },
+  {
+   "input": "2 fridays from today",
+   "expected": {
+    "value": "2013-02-22T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 fridays from tomorrow",
+   "expected": {
+    "value": "2013-02-22T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "2 mondays from today",
+   "expected": {
+    "value": "2013-02-25T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "3 tuesdays from next monday",
+   "expected": {
+    "value": "2013-03-05T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "1 friday from today",
+   "expected": {
+    "value": "2013-02-15T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
+  },
+  {
+   "input": "4 sundays from tomorrow",
+   "expected": {
+    "value": "2013-03-10T00:00:00.000-02:00",
+    "grain": "day",
+    "type": "value"
+   }
   }
  ]
 }

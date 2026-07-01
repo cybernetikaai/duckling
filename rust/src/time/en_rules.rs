@@ -1389,6 +1389,34 @@ fn interval_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // "2 fridays from today" / "3 tuesdays from tomorrow" (ruleDOWFromTime):
+        // the n-th day-of-week strictly after the base time (predNthAfter n-1).
+        // Generalizes the "from now" rule above to any base <time>.
+        Rule {
+            name: "<integer> <day-of-week> from <time>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(|t| get_int_value(t).is_some_and(|v| v >= 1))),
+                PatternItem::Predicate(Box::new(is_a_day_of_week)),
+                PatternItem::Regex(compile(r"from")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [num, Token::Time(dow), _, Token::Time(base)] => {
+                    let n = get_int_value(num)?;
+                    Some(Token::Time(TimeData {
+                        pred: take_nth_after(n - 1, true, dow.pred.clone(), base.pred.clone()),
+                        grain: Grain::Day,
+                        latent: false,
+                        not_immediate: false,
+                        form: None,
+                        direction: None,
+                        holiday: None,
+                        has_timezone: false,
+                    }))
+                }
+                _ => None,
+            }),
+        },
         Rule {
             name: "<time> before last|after next".into(),
             pattern: vec![
