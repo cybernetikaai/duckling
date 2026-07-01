@@ -109,6 +109,7 @@ Branch: `rust-port-en-time`.
 | + reference-time-of-day audit | 1069 / 1069 | 0 | 68 / 68 | **tod_ref 406** (time-sensitive inputs × 10 ref-times, 00:30→23:45) + format-variant spot-check; 0 gaps — past/future/rollover across the day is correct |
 | + robustness audit (2 fixes) | 1069 / 1069 | 0 | 68 / 68 | adversarial-input fuzz; fixed panic (jiff Span overflow in add → try_*) + hang (predNth take(n+2) over infinite series → MAX_NTH cap) |
 | + `values` alternatives array | 1069 / 1069 | 0 | 68 / 68 | **values_array 60**; emit Duckling's `values` (next-occurrence alternatives); last output feature, oracle-verified |
+| + values-array covering/ref cases | 1069 / 1069 | 0 | 68 / 68 | **values_array 69**; alternatives correct across day/year references (ongoing holidays, covering hour, passed tod) |
 
 ## Rule-level coverage audit
 
@@ -163,12 +164,15 @@ nodes) for diminishing return; current latency is well within the use case's bud
 - **ref_stress** 1249 — ref-*sensitive* inputs across 21 reference instants
   (every weekday, month/year ends, leap days). Catches reference-dependent bugs
   (the "this tuesday at 3" class). Confirms all recent fixes are ref-robust.
-- **values_array** 60 — the port emits Duckling's `values` array (up to 3 next-
+- **values_array** 69 — the port emits Duckling's `values` array (up to 3 next-
   occurrence alternatives: 3 for recurring predicates, 1 for single/past ones); this
   test cross-checks the full array element-by-element vs the oracle, incl. the 12h
   interleaving ("10:30" → 10:30/22:30/next-day), covering-point ("half past 4" at
-  04:30), holiday/interval/season, and past-direction cases. Computed from a
-  separate predicate run so the primary `value` is unchanged.
+  04:30), holiday/interval/season, past-direction cases, and (via per-case
+  references) covering intervals across the day/year: ongoing holidays ("Ramadan"
+  during it, "Hanukkah" spanning a year boundary), a season during itself, a passed
+  time-of-day ("9am" at 15:00 → tomorrow). Computed from a separate predicate run so
+  the primary `value` is unchanged.
 - **robustness** — adversarial/untrusted input must never panic or hang (the port
   parses free user speech). Fuzzing found two crash/DoS bugs, both fixed: jiff's
   Span setters panic above their per-unit range ("50000 years from now") → fallible
@@ -252,6 +256,14 @@ The 8 remaining `unique`-mode gaps ("for a quarter past 3pm"×5, "Fri, Jul 18, 2
 **Timezone validation (this iteration).** Cross-checked the port against live rasa/duckling across 6 IANA zones and both hemispheres on DST transition days; tz_stress grew 10 -> 68 verified cases (port == Duckling == authoritative IANA tzdata). The check surfaced that on transition-boundary hours (spring-forward gap, fall-back fold, the transition hour itself) Duckling attaches an offset that does NOT match the real per-instant IANA offset (e.g. "3am" on a spring-forward day -> Duckling -05:00, which is actually 4am EDT), whereas the port uses the correct per-instant offset (-04:00). Those 22 boundary cases are intentionally excluded from tz_stress: the port favors timezone correctness (the stated priority) over byte-fidelity to Duckling's DST quirk. Full-corpus oracle cross-check: 981/984 fixtures match live Duckling (99.7%; the 3 diffs are real-zone LMT artifacts of America/Noronha vs the fixed -02:00 test context).
 
 Not attempted (out of scope / disproportionate): the `TimeDatePredicate` field-merge that would let leading-"Fri," combos produce a *full-span* parse (a core-architecture rewrite for zero contains-mode gain). The opaque-Series predicate model is behavior-complete for the corpus as-is.
+
+Also out of scope — **emitting the Duration dimension as first-class output**. The
+port has full Duration machinery internally (it feeds time rules — "in 2 hours",
+"for 3 days"), but `parse` emits only Time entities (`dim:"time"`), matching a
+`dims:["time"]` request. Duckling's standalone Duration entity (`{value, unit,
+normalized, …}`) is a *different dimension*; emitting it would add cross-dimension
+ranking against the Time-only classifier model. This is a scope expansion, not a
+gap in the time port, so it's deferred to a hypothetical multi-dim phase.
 
 **Composition fuzz (this iteration).** Beyond the curated corpus, generated
 ~770 compositional probes (deep nestings, directionals, interval+date, duration
