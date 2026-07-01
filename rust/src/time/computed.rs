@@ -80,6 +80,49 @@ pub fn easter_shift_td(n: i64) -> TimeData {
     }
 }
 
+/// A day-grain TimeData backed by an explicit legislated date table (like the
+/// computed lunar holidays, but exposed for the beyond-Duckling holiday
+/// extension — e.g. NZ Matariki, IE St Brigid's Day, whose dates are fixed by
+/// statute rather than a simple weekday rule). Caller tags the holiday name.
+pub fn computed_holiday_td(ymd: &'static [(i16, i8, i8)]) -> TimeData {
+    TimeData {
+        pred: time_computed(days(ymd)),
+        grain: Grain::Day,
+        latent: false,
+        not_immediate: false,
+        form: None,
+        direction: None,
+        holiday: None,
+        has_timezone: false,
+    }
+}
+
+/// Matariki (Māori New Year) — NZ public holiday since 2022, observed on a
+/// legislated Friday each year (Te Kāhui o Matariki Public Holiday Act 2022).
+/// Not derivable from a weekday rule; dates 2022–2052 per the statute schedule.
+pub const MATARIKI: &[(i16, i8, i8)] = &[
+    (2022, 6, 24), (2023, 7, 14), (2024, 6, 28), (2025, 6, 20), (2026, 7, 10),
+    (2027, 6, 25), (2028, 7, 14), (2029, 7, 6), (2030, 6, 21), (2031, 7, 11),
+    (2032, 7, 2), (2033, 6, 24), (2034, 7, 7), (2035, 6, 29), (2036, 7, 18),
+    (2037, 7, 10), (2038, 6, 25), (2039, 7, 15), (2040, 7, 6), (2041, 7, 19),
+    (2042, 7, 11), (2043, 7, 3), (2044, 6, 24), (2045, 7, 7), (2046, 6, 29),
+    (2047, 7, 19), (2048, 7, 3), (2049, 6, 25), (2050, 7, 15), (2051, 6, 30),
+    (2052, 6, 21),
+];
+
+/// St Brigid's Day / Lá Fhéile Bríde — IE public holiday since 2023: the first
+/// Monday of February, except when 1 February is a Friday (then 1 February).
+/// Encoded as an explicit table so the Friday exception (2030/2036/2041/2047)
+/// is exact rather than approximated by a weekday rule.
+pub const ST_BRIGIDS_DAY: &[(i16, i8, i8)] = &[
+    (2023, 2, 6), (2024, 2, 5), (2025, 2, 3), (2026, 2, 2), (2027, 2, 1),
+    (2028, 2, 7), (2029, 2, 5), (2030, 2, 1), (2031, 2, 3), (2032, 2, 2),
+    (2033, 2, 7), (2034, 2, 6), (2035, 2, 5), (2036, 2, 1), (2037, 2, 2),
+    (2038, 2, 1), (2039, 2, 7), (2040, 2, 6), (2041, 2, 1), (2042, 2, 3),
+    (2043, 2, 2), (2044, 2, 1), (2045, 2, 6), (2046, 2, 5), (2047, 2, 1),
+    (2048, 2, 3), (2049, 2, 1), (2050, 2, 7), (2051, 2, 6), (2052, 2, 5),
+];
+
 fn computed_holiday_shift(
     name: &'static str,
     re: &str,

@@ -66,6 +66,64 @@
       "locale": "EnAu",
       "note": "full formal name",
       "expected": {"grain": "day", "holidayBeta": "Queen's Birthday", "type": "value", "value": "2013-06-10T00:00:00.000-02:00"}
+    },
+    {
+      "input": "king's birthday",
+      "locale": "EnNz",
+      "note": "NZ observes the sovereign's birthday 1st Monday of June (distinct from AU 2nd Monday); post-2022 King's Birthday rename of Duckling's NZ Queen's Birthday; June 3 in 2013",
+      "expected": {"grain": "day", "holidayBeta": "King's Birthday", "type": "value", "value": "2013-06-03T00:00:00.000-02:00"}
+    },
+    {
+      "input": "matariki",
+      "locale": "EnNz",
+      "note": "NZ public holiday since 2022 (Te Kāhui o Matariki Public Holiday Act); legislated Friday. From the 2013 default ref, next table entry is 2022-06-24",
+      "expected": {"grain": "day", "holidayBeta": "Matariki", "type": "value", "value": "2022-06-24T00:00:00.000-02:00"}
+    },
+    {
+      "input": "matariki",
+      "locale": "EnNz",
+      "ref": "2024-03-01T00:00:00-02:00",
+      "note": "legislated 2024 date",
+      "expected": {"grain": "day", "holidayBeta": "Matariki", "type": "value", "value": "2024-06-28T00:00:00.000-02:00"}
+    },
+    {
+      "input": "matariki",
+      "locale": "EnNz",
+      "ref": "2025-03-01T00:00:00-02:00",
+      "note": "legislated 2025 date",
+      "expected": {"grain": "day", "holidayBeta": "Matariki", "type": "value", "value": "2025-06-20T00:00:00.000-02:00"}
+    },
+    {
+      "input": "st brigid's day",
+      "locale": "EnIe",
+      "note": "IE public holiday since 2023; 1st Monday of Feb. From the 2013 default ref, next table entry is 2023-02-06",
+      "expected": {"grain": "day", "holidayBeta": "St Brigid's Day", "type": "value", "value": "2023-02-06T00:00:00.000-02:00"}
+    },
+    {
+      "input": "saint brigid's day",
+      "locale": "EnIe",
+      "note": "full-word variant",
+      "expected": {"grain": "day", "holidayBeta": "St Brigid's Day", "type": "value", "value": "2023-02-06T00:00:00.000-02:00"}
+    },
+    {
+      "input": "lá fhéile bríde",
+      "locale": "EnIe",
+      "note": "Irish-language name",
+      "expected": {"grain": "day", "holidayBeta": "St Brigid's Day", "type": "value", "value": "2023-02-06T00:00:00.000-02:00"}
+    },
+    {
+      "input": "st brigid's day",
+      "locale": "EnIe",
+      "ref": "2025-01-01T00:00:00-02:00",
+      "note": "legislated 2025 date (1st Monday = Feb 3)",
+      "expected": {"grain": "day", "holidayBeta": "St Brigid's Day", "type": "value", "value": "2025-02-03T00:00:00.000-02:00"}
+    },
+    {
+      "input": "st brigid's day",
+      "locale": "EnIe",
+      "ref": "2030-01-15T00:00:00-02:00",
+      "note": "Friday exception: 1 Feb 2030 is a Friday, so the holiday is Feb 1 (not the first Monday)",
+      "expected": {"grain": "day", "holidayBeta": "St Brigid's Day", "type": "value", "value": "2030-02-01T00:00:00.000-02:00"}
     }
   ]
 }

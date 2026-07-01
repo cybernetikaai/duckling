@@ -436,25 +436,33 @@ fn gb_locale() {
         failures.join("\n"));
 }
 
-/// Beyond-Duckling extension: holidays introduced or federally recognized AFTER
-/// Duckling's holiday data froze (~2020-03) — Juneteenth National Independence
-/// Day (US, 2021), Indigenous Peoples' Day spelling variants (US), and the
-/// Canadian National Day for Truth and Reconciliation / Orange Shirt Day (2021),
-/// Emancipation Day (2021), and National Indigenous Peoples Day. These
-/// DELIBERATELY diverge from the oracle, which returns nothing for them; expected
-/// values are hand-authored against official government dates. Region-scoped, so
-/// they never leak into oracle-based region tests. See docs/RUST_PORT_PROGRESS.md.
+/// Beyond-Duckling extension: holidays absent from Duckling's frozen (~2020-03)
+/// data — introduced/renamed since (US Juneteenth National Independence Day,
+/// CA Truth and Reconciliation / Orange Shirt / Emancipation / National
+/// Indigenous Peoples Day, NZ Matariki + King's Birthday rename, IE St Brigid's
+/// Day) or simply never included (AU Queen's/King's Birthday). These DELIBERATELY
+/// diverge from the oracle, which returns nothing for them; expected values are
+/// hand-authored against official government dates. Region-scoped, so they never
+/// leak into oracle-based region tests. An optional per-case "ref" pins the
+/// reference (default = ctx()'s 2013-02-12) — used to lock the legislated
+/// date-table years for Matariki / St Brigid's Day. See docs/RUST_PORT_PROGRESS.md.
 #[test]
 fn modern_holidays() {
     let data: Value =
         serde_json::from_str(include_str!("../fixtures/modern_holidays.json")).unwrap();
-    let ctx = ctx();
+    let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(-2));
+    let default_ref = ctx().reference;
     let mut failures = Vec::new();
     let mut checked = 0usize;
     for c in data["cases"].as_array().unwrap() {
         checked += 1;
         let input = c["input"].as_str().unwrap();
         let locale = locale_of(c["locale"].as_str().unwrap());
+        let reference = match c.get("ref").and_then(|v| v.as_str()) {
+            Some(s) => s.parse().expect("ref"),
+            None => default_ref,
+        };
+        let ctx = duckling::ResolveContext { reference, zone: zone.clone(), with_latent: false };
         let exp = strip_values(c["expected"].clone());
         let got: Vec<Value> = duckling::parse_locale(input, &ctx, locale)
             .into_iter().filter(|e| e.dim == "time").map(|e| strip_values(e.value)).collect();

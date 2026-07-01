@@ -1168,6 +1168,33 @@ fn modern_holiday_rules(locale: Locale) -> Vec<Rule> {
                 || nth_dow_of_month_td(2, 1, 6),
             ),
         ],
+        Locale::EnNz => vec![
+            // Matariki (Māori New Year) — NZ public holiday since 2022, on a
+            // legislated Friday each year (no weekday rule). Table 2022–2052.
+            holiday_rule("Matariki", r"matariki", || {
+                crate::time::computed::computed_holiday_td(crate::time::computed::MATARIKI)
+            }),
+            // King's Birthday — NZ observes the sovereign's birthday on the 1st
+            // Monday of June (distinct from AU's 2nd Monday). Duckling has NZ
+            // "Queen's Birthday"; this adds the post-2022 King's Birthday rename
+            // (same date). Regex excludes "queen" to avoid duplicating the
+            // faithful NZ Queen's Birthday rule.
+            holiday_rule(
+                "King's Birthday",
+                r"(the )?(king|monarch|sovereign)'?s'? (official )?birthday",
+                || nth_dow_of_month_td(1, 1, 6),
+            ),
+        ],
+        Locale::EnIe => vec![
+            // St Brigid's Day / Lá Fhéile Bríde — IE public holiday since 2023:
+            // first Monday of February, except 1 Feb when it is a Friday. Exact
+            // legislated table (see ST_BRIGIDS_DAY) rather than a weekday rule.
+            holiday_rule(
+                "St Brigid's Day",
+                r"(st\.?|saint) brigid'?s day|l[áa] fh[ée]ile br[íi]de",
+                || crate::time::computed::computed_holiday_td(crate::time::computed::ST_BRIGIDS_DAY),
+            ),
+        ],
         _ => Vec::new(),
     }
 }

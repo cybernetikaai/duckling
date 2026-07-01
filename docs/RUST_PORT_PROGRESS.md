@@ -119,6 +119,7 @@ Branch: `rust-port-en-time`.
 | + tractable "other" holidays | 1069 / 1069 | 0 | 68 / 68 | **region_holidays 753**; +9 relative-date holidays: Election Day, Cyber Monday (days-after-nth-DOW) + Victoria Day, Reconciliation Day (nth-DOW-rel-date, predLastOf vs predNthAfter distinguished) |
 | + post-2020 holidays (extension) | 1069 / 1069 | 0 | 68 / 68 | **modern_holidays 8**; holidays introduced after Duckling froze (~2020-03): Juneteenth National Independence Day (US name), Indigenous Peoples' Day spelling variants (US), Truth and Reconciliation / Orange Shirt Day / Emancipation Day / National Indigenous Peoples Day (CA). Deliberately diverges from oracle (returns nothing) — see "Deliberate divergence: beyond-Duckling holidays" below |
 | + AU Queen's/King's Birthday (extension) | 1069 / 1069 | 0 | 68 / 68 | **modern_holidays 11**; Australia's Queen's Birthday (2nd Mon June, majority-state convention) + King's Birthday post-2022 rename — a major AU public holiday Duckling's AU rules never included (oracle returns nothing). Faithful AU port confirmed complete (all 28 EN/AU/Rules.hs holidays present) |
+| + NZ Matariki/King's + IE St Brigid's (extension) | 1069 / 1069 | 0 | 68 / 68 | **modern_holidays 20**; region audit found 3 more post-2020 public holidays the oracle lacks: NZ **Matariki** (2022, legislated Friday date-table 2022–2052), NZ **King's Birthday** (1st Mon June rename), IE **St Brigid's Day** (2023, exact date-table incl. the 1-Feb-Friday exception). Per-case `ref` pins the table years |
 
 ## Rule-level coverage audit
 
@@ -382,6 +383,20 @@ them as a small, region-scoped, clearly-labeled extension:
   itself is confirmed complete: all 28 holidays in `Duckling/Time/EN/AU/Rules.hs`
   are present (region_holidays), and AU Boxing/Christmas/New Year/Good
   Friday/Easter Monday resolve via the shared global + computed rules.
+- **NZ** — *Matariki* (Māori New Year; public holiday since 2022, observed on a
+  legislated Friday each year with no weekday rule — backed by an explicit
+  2022–2052 date table per the Te Kāhui o Matariki Public Holiday Act 2022) and
+  *King's Birthday* (the post-2022 rename of Duckling's faithful NZ *Queen's
+  Birthday*, 1st Monday of June — note this differs from AU's 2nd Monday).
+- **IE** — *St Brigid's Day* / *Lá Fhéile Bríde* (public holiday since 2023: the
+  first Monday of February, except when 1 Feb is a Friday, when it is 1 Feb).
+  Backed by an exact date table so the Friday exception (2030/2036/2041/2047) is
+  correct rather than approximated by a weekday rule.
+
+Matariki and St Brigid's Day use legislated date tables (like the computed lunar
+holidays) via the new `computed_holiday_td(&[(y,m,d)])` helper; a per-case `ref`
+in the fixture pins specific table years so the indexing — and St Brigid's
+1-Feb-Friday exception — are locked, not just the default 2013-ref first entry.
 
 These intentionally DIVERGE from the oracle — the same posture as the tz
 ground-truth and interval divergences (favor correctness over byte-fidelity to a
