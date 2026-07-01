@@ -77,6 +77,8 @@ Branch: `rust-port-en-time`.
 | + number.number-hours fix + by the end of <time> | 949 / 984 | 35 | 10 / 10 | "in 2.5 hours" (group-index bug), "by the end of next month" |
 | + spelled compound numerals (powers/multiply/sum) | 952 / 984 | 32 | 10 / 10 | "two thousand ten"->2010; spelled-year holidays |
 | + intersect ... for year (latent year) | 953 / 984 | 31 | 10 / 10 | "April 14, 2015" |
+| + frequency-aware intersect (dow ∩ rare date) | 955 / 984 | 29 | 10 / 10 | "Thu 15th"->Aug 15, "Jul 18, Fri"->2014 |
+| + fold am/pm into hh:mm (Form minutes) | 957 / 984 | 27 | 10 / 10 | "3:18am"->tomorrow; hh:mm+am/pm composes with pinned dates |
 
 ## How to run
 
@@ -94,20 +96,17 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru N-dow-from-now. contains **929/984 (94%)**, unique **926/984**, tz_stress **10/10** (timezone/DST fully green — the hard constraint). The holiday subagent completed (176→110); its Islamic/Hindu/Jewish/Orthodox + fixed-date holidays are committed.
+Cumulative thru hh:mm am/pm fold. contains **957/984 (97.3%)**, unique **954/984**, tz_stress **10/10** (timezone/DST fully green — the hard constraint). The holiday subagent's Islamic/Hindu/Jewish/Orthodox + fixed-date holidays are committed.
 
-Remaining **35** failures (the hard tail; each needs new infra or is a harness artifact):
-- **harness-strictness artifacts** (~7, NOT rule gaps): "right now"/"just now" (entity is "now" [substring]), "for a quarter past 3pm"×5 (entity is "a quarter past 3pm"). Duckling's corpus checks the best-entity value; our `full_range_time_values` requires the entity to span the whole input. Could relax the harness to "expected value among any entity" but that risks masking real gaps — leaving as-is.
-- **intersect-ordering (rare date ∩ frequent weekday)** (~4): "Thu 15th", "Jul 18, Fri", "Fri, Jul 18, 2014 07:00 PM" (+2 tz/hh variants) — intersecting a yearly date with a weekday iterates the weekday (frequent) and hits SAFE_MAX (10) before finding the match. Duckling merges TimeDatePredicate fields and orders the composition coarsest-first; my port runCompose-intersects and bounds each side at SAFE_MAX. Fix = reorder equal-grain intersect operands by frequency (or raise the outer bound), but it's broad/risky — deferred.
-- **"the second of march"** (1): ranking picks "the <cycle> of <time>" (second=grain) over the correct dom(2); model/ranking nuance.
-- **datetime combos** (remainder): "Fri, Jul 18, 2014 07:00 PM" (+19h00/19h) — deep multi-level named-day+comma+date+year+time composition (also blocked by intersect-ordering).
-- **timezone-tagged intervals** (~3): "9:30 - 11:00 CST" — needs `<datetime>-<datetime> (interval) timezone` with a `hasNoTimezone` guard (my attempt double-applied tz to already-tz'd ends like "15:00 GMT - 18:00 GMT" and regressed 3 — reverted). Requires adding a `has_timezone` flag to TimeData.
-- **hh:mm + am/pm roll** (~2): "3:18am"/"3:18a" resolve to today 3:18 not tomorrow — the am/pm fold is only done for pure hours; hh:mm uses the intersect path (today-leak). Needs folding ampm into the minute-composed time (store minute in the form, or a general compose-classification fix).
+Remaining **27** failures (the hard tail; each needs new infra or is a harness artifact):
+- **day-of-week + pinned specific date** (~3): "Fri, Jul 18, 2014 07:00 PM" (+19h00/19h). "Jul 18, 2014 07:00 PM" (no dow) now composes, but the leading "Fri," makes it dow ∩ a Minute-grain *specific dated instant*. Making the dow the inner predicate would fix it but regresses dow ∩ *recurring* tz time ("Thursday 8:00 PST" → wrong value) — opaque predicates can't distinguish the two. Real fix needs Duckling's TimeDatePredicate field-merge (dow+month+day+year+hour as one predicate ordered coarsest-first) rather than nested runCompose intersects.
+- **timezone-tagged intervals** (~3): "9:30 - 11:00 CST" — needs `<datetime>-<datetime> (interval) timezone` with a `has_timezone` flag on TimeData (my attempt double-applied tz to "15:00 GMT - 18:00 GMT" and regressed).
+- **harness-strictness artifacts** (~7, NOT rule gaps): "right now"/"just now", "for a quarter past 3pm"×5 — the correct entity is a substring; Duckling checks best-entity, our harness requires full-span.
 - **free-form intervals** (~3): "later than 9:30 but before 11:00 on Thursday", "later than 3:30pm but before 6pm", "tomorrow in between 1-2:30 ish".
-- **interval ranking** (~2): "July 13 - July 15", "Aug 8 - Aug 12" — a spurious dd/mon/yyyy parse ("13 - July 15"→2015) outscores the correct interval.
-- **misc**: "the ides of march", "first week of october 2014", "third tuesday after christmas 2014", "a day from right now", "today in one hour", "after 5 days", "Thursday 9 am (BST)", "2015-03-28 17:00:00/2015-03-29 21:00:00".
+- **interval ranking** (~2): "July 13 - July 15", "Aug 8 - Aug 12" — a spurious dd/mon/yyyy parse outscores the correct interval.
+- **misc** (~9): "the ides of march", "the second of march" (ranking: second=grain wins), "first week of october 2014", "third tuesday after christmas 2014", "a day from right now", "today in one hour", "after 5 days", "Thursday 9 am (BST)", "2015-03-28 17:00:00/2015-03-29 21:00:00".
 
-Next best targets: intersect-ordering for rare-date ∩ weekday (unblocks ~4 + the datetime combos) — the biggest remaining lever, but needs care to reorder equal-grain intersect operands by frequency without regressing working composes; then the `has_timezone` flag for interval-tz (~3 CST cases). Most remaining need real infra or are harness artifacts (~7).
+Next best targets: the `has_timezone` flag on TimeData -> `<datetime>-<datetime> (interval) timezone` (~3 CST cases, well-scoped); then consider a TimeDatePredicate field-merge for dow ∩ pinned-date combos (larger refactor). The rest are harness-strictness artifacts (~7) or ranking nuances.
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
