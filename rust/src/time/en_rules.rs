@@ -1262,6 +1262,22 @@ fn interval_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        Rule {
+            name: "in <duration> at <time-of-day>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"in")),
+                PatternItem::Predicate(Box::new(|t| matches!(t, Token::Duration(d) if d.grain > Grain::Hour))),
+                PatternItem::Regex(compile(r"at")),
+                PatternItem::Predicate(Box::new(is_a_time_of_day)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, dur, _, Token::Time(td)] => {
+                    let (v, g) = duration_of(dur)?;
+                    intersect_td(td, &in_duration_interval_td(v, g)?).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
         // "all week" / "rest of the week" / "the week" (ruleWeek). End is two
         // days before next week's start.
         Rule {
@@ -1293,6 +1309,22 @@ fn part_of_day_rules() -> Vec<Rule> {
             prod: Box::new(|_| {
                 Some(Token::Time(with_direction(IntervalDirection::After, now_td())))
             }),
+        },
+        Rule {
+            name: "last night".into(),
+            pattern: vec![PatternItem::Regex(compile(r"(late )?last night"))],
+            prod: Box::new(|tokens| {
+                let m = regex_groups(tokens)?.first()?.to_lowercase();
+                let hours = if m == "late " { 3 } else { 6 };
+                let start = duration_after_td(-hours, Grain::Hour, &today_td());
+                let iv = interval_td(IntervalType::Open, &start, &today_td())?;
+                Some(Token::Time(part_of_day(24 - hours, iv)))
+            }),
+        },
+        Rule {
+            name: "week-end".into(),
+            pattern: vec![PatternItem::Regex(compile(r"(week(\s|-)?end|wkend)s?"))],
+            prod: Box::new(|_| Some(Token::Time(weekend_td()))),
         },
         Rule {
             name: "after lunch/work/school".into(),
