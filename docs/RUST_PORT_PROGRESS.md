@@ -123,6 +123,7 @@ Branch: `rust-port-en-time`.
 | + spoken-form audit → 2 real fixes | 1069 / 1069 | 0 | 68 / 68 | **spoken_forms 53** (ASR idioms vs oracle). Found 2 faithful-port gaps the curated corpus missed: (1) written ordinals were truncated to first..tenth — ported the full `ruleOrdinals` (…twentieth, thirtieth…ninetieth) + `ruleCompositeOrdinals` ("twenty fifth"→25), fixing "the fifteenth of august", "december twenty fifth"; (2) added `<hour> oh <integer>` ("eight oh five am"→8:05). unique 1061/1069 unchanged |
 | + spoken-form audit II (breadth) | 1069 / 1069 | 0 | 68 / 68 | **spoken_forms 105**; +52 forms across 2 refs — 24h spoken ("fourteen thirty"), American "of"=to ("ten of three"→2:50), composite ordinals in dates ("march twenty first"), spelled datetimes, this/next part-of-day, week/month relatives. **0 divergences** — pass-1 fixes generalize; port faithfully matches oracle incl. forms Duckling rejects ("fourteen thirty"/"sixteen hundred"/"twenty twenty"-as-year → [] both sides) |
 | + spoken-interval audit → 1 real fix | 1069 / 1069 | 0 | 68 / 68 | **spoken_forms 142**; +37 interval/range forms across 2 refs ("nine to five", "monday to friday", "from half past nine to eleven"). Fixed "from now to 5pm": the tod/non-tod endpoint guard wrongly rejected an instant ("now", grain Second) paired with a tod → refined to allow Second-grain instants (trailing-date case "from 3pm to 5pm tomorrow" still routes correctly; differential 768 green) |
+| + spoken-duration composition audit | 1069 / 1069 | 0 | 68 / 68 | **spoken_forms 178**; +36 duration/directional compositions across 2 refs ("half an hour before noon", "twenty minutes after three", "an hour and a half ago", "any time after half nine", "three days before christmas", "within the next hour"). **0 divergences** — the original corpus's duration rules already cover this; the spoken/British variants compose correctly. Spoken surface now thoroughly validated |
 
 ## Rule-level coverage audit
 
@@ -463,6 +464,22 @@ Second, no tod form) tripped it. Refined the guard to allow a Second-grain insta
 "5pm tomorrow" carries an hour so it is never Second) — "from now to 5pm" now
 forms [now, 5pm] while the trailing-date case is unaffected (differential_corpus
 768 green, unique 1061/1069 unchanged). **spoken_forms** grew 105→142.
+
+**Spoken-duration composition audit (this iteration → 0 new bugs).** Fourth pass
+on the spoken surface, this time duration/directional compositions (42 forms × 2
+refs): "half an hour before noon", "twenty minutes after three", "an hour and a
+half ago", "any time after half nine" (British), "three days before christmas",
+"within the next hour", "two and a half hours from now". **0 divergences** — the
+original corpus already exercises the duration rules (`<duration> after/before/
+from/past`, `quarter/half/N past-to <hour>`), so the spoken/British-idiom variants
+compose correctly on top. Locked into **spoken_forms** (142→178).
+
+**Spoken surface status:** four differential passes (single times, breadth,
+intervals, duration compositions) → 3 real fixes (ordinals, `<hour> oh <min>`,
+`from now to <time>`), now 178 oracle-verified forms guarded. Diminishing returns
+reached — the remaining productive axes are *different in kind*: the Duration
+dimension as first-class output (a genuine capability gap for a speech assistant,
+noted below as a scope expansion), and ASR-noise robustness (disfluencies, repeats).
 
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 

@@ -710,6 +710,186 @@
    "input": "for the next three days",
    "wall": "[2013-02-13T00:00:00.000|2013-02-16T00:00:00.000]",
    "body": "next three days"
+  },
+  {
+   "input": "half an hour before noon",
+   "wall": "2013-02-12T11:30:00.000",
+   "body": "half an hour before noon"
+  },
+  {
+   "input": "an hour before midnight",
+   "wall": "2013-02-12T23:00:00.000",
+   "body": "an hour before midnight"
+  },
+  {
+   "input": "twenty minutes after three",
+   "wall": "2013-02-12T15:20:00.000",
+   "body": "twenty minutes after three"
+  },
+  {
+   "input": "ten minutes past the hour",
+   "wall": "2013-02-12T04:10:00.000",
+   "body": "ten minutes past the hour"
+  },
+  {
+   "input": "a quarter of an hour before five",
+   "wall": "2013-02-12T04:45:00.000",
+   "body": "a quarter of an hour before five"
+  },
+  {
+   "input": "half an hour after nine thirty",
+   "wall": "2013-02-12T10:00:00.000",
+   "body": "half an hour after nine thirty"
+  },
+  {
+   "input": "fifteen minutes before half past two",
+   "wall": "2013-02-12T14:15:00.000",
+   "body": "fifteen minutes before half past two"
+  },
+  {
+   "input": "an hour after noon",
+   "wall": "2013-02-12T13:00:00.000",
+   "body": "an hour after noon"
+  },
+  {
+   "input": "twenty minutes to three",
+   "wall": "2013-02-12T14:40:00.000",
+   "body": "twenty minutes to three"
+  },
+  {
+   "input": "ten minutes after eight",
+   "wall": "2013-02-12T08:10:00.000",
+   "body": "ten minutes after eight"
+  },
+  {
+   "input": "in about twenty minutes",
+   "wall": "2013-02-12T04:50:00.000",
+   "body": "in about twenty minutes"
+  },
+  {
+   "input": "half an hour ago",
+   "wall": "2013-02-12T04:00:00.000",
+   "body": "half an hour ago"
+  },
+  {
+   "input": "an hour and a half ago",
+   "wall": "2013-02-12T03:00:00.000",
+   "body": "an hour and a half ago"
+  },
+  {
+   "input": "two and a half hours from now",
+   "wall": "2013-02-12T07:00:00.000",
+   "body": "two and a half hours from now"
+  },
+  {
+   "input": "in a quarter of an hour",
+   "wall": "2013-02-12T04:45:00.000",
+   "body": "in a quarter of an hour"
+  },
+  {
+   "input": "in half an hour from now",
+   "wall": "2013-02-12T05:00:00.000",
+   "body": "in half an hour"
+  },
+  {
+   "input": "three quarters of an hour from now",
+   "wall": "2013-02-12T05:15:00.000",
+   "body": "three quarters of an hour from now"
+  },
+  {
+   "input": "a couple of hours ago",
+   "wall": "2013-02-12T02:30:00.000",
+   "body": "a couple of hours ago"
+  },
+  {
+   "input": "any time after half nine",
+   "wall": "[2013-02-12T09:30:00.000|None]",
+   "body": "after half nine"
+  },
+  {
+   "input": "not before five",
+   "wall": "[None|2013-02-12T05:00:00.000]",
+   "body": "before five"
+  },
+  {
+   "input": "sometime after noon",
+   "wall": "[2013-02-12T12:00:00.000|None]",
+   "body": "sometime after noon"
+  },
+  {
+   "input": "after half past six",
+   "wall": "[2013-02-12T06:30:00.000|None]",
+   "body": "after half past six"
+  },
+  {
+   "input": "no later than five pm",
+   "wall": "2013-02-12T17:00:00.000",
+   "body": "five pm"
+  },
+  {
+   "input": "any time before noon",
+   "wall": "[None|2013-02-12T12:00:00.000]",
+   "body": "before noon"
+  },
+  {
+   "input": "sometime tomorrow afternoon",
+   "wall": "[2013-02-13T12:00:00.000|2013-02-13T19:00:00.000]",
+   "body": "tomorrow afternoon"
+  },
+  {
+   "input": "later than half seven",
+   "wall": "2013-02-12T07:30:00.000",
+   "body": "half seven"
+  },
+  {
+   "input": "three days before christmas",
+   "wall": "2013-12-22T00:00:00.000",
+   "body": "three days before christmas"
+  },
+  {
+   "input": "two weeks after easter",
+   "wall": "2013-04-14T00:00:00.000",
+   "body": "two weeks after easter"
+  },
+  {
+   "input": "the day before new year's eve",
+   "wall": "2013-12-30T00:00:00.000",
+   "body": "the day before new year's eve"
+  },
+  {
+   "input": "two months from today",
+   "wall": "2013-04-12T00:00:00.000",
+   "body": "two months from today"
+  },
+  {
+   "input": "a fortnight from friday",
+   "wall": "2013-02-15T00:00:00.000",
+   "body": "a fortnight from friday"
+  },
+  {
+   "input": "within the next hour",
+   "wall": "2013-02-12T05:00:00.000",
+   "body": "next hour"
+  },
+  {
+   "input": "within two hours",
+   "wall": "[2013-02-12T04:30:00.000|2013-02-12T06:30:00.000]",
+   "body": "within two hours"
+  },
+  {
+   "input": "sometime in the next few days",
+   "wall": "[2013-02-13T00:00:00.000|2013-02-16T00:00:00.000]",
+   "body": "next few days"
+  },
+  {
+   "input": "in the next twenty minutes",
+   "wall": "[2013-02-12T04:31:00.000|2013-02-12T04:51:00.000]",
+   "body": "next twenty minutes"
+  },
+  {
+   "input": "for the next two hours",
+   "wall": "[2013-02-12T05:00:00.000|2013-02-12T07:00:00.000]",
+   "body": "next two hours"
   }
  ]
 }
