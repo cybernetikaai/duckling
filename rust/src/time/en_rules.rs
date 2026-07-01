@@ -669,6 +669,25 @@ fn day_of_month_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // "the ides of March" -> the 15th (Mar/May/Jul/Oct) or 13th otherwise.
+        Rule {
+            name: "the ides of <named-month>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"the ides? of")),
+                PatternItem::Predicate(Box::new(is_a_month)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(td)] => {
+                    let m = match td.form {
+                        Some(Form::Month { month }) => month as i64,
+                        _ => return None,
+                    };
+                    let dom = if [3, 5, 7, 10].contains(&m) { 15 } else { 13 };
+                    intersect_td(td, &day_of_month_td(dom)).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
         Rule {
             name: "<day-of-month> (ordinal or number) of <named-month>".into(),
             pattern: vec![
