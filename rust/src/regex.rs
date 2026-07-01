@@ -6,6 +6,7 @@ use fancy_regex::Regex;
 
 pub struct Re(Regex);
 
+#[derive(Clone)]
 pub struct RegexHit {
     pub start: usize,
     pub end: usize,

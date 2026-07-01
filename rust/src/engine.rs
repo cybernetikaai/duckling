@@ -10,19 +10,51 @@
 //! this avoids needing structural equality on `Token`. (Revisited in Phase 3
 //! when predicate combinations can yield distinct tokens at one span.)
 
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 use crate::document::Document;
+use crate::regex::{Re, RegexHit};
 use crate::types::{Node, PatternItem, Range, Rule, Token};
 
+/// Regex hits are invariant across a parse (they depend only on the document),
+/// but the saturating loop and the recursive route expansion would otherwise
+/// re-scan every regex many times. Precompute each distinct regex's hits once,
+/// keyed by the `Re`'s address (rules are compiled once per thread, so the `Re`
+/// instances — and their addresses — are stable for the whole parse).
+type RegexCache = HashMap<usize, Vec<RegexHit>>;
+
+fn re_key(re: &Re) -> usize {
+    re as *const Re as usize
+}
+
 pub fn parse_string(rules: &[Rule], doc: &Document) -> Vec<Node> {
+    let mut cache: RegexCache = HashMap::new();
+    for rule in rules {
+        for item in &rule.pattern {
+            if let PatternItem::Regex(re) = item {
+                cache.entry(re_key(re)).or_insert_with(|| re.all_hits(doc));
+            }
+        }
+    }
+    // A regex-only rule (no predicate item) matches only fixed regex hits, so it
+    // produces everything it ever will in the first round; skip it thereafter.
+    let has_predicate: Vec<bool> = rules
+        .iter()
+        .map(|r| r.pattern.iter().any(|it| matches!(it, PatternItem::Predicate(_))))
+        .collect();
+
     let mut stash: Vec<Node> = Vec::new();
     let mut emitted: HashSet<(String, usize, usize)> = HashSet::new();
+    let mut first = true;
     loop {
-        let snapshot = stash.clone();
-        let mut added = false;
-        for rule in rules {
-            for route in match_pattern(&rule.pattern, doc, &snapshot, None) {
+        // Collect this round's new nodes separately so match_pattern can read a
+        // frozen `&stash` without us cloning the whole (growing) stash each round.
+        let mut new_nodes: Vec<Node> = Vec::new();
+        for (rule, &has_pred) in rules.iter().zip(&has_predicate) {
+            if !first && !has_pred {
+                continue;
+            }
+            for route in match_pattern(&rule.pattern, doc, &stash, None, &cache) {
                 if route.is_empty() {
                     continue;
                 }
@@ -31,20 +63,21 @@ pub fn parse_string(rules: &[Rule], doc: &Document) -> Vec<Node> {
                     let start = route.first().unwrap().range.0;
                     let end = route.last().unwrap().range.1;
                     if emitted.insert((rule.name.clone(), start, end)) {
-                        stash.push(Node {
+                        new_nodes.push(Node {
                             range: Range(start, end),
                             token: tok,
                             rule: Some(rule.name.clone()),
                             children: route,
                         });
-                        added = true;
                     }
                 }
             }
         }
-        if !added {
+        first = false;
+        if new_nodes.is_empty() {
             break;
         }
+        stash.extend(new_nodes);
     }
     stash
 }
@@ -56,14 +89,15 @@ fn match_pattern(
     doc: &Document,
     stash: &[Node],
     from: Option<usize>,
+    cache: &RegexCache,
 ) -> Vec<Vec<Node>> {
     let Some((head, tail)) = items.split_first() else {
         return vec![Vec::new()];
     };
     let mut routes = Vec::new();
-    for hn in match_item(head, doc, stash, from) {
+    for hn in match_item(head, doc, stash, from, cache) {
         let end = hn.range.1;
-        for mut rest in match_pattern(tail, doc, stash, Some(end)) {
+        for mut rest in match_pattern(tail, doc, stash, Some(end), cache) {
             let mut route = Vec::with_capacity(rest.len() + 1);
             route.push(hn.clone());
             route.append(&mut rest);
@@ -73,18 +107,23 @@ fn match_pattern(
     routes
 }
 
-fn match_item(item: &PatternItem, doc: &Document, stash: &[Node], from: Option<usize>) -> Vec<Node> {
+fn match_item(
+    item: &PatternItem,
+    doc: &Document,
+    stash: &[Node],
+    from: Option<usize>,
+    cache: &RegexCache,
+) -> Vec<Node> {
     match item {
-        PatternItem::Regex(re) => re
-            .all_hits(doc)
-            .into_iter()
+        PatternItem::Regex(re) => cache[&re_key(re)]
+            .iter()
             .filter(|h| match from {
                 None => true,
                 Some(p) => doc.is_adjacent(p, h.start),
             })
             .map(|h| Node {
                 range: Range(h.start, h.end),
-                token: Token::RegexMatch(h.groups),
+                token: Token::RegexMatch(h.groups.clone()),
                 rule: None,
                 children: Vec::new(),
             })
