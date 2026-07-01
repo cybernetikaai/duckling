@@ -68,6 +68,8 @@ Branch: `rust-port-en-time`.
 | + beginning/end/early/mid/late of <named-month> | 889 / 984 | 95 | 10 / 10 | dom-range intervals within a month |
 | + <hour> <integer> / o'clock / half <integer> | 901 / 984 | 83 | 10 / 10 | "ten thirty", "3 oclock am", "half three" |
 | + season Closed, Mid-day, first..fifth <dow> of <time> | 909 / 984 | 75 | 10 / 10 | "this Summer", "midday", "first monday of last month" |
+| + <day> in <duration> / hence|ago + September regex | 923 / 984 | 61 | 10 / 10 | "March in a year", "thanksgiving 3 months ago"; Sept regex ordering |
+| + beginning-of-month capture fix + N <dow> from now | 929 / 984 | 55 | 10 / 10 | "beginning of January"; "3 fridays from now" |
 
 ## How to run
 
@@ -85,11 +87,18 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru last-weekend-of-month. contains **808/984**, unique **806/984**, tz_stress **10/10** (timezone/DST fully green — the hard constraint).
+Cumulative thru N-dow-from-now. contains **929/984 (94%)**, unique **926/984**, tz_stress **10/10** (timezone/DST fully green — the hard constraint). The holiday subagent completed (176→110); its Islamic/Hindu/Jewish/Orthodox + fixed-date holidays are committed.
 
-**A holiday subagent is running** (owns computed.rs + en_rules.rs holiday_rules): porting the ~62 computed/niche holidays (Ramadan/Islamic Hijri lists, Hindu lunar: diwali/holi/dussehra/pongal, Jewish: yom kippur/purim, Orthodox/Easter-relative: mardi gras/clean monday/lazarus, King's Day/Koningsdag shift, black friday, boss's day, ides, earth hour, GYSD). Duckling data lives in `Duckling/Time/Computed.hs` + `HolidayHelpers.hs`.
+Remaining ~55 failures (niche / harder):
+- **datetime combos** (~6): "Fri, Jul 18, 2014 07:00 PM", "Jul 18, Fri", "April 14, 2015", "Thu 15th", "the second of march" — named-day/comma/year composition with times.
+- **timezone-tagged intervals** (~3): "9:30 - 11:00 CST", "9h30 - 11h CST" — interval + trailing tz.
+- **"later than X but before Y"** (~3), **"tomorrow in between 1-2:30 ish"** — free-form interval phrasing.
+- **"for a quarter past 3pm"** (~5): harness requires full-range; the natural entity is [4,22] ("a quarter past 3pm") — Duckling's corpus checks best-entity value, not full-span. Harness-strictness artifact, not a rule gap.
+- **spelled-year holidays** (~3): "choti diwali two thousand nineteen", "Easter Sunday two thousand ten" — spelled-year ("two thousand ten") not parsed as a year.
+- **interval ranking** (~2): "July 13 - July 15" — a spurious dd/mon/yyyy parse ("13 - July 15"->2015) outscores the correct interval.
+- **misc**: "right now"/"just now", ASAP/"as soon as possible", "after lunch"/"after school", "all week"/"rest of the week", "today in one hour", "in 7 days at 5pm", "3:18am"/"3:18a", "330 p.m.", "the ides of march", "first week of october 2014".
 
-Remaining NON-holiday failures (do NOT touch en_rules.rs until the holiday subagent finishes): **spelled-out clock times** ("ten thirty am", "nine fifty nine a m", "at three twenty", "half three"); **o'clock am/pm** ("3 oclock am", "3 o'clock in the afternoon"); **"X yr"** (last/this/next yr); **midday / mid day**; **early/mid/late <named-month>** ("early March"); **at the beginning|end of <named-month>** ("end of April", "beginning of January"); **N <dow> from now** forward ("3 fridays from now"); **"for a quarter past 3pm"** (for-filler); datetime combos ("Fri, Jul 18, 2014 07:00 PM"); "all week"/"rest of the week". Next targets after subagent: at-the-beginning/end-of-named-month; midday; early/mid/late month; spelled-out times.
+Next targets: spelled-out year numerals ("two thousand ten" -> 2010, unblocks several holiday + Easter cases); "all week"/"rest of the week" (ruleWeek); datetime combos; then the interval-ranking spurious dd/mon/yyyy.
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
