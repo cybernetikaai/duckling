@@ -182,3 +182,38 @@ fn differential_corpus() {
     assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
         failures.iter().take(5000).cloned().collect::<Vec<_>>().join("\n"));
 }
+
+/// Reference-time differential: ref-sensitive inputs ("next tuesday", "end of the
+/// month", "in 3 days") cross-checked against the oracle across many reference
+/// instants (varied weekdays, month/year boundaries, leap days), all in the fixed
+/// -02:00 zone. The fixed-ref corpus/differential can't catch reference-dependent
+/// bugs (e.g. "this tuesday at 3" only broke when the reference day was Tuesday).
+/// Best-entity semantics; each case carries its own reference.
+#[test]
+fn ref_stress() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/ref_stress.json")).unwrap();
+    let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(-2));
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        let expected = &c["expected"];
+        if expected.is_null() {
+            continue;
+        }
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let reference: jiff::Timestamp = c["ref"].as_str().unwrap().parse().expect("reference");
+        let ctx = duckling::ResolveContext { reference, zone: zone.clone(), with_latent: false };
+        let exp = strip_values(expected.clone());
+        if !best_time_values(input, &ctx).iter().any(|g| g == &exp) {
+            failures.push(format!(
+                "[{}] {input:?}\n  expected {exp}\n  got      {:?}",
+                c["refLabel"], best_time_values(input, &ctx)
+            ));
+        }
+    }
+    eprintln!("ref_stress checked {checked}, {} failing", failures.len());
+    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
+        failures.iter().take(5000).cloned().collect::<Vec<_>>().join("\n"));
+}
