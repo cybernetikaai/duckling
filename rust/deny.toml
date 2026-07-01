@@ -1,0 +1,36 @@
+# cargo-deny — supply-chain hardening for the Rust port.
+# Run locally with:  cargo deny check
+# CI runs it on every PR touching rust/ (see .github/workflows/rust-ci.yml).
+
+[advisories]
+version = 2
+# Fails the build on any security vulnerability in the compiled dependency graph.
+# (Transitive "unmaintained" advisories are not flagged by default — e.g. jiff's
+# target-gated embedded `defmt` dep, which never compiles for our targets. Add a
+# documented `ignore = ["RUSTSEC-..."]` entry here if a specific one ever surfaces.)
+
+[licenses]
+version = 2
+confidence-threshold = 0.9
+# Permissive licenses only — exactly the set the current tree resolves to
+# (this crate is BSD-3-Clause; deps are MIT / Apache-2.0 / Unicode-3.0 / Unlicense).
+# A new dependency license is a deliberate review step: add it here on purpose.
+allow = [
+  "BSD-3-Clause",
+  "MIT",
+  "Apache-2.0",
+  "Unicode-3.0",
+  "Unlicense",
+]
+
+[bans]
+# Wildcard ("*") version requirements are forbidden — pin real ranges.
+wildcards = "deny"
+# Duplicate versions of the same crate are noise, not an error, in a tree this small.
+multiple-versions = "warn"
+
+[sources]
+# Only allow dependencies from crates.io; no unvetted git / alternate registries.
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
