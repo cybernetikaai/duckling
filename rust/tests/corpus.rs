@@ -237,6 +237,41 @@ fn may_is_latent() {
     assert!(!full_range_time_values("March", &default).is_empty(), "March must not be latent");
 }
 
+/// Timezone ground-truth: the product-critical requirement is correct offsets
+/// against authoritative IANA tzdata, NOT merely matching Duckling (whose corpus is
+/// DST-blind and whose oracle has a documented DST-boundary quirk). For each
+/// (zone, date) this resolves "3pm" with the reference at that date's local noon
+/// and asserts the resolved instant's offset equals what Python's zoneinfo assigns
+/// to that wall-clock — across 9 real zones spanning both hemispheres' DST.
+#[test]
+fn tz_truth() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/tz_truth.json")).unwrap();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let zone = jiff::tz::TimeZone::get(c["zone"].as_str().unwrap()).expect("zone");
+        let reference: jiff::Timestamp = c["refUtc"].as_str().unwrap().parse().expect("ref");
+        let want = c["expectedOffset"].as_str().unwrap();
+        let ctx = duckling::ResolveContext { reference, zone, with_latent: false };
+        // "3pm" resolves to the reference date's 15:00 in-zone; its value string
+        // ends with the RFC3339 offset the port assigned (e.g. "...15:00.000-04:00").
+        let got: Vec<String> = duckling::parse("3pm", &ctx).into_iter()
+            .filter(|e| e.dim == "time")
+            .filter_map(|e| e.value.get("value").and_then(|v| v.as_str()).map(|s| s.to_string()))
+            .collect();
+        let ok = got.iter().any(|v| v.len() >= 6 && &v[v.len() - 6..] == want);
+        if !ok {
+            failures.push(format!("[{} {}] expected offset {want}, got {got:?}",
+                c["zone"], c["date"]));
+        }
+    }
+    eprintln!("tz_truth checked {checked}, {} failing", failures.len());
+    assert!(failures.is_empty(), "{} tz-truth failures:\n{}", failures.len(),
+        failures.iter().take(200).cloned().collect::<Vec<_>>().join("\n"));
+}
+
 /// Multi-entity extraction: inputs with several times ("Monday or Tuesday",
 /// "9am Monday and 5pm Friday") where the ranker must select multiple non-
 /// overlapping best entities. Prior tests only checked the single best entity;
