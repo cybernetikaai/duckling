@@ -314,6 +314,49 @@ fn values_array() {
         failures.iter().take(50).cloned().collect::<Vec<_>>().join("\n"));
 }
 
+fn locale_of(s: &str) -> duckling::Locale {
+    match s {
+        "EnUs" => duckling::Locale::EnUs, "EnGb" => duckling::Locale::EnGb,
+        "EnCa" => duckling::Locale::EnCa, "EnAu" => duckling::Locale::EnAu,
+        "EnNz" => duckling::Locale::EnNz, "EnIn" => duckling::Locale::EnIn,
+        "EnIe" => duckling::Locale::EnIe, "EnZa" => duckling::Locale::EnZa,
+        "EnPh" => duckling::Locale::EnPh, "EnBz" => duckling::Locale::EnBz,
+        "EnJm" => duckling::Locale::EnJm, "EnTt" => duckling::Locale::EnTt,
+        _ => panic!("unknown locale {s}"),
+    }
+}
+
+/// Region-specific holidays (GB Guy Fawkes Day, AU ANZAC Day / Melbourne Cup, ZA
+/// Heritage Day, …), ported from Duckling's per-region Rules.hs and cross-checked
+/// against the oracle (locale=en_XX) across 2013/2015/2018 — so nth-weekday and
+/// easter-relative regional holidays are validated year-over-year. Each is resolved
+/// via parse_locale in its region. Best-entity semantics; per-case reference.
+#[test]
+fn region_holidays() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/region_holiday_check.json")).unwrap();
+    let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(-2));
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let locale = locale_of(c["locale"].as_str().unwrap());
+        let reference: jiff::Timestamp = c["ref"].as_str().unwrap().parse().expect("ref");
+        let ctx = duckling::ResolveContext { reference, zone: zone.clone(), with_latent: false };
+        let exp = strip_values(c["expected"].clone());
+        let got: Vec<Value> = duckling::parse_locale(input, &ctx, locale)
+            .into_iter().filter(|e| e.dim == "time").map(|e| strip_values(e.value)).collect();
+        if !got.iter().any(|g| g == &exp) {
+            failures.push(format!("[{:?} {}] {input:?}\n  expected {exp}\n  got      {got:?}",
+                c["locale"], c["ref"]));
+        }
+    }
+    eprintln!("region_holidays checked {checked}, {} failing", failures.len());
+    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(),
+        failures.iter().take(60).cloned().collect::<Vec<_>>().join("\n"));
+}
+
 /// All English regions' numeric-date conventions vs the oracle (locale=en_XX):
 /// month-first (US/CA/PH), day-first (GB/AU/NZ/IN/IE/BZ/JM/TT), and ZA's hybrid
 /// (no-year month-first, with-year day-first). null expected = the region rejects

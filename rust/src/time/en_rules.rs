@@ -998,6 +998,81 @@ fn mk_holiday(name: &str, mut td: TimeData) -> TimeData {
     td.holiday = Some(name.to_string());
     td
 }
+
+/// Region-specific holidays (GB/CA/AU/…), built from `fixtures/region_holidays.json`
+/// (extracted from Duckling's per-region Rules.hs). US adds none — its holidays are
+/// in the base table. Four date kinds are supported: fixed month/day, nth (or last,
+/// n=-1) weekday of month, fixed-date interval, and easter-relative offset. The 9
+/// "other" entries (Islamic-calendar, nth-relative-to-a-date, conditional) are
+/// skipped — documented as a known gap in the progress doc.
+fn region_holiday_rules(locale: Locale) -> Vec<Rule> {
+    let region = match locale {
+        Locale::EnUs => return Vec::new(),
+        Locale::EnGb => "GB",
+        Locale::EnCa => "CA",
+        Locale::EnAu => "AU",
+        Locale::EnNz => "NZ",
+        Locale::EnIn => "IN",
+        Locale::EnIe => "IE",
+        Locale::EnZa => "ZA",
+        Locale::EnPh => "PH",
+        Locale::EnBz => "BZ",
+        Locale::EnJm => "JM",
+        Locale::EnTt => "TT",
+    };
+    let data: serde_json::Value =
+        serde_json::from_str(include_str!("../../fixtures/region_holidays.json"))
+            .expect("region_holidays fixture");
+    let Some(arr) = data.get(region).and_then(|v| v.as_array()) else {
+        return Vec::new();
+    };
+    let mut rules = Vec::new();
+    for h in arr {
+        let name = h["name"].as_str().unwrap().to_string();
+        let re = h["regex"].as_str().unwrap().to_string();
+        let i = |k: &str| h[k].as_i64().unwrap();
+        // A constructor for the holiday's TimeData, by date kind. Returns None to
+        // skip (unsupported "other" kinds).
+        let make: Box<dyn Fn() -> Option<TimeData>> = match h["kind"].as_str().unwrap() {
+            "month_day" => {
+                let (m, d) = (i("month"), i("day"));
+                Box::new(move || Some(month_day_td(m, d)))
+            }
+            "nth_dow_of_month" => {
+                let (n, dow, m) = (i("n"), i("dow"), i("month"));
+                Box::new(move || {
+                    Some(if n == -1 {
+                        last_dow_of_month_td(dow, m)
+                    } else {
+                        nth_dow_of_month_td(n, dow, m)
+                    })
+                })
+            }
+            "interval" => {
+                let f = h["from"].as_array().unwrap();
+                let t = h["to"].as_array().unwrap();
+                let (m1, d1) = (f[0].as_i64().unwrap(), f[1].as_i64().unwrap());
+                let (m2, d2) = (t[0].as_i64().unwrap(), t[1].as_i64().unwrap());
+                // Closed: the oracle's `to` is the last day's end (e.g. Arbor Week
+                // Sep 1–7 → to = Sep 8), i.e. the 2nd endpoint is inclusive.
+                Box::new(move || {
+                    interval_td(IntervalType::Closed, &month_day_td(m1, d1), &month_day_td(m2, d2))
+                })
+            }
+            "easter_offset" => {
+                let days = i("days");
+                Box::new(move || Some(crate::time::computed::easter_shift_td(days)))
+            }
+            _ => continue, // "other": Islamic-calendar / conditional — skipped
+        };
+        rules.push(Rule {
+            name: format!("holiday[{region}]: {name}"),
+            pattern: vec![PatternItem::Regex(compile(&re))],
+            prod: Box::new(move |_| make().map(|td| Token::Time(mk_holiday(&name, td)))),
+        });
+    }
+    rules
+}
 fn holiday_rule(name: &'static str, re: &str, make: impl Fn() -> TimeData + 'static) -> Rule {
     Rule {
         name: format!("holiday: {name}"),
@@ -3112,6 +3187,7 @@ pub fn en_rules(locale: Locale) -> Vec<Rule> {
     rules.extend(holiday_rules());
     rules.extend(season_rules());
     rules.extend(numeric_date_rules(locale));
+    rules.extend(region_holiday_rules(locale));
     rules.extend(end_beginning_of_month_rules());
     rules.extend(end_beginning_year_week_rules());
     rules.extend(this_next_last_time_rules());

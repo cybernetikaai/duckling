@@ -1,0 +1,4477 @@
+{
+ "cases": [
+  {
+   "locale": "EnGb",
+   "input": "mothering sunday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mothering Sunday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "mothering sunday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mothering Sunday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "mothering sunday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mothering Sunday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "bank holiday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-12-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "bank holiday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-12-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "bank holiday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-12-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "battle of the boyne",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-07-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Battle of the Boyne",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "battle of the boyne",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-07-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Battle of the Boyne",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "battle of the boyne",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-07-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Battle of the Boyne",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "burns night",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-01-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Burns Night",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "burns night",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-01-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Burns Night",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "burns night",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-01-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Burns Night",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "guy fawkes day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Guy Fawkes Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "guy fawkes day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Guy Fawkes Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "guy fawkes day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Guy Fawkes Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "shakespeare day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-23T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Shakespeare Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "shakespeare day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-23T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Shakespeare Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "shakespeare day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-23T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Shakespeare Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "st andrew's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St Andrew's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "st andrew's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St Andrew's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "st andrew's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St Andrew's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "st. david's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St. David's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "st. david's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St. David's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "st. david's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St. David's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "victory in europe day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-08T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Victory in Europe Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "victory in europe day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-08T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Victory in Europe Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "victory in europe day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-08T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Victory in Europe Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "august bank holiday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "August Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "august bank holiday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "August Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "august bank holiday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-27T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "August Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "early may bank holiday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Early May Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "early may bank holiday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Early May Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "early may bank holiday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Early May Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "father's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "father's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "father's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "remembrance sunday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Remembrance Sunday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "remembrance sunday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-08T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Remembrance Sunday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "remembrance sunday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Remembrance Sunday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "thanksgiving day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "thanksgiving day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnGb",
+   "input": "thanksgiving day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "anniversary of the statute of westminster",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-12-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Anniversary of the Statute of Westminster",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "anniversary of the statute of westminster",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-12-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Anniversary of the Statute of Westminster",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "anniversary of the statute of westminster",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-12-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Anniversary of the Statute of Westminster",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "memorial day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-07-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Memorial Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "memorial day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-07-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Memorial Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "memorial day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-07-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Memorial Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "groundhog day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-02-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Groundhog Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "groundhog day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-02-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Groundhog Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "groundhog day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-02-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Groundhog Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "healthcare aide day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Healthcare Aide Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "healthcare aide day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Healthcare Aide Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "healthcare aide day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Healthcare Aide Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "national aboriginal day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Aboriginal Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "national aboriginal day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Aboriginal Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "national aboriginal day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Aboriginal Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "national flag of canada day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-02-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Flag of Canada Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "national flag of canada day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-02-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Flag of Canada Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "national flag of canada day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-02-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Flag of Canada Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "national tartan day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Tartan Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "national tartan day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Tartan Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "national tartan day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Tartan Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "nunavut day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-07-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Nunavut Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "nunavut day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-07-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Nunavut Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "nunavut day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-07-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Nunavut Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "remembrance day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Remembrance Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "remembrance day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Remembrance Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "remembrance day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Remembrance Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "st david's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St David's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "st david's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St David's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "st david's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St David's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "st. jean baptiste day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St. Jean Baptiste Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "st. jean baptiste day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St. Jean Baptiste Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "st. jean baptiste day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St. Jean Baptiste Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "the twelfth",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-07-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "The Twelfth",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "the twelfth",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-07-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "The Twelfth",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "the twelfth",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-07-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "The Twelfth",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "vimy ridge day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Vimy Ridge Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "vimy ridge day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Vimy Ridge Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "vimy ridge day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Vimy Ridge Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "civic holiday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Civic Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "civic holiday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Civic Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "civic holiday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Civic Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "family day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-02-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Family Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "family day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-02-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Family Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "family day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-02-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Family Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "father's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "father's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "father's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "gold cup parade",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Gold Cup Parade",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "gold cup parade",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Gold Cup Parade",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "gold cup parade",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Gold Cup Parade",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "heritage day in alberta",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Heritage Day in Alberta",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "heritage day in alberta",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Heritage Day in Alberta",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "heritage day in alberta",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Heritage Day in Alberta",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "labour day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-09-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "labour day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-09-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "labour day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-09-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "mother's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "mother's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "mother's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "royal st. john's regatta",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Royal St. John's Regatta",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "royal st. john's regatta",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Royal St. John's Regatta",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "royal st. john's regatta",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Royal St. John's Regatta",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "take our daughters and sons to work day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Take our Daughters and Sons to Work Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "take our daughters and sons to work day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Take our Daughters and Sons to Work Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "take our daughters and sons to work day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Take our Daughters and Sons to Work Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "thanksgiving day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "thanksgiving day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "thanksgiving day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-08T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "yukon's discovery day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Yukon's Discovery Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "yukon's discovery day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Yukon's Discovery Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "yukon's discovery day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Yukon's Discovery Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "easter tuesday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Easter Tuesday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "easter tuesday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Easter Tuesday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "easter tuesday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Easter Tuesday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "anzac day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "ANZAC Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "anzac day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "ANZAC Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "anzac day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "ANZAC Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "australia day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-01-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Australia Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "australia day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-01-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Australia Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "australia day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-01-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Australia Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "harmony day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Harmony Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "harmony day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Harmony Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "harmony day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Harmony Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "national sorry day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Sorry Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "national sorry day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Sorry Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "national sorry day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Sorry Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "queensland day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Queensland Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "queensland day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Queensland Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "queensland day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Queensland Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "remembrance day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Remembrance Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "remembrance day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Remembrance Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "remembrance day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Remembrance Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "take our daughters and sons to work day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-01-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Take our Daughters and Sons to Work Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "take our daughters and sons to work day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-01-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Take our Daughters and Sons to Work Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "take our daughters and sons to work day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-01-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Take our Daughters and Sons to Work Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "adelaide cup",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Adelaide Cup",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "adelaide cup",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Adelaide Cup",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "adelaide cup",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Adelaide Cup",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "administrative professionals' day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Administrative Professionals' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "administrative professionals' day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Administrative Professionals' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "administrative professionals' day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Administrative Professionals' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "canberra day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Canberra Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "canberra day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Canberra Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "canberra day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Canberra Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "eight hours day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Eight Hours Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "eight hours day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Eight Hours Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "eight hours day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Eight Hours Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "father's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-09-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "father's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-09-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "father's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-09-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "labour day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "labour day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "labour day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "melbourne cup day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Melbourne Cup Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "melbourne cup day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Melbourne Cup Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "melbourne cup day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Melbourne Cup Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "mother's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "mother's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "mother's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "national close the gap day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Close the Gap Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "national close the gap day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Close the Gap Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "national close the gap day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Close the Gap Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "national tree day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Tree Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "national tree day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Tree Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "national tree day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Tree Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "national schools tree day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Schools Tree Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "national schools tree day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Schools Tree Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "national schools tree day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-29T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Schools Tree Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "new south wales bank holiday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New South Wales Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "new south wales bank holiday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New South Wales Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "new south wales bank holiday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "New South Wales Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "picnic day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Picnic Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "picnic day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Picnic Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "picnic day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Picnic Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "recreation day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Recreation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "recreation day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Recreation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "recreation day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Recreation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "thanksgiving day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "thanksgiving day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "thanksgiving day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "western australia day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Western Australia Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "western australia day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Western Australia Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "western australia day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Western Australia Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "easter tuesday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Easter Tuesday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "easter tuesday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Easter Tuesday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "easter tuesday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Easter Tuesday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "anzac day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "ANZAC Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "anzac day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "ANZAC Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "anzac day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "ANZAC Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "guy fawkes night",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Guy Fawkes Night",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "guy fawkes night",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Guy Fawkes Night",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "guy fawkes night",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Guy Fawkes Night",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "waitangi day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-02-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Waitangi Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "waitangi day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-02-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Waitangi Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "waitangi day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-02-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Waitangi Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "administrative professionals' day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Administrative Professionals' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "administrative professionals' day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Administrative Professionals' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "administrative professionals' day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Administrative Professionals' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "father's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-09-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "father's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-09-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "father's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-09-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "labour day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "labour day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "labour day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "mother's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "mother's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "mother's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "queen's birthday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Queen's birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "queen's birthday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Queen's birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "queen's birthday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Queen's birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "thanksgiving day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "thanksgiving day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnNz",
+   "input": "thanksgiving day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "guru tegh bahadur's martyrdom day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Guru Tegh Bahadur's Martyrdom Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "guru tegh bahadur's martyrdom day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Guru Tegh Bahadur's Martyrdom Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "guru tegh bahadur's martyrdom day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Guru Tegh Bahadur's Martyrdom Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "independence day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Independence Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "independence day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Independence Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "independence day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Independence Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "labour day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "labour day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "labour day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "mahatma gandhi jayanti",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mahatma Gandhi Jayanti",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "mahatma gandhi jayanti",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mahatma Gandhi Jayanti",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "mahatma gandhi jayanti",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mahatma Gandhi Jayanti",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "republic day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-01-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Republic Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "republic day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-01-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Republic Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "republic day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-01-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Republic Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "shivaji jayanti",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-02-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Shivaji Jayanti",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "shivaji jayanti",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-02-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Shivaji Jayanti",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "shivaji jayanti",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-02-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Shivaji Jayanti",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "father's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "father's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "father's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "friendship day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Friendship Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "friendship day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Friendship Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "friendship day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Friendship Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "mother's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "mother's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "mother's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "thanksgiving day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "thanksgiving day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIn",
+   "input": "thanksgiving day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "august bank holiday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "August Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "august bank holiday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "August Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "august bank holiday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "August Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "early may bank holiday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Early May Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "early may bank holiday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Early May Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "early may bank holiday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Early May Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "father's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "father's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "father's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "mother's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "mother's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "mother's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "june bank holiday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "June Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "june bank holiday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "June Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "june bank holiday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "June Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "labour day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "labour day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "labour day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "october bank holiday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "October Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "october bank holiday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "October Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "october bank holiday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-29T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "October Bank Holiday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "thanksgiving day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "thanksgiving day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnIe",
+   "input": "thanksgiving day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "day of goodwill",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-12-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Day of Goodwill",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "day of goodwill",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-12-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Day of Goodwill",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "day of goodwill",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-12-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Day of Goodwill",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "day of reconciliation",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-12-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Day of Reconciliation",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "day of reconciliation",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-12-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Day of Reconciliation",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "day of reconciliation",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-12-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Day of Reconciliation",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "heritage day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-09-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Heritage Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "heritage day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-09-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Heritage Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "heritage day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-09-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Heritage Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "heroes' day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Heroes' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "heroes' day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Heroes' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "heroes' day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Heroes' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "labour day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "labour day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "labour day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "national women's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Women's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "national women's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Women's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "national women's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Women's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "workers' day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Workers' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "workers' day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Workers' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "workers' day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Workers' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "administrative professionals' day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-09-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Administrative Professionals' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "administrative professionals' day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-09-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Administrative Professionals' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "administrative professionals' day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-09-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Administrative Professionals' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "father's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "father's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "father's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "mother's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "mother's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "mother's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "thanksgiving day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "thanksgiving day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "thanksgiving day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "national arbor week",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "to": {
+     "value": "2013-09-08T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2013-09-01T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "National Arbor Week",
+    "type": "interval"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "national arbor week",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "to": {
+     "value": "2015-09-08T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2015-09-01T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "National Arbor Week",
+    "type": "interval"
+   }
+  },
+  {
+   "locale": "EnZa",
+   "input": "national arbor week",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "to": {
+     "value": "2018-09-08T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2018-09-01T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "National Arbor Week",
+    "type": "interval"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "arbor day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Arbor Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "arbor day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Arbor Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "arbor day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Arbor Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "bonifacio day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Bonifacio Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "bonifacio day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Bonifacio Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "bonifacio day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Bonifacio Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "independence day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Independence Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "independence day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Independence Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "independence day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Independence Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "labour day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "labour day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "labour day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "ninoy aquino day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Ninoy Aquino Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "ninoy aquino day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Ninoy Aquino Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "ninoy aquino day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Ninoy Aquino Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "people power anniversary",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-02-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "People Power Anniversary",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "people power anniversary",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-02-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "People Power Anniversary",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "people power anniversary",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-02-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "People Power Anniversary",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "rizal day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-12-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Rizal Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "rizal day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-12-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Rizal Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "rizal day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-12-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Rizal Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "the day of valor",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "The Day of Valor",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "the day of valor",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "The Day of Valor",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "the day of valor",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "The Day of Valor",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "father's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "father's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "father's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "mother's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "mother's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "mother's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "national elections day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Elections Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "national elections day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Elections Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "national elections day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Elections Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "national heroes' day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Heroes' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "national heroes' day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Heroes' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "national heroes' day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-27T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Heroes' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "parents' day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-12-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Parents' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "parents' day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-12-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Parents' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "parents' day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-12-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Parents' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "thanksgiving day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "thanksgiving day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnPh",
+   "input": "thanksgiving day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "garifuna settlement day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Garifuna Settlement Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "garifuna settlement day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Garifuna Settlement Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "garifuna settlement day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Garifuna Settlement Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "labour day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "labour day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "labour day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "national heroes and benefactors day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Heroes and Benefactors Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "national heroes and benefactors day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Heroes and Benefactors Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "national heroes and benefactors day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Heroes and Benefactors Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "pan american day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Pan American Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "pan american day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Pan American Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "pan american day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Pan American Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "st. george's caye day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-09-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St. George's Caye Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "st. george's caye day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-09-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St. George's Caye Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "st. george's caye day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-09-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St. George's Caye Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "father's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "father's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "father's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "mother's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "mother's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "mother's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "thanksgiving day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "thanksgiving day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnBz",
+   "input": "thanksgiving day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "labour day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-23T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "labour day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-23T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "labour day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-23T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "father's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "father's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "father's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "heroes' day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Heroes' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "heroes' day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Heroes' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "heroes' day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Heroes' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "mother's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "mother's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "mother's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "thanksgiving day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "thanksgiving day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnJm",
+   "input": "thanksgiving day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "indian arrival day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Indian Arrival Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "indian arrival day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Indian Arrival Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "indian arrival day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Indian Arrival Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "labour day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "labour day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "labour day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labour Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "spiritual baptist liberation day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Spiritual Baptist Liberation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "spiritual baptist liberation day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Spiritual Baptist Liberation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "spiritual baptist liberation day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Spiritual Baptist Liberation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "father's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "father's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "father's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "mother's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "mother's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "mother's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "thanksgiving day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "thanksgiving day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnTt",
+   "input": "thanksgiving day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  }
+ ]
+}

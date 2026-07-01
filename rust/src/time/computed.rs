@@ -64,6 +64,22 @@ fn time_computed_shift(ymd: &'static [(i16, i8, i8)], n: i64) -> Predicate {
     }))
 }
 
+/// A day-grain TimeData `n` days from Easter Sunday (Good Friday = -2, Easter
+/// Monday = +1, …). Exposed for the regional-holiday builder, which resolves
+/// easter-relative regional holidays (e.g. GB Mothering Sunday = easter-21).
+pub fn easter_shift_td(n: i64) -> TimeData {
+    TimeData {
+        pred: time_computed_shift(EASTER_SUNDAY, n),
+        grain: Grain::Day,
+        latent: false,
+        not_immediate: false,
+        form: None,
+        direction: None,
+        holiday: None,
+        has_timezone: false,
+    }
+}
+
 fn computed_holiday_shift(
     name: &'static str,
     re: &str,
