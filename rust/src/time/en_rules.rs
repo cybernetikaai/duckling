@@ -591,6 +591,20 @@ fn day_of_month_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // Grain-based variant (ruleDOMOfTimeMonth): accepts any month-grained
+        // time, e.g. "20 of next month", "20th of the previous month".
+        Rule {
+            name: "<day-of-month> (ordinal or number) of <month>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_dom_value)),
+                PatternItem::Regex(compile(r"of( the)?")),
+                PatternItem::Predicate(is_grain_of_time(Grain::Month)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [dom, _, Token::Time(td)] => intersect_dom(td, dom).map(Token::Time),
+                _ => None,
+            }),
+        },
         Rule {
             name: "<day-of-month> (ordinal or number) <named-month>".into(),
             pattern: vec![
