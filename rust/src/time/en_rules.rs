@@ -2905,7 +2905,7 @@ fn precision_and_era_rules() -> Vec<Rule> {
 
 pub fn en_rules() -> Vec<Rule> {
     let mut rules = vec![
-        instant("now", Grain::Second, 0, r"now|at\s+the\s+moment|atm"),
+        instant("now", Grain::Second, 0, r"(right |just )?now|at\s+the\s+moment|atm"),
         instant("today", Grain::Day, 0, r"todays?|at\s+this\s+time"),
         instant("tomorrow", Grain::Day, 1, r"tmrw?|tomm?or?rows?"),
         instant("yesterday", Grain::Day, -1, r"yesterdays?"),
