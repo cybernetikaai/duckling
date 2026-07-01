@@ -172,6 +172,30 @@
   {
    "input": "none",
    "value": 0
+  },
+  {
+   "input": "a dozen",
+   "value": 12
+  },
+  {
+   "input": "a dozen of",
+   "value": 12
+  },
+  {
+   "input": "two dozen",
+   "value": 24
+  },
+  {
+   "input": "2 dozens",
+   "value": 24
+  },
+  {
+   "input": "two hundred dozens",
+   "value": 2400
+  },
+  {
+   "input": "200 dozens",
+   "value": 2400
   }
  ]
 }

@@ -6,7 +6,7 @@ use super::NumeralData;
 use crate::regex::compile;
 use crate::types::{PatternItem, Rule, Token};
 
-const INFORMAL: &[&str] = &["single", "couple", "pair", "few", "dozen"];
+const INFORMAL: &[&str] = &["single", "couple", "pair", "few"];
 
 const UNITS: &[(&str, i64)] = &[
     ("zero", 0),
@@ -31,7 +31,6 @@ const UNITS: &[(&str, i64)] = &[
     ("ten", 10),
     ("eleven", 11),
     ("twelve", 12),
-    ("dozen", 12),
     ("thirteen", 13),
     ("fourteen", 14),
     ("fifteen", 15),
@@ -132,7 +131,7 @@ pub fn numeral_rules() -> Vec<Rule> {
         Rule {
             name: "integer (0..19)".into(),
             pattern: vec![PatternItem::Regex(compile(
-                r"(nineteen|eighteen|seventeen|sixteen|fifteen|fourteen|thirteen|twelve|eleven|ten|nine|eight|seven|six|five|four|three|two|one|zero|naught|nought|nil|none|zilch|single|(a )?(pair|couple)s?( of)?|(a )?few|dozens?)",
+                r"(nineteen|eighteen|seventeen|sixteen|fifteen|fourteen|thirteen|twelve|eleven|ten|nine|eight|seven|six|five|four|three|two|one|zero|naught|nought|nil|none|zilch|single|(a )?(pair|couple)s?( of)?|(a )?few)",
             ))],
             prod: Box::new(|tokens| {
                 let g = match tokens.first() {
@@ -150,6 +149,20 @@ pub fn numeral_rules() -> Vec<Rule> {
                     v as f64,
                     !INFORMAL.contains(&w),
                 )))
+            }),
+        },
+        // "a dozen", "two dozen", "two hundred dozens" (ruleDozen): 12,
+        // multipliable (so "two dozen" -> 2*12), not ok for time.
+        Rule {
+            name: "a dozen of".into(),
+            pattern: vec![PatternItem::Regex(compile(r"(a )?dozens?( of)?"))],
+            prod: Box::new(|_| {
+                Some(Token::Numeral(NumeralData {
+                    value: 12.0,
+                    ok_for_time: false,
+                    grain: None,
+                    multipliable: true,
+                }))
             }),
         },
         // 20..90
