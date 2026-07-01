@@ -1324,7 +1324,13 @@ fn part_of_day_rules() -> Vec<Rule> {
         Rule {
             name: "week-end".into(),
             pattern: vec![PatternItem::Regex(compile(r"(week(\s|-)?end|wkend)s?"))],
-            prod: Box::new(|_| Some(Token::Time(weekend_td()))),
+            prod: Box::new(|_| {
+                // Tag as a part-of-day (opens Fri 18:00) so this/last/next <time>
+                // will wrap it (Duckling's mkOkForThisNext); resolution unchanged.
+                let mut td = weekend_td();
+                td.form = Some(Form::PartOfDay { start_hour: 18 });
+                Some(Token::Time(td))
+            }),
         },
         Rule {
             name: "after lunch/work/school".into(),
