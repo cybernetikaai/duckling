@@ -24,7 +24,15 @@ Every Duckling EN dimension that has a corpus is ported and green against it:
 ## Requirements
 
 - Rust (stable), edition 2024 → **Rust 1.85+**. Install via [rustup](https://rustup.rs).
-- No system dependencies; all crates are pure-Rust (`jiff`, `fancy-regex`, `serde`).
+- No **build-time** system dependencies; all crates are pure-Rust (`jiff`,
+  `fancy-regex`, `serde`).
+- **Runtime (Unix): the system IANA tz database.** `jiff` resolves zones from
+  `/usr/share/zoneinfo` (the `tzdata` package) and derives every DST-correct
+  offset from it — so the full IANA database is available and stays current with
+  the OS. `tzdata` is present on standard Ubuntu/Debian/macOS; a *minimal*
+  container (distroless, `scratch`, slimmed Alpine/Ubuntu) must either install
+  `tzdata` or build `jiff` with `features = ["tzdb-bundle-always"]` to compile the
+  database into the binary. Without either, `TimeZone::get(...)` fails at runtime.
 
 ## Build
 
