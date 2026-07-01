@@ -74,6 +74,7 @@ Branch: `rust-port-en-time`.
 | + ASAP + after lunch/work/school | 941 / 984 | 43 | 10 / 10 | open-interval-after-now; meal part-of-day intervals |
 | + week (all/rest of the/the) | 943 / 984 | 41 | 10 / 10 | "all week", "rest of the week" |
 | + in <dur> at <tod>, last night, week-end (this/last) | 947 / 984 | 37 | 10 / 10 | "in 7 days at 5pm", "late last night", "this past weekend" |
+| + number.number-hours fix + by the end of <time> | 949 / 984 | 35 | 10 / 10 | "in 2.5 hours" (group-index bug), "by the end of next month" |
 
 ## How to run
 
@@ -93,16 +94,17 @@ Branch: `rust-port-en-time`.
 
 Cumulative thru N-dow-from-now. contains **929/984 (94%)**, unique **926/984**, tz_stress **10/10** (timezone/DST fully green — the hard constraint). The holiday subagent completed (176→110); its Islamic/Hindu/Jewish/Orthodox + fixed-date holidays are committed.
 
-Remaining ~55 failures (niche / harder):
-- **datetime combos** (~6): "Fri, Jul 18, 2014 07:00 PM", "Jul 18, Fri", "April 14, 2015", "Thu 15th", "the second of march" — named-day/comma/year composition with times.
-- **timezone-tagged intervals** (~3): "9:30 - 11:00 CST", "9h30 - 11h CST" — interval + trailing tz.
-- **"later than X but before Y"** (~3), **"tomorrow in between 1-2:30 ish"** — free-form interval phrasing.
-- **"for a quarter past 3pm"** (~5): harness requires full-range; the natural entity is [4,22] ("a quarter past 3pm") — Duckling's corpus checks best-entity value, not full-span. Harness-strictness artifact, not a rule gap.
-- **spelled-year holidays** (~3): "choti diwali two thousand nineteen", "Easter Sunday two thousand ten" — spelled-year ("two thousand ten") not parsed as a year.
-- **interval ranking** (~2): "July 13 - July 15" — a spurious dd/mon/yyyy parse ("13 - July 15"->2015) outscores the correct interval.
-- **misc**: "right now"/"just now", ASAP/"as soon as possible", "after lunch"/"after school", "all week"/"rest of the week", "today in one hour", "in 7 days at 5pm", "3:18am"/"3:18a", "330 p.m.", "the ides of march", "first week of october 2014".
+Remaining **35** failures (the hard tail; each needs new infra or is a harness artifact):
+- **harness-strictness artifacts** (~7, NOT rule gaps): "right now"/"just now" (entity is "now" [substring]), "for a quarter past 3pm"×5 (entity is "a quarter past 3pm"). Duckling's corpus checks the best-entity value; our `full_range_time_values` requires the entity to span the whole input. Could relax the harness to "expected value among any entity" but that risks masking real gaps — leaving as-is.
+- **spelled-out year numerals** (~4): "two thousand ten"→2010, "two thousand eighteen/nineteen" — needs thousand/hundred compound numerals (intersect-2-numbers / powers-of-ten machinery). Unblocks "Easter Sunday two thousand ten", "orthodox shrove monday ...", "choti diwali ...".
+- **datetime combos** (~5): "Fri, Jul 18, 2014 07:00 PM", "Jul 18, Fri", "April 14, 2015", "Thu 15th", "the second of march" — named-day + comma-absorb + date + time composition.
+- **timezone-tagged intervals** (~3): "9:30 - 11:00 CST" — needs `<datetime>-<datetime> (interval) timezone` with a `hasNoTimezone` guard (my attempt double-applied tz to already-tz'd ends like "15:00 GMT - 18:00 GMT" and regressed 3 — reverted). Requires adding a `has_timezone` flag to TimeData.
+- **hh:mm + am/pm roll** (~2): "3:18am"/"3:18a" resolve to today 3:18 not tomorrow — the am/pm fold is only done for pure hours; hh:mm uses the intersect path (today-leak). Needs folding ampm into the minute-composed time (store minute in the form, or a general compose-classification fix).
+- **free-form intervals** (~3): "later than 9:30 but before 11:00 on Thursday", "later than 3:30pm but before 6pm", "tomorrow in between 1-2:30 ish".
+- **interval ranking** (~2): "July 13 - July 15", "Aug 8 - Aug 12" — a spurious dd/mon/yyyy parse ("13 - July 15"→2015) outscores the correct interval.
+- **misc**: "the ides of march", "first week of october 2014", "third tuesday after christmas 2014", "a day from right now", "today in one hour", "after 5 days", "Thursday 9 am (BST)", "2015-03-28 17:00:00/2015-03-29 21:00:00".
 
-Next targets: spelled-out year numerals ("two thousand ten" -> 2010, unblocks several holiday + Easter cases); "all week"/"rest of the week" (ruleWeek); datetime combos; then the interval-ranking spurious dd/mon/yyyy.
+Next best targets: spelled-out year numerals (thousand-compounds — biggest coherent cluster, ~4 + composition); then datetime combos; then the `has_timezone` flag for interval-tz. `375/375`-style micro-gains remain but most need real infra.
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
