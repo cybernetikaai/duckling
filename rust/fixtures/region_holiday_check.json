@@ -4472,6 +4472,3555 @@
     "holidayBeta": "Thanksgiving Day",
     "type": "value"
    }
+  },
+  {
+   "locale": "EnUs",
+   "input": "thanksgiving day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "thanksgiving day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "thanksgiving day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thanksgiving Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "father's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "father's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "father's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "air force birthday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-09-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Air Force Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "air force birthday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-09-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Air Force Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "air force birthday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-09-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Air Force Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "alaska day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Alaska Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "alaska day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Alaska Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "alaska day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Alaska Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "american eagle day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "American Eagle Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "american eagle day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "American Eagle Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "american eagle day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "American Eagle Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "army birthday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Army Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "army birthday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Army Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "army birthday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Army Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "bennington battle day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Bennington Battle Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "bennington battle day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Bennington Battle Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "bennington battle day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Bennington Battle Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "bunker hill day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Bunker Hill Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "bunker hill day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Bunker Hill Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "bunker hill day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Bunker Hill Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "california admission day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-09-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "California Admission Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "california admission day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-09-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "California Admission Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "california admission day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-09-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "California Admission Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "cinco de mayo",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Cinco de Mayo",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "cinco de mayo",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Cinco de Mayo",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "cinco de mayo",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Cinco de Mayo",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "citizenship day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-09-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Citizenship Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "citizenship day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-09-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Citizenship Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "citizenship day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-09-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Citizenship Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "coast guard birthday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Coast Guard Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "coast guard birthday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Coast Guard Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "coast guard birthday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Coast Guard Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "colorado day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Colorado Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "colorado day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Colorado Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "colorado day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Colorado Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "constitution day and citizenship day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-09-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Constitution Day and Citizenship Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "constitution day and citizenship day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-09-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Constitution Day and Citizenship Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "constitution day and citizenship day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-09-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Constitution Day and Citizenship Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "c\u00e9sar ch\u00e1vez day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "C\u00e9sar Ch\u00e1vez Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "c\u00e9sar ch\u00e1vez day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "C\u00e9sar Ch\u00e1vez Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "c\u00e9sar ch\u00e1vez day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-31T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "C\u00e9sar Ch\u00e1vez Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "d-day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "D-Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "d-day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "D-Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "d-day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "D-Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "day after christmas day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-12-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Day After Christmas Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "day after christmas day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-12-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Day After Christmas Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "day after christmas day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-12-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Day After Christmas Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "elizabeth peratrovich day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-02-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Elizabeth Peratrovich Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "elizabeth peratrovich day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-02-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Elizabeth Peratrovich Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "elizabeth peratrovich day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-02-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Elizabeth Peratrovich Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "evacuation day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Evacuation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "evacuation day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Evacuation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "evacuation day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Evacuation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "father damien day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father Damien Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "father damien day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father Damien Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "father damien day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Father Damien Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "feast of our lady of guadalupe",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-12-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Feast of Our Lady of Guadalupe",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "feast of our lady of guadalupe",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-12-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Feast of Our Lady of Guadalupe",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "feast of our lady of guadalupe",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-12-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Feast of Our Lady of Guadalupe",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "flag day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Flag Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "flag day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Flag Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "flag day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Flag Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "groundhog day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-02-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Groundhog Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "groundhog day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-02-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Groundhog Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "groundhog day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-02-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Groundhog Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "harvey milk day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Harvey Milk Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "harvey milk day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Harvey Milk Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "harvey milk day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Harvey Milk Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "inauguration day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-01-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Inauguration Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "inauguration day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-01-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Inauguration Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "inauguration day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-01-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Inauguration Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "independence day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-07-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Independence Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "independence day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-07-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Independence Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "independence day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-07-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Independence Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "juneteenth",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Juneteenth",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "juneteenth",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Juneteenth",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "juneteenth",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Juneteenth",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "kamehameha day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Kamehameha Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "kamehameha day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Kamehameha Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "kamehameha day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Kamehameha Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "kansas day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-01-29T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Kansas Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "kansas day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-01-29T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Kansas Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "kansas day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-01-29T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Kansas Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "kent state shootings remembrance",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Kent State Shootings Remembrance",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "kent state shootings remembrance",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Kent State Shootings Remembrance",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "kent state shootings remembrance",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Kent State Shootings Remembrance",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "loyalty day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Loyalty Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "loyalty day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Loyalty Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "loyalty day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Loyalty Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "leif erikson day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Leif Erikson Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "leif erikson day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Leif Erikson Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "leif erikson day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Leif Erikson Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "lincoln's birthday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-02-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Lincoln's Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "lincoln's birthday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-02-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Lincoln's Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "lincoln's birthday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-02-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Lincoln's Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "linus pauling day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Linus Pauling Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "linus pauling day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Linus Pauling Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "linus pauling day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-02-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Linus Pauling Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "lyndon baines johnson day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-27T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Lyndon Baines Johnson Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "lyndon baines johnson day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-27T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Lyndon Baines Johnson Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "lyndon baines johnson day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-27T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Lyndon Baines Johnson Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "marine corps birthday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Marine Corps Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "marine corps birthday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Marine Corps Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "marine corps birthday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Marine Corps Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "maryland day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Maryland Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "maryland day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Maryland Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "maryland day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Maryland Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national aviation day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Aviation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national aviation day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Aviation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national aviation day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Aviation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national freedom day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Freedom Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national freedom day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Freedom Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national freedom day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Freedom Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national guard birthday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Guard Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national guard birthday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Guard Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national guard birthday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-12-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Guard Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national korean war veterans armistice day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-07-27T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Korean War Veterans Armistice Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national korean war veterans armistice day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-07-27T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Korean War Veterans Armistice Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national korean war veterans armistice day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-07-27T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Korean War Veterans Armistice Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national maritime day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Maritime Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national maritime day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Maritime Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national maritime day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Maritime Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national missing children's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Missing Children's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national missing children's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Missing Children's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national missing children's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Missing Children's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national nurses day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Nurses Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national nurses day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Nurses Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national nurses day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Nurses Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national tartan day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Tartan Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national tartan day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Tartan Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national tartan day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Tartan Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "navy birthday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Navy Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "navy birthday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Navy Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "navy birthday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Navy Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "oklahoma day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Oklahoma Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "oklahoma day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Oklahoma Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "oklahoma day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Oklahoma Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "pan american aviation day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-12-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Pan American Aviation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "pan american aviation day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-12-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Pan American Aviation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "pan american aviation day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-12-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Pan American Aviation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "pascua florida day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Pascua Florida Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "pascua florida day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Pascua Florida Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "pascua florida day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Pascua Florida Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "patriot day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-09-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Patriot Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "patriot day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-09-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Patriot Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "patriot day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-09-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Patriot Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "peace officers memorial day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Peace Officers Memorial Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "peace officers memorial day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Peace Officers Memorial Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "peace officers memorial day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Peace Officers Memorial Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "pearl harbor remembrance day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-12-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Pearl Harbor Remembrance Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "pearl harbor remembrance day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-12-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Pearl Harbor Remembrance Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "pearl harbor remembrance day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-12-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Pearl Harbor Remembrance Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "pioneer day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-07-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Pioneer Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "pioneer day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-07-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Pioneer Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "pioneer day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-07-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Pioneer Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "prince jonah kuhio kalanianaole day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Prince Jonah Kuhio Kalanianaole Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "prince jonah kuhio kalanianaole day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Prince Jonah Kuhio Kalanianaole Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "prince jonah kuhio kalanianaole day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Prince Jonah Kuhio Kalanianaole Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "purple heart day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Purple Heart Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "purple heart day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Purple Heart Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "purple heart day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Purple Heart Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "read across america day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Read Across America Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "read across america day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Read Across America Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "read across america day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Read Across America Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "rhode island independence day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Rhode Island Independence Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "rhode island independence day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Rhode Island Independence Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "rhode island independence day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Rhode Island Independence Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "rosa parks day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-02-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Rosa Parks Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "rosa parks day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-02-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Rosa Parks Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "rosa parks day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-02-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Rosa Parks Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "san jacinto day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "San Jacinto Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "san jacinto day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "San Jacinto Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "san jacinto day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "San Jacinto Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "self-injury awareness day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Self-Injury Awareness Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "self-injury awareness day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Self-Injury Awareness Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "self-injury awareness day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Self-Injury Awareness Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "senior citizens day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Senior Citizens Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "senior citizens day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Senior Citizens Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "senior citizens day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Senior Citizens Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "siblings day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Siblings Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "siblings day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Siblings Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "siblings day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Siblings Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "st nicholas' day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-12-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St Nicholas' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "st nicholas' day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-12-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St Nicholas' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "st nicholas' day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-12-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St Nicholas' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "st. david's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St. David's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "st. david's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St. David's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "st. david's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "St. David's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "statehood day in arizona",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-02-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Statehood Day in Arizona",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "statehood day in arizona",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-02-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Statehood Day in Arizona",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "statehood day in arizona",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-02-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Statehood Day in Arizona",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "stephen foster memorial day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-01-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Stephen Foster Memorial Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "stephen foster memorial day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-01-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Stephen Foster Memorial Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "stephen foster memorial day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-01-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Stephen Foster Memorial Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "susan b anthony's birthday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-02-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Susan B Anthony's Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "susan b anthony's birthday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-02-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Susan B Anthony's Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "susan b anthony's birthday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-02-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Susan B Anthony's Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "texas independence day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Texas Independence Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "texas independence day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Texas Independence Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "texas independence day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Texas Independence Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "thomas jefferson's birthday",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thomas Jefferson's Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "thomas jefferson's birthday",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thomas Jefferson's Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "thomas jefferson's birthday",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Thomas Jefferson's Birthday",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "truman day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-08T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Truman Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "truman day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-08T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Truman Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "truman day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-08T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Truman Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "veterans day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Veterans Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "veterans day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Veterans Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "veterans day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Veterans Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "west virginia day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-06-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "West Virginia Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "west virginia day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "West Virginia Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "west virginia day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-06-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "West Virginia Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "white cane safety day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "White Cane Safety Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "white cane safety day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "White Cane Safety Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "white cane safety day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "White Cane Safety Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "women's equality day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Women's Equality Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "women's equality day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Women's Equality Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "women's equality day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Women's Equality Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "wright brothers day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-12-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Wright Brothers Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "wright brothers day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-12-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Wright Brothers Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "wright brothers day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-12-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Wright Brothers Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "arbor day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Arbor Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "arbor day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Arbor Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "arbor day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-27T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Arbor Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "armed forces day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Armed Forces Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "armed forces day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Armed Forces Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "armed forces day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Armed Forces Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "casimir pulaski day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Casimir Pulaski Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "casimir pulaski day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Casimir Pulaski Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "casimir pulaski day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Casimir Pulaski Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "child health day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Child Health Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "child health day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Child Health Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "child health day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Child Health Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "columbus day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Columbus Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "columbus day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Columbus Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "columbus day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-08T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Columbus Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "daylight saving start day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Daylight Saving Start Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "daylight saving start day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-08T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Daylight Saving Start Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "daylight saving start day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Daylight Saving Start Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "daylight saving end day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-11-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Daylight Saving End Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "daylight saving end day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-11-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Daylight Saving End Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "daylight saving end day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-11-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Daylight Saving End Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "employee appreciation day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Employee Appreciation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "employee appreciation day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Employee Appreciation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "employee appreciation day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Employee Appreciation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "friendship day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-04T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Friendship Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "friendship day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Friendship Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "friendship day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Friendship Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "gold star mother's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-09-29T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Gold Star Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "gold star mother's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-09-27T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Gold Star Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "gold star mother's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-09-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Gold Star Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "indigenous people's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-14T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Indigenous People's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "indigenous people's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Indigenous People's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "indigenous people's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-08T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Indigenous People's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "labor day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-09-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labor Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "labor day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-09-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labor Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "labor day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-09-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Labor Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "lee jackson day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-01-11T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Lee Jackson Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "lee jackson day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-01-09T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Lee Jackson Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "lee jackson day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-01-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Lee Jackson Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "memorial day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-27T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Memorial Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "memorial day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Memorial Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "memorial day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Memorial Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "mother's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "mother's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "mother's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Mother's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national cleanup day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-09-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National CleanUp Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national cleanup day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-09-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National CleanUp Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national cleanup day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-09-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National CleanUp Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national day of prayer",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Day of Prayer",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national day of prayer",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-07T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Day of Prayer",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national day of prayer",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Day of Prayer",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national defense transportation day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Defense Transportation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national defense transportation day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Defense Transportation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national defense transportation day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Defense Transportation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national pow/mia recognition day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-09-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National POW/MIA Recognition Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national pow/mia recognition day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-09-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National POW/MIA Recognition Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national pow/mia recognition day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-09-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National POW/MIA Recognition Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national wear red day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-02-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Wear Red Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national wear red day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-02-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Wear Red Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "national wear red day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-02-02T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Wear Red Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "native americans' day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-09-23T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Native Americans' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "native americans' day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-09-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Native Americans' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "native americans' day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-09-24T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Native Americans' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "nevada day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Nevada Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "nevada day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Nevada Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "nevada day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Nevada Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "parents' day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-07-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Parents' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "parents' day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-07-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Parents' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "parents' day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-07-22T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Parents' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "patriots' day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Patriots' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "patriots' day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Patriots' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "patriots' day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Patriots' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "robert e. lee day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-01-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Robert E. Lee Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "robert e. lee day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-01-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Robert E. Lee Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "robert e. lee day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-01-15T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Robert E. Lee Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "seward's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Seward's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "seward's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-30T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Seward's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "seward's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Seward's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "sweetest day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-10-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Sweetest Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "sweetest day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-10-17T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Sweetest Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "sweetest day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-10-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Sweetest Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "take our daughters and sons to work day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-04-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Take our Daughters and Sons to Work Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "take our daughters and sons to work day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-04-23T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Take our Daughters and Sons to Work Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "take our daughters and sons to work day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-04-26T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Take our Daughters and Sons to Work Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "town meeting day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-03-05T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Town Meeting Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "town meeting day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-03-03T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Town Meeting Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "town meeting day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-03-06T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Town Meeting Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "victory day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-08-12T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Victory Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "victory day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-08-10T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Victory Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "victory day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-08-13T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Victory Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "president's day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-02-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "President's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "president's day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-02-16T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "President's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "president's day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-02-19T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "President's Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "kwanzaa",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "to": {
+     "value": "2013-01-02T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2012-12-26T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Kwanzaa",
+    "type": "interval"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "kwanzaa",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "to": {
+     "value": "2015-01-02T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2014-12-26T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Kwanzaa",
+    "type": "interval"
+   }
+  },
+  {
+   "locale": "EnUs",
+   "input": "kwanzaa",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "to": {
+     "value": "2018-01-02T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "from": {
+     "value": "2017-12-26T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "holidayBeta": "Kwanzaa",
+    "type": "interval"
+   }
   }
  ]
 }

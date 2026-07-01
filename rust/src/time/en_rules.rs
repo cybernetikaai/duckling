@@ -1007,7 +1007,7 @@ fn mk_holiday(name: &str, mut td: TimeData) -> TimeData {
 /// skipped — documented as a known gap in the progress doc.
 fn region_holiday_rules(locale: Locale) -> Vec<Rule> {
     let region = match locale {
-        Locale::EnUs => return Vec::new(),
+        Locale::EnUs => "US",
         Locale::EnGb => "GB",
         Locale::EnCa => "CA",
         Locale::EnAu => "AU",
