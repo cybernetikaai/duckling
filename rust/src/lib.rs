@@ -4,6 +4,9 @@
 //! is the oracle; every rule is driven red->green against it. See
 //! `docs/superpowers/plans/2026-06-30-duckling-rust-en-time.md`.
 
+// The port contains zero `unsafe`; forbid it so that stays true.
+#![forbid(unsafe_code)]
+
 pub mod document;
 pub mod duration;
 pub mod engine;

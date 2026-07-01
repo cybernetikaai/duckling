@@ -1,3 +1,4 @@
+#![forbid(unsafe_code)]
 //! Command-line interface for the duckling time parser.
 //!
 //! Parses English natural-language time / duration / ordinal expressions and
