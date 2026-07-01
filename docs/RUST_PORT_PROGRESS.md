@@ -110,6 +110,7 @@ Branch: `rust-port-en-time`.
 | + robustness audit (2 fixes) | 1069 / 1069 | 0 | 68 / 68 | adversarial-input fuzz; fixed panic (jiff Span overflow in add → try_*) + hang (predNth take(n+2) over infinite series → MAX_NTH cap) |
 | + `values` alternatives array | 1069 / 1069 | 0 | 68 / 68 | **values_array 60**; emit Duckling's `values` (next-occurrence alternatives); last output feature, oracle-verified |
 | + values-array covering/ref cases | 1069 / 1069 | 0 | 68 / 68 | **values_array 69**; alternatives correct across day/year references (ongoing holidays, covering hour, passed tod) |
+| + numeric-date locale audit | 1069 / 1069 | 0 | 68 / 68 | US M/D/Y convention matches oracle ("3/4/2015"→Mar 4); D/M out-of-range-month rejected; +8 differential, +4 negatives |
 
 ## Rule-level coverage audit
 
