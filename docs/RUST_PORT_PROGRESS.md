@@ -85,6 +85,7 @@ Branch: `rust-port-en-time`.
 | + <ordinal> <cycle> of <time> notImmediate | 964 / 984 | 20 | 10 / 10 | "first week of October 2014" -> Oct 6 (skips covering week) |
 | + dd/mon separator fix + later-than interval | 969 / 984 | 15 | 10 / 10 | "July 13 - July 15"; "later than 3:30pm but before 6pm" |
 | + nth <time> after <time> | 970 / 984 | 14 | 10 / 10 | "third tuesday after christmas 2014" -> 2015-01-13 |
+| + <datetime>/<datetime> (interval) | 971 / 984 | 13 | 10 / 10 | "2015-03-28 17:00:00/2015-03-29 21:00:00" |
 
 ## How to run
 
@@ -102,15 +103,14 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru nth-time-after. contains **970/984 (98.6%)**, unique **967/984**, tz_stress **10/10** (timezone/DST fully green — the hard constraint). The holiday subagent's Islamic/Hindu/Jewish/Orthodox + fixed-date holidays are committed.
+Cumulative thru slash-interval. contains **971/984 (98.7%)**, unique **968/984**, tz_stress **10/10** (timezone/DST fully green — the hard constraint). The holiday subagent's Islamic/Hindu/Jewish/Orthodox + fixed-date holidays are committed.
 
-Remaining **14** failures — the port is at the clean-fix ceiling. Of these, **~9 are harness-strictness artifacts, not rule gaps**: the correct value IS produced but at a sub-range, and our `full_range_time_values` requires the entity to span the whole input, whereas Duckling's corpus checks the best entity. These are:
+Remaining **13** failures — the port is at the clean-fix ceiling. Of these, **~9 are harness-strictness artifacts, not rule gaps**: the correct value IS produced but at a sub-range, and our `full_range_time_values` requires the entity to span the whole input, whereas Duckling's corpus checks the best entity. These are:
 - "right now" / "just now" (entity is "now"), "for a quarter past 3pm"×5 (entity is "a quarter past 3pm"), "a day from right now" (entity is "a day from now"; "right" unconsumed), "today in one hour" (entity is "in one hour" -> 05:30). So **effective behavior-compatibility is ~979/984 (99.5%)**.
 
-The **~5 genuine remaining gaps**, each needing real infra:
+The **~4 genuine remaining gaps**, each needing disproportionate effort:
 - **day-of-week + pinned specific date** (3): "Fri, Jul 18, 2014 07:00 PM" (+19h00/19h). The leading "Fri," makes it dow ∩ a Minute-grain *specific dated instant*; making the dow inner would fix it but regresses dow ∩ *recurring* tz time ("Thursday 8:00 PST"). Real fix = Duckling's TimeDatePredicate field-merge (dow+month+day+year+hour ordered coarsest-first) rather than nested runCompose intersects — a substantial architecture change.
 - **"the second of march"** (1): ranking picks "the <cycle> of <time>" (second=grain) over the correct dom(2) — a naive-Bayes model nuance.
-- **"2015-03-28 17:00:00/2015-03-29 21:00:00"** (1): slash-separated datetime interval; adding "/" to the interval separator risks regressing "9/11"-style dates.
 
 Next best target: the TimeDatePredicate field-merge (unblocks the 3 dow-pinned combos and would let dow-inner ordering generalize safely) — but it's a core-architecture refactor, so weigh against the marginal 3-case gain. Otherwise the corpus is effectively complete; timezone/DST is fully green (10/10).
 
