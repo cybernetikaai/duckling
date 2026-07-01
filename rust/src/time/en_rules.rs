@@ -2048,6 +2048,52 @@ fn holiday_rules() -> Vec<Rule> {
     ]
 }
 
+/// Year with era, and the "about/sharp" precision markers (which just mark the
+/// wrapped time non-latent). Ports of ruleYearADBC / ruleTODPrecision /
+/// rulePrecisionTOD.
+fn precision_and_era_rules() -> Vec<Rule> {
+    vec![
+        Rule {
+            name: "<year> (bc|ad)".into(),
+            pattern: vec![
+                PatternItem::Predicate(is_integer_between(1, 10000)),
+                PatternItem::Regex(compile(r"(a\.?d\.?|b\.?c\.?)")),
+            ],
+            prod: Box::new(|tokens| {
+                let y = get_int_value(tokens.first()?)?;
+                let ab = match tokens.get(1)? {
+                    Token::RegexMatch(g) => g.first()?,
+                    _ => return None,
+                };
+                let y = if ab.to_lowercase().starts_with('b') { -y } else { y };
+                Some(Token::Time(TimeData::new(year_pred(y), Grain::Year)))
+            }),
+        },
+        Rule {
+            name: "<time-of-day> sharp|exactly".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_a_time_of_day)),
+                PatternItem::Regex(compile(r"(sharp|exactly|-?ish|approximately)")),
+            ],
+            prod: Box::new(|tokens| match tokens.first()? {
+                Token::Time(td) => Some(Token::Time(not_latent(td.clone()))),
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "about|exactly <time-of-day>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"(about|around|approximately|exactly)")),
+                PatternItem::Predicate(grain_finer_than(Grain::Year)),
+            ],
+            prod: Box::new(|tokens| match tokens.get(1)? {
+                Token::Time(td) => Some(Token::Time(not_latent(td.clone()))),
+                _ => None,
+            }),
+        },
+    ]
+}
+
 pub fn en_rules() -> Vec<Rule> {
     let mut rules = vec![
         instant("now", Grain::Second, 0, r"now|at\s+the\s+moment|atm"),
@@ -2082,6 +2128,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(timezone_rules());
     rules.extend(dom_interval_rules());
     rules.extend(direction_rules());
+    rules.extend(precision_and_era_rules());
     rules.extend(intersect_rules());
     rules
 }
