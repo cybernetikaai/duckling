@@ -5,10 +5,10 @@ use crate::grain::Grain;
 use crate::regex::compile;
 use crate::time::object::{IntervalDirection, IntervalType};
 use crate::time::predicate::{
-    Ampm, Predicate, ampm_predicate, cycle_nth, day_of_month, day_of_week, hour, hour_minute,
-    hour_minute_second, in_duration, intersect, merge_duration, minute, month, season_series,
-    shift_duration, shift_timezone, take_last_of, take_nth, take_nth_after, take_nth_closest,
-    time_cycle, time_intervals, year as year_pred, cycle_n,
+    Ampm, Predicate, ampm_predicate, cycle_nth, day_of_month, day_of_week, floor_grain_to_minute,
+    hour, hour_minute, hour_minute_second, in_duration, intersect, merge_duration, minute, month,
+    season_series, shift_duration, shift_timezone, take_last_of, take_nth, take_nth_after,
+    take_nth_closest, time_cycle, time_intervals, year as year_pred, cycle_n,
 };
 use crate::types::{Form, PatternItem, Rule, TimeData, Token};
 
@@ -1759,17 +1759,47 @@ fn timezone_rules() -> Vec<Rule> {
             ],
             prod: Box::new(|tokens| match tokens {
                 [Token::Time(a), _, Token::Time(b), Token::RegexMatch(g)] => {
-                    let off = tz_offset(g.first()?)?;
-                    // Build the interval from the raw ends first (resolves the
-                    // 12h hh:mm ambiguity to the daytime occurrence), then shift
-                    // the whole interval into the timezone.
-                    let iv = interval_td(IntervalType::Closed, a, b)?;
-                    Some(Token::Time(in_timezone_td(off, &iv)))
+                    interval_timezone(g.first()?, a, b)
+                }
+                _ => None,
+            }),
+        },
+        // "from 3pm to 5pm PST": leading from/later-than variant (the bare rule
+        // above can't match once "from" precedes it). "between … and … TZ" is
+        // deliberately excluded — Duckling applies the tz only to the 2nd endpoint
+        // there (a quirk), which the plain between rule already reproduces.
+        Rule {
+            name: "from <datetime> - <datetime> (interval) timezone".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"later than|from")),
+                PatternItem::Predicate(Box::new(|t| is_a_time_of_day(t) && has_no_timezone(t))),
+                PatternItem::Regex(compile(r"\-|to|th?ru|through|(un)?til(l)?")),
+                PatternItem::Predicate(Box::new(|t| is_a_time_of_day(t) && has_no_timezone(t))),
+                PatternItem::Regex(compile(&tz_re)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::Time(a), _, Token::Time(b), Token::RegexMatch(g)] => {
+                    interval_timezone(g.first()?, a, b)
                 }
                 _ => None,
             }),
         },
     ]
+}
+
+/// Build a closed interval and shift the whole thing into `tz_name`. The endpoints
+/// are first floored to minute grain so the interval's exclusive end is the second
+/// endpoint + 1 minute (e.g. "9am to 5pm GMT" → 5pm-GMT + 1min = 15:01, not the
+/// hour-exclusive 18:00 shifted to 16:00). Shifting the *whole resolved* interval
+/// (rather than the two recurring endpoint predicates) keeps both ends on the same
+/// day — shifting endpoints independently lets a large offset pair them across a
+/// day boundary.
+fn interval_timezone(tz_name: &str, a: &TimeData, b: &TimeData) -> Option<Token> {
+    let off = tz_offset(tz_name)?;
+    let a_min = TimeData { pred: floor_grain_to_minute(a.pred.clone()), grain: Grain::Minute, ..a.clone() };
+    let b_min = TimeData { pred: floor_grain_to_minute(b.pred.clone()), grain: Grain::Minute, ..b.clone() };
+    let iv = interval_td(IntervalType::Closed, &a_min, &b_min)?;
+    Some(Token::Time(in_timezone_td(off, &iv)))
 }
 
 /// Generic intersection of two adjacent times (ports of ruleIntersect /

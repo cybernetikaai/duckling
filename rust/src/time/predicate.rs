@@ -305,6 +305,18 @@ pub fn shift_timezone(provided_minutes: i64, inner: Predicate) -> Predicate {
     }))
 }
 
+/// Floor each occurrence's grain to `min(grain, Minute)` without moving the
+/// instant. Used so a tz-shifted interval's exclusive end is computed at minute
+/// grain (endpoint + 1 minute) rather than +1 hour: "9am to 5pm GMT" ends at
+/// 5pm-GMT + 1min, not the hour-exclusive 6pm shifted.
+pub fn floor_grain_to_minute(inner: Predicate) -> Predicate {
+    Predicate::Series(Rc::new(move |t: TimeObject, ctx: &TimeContext| {
+        let (past, future) = inner.run(t, ctx);
+        let m = |o: TimeObject| TimeObject { grain: o.grain.min(Grain::Minute), ..o };
+        (Box::new(past.map(m)) as BoxIter, Box::new(future.map(m)) as BoxIter)
+    }))
+}
+
 /// The raw cycle of `grain` (all occurrences), rounded to `grain` at each query
 /// time. Used as the cyclic predicate for cycleNthAfter (e.g. quarters of a year).
 pub fn time_cycle(grain: Grain) -> Predicate {
