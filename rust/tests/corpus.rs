@@ -183,6 +183,38 @@ fn differential_corpus() {
         failures.iter().take(5000).cloned().collect::<Vec<_>>().join("\n"));
 }
 
+/// "May" is latent (it collides with the modal verb "may"): a bare match is
+/// dropped in default mode, so "you may go" doesn't yield a spurious May. But it
+/// resolves in latent mode, and any composition ("in May", "May 1st") de-latents
+/// it. Other months are always concrete. Guards the mkLatent-on-May fix.
+#[test]
+fn may_is_latent() {
+    let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(-2));
+    let reference = jiff::civil::date(2013, 2, 12).at(4, 30, 0, 0)
+        .to_zoned(zone.clone()).unwrap().timestamp();
+    let default = duckling::ResolveContext { reference, zone: zone.clone(), with_latent: false };
+    let latent = duckling::ResolveContext { reference, zone, with_latent: true };
+
+    // Bare "May" / "may 2015": no time entity in default mode (latent, dropped).
+    for bare in ["May", "may", "may 2015"] {
+        let got = full_range_time_values(bare, &default);
+        assert!(got.is_empty(), "{bare:?} should be latent (no default-mode parse), got {got:?}");
+    }
+    // In latent mode, bare "May" resolves to May 1st.
+    assert!(
+        best_time_values("May", &latent).iter().any(|v| v["value"] == "2013-05-01T00:00:00.000-02:00"),
+        "May should resolve to 2013-05-01 in latent mode"
+    );
+    // Composition de-latents it (default mode resolves).
+    for (input, want) in [("in May", "2013-05-01"), ("May 1st", "2013-05-01"), ("next May", "2013-05-01")] {
+        let got = best_time_values(input, &default);
+        assert!(got.iter().any(|v| v["value"].as_str().is_some_and(|s| s.starts_with(want))),
+            "{input:?} should de-latent to {want}, got {got:?}");
+    }
+    // A concrete month (March) is never latent — present in default mode.
+    assert!(!full_range_time_values("March", &default).is_empty(), "March must not be latent");
+}
+
 /// Reference-time differential: ref-sensitive inputs ("next tuesday", "end of the
 /// month", "in 3 days") cross-checked against the oracle across many reference
 /// instants (varied weekdays, month/year boundaries, leap days), all in the fixed

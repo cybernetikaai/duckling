@@ -301,7 +301,11 @@ fn months() -> Vec<Rule> {
             time_rule(name, re, move || TimeData {
                 pred: month(n),
                 grain: Grain::Month,
-                latent: false,
+                // "May" is latent — it collides with the modal verb "may", so a
+                // bare match is dropped by default (Duckling's mkLatent), avoiding
+                // false positives like "you may go". Every other month is concrete.
+                // Composition ("in May", "May 1st", "next May") de-latents it.
+                latent: n == 5,
                 not_immediate: false,
                 form: Some(Form::Month { month: n as i8 }),
                 direction: None,
