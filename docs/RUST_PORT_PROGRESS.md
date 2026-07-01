@@ -112,6 +112,7 @@ Branch: `rust-port-en-time`.
 | + values-array covering/ref cases | 1069 / 1069 | 0 | 68 / 68 | **values_array 69**; alternatives correct across day/year references (ongoing holidays, covering hour, passed tod) |
 | + numeric-date locale audit | 1069 / 1069 | 0 | 68 / 68 | US M/D/Y convention matches oracle ("3/4/2015"→Mar 4); D/M out-of-range-month rejected; +8 differential, +4 negatives |
 | + large-scale randomized diff | 1069 / 1069 | 0 | 68 / 68 | **random_diff 1500**; random inputs × random references (2010–2022) vs oracle; 0 real divergences — definitive completeness pass |
+| + EN_GB locale (day-first dates) | 1069 / 1069 | 0 | 68 / 68 | **gb_locale 19**; `parse_locale` — UK "13/12/2013"→Dec 13, "3/4"→Apr 3; ported from EN/GB/Rules.hs; US unchanged |
 
 ## Rule-level coverage audit
 
@@ -166,6 +167,11 @@ nodes) for diminishing return; current latency is well within the use case's bud
 - **ref_stress** 1249 — ref-*sensitive* inputs across 21 reference instants
   (every weekday, month/year ends, leap days). Catches reference-dependent bugs
   (the "this tuesday at 3" class). Confirms all recent fixes are ref-robust.
+- **gb_locale** 19 — EN_GB day-first numeric dates via `parse_locale(_, _, EnGb)`,
+  vs the oracle with locale=en_GB. Day-first positives ("13/12/2013"→Dec 13,
+  "3/4/2015"→Apr 3) + out-of-range-month rejections. The US default (`parse`) and
+  all its tests are unchanged; the two locale rule sets differ only in the numeric-
+  date field order.
 - **random_diff** 1500 — large-scale randomized differential: random inputs
   (parameterized templates across every rule family) × random references (date +
   time-of-day, 2010–2022), vs the oracle. Varies input AND reference together (all
