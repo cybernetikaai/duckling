@@ -23,7 +23,8 @@ Every Duckling EN dimension that has a corpus is ported and green against it:
 
 ## Requirements
 
-- Rust (stable), edition 2024 → **Rust 1.85+**. Install via [rustup](https://rustup.rs).
+- Rust (edition 2024) — tracks **latest stable** (MSRV **1.96**, enforced via
+  `rust-version` in `Cargo.toml`; CI builds on `stable`). Install via [rustup](https://rustup.rs).
 - No **build-time** system dependencies; all crates are pure-Rust (`jiff`,
   `fancy-regex`, `serde`).
 - **Runtime (Unix): the system IANA tz database.** `jiff` resolves zones from

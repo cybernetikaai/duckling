@@ -6,7 +6,7 @@
 # default). That single apt line is the whole reason this file exists — without
 # it, TimeZone::get(...) fails and the parser can't coerce into a target zone.
 
-FROM rust:1.85-slim AS builder
+FROM rust:1.96.1-slim AS builder
 WORKDIR /build
 COPY . .
 RUN cargo build --release --locked
