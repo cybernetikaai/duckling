@@ -173,6 +173,41 @@ pub fn parse_duration(input: &str) -> Vec<Entity> {
         .collect()
 }
 
+/// Parse `input` and return resolved **Ordinal** entities (dim `"ordinal"`,
+/// `{type:"value", value:<int>}`), ranked by range domination — the
+/// `dims:["ordinal"]` surface. Context-free. The ordinal rules (first..ninetieth,
+/// composites like "twenty-fifth", digit forms) are the ones the Time path uses;
+/// this just exposes them as standalone entities.
+pub fn parse_ordinal(input: &str) -> Vec<Entity> {
+    let doc = Document::new(input);
+    let rules = rules_for(Locale::EnUs);
+    let nodes = engine::parse_string(&rules, &doc);
+    let scored: Vec<(Node, Entity)> = nodes
+        .into_iter()
+        .filter_map(|n| {
+            let od = match &n.token {
+                Token::Ordinal(od) => od.clone(),
+                _ => return None,
+            };
+            let e = Entity {
+                dim: "ordinal".to_string(),
+                body: doc.substring(n.range.0, n.range.1),
+                start: n.range.0,
+                end: n.range.1,
+                value: resolve::ordinal_value(&od),
+                latent: false,
+            };
+            Some((n, e))
+        })
+        .collect();
+    let ranked = CLASSIFIERS.with(|cl| ranking::rank(cl, scored));
+    let mut seen = std::collections::HashSet::new();
+    ranked
+        .into_iter()
+        .filter(|e| seen.insert((e.start, e.end, e.value.to_string())))
+        .collect()
+}
+
 /// Debug: every Time candidate (unranked) as "rule | range | score | value".
 pub fn parse_all_debug(input: &str, ctx: &ResolveContext) -> Vec<String> {
     let doc = Document::new(input);

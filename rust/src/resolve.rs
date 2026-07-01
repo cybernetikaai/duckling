@@ -36,6 +36,11 @@ pub struct Entity {
     pub latent: bool,
 }
 
+/// Resolve an Ordinal to Duckling's JSON: `{type:"value", value:<int>}`.
+pub fn ordinal_value(o: &crate::ordinal::OrdinalData) -> serde_json::Value {
+    serde_json::json!({"type": "value", "value": o.value})
+}
+
 /// Resolve a Duration to Duckling's JSON: `{value, unit, <unit>: value, type,
 /// normalized: {value: <seconds>, unit: "second"}}` (port of the DurationData
 /// ToJSON instance). The `<unit>` key is dynamic — e.g. `"minute": 30`.

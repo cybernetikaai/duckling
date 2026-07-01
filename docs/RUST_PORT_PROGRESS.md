@@ -129,6 +129,7 @@ Branch: `rust-port-en-time`.
 | + combined Time+Duration (parse_all) | 1069 / 1069 | 0 | 68 / 68 | **combined_dims 28**; new `parse_all` = the `dims:["time","duration"]` surface, ranking both in one pool by dimension-agnostic range domination. **0 divergences** vs oracle: "in 2 hours"→Time (contained Duration dominated), "…20 minutes and wake me at 7am"→Duration+Time (disjoint), "at 3pm for 2 hours"→one Time. `parse` (Time-only) unchanged → Time corpus untouched |
 | + multi-entity sentence differential | 1069 / 1069 | 0 | 68 / 68 | **combined_dims 58**; +30 realistic full-sentence utterances (53 entities) — "wake me at 7am and remind me in 2 hours"→2 Time, "take the medicine every 4 hours for 3 days"→2 Duration, "book it from 9 to 5 on monday". **0 divergences** — `parse_all` extracts the exact oracle entity set (dim+span) from multi-mention speech, the realistic product input |
 | + prose false-positive parity | 1069 / 1069 | 0 | 68 / 68 | **combined_dims 96**; +38 prose sentences with temporal homographs/idioms ("the second option", "a quarter of the students", "give me a second", "the third quarter earnings", "wait a minute", "i'll take seconds"→[]). **0 divergences** — `parse_all` matches Duckling's dimension-scoped extraction exactly (incl. its no-intent quirks like "the second"→day-of-month), so no spurious-entity drift in ordinary speech |
+| + Ordinal dimension (validate port) | 1069 / 1069 | 0 | 68 / 68 | **ordinal_corpus 32** (all of Ordinal/EN/Corpus.hs); new `parse_ordinal` emits `dim:"ordinal"` `{type,value}`. Directly validates the earlier composite-ordinal port against Duckling — "twenty-fifth"/"twenty—fifth"/"twenty fifth"/"twentyfifth"→25, "thirtyfirst"→31, "seventy-third"→73, "ninetieth"→90 — not just indirectly via Time. All pass; trivial emission (rules already ported), no Time-ranker risk |
 
 ## Rule-level coverage audit
 
@@ -379,6 +380,21 @@ quarter of the students" → Duration "a quarter" (15 min). These aren't port fa
 positives; they are faithful Duckling behavior (Duckling extracts dimensions, it
 does not detect whether a mention is temporal). "i'll take seconds" → [] on both.
 Merged into **combined_dims** (58→96).
+
+**Ordinal dimension — emit + validate (this iteration).** The full ordinal port
+(first..ninetieth base + composites + digits) landed earlier but had only been
+exercised *indirectly* through Time (dates like "the fifteenth of august"). Added
+`parse_ordinal(input)` (emits `dim:"ordinal"`, `{type:"value", value:<int>}`) and
+validated it directly against `Ordinal/EN/Corpus.hs` — **ordinal_corpus 32**,
+all pass. This confirms the composite-ordinal rules against Duckling's own
+authoritative corpus, including every separator the corpus exercises: hyphen
+("twenty-fifth"), em-dash ("twenty—fifth"), space ("twenty fifth"), concatenated
+("twentyfifth"), and digits ("25th") — all →25; likewise 31/42/73/90. Emission
+is a new entry point (rules unchanged), so no Time-ranker risk. Note: the standalone
+**Numeral** dimension was considered and declined — validating it needs the full
+`Numeral/EN/Rules.hs` (K/M/G/lakh suffixes, "1/5" fractions, "point 77"), a large
+port outside the time domain with little product value; the numeral forms the time
+path needs are already covered.
 
 **Composition fuzz (this iteration).** Beyond the curated corpus, generated
 ~770 compositional probes (deep nestings, directionals, interval+date, duration

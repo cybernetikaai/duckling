@@ -580,6 +580,34 @@ fn duration_corpus() {
     assert!(failures.is_empty(), "{} failures:\n{}", failures.len(), failures.join("\n"));
 }
 
+/// Ordinal dimension (`parse_ordinal`) — port of Duckling/Ordinal/EN/Corpus.hs.
+/// Each case's full-span ordinal entity must carry the expected integer value.
+/// Directly validates the composite-ordinal port ("twenty-fifth", "thirtyfirst",
+/// em-dash/space/concatenated separators) against Duckling, not just via Time.
+#[test]
+fn ordinal_corpus() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/ordinal_corpus.json")).unwrap();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let n = input.chars().count();
+        let want = c["value"].as_i64().unwrap();
+        let got: Vec<i64> = duckling::parse_ordinal(input)
+            .into_iter()
+            .filter(|e| e.dim == "ordinal" && e.start == 0 && e.end == n)
+            .filter_map(|e| e.value["value"].as_i64())
+            .collect();
+        if !got.contains(&want) {
+            failures.push(format!("{input:?}\n  expected {want}\n  got      {got:?}"));
+        }
+    }
+    eprintln!("ordinal_corpus checked {checked}, {} failing", failures.len());
+    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(), failures.join("\n"));
+}
+
 /// Combined Time+Duration (`parse_all`) — the `dims:["time","duration"]` surface.
 /// Time and Duration compete in one pool by dimension-agnostic range domination,
 /// exactly as Duckling: the widest match per position wins, disjoint matches all
