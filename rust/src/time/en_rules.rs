@@ -2336,6 +2336,10 @@ fn holiday_rules() -> Vec<Rule> {
         holiday_rule("World Philosophy Day", r"world philosophy day", || nth_dow_of_month_td(3, 4, 11)),
         holiday_rule("World Religion Day", r"world religion day", || nth_dow_of_month_td(3, 7, 1)),
         holiday_rule("World Sight Day", r"world sight day", || nth_dow_of_month_td(2, 4, 10)),
+        // The day after Thanksgiving (4th Thursday of November + 1 day).
+        holiday_rule("Black Friday", r"black frid?day", || {
+            cycle_nth_after_td(false, Grain::Day, 1, &nth_dow_of_month_td(4, 4, 11))
+        }),
         // Thanksgiving Day is corpus-exercised (EN/US Rules.hs); kept from the
         // prior baseline so its passing cases do not regress.
         holiday_rule("Thanksgiving Day", r"thanks?giving( day)?", || nth_dow_of_month_td(4, 4, 11)),
@@ -2418,6 +2422,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(crate::time::computed::computed_holiday_rules());
     rules.extend(crate::time::computed::computed_holiday_shift_rules());
     rules.extend(crate::time::computed::computed_interval_holiday_rules());
+    rules.push(crate::time::computed::earth_hour_rule());
     rules.extend(absorb_rules());
     rules.extend(timezone_rules());
     rules.extend(dom_interval_rules());
