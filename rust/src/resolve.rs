@@ -43,12 +43,15 @@ pub fn resolve_time(td: &TimeData, ctx: &ResolveContext) -> Option<serde_json::V
     if td.latent && !ctx.with_latent {
         return None;
     }
-    let ref_dt = ctx.reference.to_zoned(ctx.zone.clone()).datetime();
+    let ref_zoned = ctx.reference.to_zoned(ctx.zone.clone());
+    let ref_dt = ref_zoned.datetime();
+    let ref_offset_minutes = (ref_zoned.offset().seconds() / 60) as i64;
     let ref_time = TimeObject { start: ref_dt, grain: Grain::Second, end: None };
     let tc = TimeContext {
         ref_time,
         min_time: TimeObject { start: add(ref_dt, Grain::Year, -2000), grain: Grain::Second, end: None },
         max_time: TimeObject { start: add(ref_dt, Grain::Year, 2000), grain: Grain::Second, end: None },
+        ref_offset_minutes,
     };
     let (mut past, mut future) = td.pred.run(ref_time, &tc);
     let chosen = match future.next() {

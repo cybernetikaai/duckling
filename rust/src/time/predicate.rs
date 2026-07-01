@@ -30,6 +30,8 @@ pub struct TimeContext {
     pub ref_time: TimeObject,
     pub min_time: TimeObject,
     pub max_time: TimeObject,
+    /// Reference-zone offset (minutes), for shifting in-text timezones into frame.
+    pub ref_offset_minutes: i64,
 }
 
 #[derive(Clone)]
@@ -147,24 +149,30 @@ pub fn intersect(fine: Predicate, coarse: Predicate) -> Predicate {
         let (past2, future2) = coarse.run(now, ctx);
         let min_t = ctx.min_time;
         let max_t = ctx.max_time;
+        let ref_off = ctx.ref_offset_minutes;
         let f_back = fine.clone();
         let f_fwd = fine.clone();
         let back: Vec<TimeObject> = past2
             .take_while(move |t| time_starts_before_end_of(min_t, *t))
             .take(SAFE_MAX)
-            .flat_map(move |time1| compose_one(&f_back, time1))
+            .flat_map(move |time1| compose_one(&f_back, time1, ref_off))
             .collect();
         let fwd: Vec<TimeObject> = future2
             .take_while(move |t| time_starts_before_end_of(*t, max_t))
             .take(SAFE_MAX)
-            .flat_map(move |time1| compose_one(&f_fwd, time1))
+            .flat_map(move |time1| compose_one(&f_fwd, time1, ref_off))
             .collect();
         (Box::new(back.into_iter()) as BoxIter, Box::new(fwd.into_iter()) as BoxIter)
     }))
 }
 
-fn compose_one(fine: &Predicate, time1: TimeObject) -> Vec<TimeObject> {
-    let fixed = TimeContext { ref_time: time1, min_time: time1, max_time: time1 };
+fn compose_one(fine: &Predicate, time1: TimeObject, ref_off: i64) -> Vec<TimeObject> {
+    let fixed = TimeContext {
+        ref_time: time1,
+        min_time: time1,
+        max_time: time1,
+        ref_offset_minutes: ref_off,
+    };
     let (_p, f) = fine.run(time1, &fixed);
     f.take_while(move |this| time_starts_before_end_of(*this, time1))
         .filter_map(move |t| time_intersect(t, time1))
@@ -263,6 +271,28 @@ pub fn time_computed(dates: Vec<TimeObject>) -> Predicate {
         past.reverse();
         let future: Vec<TimeObject> = dates[idx..].to_vec();
         (Box::new(past.into_iter()) as BoxIter, Box::new(future.into_iter()) as BoxIter)
+    }))
+}
+
+/// Shift a time-of-day predicate from a named timezone into the reference frame
+/// (port of shiftTimezone): each occurrence moves by (ref_offset - provided)
+/// minutes. e.g. "8:00 PST" under a -02:00 reference: shift = -120-(-480) = +360.
+pub fn shift_timezone(provided_minutes: i64, inner: Predicate) -> Predicate {
+    Predicate::Series(Rc::new(move |t: TimeObject, ctx: &TimeContext| {
+        let shift = ctx.ref_offset_minutes - provided_minutes;
+        let (past, future) = inner.run(t, ctx);
+        (
+            Box::new(past.map(move |o| TimeObject {
+                start: add(o.start, Grain::Minute, shift),
+                grain: o.grain,
+                end: o.end.map(|e| add(e, Grain::Minute, shift)),
+            })) as BoxIter,
+            Box::new(future.map(move |o| TimeObject {
+                start: add(o.start, Grain::Minute, shift),
+                grain: o.grain,
+                end: o.end.map(|e| add(e, Grain::Minute, shift)),
+            })) as BoxIter,
+        )
     }))
 }
 
@@ -448,7 +478,7 @@ mod tests {
     use jiff::civil::date;
     fn tctx(y: i16, mo: i8, da: i8, h: i8, mi: i8, s: i8) -> TimeContext {
         let now = TimeObject { start: date(y, mo, da).at(h, mi, s, 0), grain: Grain::Second, end: None };
-        TimeContext { ref_time: now, min_time: now, max_time: now }
+        TimeContext { ref_time: now, min_time: now, max_time: now, ref_offset_minutes: -120 }
     }
     /// Resolution-style pick: first future occurrence, else first past.
     fn future_head(p: &Predicate, ctx: &TimeContext) -> TimeObject {
@@ -483,6 +513,7 @@ mod tests {
             ref_time: now,
             min_time: TimeObject { start: date(2011, 2, 12).at(4, 30, 0, 0), ..now },
             max_time: TimeObject { start: date(2015, 2, 12).at(4, 30, 0, 0), ..now },
+            ref_offset_minutes: -120,
         };
         let h = future_head(&hour_minute(true, 4, 23), &ctx);
         assert_eq!(h.start, date(2013, 2, 12).at(4, 23, 0, 0));

@@ -6,8 +6,8 @@ use crate::regex::compile;
 use crate::time::object::{IntervalDirection, IntervalType};
 use crate::time::predicate::{
     Predicate, ampm_predicate, cycle_nth, day_of_month, day_of_week, hour, hour_minute,
-    hour_minute_second, in_duration, intersect, month, take_last_of, take_nth, take_nth_after,
-    time_cycle, time_intervals, year as year_pred, cycle_n,
+    hour_minute_second, in_duration, intersect, month, shift_timezone, take_last_of, take_nth,
+    take_nth_after, time_cycle, time_intervals, year as year_pred, cycle_n,
 };
 use crate::types::{Form, PatternItem, Rule, TimeData, Token};
 
@@ -985,6 +985,54 @@ fn absorb_rules() -> Vec<Rule> {
     ]
 }
 
+/// Named timezone -> fixed offset in minutes (subset of parseTimezone).
+const TZ: &[(&str, i64)] = &[
+    ("GMT", 0), ("UTC", 0), ("WET", 0),
+    ("BST", 60), ("CET", 60), ("WAT", 60), ("WEST", 60),
+    ("CEST", 120), ("EET", 120), ("SAST", 120),
+    ("EEST", 180), ("EAT", 180), ("MSK", 180),
+    ("IST", 330),
+    ("PST", -480), ("PDT", -420), ("MST", -420), ("MDT", -360),
+    ("CST", -360), ("CDT", -300), ("EST", -300), ("EDT", -240),
+    ("AST", -240), ("ADT", -180), ("AKST", -540), ("AKDT", -480), ("HST", -600),
+    ("JST", 540), ("KST", 540), ("AEST", 600), ("AEDT", 660),
+    ("ACST", 570), ("AWST", 480), ("NZST", 720), ("NZDT", 780),
+];
+fn tz_offset(name: &str) -> Option<i64> {
+    let u = name.to_uppercase();
+    TZ.iter().find(|(n, _)| *n == u).map(|&(_, o)| o)
+}
+fn in_timezone_td(provided: i64, td: &TimeData) -> TimeData {
+    TimeData {
+        pred: shift_timezone(provided, td.pred.clone()),
+        grain: td.grain,
+        latent: false,
+        not_immediate: false,
+        form: td.form,
+        direction: td.direction,
+        holiday: td.holiday.clone(),
+    }
+}
+
+/// "<time-of-day> <timezone>" (ruleTimezone): shift the time into the frame.
+fn timezone_rules() -> Vec<Rule> {
+    let alt = TZ.iter().map(|(n, _)| *n).collect::<Vec<_>>().join("|");
+    vec![Rule {
+        name: "<time-of-day> timezone".into(),
+        pattern: vec![
+            PatternItem::Predicate(Box::new(|t| is_not_latent(t) && is_a_time_of_day(t))),
+            PatternItem::Regex(compile(&format!(r"\b({alt})\b"))),
+        ],
+        prod: Box::new(|tokens| match tokens {
+            [Token::Time(td), Token::RegexMatch(g)] => {
+                let off = tz_offset(g.first()?)?;
+                Some(Token::Time(in_timezone_td(off, td)))
+            }
+            _ => None,
+        }),
+    }]
+}
+
 /// Generic intersection of two adjacent times (ports of ruleIntersect /
 /// ruleIntersectOf). Composes dates+years, dow+month-day, time-on-day, etc.
 fn intersect_rules() -> Vec<Rule> {
@@ -1731,6 +1779,7 @@ pub fn en_rules() -> Vec<Rule> {
     rules.extend(crate::time::computed::computed_holiday_shift_rules());
     rules.extend(crate::time::computed::computed_interval_holiday_rules());
     rules.extend(absorb_rules());
+    rules.extend(timezone_rules());
     rules.extend(direction_rules());
     rules.extend(intersect_rules());
     rules
