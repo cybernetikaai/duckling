@@ -11,6 +11,16 @@ pub struct NumeralData {
     /// false for informal numerals (couple/few/dozen/single/pair) which Duckling
     /// marks notOkForAnyTime — they can't be a time-of-day/year/day-of-month.
     pub ok_for_time: bool,
+    /// Power-of-ten exponent for "hundred"/"thousand"/... (Duckling's grain).
+    pub grain: Option<i64>,
+    /// True for powers of ten (multiplicands like "thousand").
+    pub multipliable: bool,
+}
+
+impl NumeralData {
+    pub fn new(value: f64, ok_for_time: bool) -> Self {
+        NumeralData { value, ok_for_time, grain: None, multipliable: false }
+    }
 }
 
 /// Integer value if the numeral is a whole number.
@@ -46,7 +56,30 @@ fn from_table(table: &[(&str, i64)], w: &str) -> Option<i64> {
 }
 
 fn numeral(v: i64) -> Option<Token> {
-    Some(Token::Numeral(NumeralData { value: v as f64, ok_for_time: true }))
+    Some(Token::Numeral(NumeralData::new(v as f64, true)))
+}
+
+fn is_positive(t: &Token) -> bool {
+    matches!(t, Token::Numeral(n) if n.value >= 0.0)
+}
+fn is_multipliable(t: &Token) -> bool {
+    matches!(t, Token::Numeral(n) if n.multipliable)
+}
+fn has_grain(t: &Token) -> bool {
+    matches!(t, Token::Numeral(n) if n.grain.is_some_and(|g| g > 1))
+}
+/// Power-of-ten exponent for a magnitude word (port of powersOfTensMap).
+fn power_of_ten(w: &str) -> Option<i64> {
+    Some(match w {
+        "hundred" => 2,
+        "thousand" => 3,
+        "million" => 6,
+        "billion" => 9,
+        "trillion" => 12,
+        _ if w.starts_with('l') => 5,
+        _ if w.starts_with("cr") || w.starts_with("kr") || w == "koti" => 7,
+        _ => return None,
+    })
 }
 
 pub fn numeral_rules() -> Vec<Rule> {
@@ -57,7 +90,7 @@ pub fn numeral_rules() -> Vec<Rule> {
             prod: Box::new(|tokens| {
                 if let Some(Token::RegexMatch(g)) = tokens.first() {
                     let v: f64 = g.first()?.parse().ok()?;
-                    Some(Token::Numeral(NumeralData { value: v, ok_for_time: true }))
+                    Some(Token::Numeral(NumeralData::new(v, true)))
                 } else {
                     None
                 }
@@ -81,10 +114,7 @@ pub fn numeral_rules() -> Vec<Rule> {
                 let w = w.strip_suffix(" of").unwrap_or(w);
                 let w = w.trim_end_matches('s');
                 let v = from_table(UNITS, w)?;
-                Some(Token::Numeral(NumeralData {
-                    value: v as f64,
-                    ok_for_time: !INFORMAL.contains(&w),
-                }))
+                Some(Token::Numeral(NumeralData::new(v as f64, !INFORMAL.contains(&w))))
             }),
         },
         // 20..90
@@ -115,6 +145,79 @@ pub fn numeral_rules() -> Vec<Rule> {
                 let tens = from_table(TENS, g.first()?)?;
                 let unit = from_table(UNITS, g.get(1)?)?;
                 numeral(tens + unit)
+            }),
+        },
+        // "hundred"/"thousand"/... -> 10^grain, multipliable (rulePowersOfTen).
+        Rule {
+            name: "powers of tens".into(),
+            pattern: vec![PatternItem::Regex(compile(
+                r"(hundred|thousand|l(ac|(a?kh)?)|million|((k|c)r(ore)?|koti)|billion|trillion)s?",
+            ))],
+            prod: Box::new(|tokens| {
+                let w = match tokens.first() {
+                    Some(Token::RegexMatch(g)) => g.first()?.to_lowercase(),
+                    _ => return None,
+                };
+                let grain = power_of_ten(&w)?;
+                Some(Token::Numeral(NumeralData {
+                    value: 10f64.powi(grain as i32),
+                    ok_for_time: true,
+                    grain: Some(grain),
+                    multipliable: true,
+                }))
+            }),
+        },
+        // "two thousand" -> 2000 (ruleMultiply): positive x multipliable.
+        Rule {
+            name: "compose by multiplication".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_positive)),
+                PatternItem::Predicate(Box::new(is_multipliable)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Numeral(a), Token::Numeral(b)] => match b.grain {
+                    None => Some(Token::Numeral(NumeralData::new(a.value * b.value, true))),
+                    Some(g) if b.value > a.value => Some(Token::Numeral(NumeralData {
+                        value: a.value * b.value,
+                        ok_for_time: true,
+                        grain: Some(g),
+                        multipliable: false,
+                    })),
+                    _ => None,
+                },
+                _ => None,
+            }),
+        },
+        // "two thousand ten" -> 2010 (ruleSum): grained + smaller non-multipliable.
+        Rule {
+            name: "intersect 2 numbers".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(|t| has_grain(t) && is_positive(t))),
+                PatternItem::Predicate(Box::new(|t| !is_multipliable(t) && is_positive(t))),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Numeral(a), Token::Numeral(b)] => {
+                    let g = a.grain?;
+                    (10f64.powi(g as i32) > b.value)
+                        .then(|| Token::Numeral(NumeralData::new(a.value + b.value, true)))
+                }
+                _ => None,
+            }),
+        },
+        Rule {
+            name: "intersect 2 numbers (with and)".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(|t| has_grain(t) && is_positive(t))),
+                PatternItem::Regex(compile(r"and")),
+                PatternItem::Predicate(Box::new(|t| !is_multipliable(t) && is_positive(t))),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Numeral(a), _, Token::Numeral(b)] => {
+                    let g = a.grain?;
+                    (10f64.powi(g as i32) > b.value)
+                        .then(|| Token::Numeral(NumeralData::new(a.value + b.value, true)))
+                }
+                _ => None,
             }),
         },
     ]
