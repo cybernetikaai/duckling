@@ -50,6 +50,7 @@ Branch: `rust-port-en-time`.
 | + DST gap/fold offset (pick `before`) | 634 / 984 | 350 | **10 / 10** | spring-forward gap keeps pre-transition offset; tz harness fully green |
 | + cycle this/last/next single-rule + upcoming | 682 / 984 | 302 | 10 / 10 | coming/upcoming->next; upcoming <int> <cycle>; -48 |
 | + fold am/pm into hour predicate | 687 / 984 | 297 | 10 / 10 | "3am" at 4:30 -> tomorrow 3am (was today, past) |
+| + fraction/half/mixed duration rules | 707 / 984 | 277 | 10 / 10 | quarter/half/three-qtr hour, 2.5h, n-and-a-half, fortnight, more, about |
 
 ## How to run
 
@@ -67,7 +68,7 @@ Branch: `rust-port-en-time`.
 
 ## In progress
 
-Cumulative thru am/pm hour fold. contains **687/984**, unique **685/984**, tz_stress 10/10. Next: fraction/half durations ("a quarter of an hour", "a few/couple/pair", "1/4h"); year-with-era ("in 2014 AD/BC"); last <dow>/<cycle> of <time>; "the <ordinal> last <cycle> of <time>".
+Cumulative thru duration fractions. contains **707/984**, unique **705/984**, tz_stress 10/10. Next: informal-numeral durations ("a couple of/few minutes" -> couple=2/few=3 as single numeral tokens); year-with-era ("in 2014 AD/BC"); "last <dow>/<cycle> of <time>"; "the <ordinal> last <cycle> of <time>".
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
 Next high-value targets (by remaining count): `<time> <part-of-day>` &
