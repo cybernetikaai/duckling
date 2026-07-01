@@ -840,6 +840,11 @@ fn intersect_td(a: &TimeData, b: &TimeData) -> Option<TimeData> {
     // (weekly), so when it shares a grain with a rarer operand (a specific date
     // like "Jul 18"), make the day-of-week the inner one — otherwise iterating
     // weeks hits SAFE_MAX before reaching e.g. the "Jul 18" that is a Friday.
+    // A day-of-week shares the Day grain with a rarer same-grain operand (a
+    // specific date like "Jul 18"); make the weekly dow the inner predicate so
+    // the rarer one is iterated (else iterating weeks hits SAFE_MAX). Restricted
+    // to equal grain: for a finer-grain operand the dow may be a recurring
+    // time-of-day (e.g. "Thursday 8:00 PST") where iterating the dow is correct.
     let a_dow = matches!(a.form, Some(Form::DayOfWeek));
     let b_dow = matches!(b.form, Some(Form::DayOfWeek));
     let (fine, coarse) = if a.grain == b.grain && a_dow != b_dow {
