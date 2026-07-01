@@ -41,6 +41,16 @@ pub fn ordinal_value(o: &crate::ordinal::OrdinalData) -> serde_json::Value {
     serde_json::json!({"type": "value", "value": o.value})
 }
 
+/// Resolve a Numeral to Duckling's JSON: `{type:"value", value:<number>}`.
+/// Whole numbers emit as integers (Duckling renders `20`, not `20.0`).
+pub fn numeral_value(n: &crate::numeral::NumeralData) -> serde_json::Value {
+    if n.value.fract() == 0.0 {
+        serde_json::json!({"type": "value", "value": n.value as i64})
+    } else {
+        serde_json::json!({"type": "value", "value": n.value})
+    }
+}
+
 /// Resolve a Duration to Duckling's JSON: `{value, unit, <unit>: value, type,
 /// normalized: {value: <seconds>, unit: "second"}}` (port of the DurationData
 /// ToJSON instance). The `<unit>` key is dynamic — e.g. `"minute": 30`.

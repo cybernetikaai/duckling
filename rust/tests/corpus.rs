@@ -821,6 +821,42 @@ fn ordinal_corpus() {
     );
 }
 
+/// Numeral dimension (`parse_numeral`) — the supported subset of
+/// Duckling/Numeral/EN/Corpus.hs (integers, written numbers, informal
+/// quantifiers, compounds). Decimals/negatives/fractions/magnitude-suffixes are
+/// deferred (see docs/REMAINING_DIMENSIONS.md), so they are not asserted here.
+#[test]
+fn numeral_corpus() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/numeral_corpus.json")).unwrap();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let n = input.chars().count();
+        let want = c["value"].as_i64().unwrap();
+        let got: Vec<i64> = duckling::parse_numeral(input)
+            .into_iter()
+            .filter(|e| e.dim == "number" && e.start == 0 && e.end == n)
+            .filter_map(|e| e.value["value"].as_i64())
+            .collect();
+        if !got.contains(&want) {
+            failures.push(format!("{input:?}\n  expected {want}\n  got      {got:?}"));
+        }
+    }
+    eprintln!(
+        "numeral_corpus checked {checked}, {} failing",
+        failures.len()
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
+}
+
 /// Combined Time+Duration (`parse_all`) — the `dims:["time","duration"]` surface.
 /// Time and Duration compete in one pool by dimension-agnostic range domination,
 /// exactly as Duckling: the widest match per position wins, disjoint matches all

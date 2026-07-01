@@ -211,6 +211,42 @@ pub fn parse_ordinal(input: &str) -> Vec<Entity> {
         .collect()
 }
 
+/// Parse `input` and return resolved **Numeral** entities (dim `"number"`,
+/// `{type:"value", value:<number>}`), ranked by range domination — the
+/// `dims:["number"]` surface. Context-free. Covers the forms the Time/Duration
+/// path needs (integers, written numbers, informal quantifiers, decimals,
+/// composition); magnitude suffixes (K/M/G/lakh) and some fractions are not yet
+/// ported — see docs/REMAINING_DIMENSIONS.md.
+pub fn parse_numeral(input: &str) -> Vec<Entity> {
+    let doc = Document::new(input);
+    let rules = rules_for(Locale::EnUs);
+    let nodes = engine::parse_string(&rules, &doc);
+    let scored: Vec<(Node, Entity)> = nodes
+        .into_iter()
+        .filter_map(|n| {
+            let nd = match &n.token {
+                Token::Numeral(nd) => nd.clone(),
+                _ => return None,
+            };
+            let e = Entity {
+                dim: "number".to_string(),
+                body: doc.substring(n.range.0, n.range.1),
+                start: n.range.0,
+                end: n.range.1,
+                value: resolve::numeral_value(&nd),
+                latent: false,
+            };
+            Some((n, e))
+        })
+        .collect();
+    let ranked = CLASSIFIERS.with(|cl| ranking::rank(cl, scored));
+    let mut seen = std::collections::HashSet::new();
+    ranked
+        .into_iter()
+        .filter(|e| seen.insert((e.start, e.end, e.value.to_string())))
+        .collect()
+}
+
 /// Debug: every Time candidate (unranked) as "rule | range | score | value".
 pub fn parse_all_debug(input: &str, ctx: &ResolveContext) -> Vec<String> {
     let doc = Document::new(input);

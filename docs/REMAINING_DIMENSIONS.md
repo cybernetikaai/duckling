@@ -12,7 +12,7 @@ per-milestone log of what's already done.
 | **Duration** (`parse_duration`) | emitted | full `Duration/EN/Corpus.hs` + oracle differential (135 checks) |
 | **Ordinal** (`parse_ordinal`) | emitted | full `Ordinal/EN/Corpus.hs` (32) |
 | **Time + Duration** (`parse_all`) | emitted | cross-dimension range domination vs oracle (96 cases) |
-| **Numeral** | **foundational** (no standalone `parse_numeral` yet) | ported to the forms Time/Duration need — integers, written numbers, informal quantifiers ("a couple"), decimals, composition. **Not corpus-complete**: magnitude suffixes (`3M`/`100K`/`30 lakh`) and some fraction forms are deferred. |
+| **Numeral** | **foundational** (no standalone `parse_numeral` yet) | ported to the forms Time/Duration need — integers, written numbers, informal quantifiers ("a couple"/"a few"), and composition ("5 thousand", "one hundred thousand"); emitted via `parse_numeral`. **Not corpus-complete**: standalone decimals ("1.5"), negatives ("-504"), fractions ("1/5"), magnitude suffixes (`3M`/`100K`), and "a/two dozen" are deferred (they were only ever handled inline for Time/Duration). |
 
 ## The remaining nine — two buckets
 
