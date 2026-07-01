@@ -8,10 +8,11 @@
 
 use crate::grain::Grain;
 use crate::regex::compile;
-use crate::time::object::TimeObject;
-use crate::time::predicate::time_computed;
+use crate::time::object::{TimeObject, time_before};
+use crate::time::predicate::{BoxIter, Predicate, TimeContext, time_computed};
 use crate::types::{PatternItem, Rule, TimeData, Token};
 use jiff::civil::date;
+use std::rc::Rc;
 
 fn days(ymd: &[(i16, i8, i8)]) -> Vec<TimeObject> {
     ymd.iter()
@@ -41,11 +42,25 @@ fn computed_holiday(name: &'static str, re: &str, ymd: &'static [(i16, i8, i8)])
     }
 }
 
-fn shifted_days(ymd: &[(i16, i8, i8)], n: i64) -> Vec<TimeObject> {
-    days(ymd)
-        .into_iter()
-        .map(|t| TimeObject { start: crate::grain::add(t.start, Grain::Day, n), ..t })
-        .collect()
+/// Port of Duckling's `cycleNthAfter False Day n base` over a computed base:
+/// partition the *base* occurrences into past/future by the reference, then
+/// shift each by `n` days. This matches `takeNthAfter`, which classifies the
+/// result by the base occurrence's own past/future bucket — so e.g. Shrove
+/// Tuesday (Easter - 47) inherits Easter's "future" classification even when the
+/// shifted date lands before the reference (2013-02-12 with ref 2013-02-12).
+fn time_computed_shift(ymd: &'static [(i16, i8, i8)], n: i64) -> Predicate {
+    let base = Rc::new(days(ymd));
+    Predicate::Series(Rc::new(move |t: TimeObject, _ctx: &TimeContext| {
+        let shift = move |o: TimeObject| TimeObject {
+            start: crate::grain::add(o.start, Grain::Day, n),
+            ..o
+        };
+        let idx = base.partition_point(|d| time_before(*d, t));
+        let mut past: Vec<TimeObject> = base[..idx].iter().copied().map(shift).collect();
+        past.reverse();
+        let future: Vec<TimeObject> = base[idx..].iter().copied().map(shift).collect();
+        (Box::new(past.into_iter()) as BoxIter, Box::new(future.into_iter()) as BoxIter)
+    }))
 }
 
 fn computed_holiday_shift(
@@ -54,7 +69,7 @@ fn computed_holiday_shift(
     ymd: &'static [(i16, i8, i8)],
     n: i64,
 ) -> Rule {
-    let pred = time_computed(shifted_days(ymd, n));
+    let pred = time_computed_shift(ymd, n);
     let make = move || TimeData {
         pred: pred.clone(),
         grain: Grain::Day,
@@ -122,6 +137,80 @@ pub fn computed_holiday_shift_rules() -> Vec<Rule> {
             DHANTERAS,
             1,
         ),
+        // Islamic (offset from precomputed lunar tables).
+        computed_holiday_shift("Ashura", r"(day of )?ashura", MUHARRAM, 9),
+        computed_holiday_shift(
+            "Laylat al-Qadr",
+            r"laylat al[\-\s][qk]adr|night of (destiny|measures|power|value)",
+            RAMADAN,
+            26,
+        ),
+        computed_holiday_shift(
+            "Isra and Mi'raj",
+            r"isra and mi'raj|(the )?prophet'?s'? ascension|(the )?ascension to heaven|the night journey",
+            RAJAB,
+            26,
+        ),
+        // Orthodox-Easter-relative.
+        computed_holiday_shift(
+            "Clean Monday",
+            r"(orthodox\s+)?(ash|clean|green|pure|shrove)\s+monday|monday of lent",
+            ORTHODOX_EASTER,
+            -48,
+        ),
+        computed_holiday_shift("Lazarus Saturday", r"lazarus\s+saturday", ORTHODOX_EASTER, -8),
+        // Easter-relative (Shrove Tuesday = mardi gras).
+        computed_holiday_shift(
+            "Shrove Tuesday",
+            r"pancake (tues)?day|shrove tuesday|mardi gras",
+            EASTER_SUNDAY,
+            -47,
+        ),
+        // Jewish (offset from Rosh Hashana / Passover / Purim).
+        computed_holiday_shift("Yom Kippur", r"yom\s+kippur", ROSH_HASHANA, 9),
+        computed_holiday_shift("Shemini Atzeret", r"shemini\s+atzeret", ROSH_HASHANA, 21),
+        computed_holiday_shift("Simchat Torah", r"simc?hat\s+torah", ROSH_HASHANA, 22),
+        computed_holiday_shift(
+            "Yom HaShoah",
+            r"yom hashoah|yom hazikaron lashoah ve-lag'vurah|holocaust (remembrance )?day",
+            PASSOVER,
+            12,
+        ),
+        computed_holiday_shift("Shushan Purim", r"shushan\s+purim", PURIM, 1),
+        // Hindu (offset from Dhanteras / Navaratri / Vasant Panchami / Thai Pongal).
+        computed_holiday_shift("Diwali", r"deepavali|diwali|lakshmi\s+puja", DHANTERAS, 2),
+        computed_holiday_shift("Govardhan Puja", r"govardhan\s+puja|annak(u|oo)t", DHANTERAS, 3),
+        computed_holiday_shift(
+            "Bhai Dooj",
+            r"bhai(ya)?\s+d(u|oo)j|bhau\-beej|bhai\s+(tika|phonta)",
+            DHANTERAS,
+            4,
+        ),
+        computed_holiday_shift(
+            "Chhath",
+            r"chhathi?|chhath (parv|puja)|dala (chhath|puja)|surya shashthi",
+            DHANTERAS,
+            8,
+        ),
+        computed_holiday_shift("Durga Ashtami", r"(durga|maha)(\s+a)?shtami", NAVARATRI, 7),
+        computed_holiday_shift("Maha Navami", r"maha\s+navami", NAVARATRI, 8),
+        computed_holiday_shift("Maha Saptami", r"maha\s+saptami", NAVARATRI, 6),
+        computed_holiday_shift(
+            "Vijayadashami",
+            r"dasara|duss(eh|he)ra|vijayadashami",
+            NAVARATRI,
+            9,
+        ),
+        computed_holiday_shift("Holi", r"(rangwali )?holi|dhuleti|dhulandi|phagwah", VASANT_PANCHAMI, 39),
+        computed_holiday_shift(
+            "Holika Dahan",
+            r"holika dahan|kamudu pyre|chhoti holi",
+            VASANT_PANCHAMI,
+            38,
+        ),
+        computed_holiday_shift("Boghi", r"boghi|bogi\s+pandigai", THAI_PONGAL, -1),
+        computed_holiday_shift("Mattu Pongal", r"maa?ttu\s+pongal", THAI_PONGAL, 1),
+        computed_holiday_shift("Kaanum Pongal", r"(kaanum|kanni)\s+pongal", THAI_PONGAL, 2),
     ]
 }
 
@@ -423,6 +512,45 @@ const MUHARRAM: &[(i16, i8, i8)] = &[
     (2018, 9, 11), (2019, 8, 31), (2020, 8, 20), (2021, 8, 9), (2022, 7, 30),
     (2023, 7, 19), (2024, 7, 7), (2025, 6, 26), (2026, 6, 16), (2027, 6, 6),
     (2028, 5, 25),
+];
+
+const RAJAB: &[(i16, i8, i8)] = &[
+    (1999, 10, 10), (2000, 9, 28), (2001, 9, 18), (2002, 9, 8), (2003, 8, 29),
+    (2004, 8, 17), (2005, 8, 6), (2006, 7, 26), (2007, 7, 15), (2008, 7, 4),
+    (2009, 6, 24), (2010, 6, 13), (2011, 6, 3), (2012, 5, 22), (2013, 5, 11),
+    (2014, 4, 30), (2015, 4, 20), (2016, 4, 8), (2017, 3, 29), (2018, 3, 18),
+    (2019, 3, 8), (2020, 2, 25), (2021, 2, 13), (2022, 2, 2), (2023, 1, 23),
+    (2024, 1, 13), (2025, 1, 1), (2025, 12, 21), (2026, 12, 10), (2027, 11, 29),
+    (2028, 11, 18),
+];
+
+const RAMADAN: &[(i16, i8, i8)] = &[
+    (1950, 6, 17), (1951, 6, 6), (1952, 5, 25), (1953, 5, 14), (1954, 5, 4),
+    (1955, 4, 24), (1956, 4, 12), (1957, 4, 1), (1958, 3, 21), (1959, 3, 11),
+    (1960, 2, 28), (1961, 2, 16), (1962, 2, 5), (1963, 1, 26), (1964, 1, 15),
+    (1965, 1, 3), (1965, 12, 23), (1966, 12, 13), (1967, 12, 2), (1968, 11, 21),
+    (1969, 11, 10), (1970, 11, 1), (1971, 10, 20), (1972, 10, 8), (1973, 9, 27),
+    (1974, 9, 17), (1975, 9, 6), (1976, 8, 26), (1977, 8, 15), (1978, 8, 5),
+    (1979, 7, 25), (1980, 7, 13), (1981, 7, 2), (1982, 6, 22), (1983, 6, 12),
+    (1984, 5, 31), (1985, 5, 20), (1986, 5, 9), (1987, 4, 29), (1988, 4, 17),
+    (1989, 4, 7), (1990, 3, 27), (1991, 3, 17), (1992, 3, 5), (1993, 2, 22),
+    (1994, 2, 11), (1995, 1, 31), (1996, 1, 21), (1997, 1, 10), (1997, 12, 30),
+    (1998, 12, 19), (1999, 12, 9), (2000, 11, 27), (2001, 11, 16), (2002, 11, 6),
+    (2003, 10, 26), (2004, 10, 15), (2005, 10, 4), (2006, 9, 24), (2007, 9, 13),
+    (2008, 9, 1), (2009, 8, 22), (2010, 8, 11), (2011, 8, 1), (2012, 7, 20),
+    (2013, 7, 9), (2014, 6, 28), (2015, 6, 18), (2016, 6, 6), (2017, 5, 27),
+    (2018, 5, 16), (2019, 5, 6), (2020, 4, 24), (2021, 4, 13), (2022, 4, 2),
+    (2023, 3, 23), (2024, 3, 11), (2025, 3, 1), (2026, 2, 18), (2027, 2, 8),
+    (2028, 1, 28), (2029, 1, 16), (2030, 1, 6), (2030, 12, 26), (2031, 12, 15),
+    (2032, 12, 4), (2033, 11, 23), (2034, 11, 12), (2035, 11, 2), (2036, 10, 21),
+    (2037, 10, 11), (2038, 9, 30), (2039, 9, 19), (2040, 9, 8), (2041, 8, 28),
+    (2042, 8, 17), (2043, 8, 7), (2044, 7, 26), (2045, 7, 16), (2046, 7, 5),
+    (2047, 6, 24), (2048, 6, 13), (2049, 6, 2), (2050, 5, 22),
+];
+
+const GLOBAL_YOUTH_SERVICE_DAY: &[(i16, i8, i8)] = &[
+    (2012, 4, 20), (2013, 4, 26), (2014, 4, 11), (2015, 4, 17), (2016, 4, 15),
+    (2017, 4, 21), (2018, 4, 20),
 ];
 
 const MAWLID: &[(i16, i8, i8)] = &[
