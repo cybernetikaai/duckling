@@ -1,0 +1,55 @@
+name: Rust CI
+
+# Runs the hygiene gates for the Rust port (rust/). Kept separate from the
+# Haskell `ci.yml` and scoped to changes under rust/.
+on:
+  push:
+    paths: ["rust/**", ".github/workflows/rust-ci.yml"]
+  pull_request:
+    paths: ["rust/**", ".github/workflows/rust-ci.yml"]
+
+defaults:
+  run:
+    working-directory: rust
+
+jobs:
+  check:
+    name: fmt · clippy · test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust (stable + clippy + rustfmt)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust
+
+      - name: Format (cargo fmt --check)
+        run: cargo fmt --check
+
+      - name: Lint (clippy -D warnings)
+        run: cargo clippy --all-targets -- -D warnings
+
+      - name: Build (release)
+        run: cargo build --release
+
+      - name: Test
+        run: cargo test
+
+  audit:
+    name: cargo audit (CVE / advisories)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install cargo-audit
+        run: cargo install cargo-audit --locked
+      # Fails on vulnerabilities; unmaintained/yanked advisories are reported as
+      # non-fatal warnings (e.g. the transitive build-only proc-macro-error2).
+      - name: Audit dependencies
+        run: cargo audit
