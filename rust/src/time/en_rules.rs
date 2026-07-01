@@ -132,10 +132,20 @@ fn is_a_time_of_day(t: &Token) -> bool {
 /// bare-tod paired with a *dated* time (e.g. "from 3pm to 5pm tomorrow", where
 /// "5pm tomorrow" is 5pm intersected with a day) is the trailing-date-on-interval
 /// reading — leave it to intersect(interval, date), which resolves correctly.
+///
+/// Exception: a Second-grain *instant* ("now"/"right now"/"just now") paired with
+/// a tod is a valid interval with no date to distribute ("from now to 5pm" →
+/// [now, 5pm]), and Duckling forms it. A dated tod endpoint is never Second-grain
+/// (it carries an hour/minute), so keying the exception on Second grain admits
+/// "now" without re-admitting the trailing-date case.
 fn tod_endpoint_mismatch(a: &TimeData, b: &TimeData) -> bool {
     let a_tod = matches!(a.form, Some(Form::TimeOfDay { .. }));
     let b_tod = matches!(b.form, Some(Form::TimeOfDay { .. }));
-    a_tod != b_tod
+    if a_tod == b_tod {
+        return false;
+    }
+    let non_tod = if a_tod { b } else { a };
+    non_tod.grain != Grain::Second
 }
 
 fn is_month_or_year(t: &Token) -> bool {

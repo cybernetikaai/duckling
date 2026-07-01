@@ -122,6 +122,7 @@ Branch: `rust-port-en-time`.
 | + NZ Matariki/King's + IE St Brigid's (extension) | 1069 / 1069 | 0 | 68 / 68 | **modern_holidays 20**; region audit found 3 more post-2020 public holidays the oracle lacks: NZ **Matariki** (2022, legislated Friday date-table 2022–2052), NZ **King's Birthday** (1st Mon June rename), IE **St Brigid's Day** (2023, exact date-table incl. the 1-Feb-Friday exception). Per-case `ref` pins the table years |
 | + spoken-form audit → 2 real fixes | 1069 / 1069 | 0 | 68 / 68 | **spoken_forms 53** (ASR idioms vs oracle). Found 2 faithful-port gaps the curated corpus missed: (1) written ordinals were truncated to first..tenth — ported the full `ruleOrdinals` (…twentieth, thirtieth…ninetieth) + `ruleCompositeOrdinals` ("twenty fifth"→25), fixing "the fifteenth of august", "december twenty fifth"; (2) added `<hour> oh <integer>` ("eight oh five am"→8:05). unique 1061/1069 unchanged |
 | + spoken-form audit II (breadth) | 1069 / 1069 | 0 | 68 / 68 | **spoken_forms 105**; +52 forms across 2 refs — 24h spoken ("fourteen thirty"), American "of"=to ("ten of three"→2:50), composite ordinals in dates ("march twenty first"), spelled datetimes, this/next part-of-day, week/month relatives. **0 divergences** — pass-1 fixes generalize; port faithfully matches oracle incl. forms Duckling rejects ("fourteen thirty"/"sixteen hundred"/"twenty twenty"-as-year → [] both sides) |
+| + spoken-interval audit → 1 real fix | 1069 / 1069 | 0 | 68 / 68 | **spoken_forms 142**; +37 interval/range forms across 2 refs ("nine to five", "monday to friday", "from half past nine to eleven"). Fixed "from now to 5pm": the tod/non-tod endpoint guard wrongly rejected an instant ("now", grain Second) paired with a tod → refined to allow Second-grain instants (trailing-date case "from 3pm to 5pm tomorrow" still routes correctly; differential 768 green) |
 
 ## Rule-level coverage audit
 
@@ -449,6 +450,19 @@ ordinal/oh fixes generalize, and the port faithfully matches the oracle even
 where Duckling *rejects* a form: "fourteen thirty", "sixteen hundred", and
 "twenty twenty"-as-a-year all return [] on both sides (Duckling has no 24h-spoken
 or spelled-year-by-juxtaposition rule). **spoken_forms** grew 53→105 cases.
+
+**Spoken-interval audit (this iteration → 1 real fix).** Extended the differential
+to spoken intervals/ranges (38 forms × 2 refs): "nine to five", "monday to
+friday", "from half past nine to eleven", "between two and four", month ranges.
+One real divergence: **"from now to 5pm"** — the port returned an *open* interval
+"from now" plus a separate bare "5pm", instead of the closed interval [now, 5pm].
+Cause: `tod_endpoint_mismatch` (added earlier to route "from 3pm to 5pm tomorrow"
+through intersect) rejected any tod paired with a non-tod, and "now" (grain
+Second, no tod form) tripped it. Refined the guard to allow a Second-grain instant
+(only "now"/"right now"/"just now" are Second-grain non-tods; a dated tod like
+"5pm tomorrow" carries an hour so it is never Second) — "from now to 5pm" now
+forms [now, 5pm] while the trailing-date case is unaffected (differential_corpus
+768 green, unique 1061/1069 unchanged). **spoken_forms** grew 105→142.
 
 A 20-min cron loop (job fdd78688) auto-drives further iterations.
 
