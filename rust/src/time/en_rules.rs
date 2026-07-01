@@ -92,8 +92,16 @@ fn day_of_month_td(n: i64) -> TimeData {
 /// Intersect a month/day-of-week time with a day-of-month value (port of intersectDOM).
 fn intersect_dom(td: &TimeData, dom_token: &Token) -> Option<TimeData> {
     let n = get_int_value(dom_token)?;
+    // For a day-of-week target, iterate the day-of-month (monthly, rarer) and
+    // compose the weekday within it — otherwise "Thu 15th" iterates Thursdays
+    // and hits SAFE_MAX before reaching the 15th that is a Thursday.
+    let pred = if matches!(td.form, Some(Form::DayOfWeek)) {
+        intersect(td.pred.clone(), day_of_month(n))
+    } else {
+        intersect(day_of_month(n), td.pred.clone())
+    };
     Some(TimeData {
-        pred: intersect(day_of_month(n), td.pred.clone()),
+        pred,
         grain: Grain::Day,
         latent: false,
         not_immediate: false,
@@ -808,7 +816,21 @@ fn intersect_td(a: &TimeData, b: &TimeData) -> Option<TimeData> {
     if matches!(a.pred, Predicate::Empty) || matches!(b.pred, Predicate::Empty) {
         return None;
     }
-    let (fine, coarse) = if a.grain <= b.grain { (a, b) } else { (b, a) };
+    // `intersect(fine, coarse)` iterates the coarse predicate (bounded by
+    // SAFE_MAX), composing the fine one within each occurrence. Normally the
+    // finer grain is the inner predicate. But a day-of-week is high-frequency
+    // (weekly), so when it shares a grain with a rarer operand (a specific date
+    // like "Jul 18"), make the day-of-week the inner one — otherwise iterating
+    // weeks hits SAFE_MAX before reaching e.g. the "Jul 18" that is a Friday.
+    let a_dow = matches!(a.form, Some(Form::DayOfWeek));
+    let b_dow = matches!(b.form, Some(Form::DayOfWeek));
+    let (fine, coarse) = if a.grain == b.grain && a_dow != b_dow {
+        if a_dow { (a, b) } else { (b, a) }
+    } else if a.grain <= b.grain {
+        (a, b)
+    } else {
+        (b, a)
+    };
     Some(TimeData {
         pred: intersect(fine.pred.clone(), coarse.pred.clone()),
         grain: a.grain.min(b.grain),
