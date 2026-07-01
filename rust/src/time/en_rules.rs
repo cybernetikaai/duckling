@@ -994,6 +994,22 @@ fn last_dow_of_month_td(dow: i64, m: i64) -> TimeData {
         has_timezone: false,
     }
 }
+/// The n-th day-of-week relative to a fixed calendar date (predNthAfter/predLastOf
+/// on a monthDay): n=0 → first DOW on/after the date (Reconciliation Day = 1st Mon
+/// on/after May 26); n=-1 → last DOW on/before it (Victoria Day = last Mon on/before
+/// May 25).
+fn nth_dow_rel_date_td(n: i64, dow: i64, m: i64, d: i64) -> TimeData {
+    TimeData {
+        pred: take_nth_after(n, false, day_of_week(dow), month_day_td(m, d).pred),
+        grain: Grain::Day,
+        latent: false,
+        not_immediate: false,
+        form: None,
+        direction: None,
+        holiday: None,
+        has_timezone: false,
+    }
+}
 fn mk_holiday(name: &str, mut td: TimeData) -> TimeData {
     td.holiday = Some(name.to_string());
     td
@@ -1070,6 +1086,10 @@ fn region_holiday_rules(locale: Locale) -> Vec<Rule> {
                 Box::new(move || {
                     Some(cycle_nth_after_td(false, Grain::Day, days, &nth_dow_of_month_td(n, dow, m)))
                 })
+            }
+            "nth_dow_rel_date" => {
+                let (n, dow, m, d) = (i("n"), i("dow"), i("month"), i("day"));
+                Box::new(move || Some(nth_dow_rel_date_td(n, dow, m, d)))
             }
             _ => continue, // remaining "other": intervals / calendar-computed / etc.
         };

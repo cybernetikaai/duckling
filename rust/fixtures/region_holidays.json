@@ -199,8 +199,11 @@
   {
    "name": "Victoria Day",
    "regex": "sovereign's birthday|victoria day",
-   "kind": "other",
-   "haskell": "predLastOf (dayOfWeek 1) (monthDay 5 25)"
+   "kind": "nth_dow_rel_date",
+   "n": -1,
+   "dow": 1,
+   "month": 5,
+   "day": 26
   },
   {
    "name": "Vimy Ridge Day",
@@ -306,8 +309,11 @@
   {
    "name": "National Patriots' Day",
    "regex": "national patriot'?s'? day",
-   "kind": "other",
-   "haskell": "predNthAfter (-1) (dayOfWeek 1) (monthDay 5 25)"
+   "kind": "nth_dow_rel_date",
+   "n": -1,
+   "dow": 1,
+   "month": 5,
+   "day": 25
   },
   {
    "name": "Discovery Day",
@@ -509,8 +515,11 @@
   {
    "name": "Reconciliation Day",
    "regex": "reconciliation\\s+day",
-   "kind": "other",
-   "haskell": "predNthAfter 0 (dayOfWeek 1) (monthDay 5 26)"
+   "kind": "nth_dow_rel_date",
+   "n": 0,
+   "dow": 1,
+   "month": 5,
+   "day": 26
   },
   {
    "name": "NAIDOC Week",

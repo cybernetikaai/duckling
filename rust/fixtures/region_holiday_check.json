@@ -860,6 +860,39 @@
   },
   {
    "locale": "EnCa",
+   "input": "victoria day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Victoria Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "victoria day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-25T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Victoria Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "victoria day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Victoria Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
    "input": "vimy ridge day",
    "ref": "2013-01-01T14:00:00Z",
    "expected": {
@@ -1251,6 +1284,39 @@
     "value": "2018-08-20T00:00:00.000-02:00",
     "grain": "day",
     "holidayBeta": "Yukon's Discovery Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "national patriots' day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-20T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Patriots' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "national patriots' day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-05-18T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Patriots' Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnCa",
+   "input": "national patriots' day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-21T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "National Patriots' Day",
     "type": "value"
    }
   },
@@ -2043,6 +2109,39 @@
     "value": "2018-06-04T00:00:00.000-02:00",
     "grain": "day",
     "holidayBeta": "Western Australia Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "reconciliation day",
+   "ref": "2013-01-01T14:00:00Z",
+   "expected": {
+    "value": "2013-05-27T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Reconciliation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "reconciliation day",
+   "ref": "2015-01-01T14:00:00Z",
+   "expected": {
+    "value": "2015-06-01T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Reconciliation Day",
+    "type": "value"
+   }
+  },
+  {
+   "locale": "EnAu",
+   "input": "reconciliation day",
+   "ref": "2018-01-01T14:00:00Z",
+   "expected": {
+    "value": "2018-05-28T00:00:00.000-02:00",
+    "grain": "day",
+    "holidayBeta": "Reconciliation Day",
     "type": "value"
    }
   },
