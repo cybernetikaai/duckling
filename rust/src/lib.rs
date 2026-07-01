@@ -91,6 +91,50 @@ pub fn parse_locale(input: &str, ctx: &ResolveContext, locale: Locale) -> Vec<En
     resolve_entities(&rules_for(locale), &doc, ctx)
 }
 
+/// Parse `input` for **both** Time and Duration and return the ranked entities —
+/// the `dims:["time","duration"]` surface. Time and Duration compete in one pool
+/// by range domination (dimension-agnostic, exactly as Duckling): the widest
+/// match at each position wins, disjoint matches all surface. So "in 2 hours" →
+/// one Time entity (the contained "2 hours" Duration is dominated), while
+/// "set a timer for 20 minutes and wake me at 7am" → a Duration and a Time
+/// (disjoint). `parse` (Time-only) is unchanged, so the Time corpus is untouched.
+pub fn parse_all(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
+    let doc = Document::new(input);
+    let rules = rules_for(Locale::EnUs);
+    let nodes = engine::parse_string(&rules, &doc);
+    let scored: Vec<(Node, Entity)> = nodes
+        .into_iter()
+        .filter_map(|n| {
+            let e = match &n.token {
+                Token::Time(td) => Entity {
+                    dim: "time".to_string(),
+                    body: doc.substring(n.range.0, n.range.1),
+                    start: n.range.0,
+                    end: n.range.1,
+                    value: resolve::resolve_time(td, ctx)?,
+                    latent: td.latent,
+                },
+                Token::Duration(dd) => Entity {
+                    dim: "duration".to_string(),
+                    body: doc.substring(n.range.0, n.range.1),
+                    start: n.range.0,
+                    end: n.range.1,
+                    value: resolve::duration_value(dd),
+                    latent: false,
+                },
+                _ => return None,
+            };
+            Some((n, e))
+        })
+        .collect();
+    let ranked = CLASSIFIERS.with(|cl| ranking::rank(cl, scored));
+    let mut seen = std::collections::HashSet::new();
+    ranked
+        .into_iter()
+        .filter(|e| seen.insert((e.start, e.end, e.dim.clone(), e.value.to_string())))
+        .collect()
+}
+
 /// Parse `input` and return resolved **Duration** entities (dim `"duration"`),
 /// ranked (range-dominated). Durations are context-free — "half an hour",
 /// "2 years and 3 months", "an hour and 45 minutes" — so no `ResolveContext` is

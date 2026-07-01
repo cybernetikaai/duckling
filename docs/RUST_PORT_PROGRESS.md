@@ -126,6 +126,7 @@ Branch: `rust-port-en-time`.
 | + spoken-duration composition audit | 1069 / 1069 | 0 | 68 / 68 | **spoken_forms 178**; +36 duration/directional compositions across 2 refs ("half an hour before noon", "twenty minutes after three", "an hour and a half ago", "any time after half nine", "three days before christmas", "within the next hour"). **0 divergences** — the original corpus's duration rules already cover this; the spoken/British variants compose correctly. Spoken surface now thoroughly validated |
 | + Duration dimension (new output) | 1069 / 1069 | 0 | 68 / 68 | **duration_corpus 83** (all of Duckling/Duration/EN/Corpus.hs + 5 negatives); new `parse_duration` emits `dim:"duration"` JSON ({value,unit,`<unit>`,normalized}); ported the DurationData Semigroup + composite rules ("2 years and 3 months"→27mo, "an hour and 45 minutes"→105min, "1 year 2 days 3 hours and 4 seconds"). **Bonus Time fix:** the composites also fixed "2 hours and 30 minutes from now" (was dropping "2 hours"→05:00, now 07:00). Kept separate from `parse` (Time), so Time ranker untouched |
 | + Duration differential vs oracle | 1069 / 1069 | 0 | 68 / 68 | **duration_corpus 135** (+47 oracle-verified cases, +5 genuine negatives); 64-input differential (abbreviations, fractions, composites, colloquial, more/less, precision) → **0 divergences** incl. partial-match parity ("3.5 weeks"→both drop "3." and yield partial "5 weeks", since decimal-durations only apply to hours/minutes). New dimension validated against the live oracle, not just the transcribed corpus |
+| + combined Time+Duration (parse_all) | 1069 / 1069 | 0 | 68 / 68 | **combined_dims 28**; new `parse_all` = the `dims:["time","duration"]` surface, ranking both in one pool by dimension-agnostic range domination. **0 divergences** vs oracle: "in 2 hours"→Time (contained Duration dominated), "…20 minutes and wake me at 7am"→Duration+Time (disjoint), "at 3pm for 2 hours"→one Time. `parse` (Time-only) unchanged → Time corpus untouched |
 
 ## Rule-level coverage audit
 
@@ -336,6 +337,20 @@ rule only applies to hours/minutes), so both yield the partial "5 weeks" (droppi
 bugs): "5s"/"3wk"/"6 mos" abbreviations and "several weeks" are unsupported by
 Duckling too — kept out of the hard-negative list so a future beyond-Duckling
 extension isn't blocked.
+
+**Combined Time+Duration output (this iteration → 0 divergences).** Added
+`parse_all(input, ctx)` — the `dims:["time","duration"]` surface — which collects
+both Time and Duration nodes and ranks them in one pool by *dimension-agnostic*
+range domination (the port's existing `rank` already works this way), exactly as
+Duckling: the widest match per position wins, disjoint matches all surface. This
+is a *new* entry point; `parse` (Time-only) and `parse_duration` are unchanged, so
+the 1069/1069 Time corpus is untouched — zero cross-dimension ranking risk to the
+validated path. Verified against the oracle (dims=["time","duration"]) on 28 mixed
+utterances: "in 2 hours"→Time (the contained "2 hours" Duration is dominated),
+"2 hours"→Duration, "at 3pm for 2 hours"→one Time [0,18] (the `<time> for
+<duration>` rule spans it, dominating the inner Duration), "set a timer for 20
+minutes and wake me at 7am"→Duration[16,26]+Time[39,45] (disjoint, both surface).
+0 divergences; locked as **combined_dims 28**.
 
 **Composition fuzz (this iteration).** Beyond the curated corpus, generated
 ~770 compositional probes (deep nestings, directionals, interval+date, duration

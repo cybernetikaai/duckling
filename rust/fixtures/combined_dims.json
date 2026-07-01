@@ -1,0 +1,290 @@
+{
+ "_comment": "Combined time+duration (parse_all) cross-dimension range-domination, vs the oracle dims=[time,duration] at ref 2013-02-12 04:30. Each case lists the expected surviving entities as [dim,start,end]; the widest match per position wins, disjoint matches all surface.",
+ "cases": [
+  {
+   "input": "in 2 hours",
+   "expected": [
+    [
+     "time",
+     0,
+     10
+    ]
+   ]
+  },
+  {
+   "input": "2 hours",
+   "expected": [
+    [
+     "duration",
+     0,
+     7
+    ]
+   ]
+  },
+  {
+   "input": "for 2 hours",
+   "expected": [
+    [
+     "duration",
+     4,
+     11
+    ]
+   ]
+  },
+  {
+   "input": "3 days",
+   "expected": [
+    [
+     "duration",
+     0,
+     6
+    ]
+   ]
+  },
+  {
+   "input": "in 3 days",
+   "expected": [
+    [
+     "time",
+     0,
+     9
+    ]
+   ]
+  },
+  {
+   "input": "2 hours and 30 minutes",
+   "expected": [
+    [
+     "duration",
+     0,
+     22
+    ]
+   ]
+  },
+  {
+   "input": "2 hours and 30 minutes from now",
+   "expected": [
+    [
+     "time",
+     0,
+     31
+    ]
+   ]
+  },
+  {
+   "input": "set a timer for 20 minutes and wake me at 7am",
+   "expected": [
+    [
+     "duration",
+     16,
+     26
+    ],
+    [
+     "time",
+     39,
+     45
+    ]
+   ]
+  },
+  {
+   "input": "at 3pm for 2 hours",
+   "expected": [
+    [
+     "time",
+     0,
+     18
+    ]
+   ]
+  },
+  {
+   "input": "half an hour",
+   "expected": [
+    [
+     "duration",
+     0,
+     12
+    ]
+   ]
+  },
+  {
+   "input": "meeting in 30 minutes",
+   "expected": [
+    [
+     "time",
+     8,
+     21
+    ]
+   ]
+  },
+  {
+   "input": "call me in 15 minutes",
+   "expected": [
+    [
+     "time",
+     8,
+     21
+    ]
+   ]
+  },
+  {
+   "input": "wake me up in 8 hours",
+   "expected": [
+    [
+     "time",
+     11,
+     21
+    ]
+   ]
+  },
+  {
+   "input": "the meeting lasts 2 hours",
+   "expected": [
+    [
+     "duration",
+     18,
+     25
+    ]
+   ]
+  },
+  {
+   "input": "see you in a week",
+   "expected": [
+    [
+     "time",
+     8,
+     17
+    ]
+   ]
+  },
+  {
+   "input": "remind me in half an hour",
+   "expected": [
+    [
+     "time",
+     10,
+     25
+    ]
+   ]
+  },
+  {
+   "input": "30 minutes",
+   "expected": [
+    [
+     "duration",
+     0,
+     10
+    ]
+   ]
+  },
+  {
+   "input": "a day",
+   "expected": [
+    [
+     "duration",
+     0,
+     5
+    ]
+   ]
+  },
+  {
+   "input": "in a day",
+   "expected": [
+    [
+     "time",
+     0,
+     8
+    ]
+   ]
+  },
+  {
+   "input": "lunch at noon for an hour",
+   "expected": [
+    [
+     "time",
+     0,
+     25
+    ]
+   ]
+  },
+  {
+   "input": "in 3 days at 5pm",
+   "expected": [
+    [
+     "time",
+     0,
+     16
+    ]
+   ]
+  },
+  {
+   "input": "3 weeks from now",
+   "expected": [
+    [
+     "time",
+     0,
+     16
+    ]
+   ]
+  },
+  {
+   "input": "20 minutes before 3pm",
+   "expected": [
+    [
+     "time",
+     0,
+     21
+    ]
+   ]
+  },
+  {
+   "input": "for the next 2 hours",
+   "expected": [
+    [
+     "time",
+     8,
+     20
+    ]
+   ]
+  },
+  {
+   "input": "two days ago",
+   "expected": [
+    [
+     "time",
+     0,
+     12
+    ]
+   ]
+  },
+  {
+   "input": "5 minutes",
+   "expected": [
+    [
+     "duration",
+     0,
+     9
+    ]
+   ]
+  },
+  {
+   "input": "tomorrow for 3 days",
+   "expected": [
+    [
+     "time",
+     0,
+     19
+    ]
+   ]
+  },
+  {
+   "input": "every 2 hours",
+   "expected": [
+    [
+     "duration",
+     6,
+     13
+    ]
+   ]
+  }
+ ]
+}

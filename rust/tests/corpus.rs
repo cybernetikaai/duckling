@@ -580,6 +580,37 @@ fn duration_corpus() {
     assert!(failures.is_empty(), "{} failures:\n{}", failures.len(), failures.join("\n"));
 }
 
+/// Combined Time+Duration (`parse_all`) — the `dims:["time","duration"]` surface.
+/// Time and Duration compete in one pool by dimension-agnostic range domination,
+/// exactly as Duckling: the widest match per position wins, disjoint matches all
+/// surface. Each case's expected surviving entities (as (dim, start, end)) were
+/// captured from the live oracle. Verifies e.g. "in 2 hours"→one Time (contained
+/// "2 hours" Duration dominated), "…20 minutes and wake me at 7am"→Duration+Time.
+#[test]
+fn combined_dims() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/combined_dims.json")).unwrap();
+    let ctx = ctx();
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for c in data["cases"].as_array().unwrap() {
+        checked += 1;
+        let input = c["input"].as_str().unwrap();
+        let mut exp: Vec<(String, u64, u64)> = c["expected"].as_array().unwrap().iter()
+            .map(|e| (e[0].as_str().unwrap().to_string(), e[1].as_u64().unwrap(), e[2].as_u64().unwrap()))
+            .collect();
+        exp.sort();
+        let mut got: Vec<(String, u64, u64)> = duckling::parse_all(input, &ctx)
+            .into_iter().map(|e| (e.dim, e.start as u64, e.end as u64)).collect();
+        got.sort();
+        if exp != got {
+            failures.push(format!("{input:?}\n  expected {exp:?}\n  got      {got:?}"));
+        }
+    }
+    eprintln!("combined_dims checked {checked}, {} failing", failures.len());
+    assert!(failures.is_empty(), "{} failures:\n{}", failures.len(), failures.join("\n"));
+}
+
 /// Large-scale randomized differential: random inputs (from parameterized
 /// templates across every rule family) paired with random references (date +
 /// time-of-day, 2010–2022), cross-checked against the oracle. All prior fuzzing
