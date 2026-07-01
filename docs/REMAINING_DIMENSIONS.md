@@ -34,7 +34,7 @@ they never touch the Time ranker.
 | Dimension | Haskell | Numeral refs | Estimate |
 |---|---|---|---|
 | ~~Temperature~~ ✅ | 161 L | done — temperature_corpus (31+3 neg) | — |
-| Volume | 166 L | 7 | ~½–1 day |
+| ~~Volume~~ ✅ | 166 L | done — volume_corpus (54+4 neg) | — |
 | Distance | 213 L | 13 | ~1 day |
 | Quantity | 256 L | 21 | ~1 day |
 | AmountOfMoney | 432 L | 20 | ~1.5 days |
@@ -85,4 +85,7 @@ product actually needs to extract those quantities.
 2. ~~Email → Url → CreditCardNumber → PhoneNumber (quick wins)~~ — ✅ done.
 3. ~~Finish Numeral~~ ✅ — corpus-complete (105/105); one documented omission
    (ruleSkipHundreds1). Prerequisite for Bucket B now cleared.
-4. Temperature → Volume → Distance → Quantity → AmountOfMoney.
+4. ~~Temperature~~ ✅ → ~~Volume~~ ✅ → Distance → Quantity → AmountOfMoney.
+   **Next: Distance** (Duckling/Distance/EN — km/mi/m/cm/in/yd/ft, `<numeral> <unit>`,
+   feet-and-inches "5'9\"", intervals). Same isolated-rule-set pattern as Volume:
+   its own `numeral + distance` set via `dim_rules`, so zero Time-corpus risk.

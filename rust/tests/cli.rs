@@ -92,6 +92,10 @@ fn each_dimension_dispatches() {
         parse(&["--dims", "temperature", "70 degrees"])[0]["value"]["unit"],
         "degree"
     );
+    assert_eq!(
+        parse(&["--dims", "volume", "2 liters"])[0]["value"]["unit"],
+        "litre"
+    );
 }
 
 #[test]

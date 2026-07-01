@@ -25,6 +25,7 @@ pub mod time;
 pub mod timegrain;
 pub mod types;
 pub mod url;
+pub mod volume;
 
 pub use resolve::{Entity, ResolveContext};
 
@@ -354,6 +355,21 @@ pub fn parse_temperature(input: &str) -> Vec<Entity> {
     });
     emit_entities(&rules, input, |t| match t {
         Token::Temperature(td) => resolve::temperature_value(td).map(|v| ("temperature", v)),
+        _ => None,
+    })
+}
+
+/// Parse volumes ("2 liters", "between 100 and 1000 l", "at least 4 ml"). Runs
+/// in Volume's own rule set (numerals + volume rules), so it never touches the
+/// Time ranker.
+pub fn parse_volume(input: &str) -> Vec<Entity> {
+    let rules = dim_rules("volume", || {
+        let mut r = numeral::en::numeral_rules();
+        r.extend(volume::en::volume_rules());
+        r
+    });
+    emit_entities(&rules, input, |t| match t {
+        Token::Volume(vd) => resolve::volume_value(vd).map(|v| ("volume", v)),
         _ => None,
     })
 }

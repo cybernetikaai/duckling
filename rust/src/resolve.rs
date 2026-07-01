@@ -94,6 +94,22 @@ pub fn temperature_value(t: &crate::temperature::TemperatureData) -> Option<serd
     })
 }
 
+/// Resolve a Volume (port of the VolumeData Resolve instance). None when there
+/// is no unit (a latent value-only or unit-only volume is never emitted).
+pub fn volume_value(v: &crate::volume::VolumeData) -> Option<serde_json::Value> {
+    let u = v.unit?.as_str();
+    Some(match (v.value, v.min, v.max) {
+        (Some(val), _, _) => serde_json::json!({"value": num(val), "unit": u, "type": "value"}),
+        (None, Some(from), Some(to)) => serde_json::json!({
+            "type": "interval", "from": {"value": num(from), "unit": u}, "to": {"value": num(to), "unit": u}}),
+        (None, Some(from), None) => serde_json::json!({
+            "type": "interval", "from": {"value": num(from), "unit": u}}),
+        (None, None, Some(to)) => serde_json::json!({
+            "type": "interval", "to": {"value": num(to), "unit": u}}),
+        _ => return None,
+    })
+}
+
 /// Resolve a CreditCardNumber to Duckling's JSON: `{value, issuer}` (no `type`).
 pub fn creditcard_value(c: &crate::creditcard::CreditCardData) -> serde_json::Value {
     serde_json::json!({"value": c.number, "issuer": c.issuer})

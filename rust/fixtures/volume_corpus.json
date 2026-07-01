@@ -1,0 +1,80 @@
+{
+ "_comment": "Transcribed from Duckling/Volume/EN/Corpus.hs. parse_volume must produce an entity whose value equals expected. negatives (value-only or unit-only) produce none.",
+ "cases": [
+  { "input": "1 liter",    "expected": {"value": 1, "unit": "litre", "type": "value"} },
+  { "input": "1 litre",    "expected": {"value": 1, "unit": "litre", "type": "value"} },
+  { "input": "one liter",  "expected": {"value": 1, "unit": "litre", "type": "value"} },
+  { "input": "a liter",    "expected": {"value": 1, "unit": "litre", "type": "value"} },
+
+  { "input": "2 liters",   "expected": {"value": 2, "unit": "litre", "type": "value"} },
+  { "input": "2l",         "expected": {"value": 2, "unit": "litre", "type": "value"} },
+
+  { "input": "1000 liters",    "expected": {"value": 1000, "unit": "litre", "type": "value"} },
+  { "input": "thousand liters","expected": {"value": 1000, "unit": "litre", "type": "value"} },
+
+  { "input": "half liter",  "expected": {"value": 0.5, "unit": "litre", "type": "value"} },
+  { "input": "half-litre",  "expected": {"value": 0.5, "unit": "litre", "type": "value"} },
+  { "input": "half a liter","expected": {"value": 0.5, "unit": "litre", "type": "value"} },
+
+  { "input": "quarter-litre",  "expected": {"value": 0.25, "unit": "litre", "type": "value"} },
+  { "input": "fourth of liter","expected": {"value": 0.25, "unit": "litre", "type": "value"} },
+
+  { "input": "one milliliter","expected": {"value": 1, "unit": "millilitre", "type": "value"} },
+  { "input": "an ml",         "expected": {"value": 1, "unit": "millilitre", "type": "value"} },
+  { "input": "a millilitre",  "expected": {"value": 1, "unit": "millilitre", "type": "value"} },
+
+  { "input": "250 milliliters","expected": {"value": 250, "unit": "millilitre", "type": "value"} },
+  { "input": "250 millilitres","expected": {"value": 250, "unit": "millilitre", "type": "value"} },
+  { "input": "250ml",          "expected": {"value": 250, "unit": "millilitre", "type": "value"} },
+  { "input": "250mls",         "expected": {"value": 250, "unit": "millilitre", "type": "value"} },
+  { "input": "250 ml",         "expected": {"value": 250, "unit": "millilitre", "type": "value"} },
+
+  { "input": "3 gallons",           "expected": {"value": 3, "unit": "gallon", "type": "value"} },
+  { "input": "3 gal",               "expected": {"value": 3, "unit": "gallon", "type": "value"} },
+  { "input": "3gal",                "expected": {"value": 3, "unit": "gallon", "type": "value"} },
+  { "input": "around three gallons","expected": {"value": 3, "unit": "gallon", "type": "value"} },
+
+  { "input": "0.5 gals",     "expected": {"value": 0.5, "unit": "gallon", "type": "value"} },
+  { "input": "1/2 gallon",   "expected": {"value": 0.5, "unit": "gallon", "type": "value"} },
+  { "input": "half a gallon","expected": {"value": 0.5, "unit": "gallon", "type": "value"} },
+
+  { "input": "0.1 gallons",       "expected": {"value": 0.1, "unit": "gallon", "type": "value"} },
+  { "input": "tenth of a gallon", "expected": {"value": 0.1, "unit": "gallon", "type": "value"} },
+
+  { "input": "3 hectoliters", "expected": {"value": 3, "unit": "hectolitre", "type": "value"} },
+
+  { "input": "between 100 and 1000 liters", "expected": {"type": "interval", "from": {"value": 100, "unit": "litre"}, "to": {"value": 1000, "unit": "litre"}} },
+  { "input": "100-1000 liters",             "expected": {"type": "interval", "from": {"value": 100, "unit": "litre"}, "to": {"value": 1000, "unit": "litre"}} },
+  { "input": "from 100 to 1000 l",          "expected": {"type": "interval", "from": {"value": 100, "unit": "litre"}, "to": {"value": 1000, "unit": "litre"}} },
+  { "input": "100 - 1000 l",                "expected": {"type": "interval", "from": {"value": 100, "unit": "litre"}, "to": {"value": 1000, "unit": "litre"}} },
+
+  { "input": "around 2 -7 l",                     "expected": {"type": "interval", "from": {"value": 2, "unit": "litre"}, "to": {"value": 7, "unit": "litre"}} },
+  { "input": "~2-7 liters",                       "expected": {"type": "interval", "from": {"value": 2, "unit": "litre"}, "to": {"value": 7, "unit": "litre"}} },
+  { "input": "from 2 to 7 l",                     "expected": {"type": "interval", "from": {"value": 2, "unit": "litre"}, "to": {"value": 7, "unit": "litre"}} },
+  { "input": "between 2.0 l and about 7.0 l",     "expected": {"type": "interval", "from": {"value": 2, "unit": "litre"}, "to": {"value": 7, "unit": "litre"}} },
+  { "input": "between 2l and about 7l",           "expected": {"type": "interval", "from": {"value": 2, "unit": "litre"}, "to": {"value": 7, "unit": "litre"}} },
+  { "input": "2 - ~7 litres",                     "expected": {"type": "interval", "from": {"value": 2, "unit": "litre"}, "to": {"value": 7, "unit": "litre"}} },
+
+  { "input": "less than six gallons","expected": {"type": "interval", "to": {"value": 6, "unit": "gallon"}} },
+  { "input": "under six gallon",     "expected": {"type": "interval", "to": {"value": 6, "unit": "gallon"}} },
+  { "input": "no more than 6 gals",  "expected": {"type": "interval", "to": {"value": 6, "unit": "gallon"}} },
+  { "input": "below 6.0gal",         "expected": {"type": "interval", "to": {"value": 6, "unit": "gallon"}} },
+  { "input": "at most six gallons",  "expected": {"type": "interval", "to": {"value": 6, "unit": "gallon"}} },
+
+  { "input": "exceeding 2 hectoliters","expected": {"type": "interval", "from": {"value": 2, "unit": "hectolitre"}} },
+  { "input": "at least two hectolitres","expected": {"type": "interval", "from": {"value": 2, "unit": "hectolitre"}} },
+  { "input": "over 2 hectolitre",      "expected": {"type": "interval", "from": {"value": 2, "unit": "hectolitre"}} },
+  { "input": "more than 2 hectoliter", "expected": {"type": "interval", "from": {"value": 2, "unit": "hectolitre"}} },
+
+  { "input": "exceeding 4 ml",       "expected": {"type": "interval", "from": {"value": 4, "unit": "millilitre"}} },
+  { "input": "at least 4.0 ml",      "expected": {"type": "interval", "from": {"value": 4, "unit": "millilitre"}} },
+  { "input": "over four milliliters","expected": {"type": "interval", "from": {"value": 4, "unit": "millilitre"}} },
+  { "input": "more than four mls",   "expected": {"type": "interval", "from": {"value": 4, "unit": "millilitre"}} }
+ ],
+ "negatives": [
+  "5",
+  "liter",
+  "gallons",
+  "hello world"
+ ]
+}

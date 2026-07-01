@@ -15,6 +15,7 @@ use crate::temperature::TemperatureData;
 use crate::time::object::IntervalDirection;
 use crate::time::predicate::Predicate;
 use crate::url::UrlData;
+use crate::volume::VolumeData;
 
 /// English locale variant. Base EN is region-neutral; regions differ in numeric-
 /// date field order — US reads "3/4" as month/day (March 4), GB as day/month
@@ -122,6 +123,7 @@ pub enum Token {
     CreditCard(CreditCardData),
     Phone(PhoneNumberData),
     Temperature(TemperatureData),
+    Volume(VolumeData),
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
