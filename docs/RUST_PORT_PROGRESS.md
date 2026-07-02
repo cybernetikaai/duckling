@@ -311,6 +311,10 @@ The 8 remaining `unique`-mode gaps ("for a quarter past 3pm"×5, "Fri, Jul 18, 2
 
 Not attempted (out of scope / disproportionate): the `TimeDatePredicate` field-merge that would let leading-"Fri," combos produce a *full-span* parse (a core-architecture rewrite for zero contains-mode gain). The opaque-Series predicate model is behavior-complete for the corpus as-is.
 
+**Unique-mode re-investigation (later iteration).** Diagnosed the 8 `unique` gaps precisely:
+- **5× "for a quarter past …"** — the port's best entity IS the correct value ("a quarter past 3pm"); Duckling does not absorb a leading "for" either, so these have no full-span parse *in Duckling*. Forcing one would be a **divergence**, not a fix. Test artifact, correctly left alone.
+- **3× "Fri, Jul 18, 2014 07:00 PM/19h00/19h"** — resolved *value* is already correct (the port emits "Jul 18, 2014 07:00 PM" → the right instant, plus a separate "Fri, Jul 18, 2014" day). The only gap is span: a weekday-carrying date won't intersect a **connector-less** trailing time. Note "Fri, Jul 18, 2014 **at** 7pm" and "tuesday feb 18 2014 at 7pm" both parse full-span — the machinery exists; only the bare-time (no "at") three-way merge is missing. Fixing it means touching the Time intersect rules, which risks the 1069/1069 for a span-only gain on 3 inputs whose values are already right — so still deliberately not done. Values are behavior-complete; the span difference is the only residue.
+
 **Duration dimension — now implemented** (was previously deferred). `parse_duration(input)`
 emits standalone Duration entities (`dim:"duration"`, `{value, unit, <unit>,
 type, normalized:{value,unit}}`) — the full `dims:["duration"]` surface. It is a

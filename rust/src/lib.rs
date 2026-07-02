@@ -158,7 +158,7 @@ pub fn parse_locale(input: &str, ctx: &ResolveContext, locale: Locale) -> Vec<En
 /// one Time entity (the contained "2 hours" Duration is dominated), while
 /// "set a timer for 20 minutes and wake me at 7am" → a Duration and a Time
 /// (disjoint). `parse` (Time-only) is unchanged, so the Time corpus is untouched.
-pub fn parse_all(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
+pub fn parse_time_and_duration(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
     let doc = Document::new(input);
     let rules = rules_for(Locale::EnUs);
     let nodes = engine::parse_string(&rules, &doc);
@@ -193,6 +193,55 @@ pub fn parse_all(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
         .into_iter()
         .filter(|e| seen.insert((e.start, e.end, e.dim.clone(), e.value.to_string())))
         .collect()
+}
+
+/// Parse `input` across **every** dimension and return the surviving entities —
+/// the unrestricted "all dimensions" surface for extracting all structured data
+/// from an utterance (e.g. "pay $20 for 2 lbs of coffee at 3pm" → an
+/// amount-of-money, a quantity, and a time). Time/Duration are ranked together
+/// by the classifier (via [`parse_time_and_duration`]); every other dimension is
+/// resolved in its own isolated rule set. All results are then merged by
+/// **cross-dimension range domination**: an entity whose span is strictly
+/// contained in another's is dropped (so the bare numeral inside "$20" or the
+/// "3" inside "3pm" disappears), while disjoint entities all survive. Genuinely
+/// ambiguous equal spans across dimensions (e.g. "10 c" as cents vs. Celsius) are
+/// both surfaced — the caller picks. `parse` (Time-only) is untouched.
+pub fn parse_all(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
+    let mut all = parse_time_and_duration(input, ctx);
+    all.extend(parse_numeral(input));
+    all.extend(parse_ordinal(input));
+    all.extend(parse_temperature(input));
+    all.extend(parse_volume(input));
+    all.extend(parse_distance(input));
+    all.extend(parse_quantity(input));
+    all.extend(parse_amountofmoney(input));
+    all.extend(parse_email(input));
+    all.extend(parse_url(input));
+    all.extend(parse_creditcard(input));
+    all.extend(parse_phonenumber(input));
+
+    // Cross-dimension range domination: drop any entity whose span is strictly
+    // contained within another entity's span. Equal / partially-overlapping
+    // spans are both kept.
+    let spans: Vec<(usize, usize)> = all.iter().map(|e| (e.start, e.end)).collect();
+    let mut kept: Vec<Entity> = all
+        .iter()
+        .enumerate()
+        .filter(|(i, _)| {
+            let (si, ei) = spans[*i];
+            !spans
+                .iter()
+                .enumerate()
+                .any(|(j, &(sj, ej))| *i != j && sj <= si && ei <= ej && (ej - sj) > (ei - si))
+        })
+        .map(|(_, e)| e.clone())
+        .collect();
+
+    // Drop exact duplicates, then order by position for a stable, readable result.
+    let mut seen = std::collections::HashSet::new();
+    kept.retain(|e| seen.insert((e.start, e.end, e.dim.clone(), e.value.to_string())));
+    kept.sort_by_key(|e| (e.start, e.end));
+    kept
 }
 
 /// Parse `input` and return resolved **Duration** entities (dim `"duration"`),

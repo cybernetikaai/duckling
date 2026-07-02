@@ -1096,7 +1096,7 @@ fn combined_dims() {
             })
             .collect();
         exp.sort();
-        let mut got: Vec<(String, u64, u64)> = duckling::parse_all(input, &ctx)
+        let mut got: Vec<(String, u64, u64)> = duckling::parse_time_and_duration(input, &ctx)
             .into_iter()
             .map(|e| (e.dim, e.start as u64, e.end as u64))
             .collect();
@@ -1705,6 +1705,80 @@ fn amountofmoney_corpus() {
     assert!(
         failures.is_empty(),
         "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
+}
+
+/// Unified `parse_all` — the "all dimensions" surface. Realistic utterances
+/// should yield exactly the expected set of entity dimensions (cross-dimension
+/// range domination drops numerals inside "$20"/"3pm"/etc.), with spot-checked
+/// values. This is a behavioral test (Duckling has no combined-corpus fixture);
+/// each expectation is hand-derived and verifiable by reading the input.
+#[test]
+#[allow(clippy::type_complexity)]
+fn parse_all_dims() {
+    let ctx = ctx();
+    // (input, expected sorted dim set, (dim, value-substring) spot-checks)
+    let cases: &[(&str, &[&str], &[(&str, &str)])] = &[
+        (
+            "pay $20 for 2 lbs of coffee at 3pm",
+            &["amount-of-money", "quantity", "time"],
+            &[
+                ("amount-of-money", "\"unit\":\"$\""),
+                ("quantity", "\"product\":\"coffee\""),
+                ("time", "T15:00"),
+            ],
+        ),
+        (
+            "it is 20 degrees and 5 km away",
+            &["distance", "temperature"],
+            &[
+                ("temperature", "\"unit\":\"degree\""),
+                ("distance", "\"unit\":\"kilometre\""),
+            ],
+        ),
+        ("email me at a@b.com", &["email"], &[("email", "a@b.com")]),
+        (
+            "call 555-123-4567",
+            &["phone-number"],
+            &[("phone-number", "5551234567")],
+        ),
+        (
+            "I need 3 cups of sugar",
+            &["quantity"],
+            &[("quantity", "\"product\":\"sugar\"")],
+        ),
+    ];
+    let mut failures = Vec::new();
+    for (input, want_dims, checks) in cases {
+        let got = duckling::parse_all(input, &ctx);
+        let mut dims: Vec<String> = got.iter().map(|e| e.dim.clone()).collect();
+        dims.sort();
+        dims.dedup();
+        let want: Vec<String> = want_dims.iter().map(|s| s.to_string()).collect();
+        if dims != want {
+            failures.push(format!(
+                "{input:?}\n  expected dims {want:?}\n  got dims      {dims:?}"
+            ));
+        }
+        for (dim, sub) in *checks {
+            let found = got
+                .iter()
+                .any(|e| e.dim == *dim && e.value.to_string().contains(sub));
+            if !found {
+                failures.push(format!(
+                    "{input:?}\n  missing {dim} entity containing {sub:?}\n  got {:?}",
+                    got.iter()
+                        .map(|e| (&e.dim, e.value.to_string()))
+                        .collect::<Vec<_>>()
+                ));
+            }
+        }
+    }
+    assert!(
+        failures.is_empty(),
+        "{} parse_all failures:\n{}",
         failures.len(),
         failures.join("\n")
     );

@@ -302,10 +302,9 @@ pub fn resolve_time(td: &TimeData, ctx: &ResolveContext) -> Option<serde_json::V
             v.push(c);
         }
         v.extend(vfut.by_ref().take(3usize.saturating_sub(v.len())));
-        if v.is_empty()
-            && let Some(b) = first_past
-        {
-            v.push(b);
+        if v.is_empty() {
+            // first_past is a Copy Option; extend pushes it iff Some.
+            v.extend(first_past);
         }
         v
     };
