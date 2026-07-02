@@ -1826,3 +1826,58 @@ fn hyphenated_units_corpus() {
         failures.join("\n")
     );
 }
+
+/// Grain-precision truncation (beyond-Duckling display helper). `value_at_grain`
+/// truncates one RFC3339 value to its grain (coarse → calendar, no offset;
+/// sub-day → keep offset); `to_grain_precision` applies it recursively across a
+/// resolved entity's value (simple, `values[]`, and interval `from`/`to`).
+#[test]
+fn grain_precision() {
+    use duckling::{to_grain_precision, value_at_grain};
+    let d = "2026-07-03T00:00:00.000-04:00";
+    let t = "2026-07-03T17:30:45.000-04:00";
+    let cases = [
+        (d, "year", "2026"),
+        (d, "quarter", "2026-07"),
+        (d, "month", "2026-07"),
+        (d, "week", "2026-07-03"),
+        (d, "day", "2026-07-03"),
+        (t, "hour", "2026-07-03T17:30-04:00"), // HH:MM, offset kept
+        (t, "minute", "2026-07-03T17:30-04:00"),
+        (t, "second", "2026-07-03T17:30:45-04:00"),
+        ("2026-07-03T17:00:00.000Z", "hour", "2026-07-03T17:00Z"), // Z offset kept
+        ("2026-07-03T00:00:00.000Z", "day", "2026-07-03"),
+        ("2001", "day", "2001"), // too-short / unexpected -> unchanged
+    ];
+    for (input, grain, want) in cases {
+        assert_eq!(
+            value_at_grain(input, grain),
+            want,
+            "grain={grain} input={input}"
+        );
+    }
+
+    // recursive: simple value + its values[] alternatives
+    let mut simple = serde_json::json!({
+        "grain": "day", "type": "value", "value": d,
+        "values": [{"grain": "day", "type": "value", "value": d}]
+    });
+    to_grain_precision(&mut simple);
+    assert_eq!(simple["value"], "2026-07-03");
+    assert_eq!(simple["values"][0]["value"], "2026-07-03");
+
+    // recursive: interval from/to (each carries its own grain)
+    let mut interval = serde_json::json!({
+        "type": "interval",
+        "from": {"grain": "hour", "value": "2026-07-02T17:00:00.000-04:00"},
+        "to":   {"grain": "hour", "value": "2026-07-02T20:00:00.000-04:00"}
+    });
+    to_grain_precision(&mut interval);
+    assert_eq!(interval["from"]["value"], "2026-07-02T17:00-04:00");
+    assert_eq!(interval["to"]["value"], "2026-07-02T20:00-04:00");
+
+    // non-time value (money) is untouched — no grain sibling
+    let mut money = serde_json::json!({"type": "value", "unit": "$", "value": 20});
+    to_grain_precision(&mut money);
+    assert_eq!(money["value"], 20);
+}

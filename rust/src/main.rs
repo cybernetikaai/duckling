@@ -46,12 +46,17 @@ OPTIONS:
     --locale <L>    en_US en_GB en_CA en_AU en_NZ en_IN
                     en_IE en_ZA en_PH en_BZ en_JM en_TT    (default: en_US)
     --latent        surface latent parses (e.g. a bare year \"2001\" as a time)
+    --raw           keep full RFC 3339 time values (default truncates to grain:
+                    a \"day\" -> 2026-07-03, an \"hour\" -> 2026-07-03T17:00-04:00)
     --batch         read one input per stdin line; print one compact JSON array
                     per line (NDJSON), for bulk corpora
     -h, --help      print this help
 
 OUTPUT:
     A JSON array of entities: {dim, body, start, end, value, latent}.
+    Time values are truncated to their `grain` by default (a date reads as a
+    date, not a midnight instant); coarse grains drop the UTC offset (a calendar
+    date has none), sub-day grains keep it. Use --raw for full timestamps.
     (--batch: one such array per line, in input order.)
 
 EXAMPLES:
@@ -128,6 +133,7 @@ fn main() {
     let mut locale_str = String::from("en_US");
     let mut batch = false;
     let mut with_latent = false;
+    let mut raw = false;
     let mut words: Vec<String> = Vec::new();
 
     let mut it = std::env::args().skip(1);
@@ -139,6 +145,7 @@ fn main() {
             }
             "--batch" => batch = true,
             "--latent" => with_latent = true,
+            "--raw" | "--iso-instant" => raw = true,
             "--dims" => dims = it.next().unwrap_or_else(|| fail("--dims needs a value")),
             "--ref" => ref_str = Some(it.next().unwrap_or_else(|| fail("--ref needs a value"))),
             "--tz" => tz_str = it.next().unwrap_or_else(|| fail("--tz needs a value")),
@@ -172,7 +179,12 @@ fn main() {
         let mut out = std::io::BufWriter::new(stdout.lock());
         for line in stdin.lock().lines() {
             let line = line.unwrap_or_default();
-            let entities = parse_dims(&dims, line.trim(), &ctx, locale);
+            let mut entities = parse_dims(&dims, line.trim(), &ctx, locale);
+            if !raw {
+                entities
+                    .iter_mut()
+                    .for_each(|e| duckling::to_grain_precision(&mut e.value));
+            }
             let json = serde_json::to_string(&entities).unwrap_or_else(|_| "[]".to_string());
             writeln!(out, "{json}").ok();
         }
@@ -193,7 +205,14 @@ fn main() {
         std::process::exit(2);
     }
 
-    let entities = parse_dims(&dims, &text, &ctx, locale);
+    let mut entities = parse_dims(&dims, &text, &ctx, locale);
+    // Truncate time values to their grain by default (a date reads as a date, not
+    // a midnight instant); `--raw` keeps the full RFC3339 timestamp.
+    if !raw {
+        entities
+            .iter_mut()
+            .for_each(|e| duckling::to_grain_precision(&mut e.value));
+    }
 
     match serde_json::to_string_pretty(&entities) {
         Ok(json) => println!("{json}"),

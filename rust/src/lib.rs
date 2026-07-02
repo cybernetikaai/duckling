@@ -30,7 +30,7 @@ pub mod types;
 pub mod url;
 pub mod volume;
 
-pub use resolve::{Entity, ResolveContext};
+pub use resolve::{Entity, ResolveContext, to_grain_precision, value_at_grain};
 
 use document::Document;
 use types::{Node, Rule, Token};
