@@ -36,7 +36,8 @@ fn with_unit_rule(name: &'static str, re: &str, allow_degree: bool, u: TempUnit)
         name: name.into(),
         pattern: vec![
             PatternItem::Predicate(Box::new(is_value_only(allow_degree))),
-            PatternItem::Regex(compile(re)),
+            // Optional leading hyphen (beyond-Duckling): "70-degree" -> "-degree".
+            PatternItem::Regex(compile(&format!("-?{re}"))),
         ],
         prod: Box::new(move |tokens| match tokens.first()? {
             Token::Temperature(td) => Some(Token::Temperature(TemperatureData {

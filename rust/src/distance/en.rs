@@ -180,12 +180,16 @@ fn open_max(to: f64, u: Unit) -> Token {
 }
 
 /// "<distance> <unit-regex>" -> attach the unit (Duckling `ruleDistances`).
+/// The optional leading hyphen is a *beyond-Duckling* extension: it lets
+/// "3-inch"/"six-mile" attach the unit (the "-" becomes part of the unit token,
+/// adjacent to the number) exactly as the spaced form does. Additive — the
+/// hyphen-free forms are unaffected.
 fn unit_rule(name: &'static str, re: &str, u: Unit) -> Rule {
     Rule {
         name: name.into(),
         pattern: vec![
             PatternItem::Predicate(Box::new(is_distance)),
-            PatternItem::Regex(compile(re)),
+            PatternItem::Regex(compile(&format!("-?{re}"))),
         ],
         prod: Box::new(move |tokens| match tokens.first()? {
             Token::Distance(dd) => Some(Token::Distance(DistanceData {

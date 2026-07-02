@@ -1,0 +1,26 @@
+{
+ "_comment": "BEYOND-DUCKLING extension. `<number>-<unit>` hyphenated forms ('a 3-inch pipe', 'an 8-ounce glass') are common in real English/speech but upstream Duckling does NOT parse them (verified against the oracle: '3-inch'/'six-mile' -> nothing). The distance cases are attested in Microsoft Recognizers-Text's Dimension specs; volume/quantity/temperature are analogous. Each dimension's parser must resolve the hyphenated form exactly like its spaced equivalent. Values compared with tolerance (reuses approx_eq). This is an intentional coverage extension for the speech product, kept additive so the Duckling corpus stays 100% green.",
+ "distance": [
+  { "input": "3-inch",     "expected": {"value": 3, "unit": "inch", "type": "value"} },
+  { "input": "six-mile",   "expected": {"value": 6, "unit": "mile", "type": "value"} },
+  { "input": "three-foot", "expected": {"value": 3, "unit": "foot", "type": "value"} },
+  { "input": "2.5-mile",   "expected": {"value": 2.5, "unit": "mile", "type": "value"} },
+  { "input": "four-mile",  "expected": {"value": 4, "unit": "mile", "type": "value"} },
+  { "input": "776-foot",   "expected": {"value": 776, "unit": "foot", "type": "value"} },
+  { "input": "a 3-inch pipe", "expected": {"value": 3, "unit": "inch", "type": "value"} },
+  { "input": "10-kilometer race", "expected": {"value": 10, "unit": "kilometre", "type": "value"} }
+ ],
+ "volume": [
+  { "input": "2-liter bottle", "expected": {"value": 2, "unit": "litre", "type": "value"} },
+  { "input": "5-gallon tank",  "expected": {"value": 5, "unit": "gallon", "type": "value"} }
+ ],
+ "quantity": [
+  { "input": "an 8-ounce glass", "expected": {"value": 8, "unit": "ounce", "type": "value"} },
+  { "input": "a 5-pound bag",    "expected": {"value": 5, "unit": "pound", "type": "value"} },
+  { "input": "a 3-cup measure",  "expected": {"value": 3, "unit": "cup", "type": "value"} }
+ ],
+ "temperature": [
+  { "input": "a 70-degree day",  "expected": {"value": 70, "unit": "degree", "type": "value"} },
+  { "input": "a 98-degree fever","expected": {"value": 98, "unit": "degree", "type": "value"} }
+ ]
+}

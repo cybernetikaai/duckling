@@ -1783,3 +1783,46 @@ fn parse_all_dims() {
         failures.join("\n")
     );
 }
+
+/// Beyond-Duckling extension: `<number>-<unit>` hyphenated forms ("a 3-inch pipe",
+/// "an 8-ounce glass"). Upstream Duckling doesn't parse these; this is an
+/// intentional coverage extension for real speech, in the isolated value
+/// dimensions only (zero Time-corpus risk). Each hyphenated form must resolve
+/// like its spaced equivalent. Reuses `approx_eq`.
+#[test]
+#[allow(clippy::type_complexity)]
+fn hyphenated_units_corpus() {
+    let data: Value =
+        serde_json::from_str(include_str!("../fixtures/hyphenated_units_corpus.json")).unwrap();
+    let dims: &[(&str, fn(&str) -> Vec<duckling::Entity>)] = &[
+        ("distance", duckling::parse_distance),
+        ("volume", duckling::parse_volume),
+        ("quantity", duckling::parse_quantity),
+        ("temperature", duckling::parse_temperature),
+    ];
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for (dim, parse) in dims {
+        for c in data[dim].as_array().unwrap() {
+            checked += 1;
+            let input = c["input"].as_str().unwrap();
+            let want = &c["expected"];
+            let got: Vec<Value> = parse(input).into_iter().map(|e| e.value).collect();
+            if !got.iter().any(|g| approx_eq(g, want)) {
+                failures.push(format!(
+                    "[{dim}] {input:?}\n  expected {want}\n  got      {got:?}"
+                ));
+            }
+        }
+    }
+    eprintln!(
+        "hyphenated_units_corpus checked {checked}, {} failing",
+        failures.len()
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
+}

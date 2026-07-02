@@ -107,6 +107,23 @@ pub fn volume_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // "<number>-<volume>" hyphenated (beyond-Duckling): "2-liter". A dedicated
+        // rule (not a `-?` on the unit regex) so it can't disturb the hyphen-eating
+        // fraction words ("half-litre"); `isPositive` never matches "half".
+        Rule {
+            name: "<number>-<volume>".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_positive)),
+                PatternItem::Regex(compile(r"-")),
+                PatternItem::Predicate(Box::new(is_unit_only)),
+            ],
+            prod: Box::new(|tokens| match (tokens.first()?, tokens.get(2)?) {
+                (Token::Numeral(n), Token::Volume(v)) => {
+                    Some(Token::Volume(volume(v.unit?, n.value)))
+                }
+                _ => None,
+            }),
+        },
         // "<numeral> - <volume>": interval, from < to; unit from the volume.
         Rule {
             name: "<numeral> - <volume>".into(),
