@@ -80,11 +80,19 @@ def expected(spec_path, type_prefix, subtype):
 
 
 def our_value(entity):
-    """Numeric value + unit from one of our entities (simple values only)."""
+    """Numeric value + unit from one of our entities. Handles simple values and
+    open/closed intervals ("more than $247M" -> from:247M), whose bound is the
+    scalar MS reports — otherwise those correct parses look like misses."""
     v = entity.get("value") or {}
     if "value" in v and not isinstance(v["value"], dict):
         try:
             return float(v["value"]), v.get("unit")
+        except (TypeError, ValueError):
+            return None, None
+    bound = v.get("from") or v.get("to")  # interval -> use the present bound
+    if isinstance(bound, dict) and "value" in bound:
+        try:
+            return float(bound["value"]), bound.get("unit")
         except (TypeError, ValueError):
             return None, None
     return None, None

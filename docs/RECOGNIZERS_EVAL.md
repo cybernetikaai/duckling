@@ -30,9 +30,18 @@ multi-result inputs like IP addresses diverge by *tokenization*, not resolution)
 | Dimension | cases | recognized | value-agree | clean-input value-agree |
 |---|---|---|---|---|
 | **temperature** | 32 | 96.9% | **96.9%** | 96.9% |
-| amount-of-money | 190 | 85.3% | 74.7% | 78.3% |
+| amount-of-money | 190 | 85.3% | 75.3% | 78.9% |
 | distance | 40 | 75.0% | 60.0% | 60.0% |
 | number | 259 | 96.1% | 44.4% | 36.1% |
+
+> **The money/distance gaps are scope differences, not bugs — verified against the
+> Duckling oracle.** Every disagreement probed reproduces upstream Duckling exactly:
+> "3-inch"/"six-mile"/"three-foot" → both emit nothing; "10 1/2 miles" → both 0.5;
+> "125 million australian dollars"/"finnish markka" → both nothing. MS Recognizers
+> simply parses hyphenated units, mixed numbers, currency words, and exotic
+> currencies that Duckling deliberately omits — so matching them would *diverge*
+> from Duckling. (Interval results like "more than $247M" are now scored via their
+> bound, removing an earlier measurement artifact.)
 
 ## Interpretation (what each row tells us)
 
@@ -46,11 +55,12 @@ multi-result inputs like IP addresses diverge by *tokenization*, not resolution)
   franc, Peseta) or un-symboled forms MS infers ("125 million australian
   dollars"). Where the currency is supported, values agree.
 
-- **Distance — 60%; a few genuine leads.** The disagreements cluster on
-  **hyphenated forms** ("3-inch", "six-mile", "three-foot") and **mixed numbers**
-  ("10 1/2 miles" → 10.5, where we take only "1/2"). These are worth checking
-  against the live oracle — some may be real gaps, some Duckling-vs-MS design
-  differences.
+- **Distance — 60%; the disagreements are Duckling-vs-MS scope, verified.** They
+  cluster on **hyphenated forms** ("3-inch", "six-mile", "three-foot") and **mixed
+  numbers** ("10 1/2 miles" → 10.5, where we take only "1/2"). Checked against the
+  live oracle: Duckling itself returns nothing / 0.5 for all of these, so the port
+  is faithful — these are forms MS parses and Duckling doesn't (candidates for a
+  deliberate *beyond-Duckling* extension if the product wants them; see below).
 
 - **Number — low agreement is a *scope* difference, not bugs.** MS Recognizers
   resolves things Duckling's numeral deliberately doesn't: fraction words
@@ -66,8 +76,12 @@ multi-result inputs like IP addresses diverge by *tokenization*, not resolution)
   implementation** — temperature near-perfectly; money/distance where units and
   scope align.
 - The benchmark **maps Duckling's scope boundaries** on number and money against a
-  peer tool, and **surfaces concrete distance leads** (hyphenated units, mixed
-  numbers) for follow-up.
+  peer tool, and **surfaces real-world forms Duckling misses** (hyphenated units
+  "3-inch", mixed numbers "10 1/2", currency words "australian dollars"). These are
+  faithful gaps — Duckling misses them too — so incorporating any is a deliberate
+  *beyond-Duckling extension* (precedent: the modern-holidays additions), weighed
+  per form by product value vs. cross-dimension risk (isolated value dims are safe;
+  numeral changes touch the Time rule set).
 - Datetime is intentionally out of scope here: MS's `datetimeV2` resolution shape
   differs enough from Duckling's that a fair comparison needs its own normalizer
   (candidate for a follow-up, alongside the TimeML/TIMEX3 value benchmark).
