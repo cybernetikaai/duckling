@@ -105,7 +105,8 @@ fn numeral_quantity_rule(name: &'static str, re: &str, u: Unit) -> Rule {
         name: name.into(),
         pattern: vec![
             PatternItem::Predicate(Box::new(is_positive)),
-            PatternItem::Regex(compile(re)),
+            // Optional leading hyphen (beyond-Duckling): "8-ounce" -> "-ounce".
+            PatternItem::Regex(compile(&format!("-?{re}"))),
         ],
         prod: Box::new(move |tokens| match (tokens.first()?, tokens.get(1)?) {
             (Token::Numeral(n), Token::RegexMatch(g)) => {
