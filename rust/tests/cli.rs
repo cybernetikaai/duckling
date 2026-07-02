@@ -155,3 +155,58 @@ fn bad_timezone_errors() {
     let (_stdout, code) = run(&["--tz", "Not/AZone", "tomorrow"], None);
     assert_eq!(code, 2, "bad --tz should exit 2");
 }
+
+#[test]
+fn batch_mode_ndjson() {
+    // One input per line -> one JSON array per line, order preserved; empty
+    // input -> empty array.
+    let (stdout, code) = run(
+        &["--dims", "time", "--ref", "2013-02-12T04:30:00Z", "--batch"],
+        Some("tomorrow at 5pm\nno time in this line\nnext friday\n"),
+    );
+    assert_eq!(code, 0);
+    let lines: Vec<&str> = stdout.lines().collect();
+    assert_eq!(lines.len(), 3, "one output line per input line: {stdout}");
+    let l0: Value = serde_json::from_str(lines[0]).unwrap();
+    assert_eq!(l0[0]["dim"], "time");
+    let l1: Value = serde_json::from_str(lines[1]).unwrap();
+    assert_eq!(l1.as_array().unwrap().len(), 0, "no time -> []");
+    let l2: Value = serde_json::from_str(lines[2]).unwrap();
+    assert_eq!(l2[0]["dim"], "time");
+}
+
+#[test]
+fn latent_flag_surfaces_bare_year() {
+    // A bare year is latent: dropped by default, surfaced with --latent.
+    let (def, _) = run(
+        &["--dims", "time", "--ref", "2013-02-12T04:30:00Z", "2001"],
+        None,
+    );
+    assert_eq!(
+        serde_json::from_str::<Value>(&def)
+            .unwrap()
+            .as_array()
+            .unwrap()
+            .len(),
+        0
+    );
+    let (lat, _) = run(
+        &[
+            "--dims",
+            "time",
+            "--ref",
+            "2013-02-12T04:30:00Z",
+            "--latent",
+            "2001",
+        ],
+        None,
+    );
+    let v: Value = serde_json::from_str(&lat).unwrap();
+    assert!(
+        v[0]["value"]["value"]
+            .as_str()
+            .unwrap_or("")
+            .starts_with("2001"),
+        "expected a 2001 time with --latent, got {lat}"
+    );
+}
