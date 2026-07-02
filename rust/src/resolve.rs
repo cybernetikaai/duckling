@@ -344,3 +344,68 @@ pub fn resolve_time(td: &TimeData, ctx: &ResolveContext) -> Option<serde_json::V
     }
     Some(value)
 }
+
+// ---------------------------------------------------------------------------
+// Grain-precision truncation (beyond-Duckling display helper).
+//
+// Duckling always emits a full RFC3339 instant + a `grain` tag; that anchors a
+// day to `T00:00:00.000`, which downstream consumers routinely misread as "the
+// caller meant midnight". These helpers truncate a value to its grain so a date
+// reads as a date. Principle: an offset is only meaningful sub-day, so coarse
+// grains drop it (a calendar date has no single offset) while sub-day grains
+// keep it. The resolver's own value is left full-precision + Duckling-faithful;
+// this is applied at the output boundary (CLI default; `--raw` opts out).
+
+/// Truncate one RFC3339 time value to `grain` precision. Non-time / unexpected
+/// input is returned unchanged.
+pub fn value_at_grain(rfc3339: &str, grain: &str) -> String {
+    let s = rfc3339;
+    let head = |n: usize| s.get(..n).map(str::to_string);
+    let out = match grain {
+        "year" => head(4),              // 2026
+        "quarter" | "month" => head(7), // 2026-07
+        "week" | "day" => head(10),     // 2026-07-03
+        "hour" | "minute" | "second" => {
+            // keep the offset (trailing Z or ±HH:MM, after the seconds/millis)
+            let end = if grain == "second" { 19 } else { 16 }; // HH:MM:SS vs HH:MM
+            match (s.get(..end), s.get(19..)) {
+                (Some(h), Some(rest)) => {
+                    let off = rest.find(['Z', '+', '-']).map(|i| &rest[i..]).unwrap_or("");
+                    Some(format!("{h}{off}"))
+                }
+                _ => None,
+            }
+        }
+        _ => None,
+    };
+    out.unwrap_or_else(|| s.to_string())
+}
+
+/// Recursively rewrite every time `value` in a resolved entity's value JSON to
+/// its grain precision — handles simple values, the `values[]` alternatives, and
+/// interval `from`/`to`. Objects that don't pair a `grain` with a string `value`
+/// (money, duration, number, …) are left untouched.
+pub fn to_grain_precision(v: &mut serde_json::Value) {
+    if let serde_json::Value::Object(map) = v {
+        if let (Some(grain), Some(val)) = (
+            map.get("grain")
+                .and_then(|g| g.as_str())
+                .map(str::to_string),
+            map.get("value")
+                .and_then(|x| x.as_str())
+                .map(str::to_string),
+        ) {
+            map.insert(
+                "value".to_string(),
+                serde_json::Value::String(value_at_grain(&val, &grain)),
+            );
+        }
+        for child in map.values_mut() {
+            to_grain_precision(child);
+        }
+    } else if let serde_json::Value::Array(arr) = v {
+        for child in arr.iter_mut() {
+            to_grain_precision(child);
+        }
+    }
+}

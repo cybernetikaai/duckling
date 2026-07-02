@@ -47,3 +47,6 @@ result-*
 tags
 log
 .idea
+
+# macOS Finder metadata
+.DS_Store

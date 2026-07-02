@@ -80,7 +80,18 @@ echo "in half an hour" | duckling
 | `--ref` | RFC 3339 timestamp | system now | The reference "now" that relative expressions ("tomorrow", "in 2 hours") resolve from. |
 | `--tz` | IANA zone (e.g. `America/New_York`) | `UTC` | **Target timezone.** Relative expressions resolve in this zone and output offsets are derived from it. Set it here at parse time to coerce into the target zone — don't convert the result afterward. |
 | `--locale` | `en_US` `en_GB` `en_CA` `en_AU` `en_NZ` `en_IN` `en_IE` `en_ZA` `en_PH` `en_BZ` `en_JM` `en_TT` | `en_US` | English locale. Affects numeric date order (US `3/4`→Mar 4, GB `3/4`→Apr 3) and regional holidays. |
+| `--latent` | flag | off | Surface latent (weakly-signalled) parses, e.g. a bare year "2001" as a time. |
+| `--raw` | flag | off | Keep full RFC 3339 time values. By **default** the CLI truncates each time value to its `grain` (see below). |
 | `-h`, `--help` | | | Print help. |
+
+**Time values are truncated to their `grain` by default** (a *beyond-Duckling*
+default — see [`docs/REMAINING_DIMENSIONS.md`](../docs/REMAINING_DIMENSIONS.md)):
+a `day` grain renders `2026-07-03`, not `2026-07-03T00:00:00.000-04:00`, so a date
+reads as a date rather than a midnight instant. Coarse grains drop the UTC offset
+(a calendar date has no single offset); **sub-day** grains keep it
+(`hour` → `2026-07-03T17:00-04:00`). Pass `--raw` for the full Duckling-faithful
+timestamp. The library resolver itself is unchanged (always full-precision); this
+is an output-layer transform (`duckling::value_at_grain` / `to_grain_precision`).
 
 ### Examples
 
@@ -164,6 +175,8 @@ fn main() {
 | `parse_url(input)` | Url | Context-free. `{value, domain}`. |
 | `parse_creditcard(input)` | CreditCardNumber | Context-free. Luhn-validated; `{value, issuer}`. |
 | `parse_phonenumber(input)` | PhoneNumber | Context-free. Normalized `{value}`. |
+| `value_at_grain(rfc3339, grain)` | — | Helper: truncate one time value to its grain (`day`→`2026-07-03`, `hour`→`…T17:00-04:00`). |
+| `to_grain_precision(&mut value)` | — | Helper: apply `value_at_grain` recursively across an entity's value (simple, `values[]`, interval `from`/`to`). What the CLI runs by default. |
 
 ### `ResolveContext`
 

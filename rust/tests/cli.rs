@@ -35,7 +35,9 @@ fn parse(args: &[&str]) -> Vec<Value> {
 #[test]
 fn time_with_ref_and_tz() {
     // "in 2 hours" from 2013-02-12T04:30Z, coerced into America/New_York.
+    // --raw keeps the full RFC3339 instant (default truncates to grain).
     let v = parse(&[
+        "--raw",
         "--tz",
         "America/New_York",
         "--ref",
@@ -44,6 +46,26 @@ fn time_with_ref_and_tz() {
     ]);
     assert_eq!(v[0]["dim"], "time");
     assert_eq!(v[0]["value"]["value"], "2013-02-12T01:30:00.000-05:00");
+}
+
+#[test]
+fn grain_precision_default_and_raw() {
+    // Default: a day-grain time truncates to a bare date (no midnight, no offset).
+    let day = parse(&["--ref", "2026-07-02T12:00:00Z", "tomorrow"]);
+    assert_eq!(day[0]["value"]["grain"], "day");
+    assert_eq!(day[0]["value"]["value"], "2026-07-03");
+    // Default: a sub-day (hour) grain keeps the offset.
+    let hour = parse(&[
+        "--tz",
+        "America/New_York",
+        "--ref",
+        "2026-07-02T12:00:00-04:00",
+        "tomorrow at 5pm",
+    ]);
+    assert_eq!(hour[0]["value"]["value"], "2026-07-03T17:00-04:00");
+    // --raw restores the full timestamp.
+    let raw = parse(&["--raw", "--ref", "2026-07-02T12:00:00Z", "tomorrow"]);
+    assert_eq!(raw[0]["value"]["value"], "2026-07-03T00:00:00.000+00:00");
 }
 
 #[test]
