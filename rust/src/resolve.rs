@@ -16,6 +16,7 @@ use crate::types::TimeData;
 /// where `zone` is a fixed -02:00 offset with no transitions; production uses
 /// a real IANA zone. To "coerce into the user's target zone", set `zone` to
 /// that zone here at parse time — do not convert the resolved instant after.
+#[derive(Clone)]
 pub struct ResolveContext {
     /// The "now" as a true UTC instant.
     pub reference: jiff::Timestamp,

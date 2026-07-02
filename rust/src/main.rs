@@ -50,6 +50,11 @@ OPTIONS:
                     a \"day\" -> 2026-07-03, an \"hour\" -> 2026-07-03T17:00-04:00)
     --batch         read one input per stdin line; print one compact JSON array
                     per line (NDJSON), for bulk corpora
+    --batch-json    read one {\"text\",\"ref\",\"tz\"} JSON object per stdin
+                    line (ref/tz optional, fall back to --ref/--tz); print one
+                    compact JSON array per line, flushed immediately after
+                    each line — for eval harnesses driving one warm process
+                    across many (text, reference-time, timezone) triples
     -h, --help      print this help
 
 OUTPUT:
@@ -57,7 +62,7 @@ OUTPUT:
     Time values are truncated to their `grain` by default (a date reads as a
     date, not a midnight instant); coarse grains drop the UTC offset (a calendar
     date has none), sub-day grains keep it. Use --raw for full timestamps.
-    (--batch: one such array per line, in input order.)
+    (--batch / --batch-json: one such array per line, in input order.)
 
 EXAMPLES:
     duckling \"tomorrow at 5pm\"
@@ -132,6 +137,7 @@ fn main() {
     let mut tz_str = String::from("UTC");
     let mut locale_str = String::from("en_US");
     let mut batch = false;
+    let mut batch_json = false;
     let mut with_latent = false;
     let mut raw = false;
     let mut words: Vec<String> = Vec::new();
@@ -144,6 +150,7 @@ fn main() {
                 return;
             }
             "--batch" => batch = true,
+            "--batch-json" => batch_json = true,
             "--latent" => with_latent = true,
             "--raw" | "--iso-instant" => raw = true,
             "--dims" => dims = it.next().unwrap_or_else(|| fail("--dims needs a value")),
@@ -187,6 +194,60 @@ fn main() {
             }
             let json = serde_json::to_string(&entities).unwrap_or_else(|_| "[]".to_string());
             writeln!(out, "{json}").ok();
+            out.flush().ok(); // request/response pipe: flush per line
+        }
+        return;
+    }
+
+    // Batch-JSON mode: one `{"text":..,"ref":..,"tz":..}` object per stdin
+    // line -> one compact JSON array per line, flushed immediately. `ref`/`tz`
+    // are per-line overrides of the process-level context, for eval harnesses
+    // driving one warm process across many (text, reference-time, timezone)
+    // triples.
+    if batch_json {
+        use std::io::{BufRead, Write};
+        let stdin = std::io::stdin();
+        let stdout = std::io::stdout();
+        let mut out = std::io::BufWriter::new(stdout.lock());
+        for line in stdin.lock().lines() {
+            let line = line.unwrap_or_default();
+            let parsed: Option<serde_json::Value> = serde_json::from_str(line.trim()).ok();
+            let json = match parsed
+                .as_ref()
+                .and_then(|v| v.get("text").and_then(|t| t.as_str()))
+            {
+                None => "[]".to_string(),
+                Some(text) => {
+                    let mut line_ctx = ctx.clone();
+                    if let Some(r) = parsed
+                        .as_ref()
+                        .and_then(|v| v.get("ref"))
+                        .and_then(|r| r.as_str())
+                    {
+                        if let Ok(ts) = r.parse::<jiff::Timestamp>() {
+                            line_ctx.reference = ts;
+                        }
+                    }
+                    if let Some(z) = parsed
+                        .as_ref()
+                        .and_then(|v| v.get("tz"))
+                        .and_then(|z| z.as_str())
+                    {
+                        if let Ok(zone) = jiff::tz::TimeZone::get(z) {
+                            line_ctx.zone = zone;
+                        }
+                    }
+                    let mut entities = parse_dims(&dims, text, &line_ctx, locale);
+                    if !raw {
+                        entities
+                            .iter_mut()
+                            .for_each(|e| duckling::to_grain_precision(&mut e.value));
+                    }
+                    serde_json::to_string(&entities).unwrap_or_else(|_| "[]".to_string())
+                }
+            };
+            writeln!(out, "{json}").ok();
+            out.flush().ok(); // request/response pipe: flush per line
         }
         return;
     }
