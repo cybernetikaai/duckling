@@ -2,7 +2,7 @@
 name = "duckling"
 version = "0.0.0"
 edition = "2024"
-rust-version = "1.96"                          # track latest stable; CI builds on `stable`
+rust-version = "1.85"                          # true MSRV = edition-2024 floor; CI builds on stable + pins a 1.85 job
 license = "BSD-3-Clause"                       # matches upstream Duckling (see ../LICENSE)
 description = "Behavior-compatible Rust port of Duckling's English NLU entity parsing (time, duration, numeral, temperature, money, ...)."
 repository = "https://github.com/cybernetikaai/duckling"

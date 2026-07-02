@@ -41,6 +41,27 @@ jobs:
       - name: Test
         run: cargo test
 
+  msrv:
+    name: build on MSRV (1.85)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Pin the declared MSRV (rust-version in Cargo.toml). This is what keeps the
+      # floor honest: if a change quietly uses a newer language feature (e.g. a
+      # let-chain, which needs 1.88), this job fails on 1.85 even though the
+      # `stable` job stays green. Build only — the hygiene gates run on stable.
+      - name: Install Rust 1.85 (MSRV)
+        uses: dtolnay/rust-toolchain@1.85.0
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust
+
+      - name: Build on MSRV (cargo build --locked)
+        run: cargo build --locked
+
   supply-chain:
     name: cargo deny (advisories · licenses · bans · sources)
     runs-on: ubuntu-latest
