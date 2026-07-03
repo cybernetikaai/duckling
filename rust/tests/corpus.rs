@@ -899,6 +899,96 @@ fn email_corpus() {
     );
 }
 
+/// Regression: a literal `local@domain` email must win over an accidental
+/// spoken-form ("at"-composed) parse when the two overlap. A dotted local
+/// part (e.g. "lina.muller@teamfoxy.ai") is itself shaped exactly like a
+/// valid spoken-form "<local> at <domain>" match ("me at lina.muller"), so a
+/// naive non-overlapping scan can consume it before ever reaching the real
+/// "@". The literal parse must dominate: correct value, correct span, and no
+/// "me@lina.muller"-style artifact — and the leftover domain must not leak
+/// out as a separate (cross-dimension-dominated) URL entity. The spoken-form
+/// rule itself ("john at gmail dot com") must be unaffected.
+#[test]
+fn email_literal_dominates_spoken_form_overlap() {
+    let ctx = ctx();
+
+    // 1. "email me at <dotted-local>@<domain> at <time>" — the literal email
+    //    must win, with the correct span, and the spurious "me@lina.muller"
+    //    spoken-form artifact must not appear.
+    {
+        let input = "email me at lina.muller@teamfoxy.ai at 5pm";
+        let want = "lina.muller@teamfoxy.ai";
+        let start = input.find(want).unwrap();
+        let end = start + want.len();
+        let emails = duckling::parse_email(input);
+        assert_eq!(
+            emails.len(),
+            1,
+            "expected exactly one email entity, got {emails:?}"
+        );
+        assert_eq!(emails[0].value["value"].as_str(), Some(want));
+        assert_eq!((emails[0].start, emails[0].end), (start, end));
+        assert!(
+            !emails.iter().any(|e| e.value["value"] == "me@lina.muller"),
+            "spoken-form artifact leaked through: {emails:?}"
+        );
+
+        // Cross-dimension: the leftover "teamfoxy.ai" must not surface as a
+        // separate URL now that the wider, correct email span dominates it.
+        let all = duckling::parse_all(input, &ctx);
+        assert!(
+            !all.iter().any(|e| e.dim == "url"),
+            "spurious URL entity from a dominated email domain: {all:?}"
+        );
+        assert!(
+            all.iter()
+                .any(|e| e.dim == "email" && e.value["value"] == want),
+            "expected the literal email in parse_all: {all:?}"
+        );
+    }
+
+    // 2. Same shape without a trailing time expression.
+    {
+        let input = "reach out anytime at lina.muller@teamfoxy.ai";
+        let want = "lina.muller@teamfoxy.ai";
+        let start = input.find(want).unwrap();
+        let end = start + want.len();
+        let emails = duckling::parse_email(input);
+        assert_eq!(
+            emails.len(),
+            1,
+            "expected exactly one email entity, got {emails:?}"
+        );
+        assert_eq!(emails[0].value["value"].as_str(), Some(want));
+        assert_eq!((emails[0].start, emails[0].end), (start, end));
+    }
+
+    // 3. The spoken-form rule must still work when there's no literal `@` in
+    //    the span at all.
+    {
+        let input = "john at gmail dot com";
+        let emails = duckling::parse_email(input);
+        assert!(
+            emails.iter().any(|e| e.value["value"] == "john@gmail.com"),
+            "spoken-form email regressed: {emails:?}"
+        );
+    }
+
+    // 4. The exact "at <literal email>" shape (no dotted local before the
+    //    "@", so no accidental domain-shaped overlap) — guard against
+    //    regressing this while fixing the dotted-local case.
+    {
+        let input = "contact us at support@foo.io";
+        let want = "support@foo.io";
+        let start = input.find(want).unwrap();
+        let end = start + want.len();
+        let emails = duckling::parse_email(input);
+        assert_eq!(emails.len(), 1, "got {emails:?}");
+        assert_eq!(emails[0].value["value"].as_str(), Some(want));
+        assert_eq!((emails[0].start, emails[0].end), (start, end));
+    }
+}
+
 /// Url dimension (`parse_url`) — port of Duckling/Url/Rules.hs. A positive must
 /// produce an entity with the expected value + (lowercased) domain; negatives
 /// (bare words, "hey:42", …) produce none.
