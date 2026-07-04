@@ -1,0 +1,62 @@
+name: release
+
+# Tag vX.Y.Z -> platform binaries attached to a GitHub Release. The primary
+# consumer is the `ner` repo's build, which bundles these binaries into its
+# platform wheels (duckling is an implementation detail of hybrid_ner, not a
+# dependency its consumers manage).
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - os: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-gnu
+          - os: macos-14
+            target: aarch64-apple-darwin
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: rust
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust
+      - name: Tag/version drift guard
+        run: |
+          V=$(cargo metadata --no-deps --format-version 1 | python3 -c "import json,sys; print(json.load(sys.stdin)['packages'][0]['version'])")
+          [ "v$V" = "$GITHUB_REF_NAME" ] || { echo "tag $GITHUB_REF_NAME != Cargo.toml $V"; exit 1; }
+      - name: Build
+        run: cargo build --release
+      - name: Smoke (batch-json round trip)
+        run: |
+          OUT=$(echo '{"text":"tomorrow at 5pm"}' | ./target/release/duckling --dims all --batch-json)
+          echo "$OUT" | grep -q '"dim"' || { echo "smoke failed: $OUT"; exit 1; }
+      - name: Stage binary
+        run: cp target/release/duckling "duckling-${{ matrix.target }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: duckling-${{ matrix.target }}
+          path: rust/duckling-${{ matrix.target }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+      - name: Create release with binaries
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" duckling-* --generate-notes --repo "$GITHUB_REPOSITORY"
