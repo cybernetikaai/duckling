@@ -1,6 +1,6 @@
 [package]
 name = "duckling"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 rust-version = "1.85"                          # true MSRV = edition-2024 floor; CI builds on stable + pins a 1.85 job
 license = "BSD-3-Clause"                       # matches upstream Duckling (see ../LICENSE)
