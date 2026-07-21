@@ -715,6 +715,58 @@ pub fn take_nth(n: i64, not_immediate: bool, pred: Predicate) -> Predicate {
     }))
 }
 
+/// "next <day-of-week>" under the proximity convention: the nearest upcoming
+/// occurrence, today excluded — but an occurrence landing within
+/// `min_gap_days` calendar days of the reference skips one week ("next
+/// Thursday" said Wednesday is not tomorrow; said Monday it IS this week's
+/// Thursday). Deliberate deviation from upstream ruleNextDOW, whose
+/// intersect-with-next-week reading both contradicts the dominant
+/// US-sequential usage (GNU date, date-fns nextX(), chrono-english
+/// Dialect::Us) and collides with "X after next" (upstream's own corpus
+/// resolves "next friday" and "friday after next" to the same day from a
+/// Tuesday reference). Threshold ruling 2026-07-21: min_gap_days = 2.
+pub fn take_next_dow(min_gap_days: i64, pred: Predicate) -> Predicate {
+    Predicate::Series(Rc::new(move |t: TimeObject, ctx: &TimeContext| {
+        let base = ctx.ref_time;
+        let (_, future) = pred.run(base, ctx);
+        let fut: Vec<TimeObject> = future.take(3).collect();
+        // Today is never "next X": skip an occurrence covering the reference.
+        let i0 = usize::from(
+            fut.first()
+                .is_some_and(|a| time_intersect(*a, base).is_some()),
+        );
+        let horizon = add(
+            grain_round(base.start, Grain::Day),
+            Grain::Day,
+            min_gap_days,
+        );
+        let chosen = fut
+            .get(i0)
+            .and_then(|first| {
+                if grain_round(first.start, Grain::Day) <= horizon {
+                    fut.get(i0 + 1)
+                } else {
+                    Some(first)
+                }
+            })
+            .copied();
+        match chosen {
+            None => (
+                Box::new(std::iter::empty()) as BoxIter,
+                Box::new(std::iter::empty()) as BoxIter,
+            ),
+            Some(o) if time_starts_before_end_of(t, o) => (
+                Box::new(std::iter::empty()) as BoxIter,
+                Box::new(std::iter::once(o)) as BoxIter,
+            ),
+            Some(o) => (
+                Box::new(std::iter::once(o)) as BoxIter,
+                Box::new(std::iter::empty()) as BoxIter,
+            ),
+        }
+    }))
+}
+
 /// last occurrence of `cyclic` within each `base` occurrence (takeLastOf).
 /// e.g. last Monday of May = Memorial Day.
 pub fn take_last_of(cyclic: Predicate, base: Predicate) -> Predicate {
@@ -780,6 +832,36 @@ mod tests {
         assert_eq!(
             future_head(&day_of_week(1), &ctx).start,
             date(2013, 2, 18).at(0, 0, 0, 0)
+        );
+    }
+    #[test]
+    fn take_next_dow_proximity_convention() {
+        let ctx = tctx(2013, 2, 12, 4, 30, 0); // Tuesday
+        // Saturday is +4 days: past the 2-day gap, so "next saturday" is the
+        // nearest one (upstream's week-intersect reading would say Feb 23).
+        assert_eq!(
+            future_head(&take_next_dow(2, day_of_week(6)), &ctx).start,
+            date(2013, 2, 16).at(0, 0, 0, 0)
+        );
+        // Wednesday is tomorrow (+1 <= 2): skips a week.
+        assert_eq!(
+            future_head(&take_next_dow(2, day_of_week(3)), &ctx).start,
+            date(2013, 2, 20).at(0, 0, 0, 0)
+        );
+        // Thursday is +2 (<= 2): skips a week.
+        assert_eq!(
+            future_head(&take_next_dow(2, day_of_week(4)), &ctx).start,
+            date(2013, 2, 21).at(0, 0, 0, 0)
+        );
+        // Friday is +3: kept.
+        assert_eq!(
+            future_head(&take_next_dow(2, day_of_week(5)), &ctx).start,
+            date(2013, 2, 15).at(0, 0, 0, 0)
+        );
+        // Tuesday is today: never "next tuesday" — the +7 instance, kept.
+        assert_eq!(
+            future_head(&take_next_dow(2, day_of_week(2)), &ctx).start,
+            date(2013, 2, 19).at(0, 0, 0, 0)
         );
     }
     #[test]

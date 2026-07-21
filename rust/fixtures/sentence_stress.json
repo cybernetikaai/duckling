@@ -202,7 +202,7 @@
   {
    "input": "The report is due next Friday",
    "expected": {
-    "value": "2013-02-22T00:00:00.000-02:00",
+    "value": "2013-02-15T00:00:00.000-02:00",
     "grain": "day",
     "type": "value"
    }

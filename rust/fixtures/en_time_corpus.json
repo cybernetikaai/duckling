@@ -9702,9 +9702,10 @@
   },
   {
    "input": "next saturday",
+   "note": "deliberate deviation from upstream (2013-02-23): proximity convention, ruling 2026-07-21 — nearest upcoming instance unless <=2 calendar days out; Saturday is +4 from the Tuesday reference. See time::predicate::take_next_dow.",
    "expected": {
     "type": "value",
-    "value": "2013-02-23T00:00:00.000-02:00",
+    "value": "2013-02-16T00:00:00.000-02:00",
     "grain": "day"
    }
   },

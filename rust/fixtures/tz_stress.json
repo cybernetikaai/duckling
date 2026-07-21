@@ -176,7 +176,7 @@
       "referenceTimeUtc": "2024-03-09T12:00:00Z",
       "input": "next monday at 8am",
       "expected": {
-        "value": "2024-03-11T08:00:00.000-04:00",
+        "value": "2024-03-18T08:00:00.000-04:00",
         "grain": "hour",
         "type": "value"
       }
@@ -226,7 +226,7 @@
       "referenceTimeUtc": "2024-11-02T12:00:00Z",
       "input": "next monday at 8am",
       "expected": {
-        "value": "2024-11-04T08:00:00.000-05:00",
+        "value": "2024-11-11T08:00:00.000-05:00",
         "grain": "hour",
         "type": "value"
       }
@@ -296,7 +296,7 @@
       "referenceTimeUtc": "2024-03-09T20:00:00Z",
       "input": "next monday at 8am",
       "expected": {
-        "value": "2024-03-11T08:00:00.000-07:00",
+        "value": "2024-03-18T08:00:00.000-07:00",
         "grain": "hour",
         "type": "value"
       }
@@ -346,7 +346,7 @@
       "referenceTimeUtc": "2024-11-02T20:00:00Z",
       "input": "next monday at 8am",
       "expected": {
-        "value": "2024-11-04T08:00:00.000-08:00",
+        "value": "2024-11-11T08:00:00.000-08:00",
         "grain": "hour",
         "type": "value"
       }
@@ -416,7 +416,7 @@
       "referenceTimeUtc": "2024-03-30T12:00:00Z",
       "input": "next monday at 8am",
       "expected": {
-        "value": "2024-04-01T08:00:00.000+01:00",
+        "value": "2024-04-08T08:00:00.000+01:00",
         "grain": "hour",
         "type": "value"
       }
@@ -486,7 +486,7 @@
       "referenceTimeUtc": "2024-10-26T12:00:00Z",
       "input": "next monday at 8am",
       "expected": {
-        "value": "2024-10-28T08:00:00.000+00:00",
+        "value": "2024-11-04T08:00:00.000+00:00",
         "grain": "hour",
         "type": "value"
       }
@@ -536,7 +536,7 @@
       "referenceTimeUtc": "2024-03-30T12:00:00Z",
       "input": "next monday at 8am",
       "expected": {
-        "value": "2024-04-01T08:00:00.000+02:00",
+        "value": "2024-04-08T08:00:00.000+02:00",
         "grain": "hour",
         "type": "value"
       }
@@ -586,7 +586,7 @@
       "referenceTimeUtc": "2024-04-06T12:00:00Z",
       "input": "next monday at 8am",
       "expected": {
-        "value": "2024-04-08T08:00:00.000+10:00",
+        "value": "2024-04-15T08:00:00.000+10:00",
         "grain": "hour",
         "type": "value"
       }
@@ -636,7 +636,7 @@
       "referenceTimeUtc": "2024-10-05T12:00:00Z",
       "input": "next monday at 8am",
       "expected": {
-        "value": "2024-10-07T08:00:00.000+11:00",
+        "value": "2024-10-14T08:00:00.000+11:00",
         "grain": "hour",
         "type": "value"
       }
@@ -686,7 +686,7 @@
       "referenceTimeUtc": "2024-04-06T00:00:00Z",
       "input": "next monday at 8am",
       "expected": {
-        "value": "2024-04-08T08:00:00.000+12:00",
+        "value": "2024-04-15T08:00:00.000+12:00",
         "grain": "hour",
         "type": "value"
       }
