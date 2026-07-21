@@ -499,6 +499,33 @@ low speech-input value): AU Grand Final Day (VIC-only, date set annually) and
 Family & Community Day (ACT, discontinued 2017 → replaced by Reconciliation Day,
 which we already have); plus the remaining ~20 Duckling "other" holidays.
 
+**Deliberate divergence: "next \<day-of-week\>" proximity convention (BEHAVIOR CHANGE).**
+Upstream's `ruleNextDOW` reads "next Thursday" as *Thursday of next week*
+(`intersect dow $ cycleNth TG.Week 1`) — the UK/skip-week convention. That
+contradicts the dominant US/sequential reading (GNU `date`, date-fns `nextX()`,
+chrono-english `Dialect::Us` all return the nearest upcoming instance), and
+upstream is internally inconsistent: from its own Tuesday 2013-02-12 corpus
+reference, "next friday" and "friday after next" resolve to the *same day*
+(Feb 22), leaving no way to say the nearer Friday with "next". Human usage
+genuinely splits (~61/39 per PMC9003772, with day-of-utterance effects), so
+neither pure convention satisfies everyone. We adopt the proximity compromise
+(the heuristic Siri uses): **"next X" = the nearest upcoming X, today excluded —
+but if that instance lands ≤2 calendar days from the reference, skip one week**
+(ruling 2026-07-21, threshold K=2). Said on a Tuesday: "next Wednesday" and
+"next Thursday" skip (+1/+2 days feel like "this Wednesday/Thursday"), while
+"next Friday" and "next Saturday" (+3/+4) resolve this week; "next Tuesday" is
++7 (today never counts). Implemented as `take_next_dow(min_gap_days, pred)` in
+`time/predicate.rs`, wired only into the "next" arm of "this|next
+\<day-of-week\>" (`en/cycles.rs`) — bare/"this"/"coming" \<dow\> and "\<dow\>
+after next" are untouched. Consequences for the oracle-derived fixtures: one
+positive-corpus expectation deviates ("next saturday" → Feb 16, not upstream's
+Feb 23; annotated in `en_time_corpus.json`), and 71 stress-fixture expectations
+across differential / random_diff / ref_stress / sentence_stress / tz_stress /
+values_array were re-baselined by computing both conventions per entry (±7d).
+Guarded by the `take_next_dow_proximity_convention` unit test (all five
+distances from the Tuesday reference). Same posture as the other divergences:
+favor real-user correctness over byte-fidelity to a frozen dataset.
+
 **Spoken-form audit (this iteration → 2 real fixes).** Prior fuzzing used
 written/templated inputs; this pass targeted the product's actual input
 distribution — ASR/spoken-English idioms ("half seven", "eight oh five am", "the

@@ -75,9 +75,11 @@ pub(super) fn cycle_and_relative_rules() -> Vec<Rule> {
                         .map(|s| s.to_ascii_lowercase())
                         .unwrap_or_default();
                     if word == "next" {
-                        // the day-of-week falling in next week
+                        // Proximity convention (min gap 2 calendar days), NOT
+                        // upstream's day-of-week-in-next-week — see
+                        // take_next_dow for the rationale and the ruling date.
                         Some(Token::Time(TimeData {
-                            pred: intersect(td.pred.clone(), cycle_nth(Grain::Week, 1)),
+                            pred: take_next_dow(2, td.pred.clone()),
                             grain: Grain::Day,
                             latent: false,
                             not_immediate: false,

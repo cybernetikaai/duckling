@@ -21,7 +21,8 @@ pub(super) use crate::time::predicate::{
     Ampm, Predicate, ampm_predicate, cycle_n, cycle_nth, day_of_month, day_of_week,
     floor_grain_to_minute, hour, hour_minute, hour_minute_second, in_duration, intersect,
     merge_duration, minute, month, season_series, shift_duration, shift_timezone, take_last_of,
-    take_nth, take_nth_after, take_nth_closest, time_cycle, time_intervals, year as year_pred,
+    take_next_dow, take_nth, take_nth_after, take_nth_closest, time_cycle, time_intervals,
+    year as year_pred,
 };
 pub(super) use crate::types::{Form, Locale, PatternItem, Rule, TimeData, Token};
 
