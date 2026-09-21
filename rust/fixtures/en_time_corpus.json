@@ -1480,10 +1480,17 @@
   },
   {
    "input": "last week of september 2014",
+   "divergence": "Deliberate divergence from upstream Duckling, which answers the last Mon-Sun week wholly inside the month (2014-09-22, week grain). This fork answers the month's final seven days: it ends where the month ends, consults no week boundary (en-US starts weeks on Sunday, en-AU on Monday), and depends only on month length, so it can be stated without an anchor. See take_last_days_of.",
    "expected": {
-    "type": "value",
-    "value": "2014-09-22T00:00:00.000-02:00",
-    "grain": "week"
+    "type": "interval",
+    "from": {
+     "value": "2014-09-24T00:00:00.000-02:00",
+     "grain": "day"
+    },
+    "to": {
+     "value": "2014-10-01T00:00:00.000-02:00",
+     "grain": "day"
+    }
    }
   },
   {

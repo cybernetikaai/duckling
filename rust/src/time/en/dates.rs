@@ -478,5 +478,30 @@ pub(super) fn named_month_part_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // "first|second half of <named-month>". The halves of a month are the
+        // same days in every year -- Oct 1-15 and Oct 16-31 -- so this composes
+        // out of the same dom-range helper as early/mid/late. There was no
+        // half-of-period rule at all before: every "half" in the grammar is
+        // hour-of-day ("half past three"), so the qualifier was dropped whole
+        // and only the bare month survived.
+        Rule {
+            name: "first|second half of <named-month>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"(?:the )?(first|1st|second|2nd) half of")),
+                PatternItem::Predicate(Box::new(is_a_month)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::RegexMatch(g), Token::Time(m)] => {
+                    let w = g.first()?.to_lowercase();
+                    let (sd, ed) = if w.contains("first") || w.contains("1st") {
+                        (1, 15)
+                    } else {
+                        (16, -1)
+                    };
+                    month_dom_range(m, sd, ed).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
     ]
 }
