@@ -14,8 +14,12 @@
 use serde_json::Value;
 
 fn ctx() -> duckling::ResolveContext {
+    ctx_in(2026)
+}
+
+fn ctx_in(year: i16) -> duckling::ResolveContext {
     let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(10));
-    let reference = jiff::civil::date(2026, 9, 21)
+    let reference = jiff::civil::date(year, 9, 21)
         .at(9, 0, 0, 0)
         .to_zoned(zone.clone())
         .unwrap()
@@ -37,9 +41,8 @@ fn strip_values(mut v: Value) -> Value {
 /// Every reading that spans the WHOLE input. A qualifier that gets dropped
 /// leaves a shorter reading behind ("October" out of "first half of October"),
 /// so requiring the full span is what makes the drop visible.
-fn readings(input: &str) -> Vec<Value> {
+fn readings_in(input: &str, ctx: duckling::ResolveContext) -> Vec<Value> {
     let n = input.chars().count();
-    let ctx = ctx();
     duckling::parse(input, &ctx)
         .into_iter()
         .filter(|e| e.dim == "time" && e.start == 0 && e.end == n)
@@ -51,7 +54,11 @@ fn readings(input: &str) -> Vec<Value> {
 /// value count as one; genuinely differing values are an ambiguity the caller
 /// cannot act on, so they fail here.
 fn one(input: &str) -> Value {
-    let got = readings(input);
+    one_in(input, ctx())
+}
+
+fn one_in(input: &str, ctx: duckling::ResolveContext) -> Value {
+    let got = readings_in(input, ctx);
     assert!(!got.is_empty(), "{input:?}: no full-span time reading");
     let first = got[0].clone();
     assert!(
@@ -68,7 +75,11 @@ fn date_of(v: &Value) -> String {
 /// `(from, to)` as plain dates. `to` is None for an open-ended window, which is
 /// represented by ABSENCE of the key — never a null and never a fabricated end.
 fn interval(input: &str) -> (String, Option<String>) {
-    let v = one(input);
+    interval_in(input, ctx())
+}
+
+fn interval_in(input: &str, ctx: duckling::ResolveContext) -> (String, Option<String>) {
+    let v = one_in(input, ctx);
     assert_eq!(v["type"], "interval", "{input:?} is not an interval: {v}");
     (
         date_of(&v["from"]["value"]),
@@ -119,10 +130,11 @@ fn the_article_form_of_a_half() {
 
 #[test]
 fn last_two_weeks_of_a_month() {
-    // The last two Mon-Sun weeks the month ends on: Oct 19 through Nov 2.
+    // 14 days counted back from the end of the month, so the plural cannot
+    // disagree with the singular about where the span ends.
     assert_eq!(
         interval("last two weeks of October"),
-        ("2026-10-19".into(), Some("2026-11-02".into()))
+        ("2026-10-18".into(), Some("2026-11-01".into()))
     );
 }
 
@@ -139,29 +151,61 @@ fn last_n_weeks_of_a_month_never_resolves_into_the_past() {
     );
 }
 
-// --- which week is "the last week" ------------------------------------------
+// --- what "the last week of <month>" means ---------------------------------
+// The month's final seven days, ending exactly where the month ends. NOT a
+// Mon-Sun week: `take_last_days_of` records why the week-aligned readings were
+// rejected. There is no universal convention for this phrase, so these tests
+// pin the three properties that made this reading the usable one.
 
 #[test]
-fn the_last_week_of_a_month_is_the_week_the_month_ends_on() {
-    // October 2026 ends Sat Oct 31, so the week of Mon Oct 26 carries six of
-    // the month's days and is what a caller means. duckling answers Oct 19
-    // today — the last week lying WHOLLY inside October — which also
-    // contradicts its own "late October" = [Oct 21, Nov 1).
+fn the_last_week_of_a_month_is_its_final_seven_days() {
     assert_eq!(
-        point("the last week of October"),
-        ("2026-10-26".into(), "week".into())
+        interval("the last week of October"),
+        ("2026-10-25".into(), Some("2026-11-01".into()))
     );
 }
 
 #[test]
-fn a_week_that_merely_clips_the_month_is_not_its_last_week() {
-    // September 2014 ends Tue Sep 30, so the Sep 29 week holds only two
-    // September days and the answer stays Sep 22. Both the old "wholly inside"
-    // reading and the new "the week it ends on" reading agree here — which is
-    // why the corpus's pinned value for this input survives the change.
+fn the_last_week_ends_where_the_month_ends_even_when_it_ends_mid_week() {
+    // November 2026 ends on a MONDAY, which is where every week-aligned
+    // reading has to choose badly: retreat to the last fully-contained week
+    // and Nov 30 -- the month's own last day -- falls outside "the last week
+    // of November", or keep the week containing it and run six days into
+    // December. Counting seven days back from the month's end does neither,
+    // and agrees with the grammar's "late November" = [Nov 21, Dec 1) about
+    // where November stops.
     assert_eq!(
-        point("last week of september 2014"),
-        ("2014-09-22".into(), "week".into())
+        interval("the last week of November"),
+        ("2026-11-24".into(), Some("2026-12-01".into()))
+    );
+}
+
+#[test]
+fn the_last_week_is_the_same_dates_in_every_year() {
+    // The property that earns this definition its keep. The span depends only
+    // on the month's LENGTH, so October's last week is Oct 25-31 whatever the
+    // year -- which lets a consumer that refuses to assert an unstated year
+    // still carry the month and day. A week-aligned span moves with the
+    // weekday and cannot be stated at all without an anchor.
+    let a = interval_in("the last week of October", ctx_in(2026));
+    let b = interval_in("the last week of October", ctx_in(2029));
+    assert_eq!(a.0[4..], b.0[4..], "start moved between years: {a:?} {b:?}");
+    assert_eq!(&a.0[4..], "-10-25");
+    assert_eq!(
+        a.1.as_deref().map(|s| &s[4..]),
+        b.1.as_deref().map(|s| &s[4..]),
+        "end moved between years: {a:?} {b:?}"
+    );
+}
+
+#[test]
+fn only_week_changed_other_grains_keep_the_containment_reading() {
+    // The dispatch is scoped to Week. "the last day of October" is Oct 31
+    // under either reading and stays a day-grained POINT rather than becoming
+    // a span -- this is also a corpus-pinned input, so it is checked twice.
+    assert_eq!(
+        point("last day of october 2015"),
+        ("2015-10-31".into(), "day".into())
     );
 }
 

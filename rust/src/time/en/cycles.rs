@@ -531,10 +531,10 @@ pub(super) fn cycle_after_before_rules() -> Vec<Rule> {
         // reference: at 2026-09-21 it answered Sep 7-21, a window that closed
         // before the caller spoke.
         //
-        // Scoped to Week deliberately. The first week is named by the same
-        // end-of-period definition as the last (see `take_last_week_of`), so the
-        // span cannot disagree with "the last week of <month>" about where it
-        // ends; no other grain has that second definition to share.
+        // Scoped to Week deliberately: n weeks is just 7n days counted back
+        // from the end of the period (see `take_last_days_of`), so the plural
+        // cannot disagree with "the last week of <month>" about where it ends.
+        // No other grain reduces to a fixed number of days.
         Rule {
             name: "last <n> <cycle>s of <time>".into(),
             pattern: vec![
@@ -554,9 +554,10 @@ pub(super) fn cycle_after_before_rules() -> Vec<Rule> {
                         return None;
                     }
                     let n = get_int_value(num)?;
-                    let start = TimeData::new(take_last_week_of(td.pred.clone(), n - 1), g);
-                    let end = cycle_last_of_td(g, td);
-                    interval_td(IntervalType::Closed, &start, &end).map(Token::Time)
+                    Some(Token::Time(TimeData::new(
+                        take_last_days_of(td.pred.clone(), 7 * n),
+                        Grain::Day,
+                    )))
                 }
                 _ => None,
             }),

@@ -783,29 +783,39 @@ pub fn take_last_of(cyclic: Predicate, base: Predicate) -> Predicate {
     }))
 }
 
-/// The last WEEK of `base`, in the sense a speaker means it: the week the
-/// period ENDS ON, not the last week lying wholly inside it.
+/// The final `days` days of `base`, as a closed-open span ending exactly where
+/// `base` ends: "the last week of October" is [Oct 25, Nov 1).
 ///
-/// `take_last_of` answers the latter -- "the last week of October" 2026 comes
-/// back Oct 19-25, a week that finishes six days before the month does. That is
-/// both counter-colloquial and inconsistent with the grammar's own
-/// "late October" = [Oct 21, Nov 1).
+/// Deliberately NOT week-aligned. A week-aligned reading has to answer three
+/// questions this one never asks:
 ///
-/// A week qualifies when it holds more than two of the period's days, and that
-/// is exactly the week containing `end - 3 days` (the period's last day, less
-/// two): if the last day falls on a Wednesday or later it carries 3+ days and
-/// keeps its own week, and if it falls on a Monday or Tuesday it carries 1-2
-/// and the subtraction lands in the week before. Verified equal to the
-/// count-the-days definition for every month from 2000 to 2040.
+///   * Does the week start Sunday or Monday? The split is roughly even by
+///     population, and we serve both en-AU (Monday) and en-US (Sunday).
+///   * What happens when the month ends mid-week? Retreating to the last
+///     fully-contained week drops the month's final days -- "the last week of
+///     November" 2026 came back [Nov 23, Nov 30), excluding Nov 30 itself,
+///     while the grammar's own "late November" = [Nov 21, Dec 1) includes it.
+///   * Which year is it? A week-aligned start moves with the weekday, so the
+///     span cannot be stated without an anchor.
 ///
-/// `weeks_back` steps further back from there, so that "the last two weeks of
-/// October" can name its own first week without a second definition of "last".
-pub fn take_last_week_of(base: Predicate, weeks_back: i64) -> Predicate {
+/// The final-N-days reading answers all three by construction: it consults no
+/// week boundary, it always ends where the period ends, and it depends only on
+/// the period's length -- so "the last week of October" is Oct 25-31 in EVERY
+/// year, and a consumer that refuses to assert an unstated year can still carry
+/// the month and day.
+///
+/// There is no universal convention for this phrase; "last full week", "final
+/// seven days" and "the partial week the month ends in" are all in live use.
+/// This picks the one that survives having no anchor and no locale.
+pub fn take_last_days_of(base: Predicate, days: i64) -> Predicate {
     Predicate::Series(Rc::new(move |now: TimeObject, ctx: &TimeContext| {
         let f = move |t: TimeObject| -> Option<TimeObject> {
-            let end = time_starting_at_the_end_of(t);
-            let last = time_round(time_plus(end, Grain::Day, -3), Grain::Week);
-            Some(time_plus(last, Grain::Week, -weeks_back))
+            let end = time_starting_at_the_end_of(t).start;
+            Some(TimeObject {
+                start: add(end, Grain::Day, -days),
+                grain: Grain::Day,
+                end: Some(end),
+            })
         };
         let (past, future) = seq_map(false, f, &base, now, ctx);
         (
