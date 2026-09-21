@@ -783,6 +783,38 @@ pub fn take_last_of(cyclic: Predicate, base: Predicate) -> Predicate {
     }))
 }
 
+/// The last WEEK of `base`, in the sense a speaker means it: the week the
+/// period ENDS ON, not the last week lying wholly inside it.
+///
+/// `take_last_of` answers the latter -- "the last week of October" 2026 comes
+/// back Oct 19-25, a week that finishes six days before the month does. That is
+/// both counter-colloquial and inconsistent with the grammar's own
+/// "late October" = [Oct 21, Nov 1).
+///
+/// A week qualifies when it holds more than two of the period's days, and that
+/// is exactly the week containing `end - 3 days` (the period's last day, less
+/// two): if the last day falls on a Wednesday or later it carries 3+ days and
+/// keeps its own week, and if it falls on a Monday or Tuesday it carries 1-2
+/// and the subtraction lands in the week before. Verified equal to the
+/// count-the-days definition for every month from 2000 to 2040.
+///
+/// `weeks_back` steps further back from there, so that "the last two weeks of
+/// October" can name its own first week without a second definition of "last".
+pub fn take_last_week_of(base: Predicate, weeks_back: i64) -> Predicate {
+    Predicate::Series(Rc::new(move |now: TimeObject, ctx: &TimeContext| {
+        let f = move |t: TimeObject| -> Option<TimeObject> {
+            let end = time_starting_at_the_end_of(t);
+            let last = time_round(time_plus(end, Grain::Day, -3), Grain::Week);
+            Some(time_plus(last, Grain::Week, -weeks_back))
+        };
+        let (past, future) = seq_map(false, f, &base, now, ctx);
+        (
+            Box::new(past.into_iter()) as BoxIter,
+            Box::new(future.into_iter()) as BoxIter,
+        )
+    }))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

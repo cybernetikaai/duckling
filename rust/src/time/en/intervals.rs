@@ -523,5 +523,23 @@ pub(super) fn direction_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // "<time> onwards" -- the trailing twin of "from|since|after <time>".
+        // Identical open-ended window, stated after the date instead of before
+        // it; without this the suffix is unconsumed and only the bare point
+        // survives, which silently closes a window that must stay open.
+        Rule {
+            name: "<time> onwards".into(),
+            pattern: vec![
+                PatternItem::Predicate(Box::new(is_a_time)),
+                PatternItem::Regex(compile(r"onwards?")),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [Token::Time(td), _] => Some(Token::Time(with_direction(
+                    IntervalDirection::After,
+                    td.clone(),
+                ))),
+                _ => None,
+            }),
+        },
     ]
 }

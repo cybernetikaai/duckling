@@ -505,5 +505,61 @@ pub(super) fn cycle_after_before_rules() -> Vec<Rule> {
                 _ => None,
             }),
         },
+        // "the last <cycle> of <time>" -- the article form. Without it "the
+        // last week of October" leaves "the" unconsumed, so no reading spans
+        // the whole input at all. Mirrors the existing article variants of the
+        // <ordinal> forms rather than loosening the bare rule's regex, which
+        // would let it compete with "last week end of October".
+        Rule {
+            name: "the last <cycle> of <time>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"the last")),
+                PatternItem::Predicate(Box::new(is_a_grain)),
+                PatternItem::Regex(compile(r"of|in")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, Token::TimeGrain(g), _, Token::Time(td)] => {
+                    Some(Token::Time(cycle_last_of_td(*g, td)))
+                }
+                _ => None,
+            }),
+        },
+        // "last <n> <cycle>s of <time>" -- the plural of the rule above. Without
+        // it "last two weeks of October" matches only the bare "last two weeks"
+        // cycle, dropping "of October" entirely and resolving BACKWARDS from the
+        // reference: at 2026-09-21 it answered Sep 7-21, a window that closed
+        // before the caller spoke.
+        //
+        // Scoped to Week deliberately. The first week is named by the same
+        // end-of-period definition as the last (see `take_last_week_of`), so the
+        // span cannot disagree with "the last week of <month>" about where it
+        // ends; no other grain has that second definition to share.
+        Rule {
+            name: "last <n> <cycle>s of <time>".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"(?:the )?last")),
+                PatternItem::Predicate(Box::new(|t| {
+                    matches!(t, Token::Numeral(_))
+                        && get_int_value(t).is_some_and(|v| (2..=52).contains(&v))
+                })),
+                PatternItem::Predicate(Box::new(is_a_grain)),
+                PatternItem::Regex(compile(r"of|in")),
+                PatternItem::Predicate(Box::new(is_a_time)),
+            ],
+            prod: Box::new(|tokens| match tokens {
+                [_, num, grain, _, Token::Time(td)] => {
+                    let g = grain_of(grain)?;
+                    if g != Grain::Week {
+                        return None;
+                    }
+                    let n = get_int_value(num)?;
+                    let start = TimeData::new(take_last_week_of(td.pred.clone(), n - 1), g);
+                    let end = cycle_last_of_td(g, td);
+                    interval_td(IntervalType::Closed, &start, &end).map(Token::Time)
+                }
+                _ => None,
+            }),
+        },
     ]
 }

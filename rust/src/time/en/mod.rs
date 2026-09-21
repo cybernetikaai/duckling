@@ -21,8 +21,8 @@ pub(super) use crate::time::predicate::{
     Ampm, Predicate, ampm_predicate, cycle_n, cycle_nth, day_of_month, day_of_week,
     floor_grain_to_minute, hour, hour_minute, hour_minute_second, in_duration, intersect,
     merge_duration, minute, month, season_series, shift_duration, shift_timezone, take_last_of,
-    take_next_dow, take_nth, take_nth_after, take_nth_closest, time_cycle, time_intervals,
-    year as year_pred,
+    take_last_week_of, take_next_dow, take_nth, take_nth_after, take_nth_closest, time_cycle,
+    time_intervals, year as year_pred,
 };
 pub(super) use crate::types::{Form, Locale, PatternItem, Rule, TimeData, Token};
 
@@ -746,7 +746,16 @@ fn cycle_nth_after_td(not_immediate: bool, grain: Grain, n: i64, base: &TimeData
 
 /// The last occurrence of a cycle grain within `base` (port of cycleLastOf).
 fn cycle_last_of_td(grain: Grain, base: &TimeData) -> TimeData {
-    TimeData::new(take_last_of(time_cycle(grain), base.pred.clone()), grain)
+    // Week is special: "the last week of October" means the week October ends
+    // on, not the last week wholly inside it. Every other grain keeps the
+    // containment reading, where the two definitions coincide anyway ("the last
+    // day of October" is Oct 31 either way).
+    let pred = if grain == Grain::Week {
+        take_last_week_of(base.pred.clone(), 0)
+    } else {
+        take_last_of(time_cycle(grain), base.pred.clone())
+    };
+    TimeData::new(pred, grain)
 }
 
 /// The last occurrence of a cyclic time within `base` (port of predLastOf);
