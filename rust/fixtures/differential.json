@@ -1139,7 +1139,7 @@
   {
    "input": "the week of thanksgiving",
    "expected": {
-    "value": "2013-12-02T00:00:00.000-02:00",
+    "value": "2013-11-25T00:00:00.000-02:00",
     "grain": "week",
     "type": "value"
    }
@@ -9138,7 +9138,7 @@
   {
    "input": "the week of black friday",
    "expected": {
-    "value": "2013-12-02T00:00:00.000-02:00",
+    "value": "2013-11-25T00:00:00.000-02:00",
     "grain": "week",
     "type": "value"
    }
@@ -9146,7 +9146,7 @@
   {
    "input": "the week of boxing day",
    "expected": {
-    "value": "2013-12-30T00:00:00.000-02:00",
+    "value": "2013-12-23T00:00:00.000-02:00",
     "grain": "week",
     "type": "value"
    }
@@ -9154,7 +9154,7 @@
   {
    "input": "the week of christmas",
    "expected": {
-    "value": "2013-12-30T00:00:00.000-02:00",
+    "value": "2013-12-23T00:00:00.000-02:00",
     "grain": "week",
     "type": "value"
    }
@@ -9162,7 +9162,7 @@
   {
    "input": "the week of christmas eve",
    "expected": {
-    "value": "2013-12-30T00:00:00.000-02:00",
+    "value": "2013-12-23T00:00:00.000-02:00",
     "grain": "week",
     "type": "value"
    }
@@ -9170,7 +9170,7 @@
   {
    "input": "the week of easter",
    "expected": {
-    "value": "2013-04-01T00:00:00.000-02:00",
+    "value": "2013-03-25T00:00:00.000-02:00",
     "grain": "week",
     "type": "value"
    }
@@ -9178,7 +9178,7 @@
   {
    "input": "the week of good friday",
    "expected": {
-    "value": "2013-04-01T00:00:00.000-02:00",
+    "value": "2013-03-25T00:00:00.000-02:00",
     "grain": "week",
     "type": "value"
    }
@@ -9186,7 +9186,7 @@
   {
    "input": "the week of halloween",
    "expected": {
-    "value": "2013-11-04T00:00:00.000-02:00",
+    "value": "2013-10-28T00:00:00.000-02:00",
     "grain": "week",
     "type": "value"
    }
@@ -9194,7 +9194,7 @@
   {
    "input": "the week of new year's day",
    "expected": {
-    "value": "2014-01-06T00:00:00.000-02:00",
+    "value": "2013-12-30T00:00:00.000-02:00",
     "grain": "week",
     "type": "value"
    }
@@ -9202,7 +9202,7 @@
   {
    "input": "the week of new year's eve",
    "expected": {
-    "value": "2014-01-06T00:00:00.000-02:00",
+    "value": "2013-12-30T00:00:00.000-02:00",
     "grain": "week",
     "type": "value"
    }
@@ -9210,7 +9210,7 @@
   {
    "input": "the week of st patrick's day",
    "expected": {
-    "value": "2013-03-18T00:00:00.000-02:00",
+    "value": "2013-03-11T00:00:00.000-02:00",
     "grain": "week",
     "type": "value"
    }
@@ -9218,7 +9218,7 @@
   {
    "input": "the week of valentine's day",
    "expected": {
-    "value": "2013-02-18T00:00:00.000-02:00",
+    "value": "2013-02-11T00:00:00.000-02:00",
     "grain": "week",
     "type": "value"
    }
