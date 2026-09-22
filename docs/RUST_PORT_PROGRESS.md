@@ -526,6 +526,47 @@ Guarded by the `take_next_dow_proximity_convention` unit test (all five
 distances from the Tuesday reference). Same posture as the other divergences:
 favor real-user correctness over byte-fidelity to a frozen dataset.
 
+**Deliberate divergence: "the \<cycle\> of \<time\>" containment (BEHAVIOR CHANGE).**
+Upstream's `ruleCycleOfTime` passes `notImmediate = True`, the same flag the
+*ordinal* forms use ("the first week of October"). For an ordinal that flag is
+right: the first week of October is the first week wholly inside October, so a
+week that starts in September must be skipped. For the bare form it is wrong.
+"the week of October 20th" names the week the 20th *falls in*, and that week
+starts on Monday the 19th — before the base. `notImmediate` drops exactly the
+occurrence that starts before its base, so the rule returned the FOLLOWING week
+for every date that was not already a Monday, and was right only by accident
+when it was. Upstream's own corpus shows the shape: "the week of christmas"
+(Wed 2013-12-25) resolved to 2013-12-30, the week *after* Christmas. We pass
+`not_immediate = false` for the bare form only (`en/cycles.rs`); the three
+ordinal arms above it keep `true` on purpose. This matters downstream because
+the value is a booking anchor (`bv3:windowStart` in cybernetikaai/foxy), where a
+week-late start silently offers the caller the wrong week and never refuses.
+Consequences for the oracle-derived fixtures: 13 expectations re-baselined to
+the containing week — 12 `the week of \<holiday\>` entries in `differential.json`
+and "the week of october 6th" in `en_time_corpus.json`; each new value was
+verified independently as the Monday of the week containing that holiday, not
+read back from the parser. "the week of october 7th" (already a Monday) is
+unchanged and stands as the guard that the aligned case still works. Guarded by
+`tests/week_of.rs` (7 cases: midweek, Monday, week-end Sunday, next Monday, a
+week spanning a month boundary, the ordinal form, coarser grains).
+
+**The article stays required.** cybernetikaai/duckling#19 also notes that the
+article-less spelling ("week of October 20th") matches no rule at all, leaving
+the bare date behind at grain=day. Dropping the article is not the fix: an
+optional-article regex matches the empty string and the engine discards
+zero-width hits, and a separate bare `\<grain\> of \<time\>` rule collides with
+ordinary English, because "quarter", "second" and "minute" are grains as well as
+words — it reads "quarter of five" (4:45) as a quarter-grain cycle and "second
+of march" (March 2nd) as a second-grain one, which the corpus catches. Left open
+on the issue rather than fixed here.
+
+**Known edge, left as-is:** weeks start on Monday, so "the week of \<Sunday\>"
+returns the week *ending* on that Sunday — "the week of October 6th" (a Sunday)
+gives Sep 30. That is the containing week under ISO weeks, but a reader who
+thinks of weeks as Sunday-start will read it as the week before. Changing it
+would mean changing the week convention itself, which is out of scope here.
+
+
 **Spoken-form audit (this iteration → 2 real fixes).** Prior fuzzing used
 written/templated inputs; this pass targeted the product's actual input
 distribution — ASR/spoken-English idioms ("half seven", "eight oh five am", "the

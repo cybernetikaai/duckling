@@ -465,9 +465,22 @@ pub(super) fn cycle_after_before_rules() -> Vec<Rule> {
                 PatternItem::Regex(compile(r"of")),
                 PatternItem::Predicate(Box::new(is_a_time)),
             ],
+            // notImmediate=FALSE, unlike the ordinal rules above. "the week of
+            // October 20th" names the week that CONTAINS the 20th, and that week
+            // starts on the 19th -- before the base. notImmediate drops exactly
+            // that case, so it returned the FOLLOWING week for every base that
+            // was not already a Monday, and was right only by accident when it
+            // was. The ordinal rules keep true on purpose: "the first week of
+            // October" does mean the first week wholly inside it.
+            //
+            // The article stays REQUIRED. Dropping it collides with ordinary
+            // English, because "quarter", "second" and "minute" are grains as
+            // well as words: "quarter of five" is 4:45 and "second of march" is
+            // March 2nd, but a bare <grain> of <time> rule reads both as cycles.
+            // See cybernetikaai/duckling#19.
             prod: Box::new(|tokens| match tokens {
                 [_, Token::TimeGrain(g), _, Token::Time(td)] => {
-                    Some(Token::Time(cycle_nth_after_td(true, *g, 0, td)))
+                    Some(Token::Time(cycle_nth_after_td(false, *g, 0, td)))
                 }
                 _ => None,
             }),

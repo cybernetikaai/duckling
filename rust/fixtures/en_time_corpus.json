@@ -1450,7 +1450,7 @@
    "input": "the week of october 6th",
    "expected": {
     "type": "value",
-    "value": "2013-10-07T00:00:00.000-02:00",
+    "value": "2013-09-30T00:00:00.000-02:00",
     "grain": "week"
    }
   },
