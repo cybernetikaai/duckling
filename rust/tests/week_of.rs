@@ -27,20 +27,36 @@ fn ctx() -> duckling::ResolveContext {
     }
 }
 
+/// Drop the candidate spread, as `intra_period.rs` does: redundant rule paths
+/// that resolve to the same reading may still offer different candidate lists,
+/// and that is not an ambiguity the caller has to act on.
+fn strip_values(mut v: Value) -> Value {
+    if let Value::Object(ref mut o) = v {
+        o.remove("values");
+    }
+    v
+}
+
 /// The single full-span reading, as `(date, grain)`. Full-span because a
 /// dropped qualifier leaves a shorter reading behind ("October 20th" out of
 /// "the week of October 20th"), and requiring the whole input makes that visible.
+///
+/// Readings are compared WHOLE, not by timestamp alone. Grain is exactly what
+/// this rule's neighbouring bug turns on — the article-less spelling resolves to
+/// the right instant at `grain=day` rather than `grain=week` — so a guard that
+/// compared only `value` would wave through the one ambiguity most worth
+/// catching here and silently return whichever grain came first.
 fn point(input: &str) -> (String, String) {
     let n = input.chars().count();
     let got: Vec<Value> = duckling::parse(input, &ctx())
         .into_iter()
         .filter(|e| e.dim == "time" && e.start == 0 && e.end == n)
-        .map(|e| e.value)
+        .map(|e| strip_values(e.value))
         .collect();
     assert!(!got.is_empty(), "{input:?}: no full-span time reading");
     let first = &got[0];
     assert!(
-        got.iter().all(|v| v["value"] == first["value"]),
+        got.iter().all(|v| v == first),
         "{input:?}: ambiguous full-span readings: {got:?}"
     );
     (
