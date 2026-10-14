@@ -196,7 +196,7 @@ pub(super) fn timezone_rules() -> Vec<Rule> {
             name: "<datetime> - <datetime> (interval) timezone".into(),
             pattern: vec![
                 PatternItem::Predicate(Box::new(|t| is_a_time_of_day(t) && has_no_timezone(t))),
-                PatternItem::Regex(compile(r"\-|to|th?ru|through|(un)?til(l)?")),
+                PatternItem::Regex(compile(r"[\-–—]|to|th?ru|through|(un)?til(l)?")),
                 PatternItem::Predicate(Box::new(|t| is_a_time_of_day(t) && has_no_timezone(t))),
                 PatternItem::Regex(compile(&tz_re)),
             ],
@@ -216,7 +216,7 @@ pub(super) fn timezone_rules() -> Vec<Rule> {
             pattern: vec![
                 PatternItem::Regex(compile(r"later than|from")),
                 PatternItem::Predicate(Box::new(|t| is_a_time_of_day(t) && has_no_timezone(t))),
-                PatternItem::Regex(compile(r"\-|to|th?ru|through|(un)?til(l)?")),
+                PatternItem::Regex(compile(r"[\-–—]|to|th?ru|through|(un)?til(l)?")),
                 PatternItem::Predicate(Box::new(|t| is_a_time_of_day(t) && has_no_timezone(t))),
                 PatternItem::Regex(compile(&tz_re)),
             ],

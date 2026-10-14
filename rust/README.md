@@ -243,9 +243,10 @@ they don't need per-region modules.
 - **Faithful to Duckling**, with a few deliberate, documented divergences (e.g.
   correct per-instant DST offsets on transition boundaries, beyond-Duckling
   holidays introduced after Duckling's data froze, a proximity convention for
-  "next <day-of-week>" instead of upstream's skip-a-week reading, and "the
+  "next <day-of-week>" instead of upstream's skip-a-week reading, "the
   week of <date>" reading as the week that *contains* the date rather than the
-  one after it — see `docs/RUST_PORT_PROGRESS.md`).
+  one after it, en/em dashes as range connectors ("2–4pm"), and "between 2 and
+  4pm" sharing the trailing am/pm — see `docs/RUST_PORT_PROGRESS.md`).
 - Duckling does **dimension extraction, not intent detection**: "the second option"
   yields a Time ("the 2nd"), exactly as upstream Duckling does. Filter by intent in
   your application layer if needed.

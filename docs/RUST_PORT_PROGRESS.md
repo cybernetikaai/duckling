@@ -566,6 +566,30 @@ gives Sep 30. That is the containing week under ISO weeks, but a reader who
 thinks of weeks as Sunday-start will read it as the week before. Changing it
 would mean changing the week convention itself, which is out of scope here.
 
+**Deliberate divergence: en/em dash range connectors (EXTENSION).** Upstream's
+range connectors accept only the ASCII hyphen, so typed or pasted text that uses
+an en dash ("2–4pm", "Tue–Thu", "October 20–22") never forms a range: "2–4pm"
+returns the bare "4pm", "Tue–Thu" returns two separate days, "October 20–22"
+drops the 22nd. Every connector alternation that accepts `-` (`en/intervals.rs`,
+`en/modifiers.rs`) now accepts `–` and `—` too, so each dash spelling reads
+exactly as its hyphen twin — no reading that the hyphen does not already give.
+In-token hyphens (ISO dates, "co-operatives") are not connectors and are
+unchanged. No oracle fixture contains a dash range, so nothing re-baselined.
+
+**Deliberate divergence: "between \<hh\> and \<time-of-day\> am|pm" shares the
+meridiem (BEHAVIOR CHANGE).** Upstream shares a trailing am/pm with a bare
+leading hour only in the dash/"to" spelling (`ruleIntervalTODAMPM`: "2-4pm",
+"from 2 to 4pm"). "between 2 and 4pm" falls through to `between <time> and
+<time>`, which resolves the bare 2 to 2am — a 15-hour range. A new rule, the
+"between … and" twin of that one and sharing its production, reads it as 2pm–4pm.
+"and" is a connector only after "between", so "2 and 4pm" still lists two times;
+with no trailing meridiem ("between 9 and 11") nothing changes. One oracle
+expectation re-baselined: `random_diff.json` "between 2:45 and 3pm" from 02:45 to
+14:45, verified as the next 2:45pm after its 21:00 reference rather than read back
+from the parser; its 15:01 end is unchanged, and the other 62 `between` cases
+there pass untouched. Both changes are guarded by `tests/range_connectors.rs`
+(9 cases); reverting the source fails 7 of them.
+
 
 **Spoken-form audit (this iteration → 2 real fixes).** Prior fuzzing used
 written/templated inputs; this pass targeted the product's actual input
