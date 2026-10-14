@@ -3,7 +3,7 @@
 use super::*;
 
 pub(super) fn interval_rules() -> Vec<Rule> {
-    let sep = r"\-|to|th?ru|through|(un)?til(l)?";
+    let sep = r"[\-–—]|to|th?ru|through|(un)?til(l)?";
     vec![
         // "1960 - 1961" (ruleIntervalYearLatent): two bare 4-digit years, y1<y2.
         Rule {
@@ -90,7 +90,7 @@ pub(super) fn interval_rules() -> Vec<Rule> {
                 PatternItem::Predicate(Box::new(|t: &Token| {
                     is_not_latent(t) && is_a_time_of_day(t)
                 })),
-                PatternItem::Regex(compile(r"\-|:|to|th?ru|through|(un)?til(l)?")),
+                PatternItem::Regex(compile(r"[\-–—]|:|to|th?ru|through|(un)?til(l)?")),
                 PatternItem::Predicate(Box::new(is_a_time_of_day)),
             ],
             prod: Box::new(|tokens| match tokens {
@@ -106,7 +106,9 @@ pub(super) fn interval_rules() -> Vec<Rule> {
             pattern: vec![
                 PatternItem::Regex(compile(r"(later than|from|(in[\s-])?between)")),
                 PatternItem::Predicate(Box::new(is_a_time_of_day)),
-                PatternItem::Regex(compile(r"((but )?before)|\-|to|th?ru|through|(un)?til(l)?")),
+                PatternItem::Regex(compile(
+                    r"((but )?before)|[\-–—]|to|th?ru|through|(un)?til(l)?",
+                )),
                 PatternItem::Predicate(Box::new(is_a_time_of_day)),
             ],
             prod: Box::new(|tokens| match tokens {
@@ -123,33 +125,23 @@ pub(super) fn interval_rules() -> Vec<Rule> {
                 PatternItem::Regex(compile(
                     r"(?:from )?((?:[01]?\d)|(?:2[0-3]))([:.]([0-5]\d))?",
                 )),
-                PatternItem::Regex(compile(r"\-|to|th?ru|through|(un)?til(l)?")),
+                PatternItem::Regex(compile(r"[\-–—]|to|th?ru|through|(un)?til(l)?")),
                 PatternItem::Predicate(Box::new(is_a_time_of_day)),
                 PatternItem::Regex(compile(r"(in the )?([ap])(\s|\.)?m?\.?")),
             ],
-            prod: Box::new(|tokens| match tokens {
-                [
-                    Token::RegexMatch(g1),
-                    _,
-                    Token::Time(td2),
-                    Token::RegexMatch(g4),
-                ] => {
-                    let h: i64 = g1.first()?.parse().ok()?;
-                    let m = g1.get(2).and_then(|s| s.parse::<i64>().ok());
-                    let is_am = g4
-                        .get(1)
-                        .map(|s| s.eq_ignore_ascii_case("a"))
-                        .unwrap_or(false);
-                    let td1 = match m {
-                        Some(mm) => hour_minute_td(true, h, mm),
-                        None => hour_td(true, h),
-                    };
-                    let a = time_of_day_ampm(is_am, &td1);
-                    let b = time_of_day_ampm(is_am, td2);
-                    interval_td(IntervalType::Closed, &a, &b).map(Token::Time)
-                }
-                _ => None,
-            }),
+            prod: Box::new(shared_meridiem_interval),
+        },
+        // "between 2 and 4pm": the same sharing for the "between … and" spelling,
+        // which upstream lacks — there the bare leading hour resolved to 2am.
+        Rule {
+            name: "between hh(:mm) and <time-of-day> am|pm".into(),
+            pattern: vec![
+                PatternItem::Regex(compile(r"between ((?:[01]?\d)|(?:2[0-3]))([:.]([0-5]\d))?")),
+                PatternItem::Regex(compile(r"and")),
+                PatternItem::Predicate(Box::new(is_a_time_of_day)),
+                PatternItem::Regex(compile(r"(in the )?([ap])(\s|\.)?m?\.?")),
+            ],
+            prod: Box::new(shared_meridiem_interval),
         },
         Rule {
             name: "by <time>".into(),
@@ -421,8 +413,36 @@ pub(super) fn interval_rules() -> Vec<Rule> {
 
 /// Day-of-month intervals within a month (ruleIntervalMonthDDDD family):
 /// "July 13 to 15", "23rd to 26th Oct", "from 13 to 15 of July".
+/// `[hh(:mm), connector, <time-of-day>, am|pm]`: the trailing am/pm applies to
+/// both ends.
+fn shared_meridiem_interval(tokens: &[Token]) -> Option<Token> {
+    match tokens {
+        [
+            Token::RegexMatch(g1),
+            _,
+            Token::Time(td2),
+            Token::RegexMatch(g4),
+        ] => {
+            let h: i64 = g1.first()?.parse().ok()?;
+            let m = g1.get(2).and_then(|s| s.parse::<i64>().ok());
+            let is_am = g4
+                .get(1)
+                .map(|s| s.eq_ignore_ascii_case("a"))
+                .unwrap_or(false);
+            let td1 = match m {
+                Some(mm) => hour_minute_td(true, h, mm),
+                None => hour_td(true, h),
+            };
+            let a = time_of_day_ampm(is_am, &td1);
+            let b = time_of_day_ampm(is_am, td2);
+            interval_td(IntervalType::Closed, &a, &b).map(Token::Time)
+        }
+        _ => None,
+    }
+}
+
 pub(super) fn dom_interval_rules() -> Vec<Rule> {
-    let sep = || compile(r"\-|to|th?ru|through|(un)?til(l)?");
+    let sep = || compile(r"[\-–—]|to|th?ru|through|(un)?til(l)?");
     let dv = || PatternItem::Predicate(Box::new(is_dom_value));
     let am = || PatternItem::Predicate(Box::new(is_a_month));
     vec![
@@ -463,7 +483,7 @@ pub(super) fn dom_interval_rules() -> Vec<Rule> {
             pattern: vec![
                 PatternItem::Regex(compile(r"from( the)?")),
                 dv(),
-                PatternItem::Regex(compile(r"\-|to( the)?|th?ru|through|(un)?til(l)?")),
+                PatternItem::Regex(compile(r"[\-–—]|to( the)?|th?ru|through|(un)?til(l)?")),
                 dv(),
                 am(),
             ],
@@ -477,7 +497,7 @@ pub(super) fn dom_interval_rules() -> Vec<Rule> {
             pattern: vec![
                 PatternItem::Regex(compile(r"from( the)?")),
                 dv(),
-                PatternItem::Regex(compile(r"\-|to( the)?|th?ru|through|(un)?til(l)?")),
+                PatternItem::Regex(compile(r"[\-–—]|to( the)?|th?ru|through|(un)?til(l)?")),
                 dv(),
                 PatternItem::Regex(compile(r"of")),
                 am(),
