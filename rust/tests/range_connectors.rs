@@ -1,5 +1,6 @@
-//! Range connectors: an en or em dash joins a range exactly as a hyphen does,
-//! and "between <hh> and <time-of-day> am|pm" shares the trailing am/pm.
+//! Range connectors: an en dash joins a range exactly as a hyphen does, an em
+//! dash does not, and "between <hh> and <time-of-day> am|pm" shares the
+//! trailing am/pm.
 //!
 //! Typed and pasted text carries "2–4pm" (en dash) as often as "2-4pm". Before
 //! this, every connector accepted only the ASCII hyphen, so "2–4pm" came back as
@@ -8,6 +9,11 @@
 //! "2–4pm" then composed into the whole afternoon. Separately, "between 2 and
 //! 4pm" resolved its leading hour to 2am, because only the dash/"to" spelling
 //! shared the meridiem.
+//!
+//! The em dash is prose punctuation — a break or an aside — not a range mark.
+//! Read as a connector it joined the two sides of a sentence break into one
+//! range ("a Thursday — Monday is wrong" became Thursday to Monday), so it stays
+//! a separator, as upstream has it.
 //!
 //! Reference: Tue 2026-10-13 23:23 at a fixed -04:00 zone, the send instant of
 //! the booking reply that surfaced the en dash split.
@@ -60,17 +66,26 @@ fn span(input: &str) -> (String, String) {
     (end("from"), end("to"))
 }
 
-/// The en-dash, em-dash and spaced spellings read exactly as the hyphen does,
-/// and the hyphen reading is the stated one.
+/// The en-dash spelling reads exactly as the hyphen does, and the hyphen
+/// reading is the stated one.
 fn assert_dash_forms(hyphen: &str, from: &str, to: &str) {
     assert_eq!(span(hyphen), (from.into(), to.into()), "{hyphen:?}");
-    for dash in ["–", "—"] {
-        let input = hyphen.replacen('-', dash, 1);
-        assert_eq!(reading(&input), reading(hyphen), "{input:?} vs {hyphen:?}");
-    }
+    let input = hyphen.replacen('-', "–", 1);
+    assert_eq!(reading(&input), reading(hyphen), "{input:?} vs {hyphen:?}");
 }
 
-// --- an en or em dash is a range connector ---------------------------------
+/// The surface of every time reading of `input`, sorted.
+fn time_bodies(input: &str) -> Vec<String> {
+    let mut got: Vec<String> = duckling::parse(input, &ctx())
+        .into_iter()
+        .filter(|e| e.dim == "time")
+        .map(|e| e.body)
+        .collect();
+    got.sort();
+    got
+}
+
+// --- an en dash is a range connector ---------------------------------------
 
 #[test]
 fn a_clock_range_sharing_its_meridiem() {
@@ -135,6 +150,35 @@ fn a_year_range() {
     assert_eq!(v["from"]["value"], "1960-01-01T00:00:00.000-04:00");
 }
 
+// --- an em dash is punctuation, not a range connector ---------------------
+
+#[test]
+fn an_em_dash_sentence_break_does_not_join_its_sides() {
+    // Each side keeps its own reading, as with any other punctuation.
+    assert_eq!(
+        time_bodies("June 11, 2026 is a Thursday — Monday is wrong."),
+        ["June 11, 2026", "Monday", "Thursday"]
+    );
+    assert_eq!(
+        time_bodies("Tuesday at 3pm — Thursday at 4pm"),
+        ["Thursday at 4pm", "Tuesday at 3pm"]
+    );
+}
+
+#[test]
+fn an_em_dash_aside_does_not_join_its_sides() {
+    // The same instant written two ways is two readings, not a 2pm-6pm range.
+    assert_eq!(
+        time_bodies("the proposed time (2:00 PM EDT — 18:00Z in the host's zone)"),
+        ["18:00", "2:00 PM EDT"]
+    );
+}
+
+#[test]
+fn an_unspaced_em_dash_is_not_a_connector_either() {
+    assert_eq!(time_bodies("2pm—4pm"), ["2pm", "4pm"]);
+}
+
 // --- "between … and" shares the trailing meridiem --------------------------
 
 #[test]
@@ -177,10 +221,5 @@ fn between_with_no_trailing_meridiem_is_unchanged() {
 #[test]
 fn and_without_between_is_not_a_range() {
     // "2 and 4pm" lists two times; only "between" makes "and" a connector.
-    let got: Vec<String> = duckling::parse("2 and 4pm", &ctx())
-        .into_iter()
-        .filter(|e| e.dim == "time")
-        .map(|e| e.body)
-        .collect();
-    assert_eq!(got, vec!["4pm".to_string()]);
+    assert_eq!(time_bodies("2 and 4pm"), ["4pm"]);
 }
