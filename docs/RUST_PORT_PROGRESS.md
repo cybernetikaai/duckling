@@ -566,15 +566,25 @@ gives Sep 30. That is the containing week under ISO weeks, but a reader who
 thinks of weeks as Sunday-start will read it as the week before. Changing it
 would mean changing the week convention itself, which is out of scope here.
 
-**Deliberate divergence: en/em dash range connectors (EXTENSION).** Upstream's
+**Deliberate divergence: en dash range connector (EXTENSION).** Upstream's
 range connectors accept only the ASCII hyphen, so typed or pasted text that uses
 an en dash ("2–4pm", "Tue–Thu", "October 20–22") never forms a range: "2–4pm"
 returns the bare "4pm", "Tue–Thu" returns two separate days, "October 20–22"
 drops the 22nd. Every connector alternation that accepts `-` (`en/intervals.rs`,
-`en/modifiers.rs`) now accepts `–` and `—` too, so each dash spelling reads
-exactly as its hyphen twin — no reading that the hyphen does not already give.
-In-token hyphens (ISO dates, "co-operatives") are not connectors and are
-unchanged. No oracle fixture contains a dash range, so nothing re-baselined.
+`en/modifiers.rs`) now accepts `–` too, so the en dash spelling reads exactly as
+its hyphen twin — no reading that the hyphen does not already give. In-token
+hyphens (ISO dates, "co-operatives") are not connectors and are unchanged. No
+oracle fixture contains a dash range, so nothing re-baselined.
+
+The em dash `—` is deliberately *not* a connector (v0.4.1 accepted it; v0.4.2
+dropped it). It is prose punctuation, a sentence break or an aside, and as a
+connector it joined the two sides into a range: "a Thursday — Monday is wrong"
+read as Thursday to Monday, "2:00 PM EDT — 18:00Z" (one instant written twice)
+as a 2pm–6pm range, "After 01 — three months" as an hour range. Over 29,384
+em-dash strings from cybernetikaai/foxy's tests, fixtures and docs, every
+reading the em dash changed was one of these false joins, and none was an
+unspaced range like "2—4pm". The en dash showed the opposite: its changes were
+the intended ranges.
 
 **Deliberate divergence: "between \<hh\> and \<time-of-day\> am|pm" shares the
 meridiem (BEHAVIOR CHANGE).** Upstream shares a trailing am/pm with a bare

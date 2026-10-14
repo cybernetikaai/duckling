@@ -3,7 +3,7 @@
 use super::*;
 
 pub(super) fn interval_rules() -> Vec<Rule> {
-    let sep = r"[\-–—]|to|th?ru|through|(un)?til(l)?";
+    let sep = r"[\-–]|to|th?ru|through|(un)?til(l)?";
     vec![
         // "1960 - 1961" (ruleIntervalYearLatent): two bare 4-digit years, y1<y2.
         Rule {
@@ -90,7 +90,7 @@ pub(super) fn interval_rules() -> Vec<Rule> {
                 PatternItem::Predicate(Box::new(|t: &Token| {
                     is_not_latent(t) && is_a_time_of_day(t)
                 })),
-                PatternItem::Regex(compile(r"[\-–—]|:|to|th?ru|through|(un)?til(l)?")),
+                PatternItem::Regex(compile(r"[\-–]|:|to|th?ru|through|(un)?til(l)?")),
                 PatternItem::Predicate(Box::new(is_a_time_of_day)),
             ],
             prod: Box::new(|tokens| match tokens {
@@ -107,7 +107,7 @@ pub(super) fn interval_rules() -> Vec<Rule> {
                 PatternItem::Regex(compile(r"(later than|from|(in[\s-])?between)")),
                 PatternItem::Predicate(Box::new(is_a_time_of_day)),
                 PatternItem::Regex(compile(
-                    r"((but )?before)|[\-–—]|to|th?ru|through|(un)?til(l)?",
+                    r"((but )?before)|[\-–]|to|th?ru|through|(un)?til(l)?",
                 )),
                 PatternItem::Predicate(Box::new(is_a_time_of_day)),
             ],
@@ -125,7 +125,7 @@ pub(super) fn interval_rules() -> Vec<Rule> {
                 PatternItem::Regex(compile(
                     r"(?:from )?((?:[01]?\d)|(?:2[0-3]))([:.]([0-5]\d))?",
                 )),
-                PatternItem::Regex(compile(r"[\-–—]|to|th?ru|through|(un)?til(l)?")),
+                PatternItem::Regex(compile(r"[\-–]|to|th?ru|through|(un)?til(l)?")),
                 PatternItem::Predicate(Box::new(is_a_time_of_day)),
                 PatternItem::Regex(compile(r"(in the )?([ap])(\s|\.)?m?\.?")),
             ],
@@ -442,7 +442,7 @@ fn shared_meridiem_interval(tokens: &[Token]) -> Option<Token> {
 }
 
 pub(super) fn dom_interval_rules() -> Vec<Rule> {
-    let sep = || compile(r"[\-–—]|to|th?ru|through|(un)?til(l)?");
+    let sep = || compile(r"[\-–]|to|th?ru|through|(un)?til(l)?");
     let dv = || PatternItem::Predicate(Box::new(is_dom_value));
     let am = || PatternItem::Predicate(Box::new(is_a_month));
     vec![
@@ -483,7 +483,7 @@ pub(super) fn dom_interval_rules() -> Vec<Rule> {
             pattern: vec![
                 PatternItem::Regex(compile(r"from( the)?")),
                 dv(),
-                PatternItem::Regex(compile(r"[\-–—]|to( the)?|th?ru|through|(un)?til(l)?")),
+                PatternItem::Regex(compile(r"[\-–]|to( the)?|th?ru|through|(un)?til(l)?")),
                 dv(),
                 am(),
             ],
@@ -497,7 +497,7 @@ pub(super) fn dom_interval_rules() -> Vec<Rule> {
             pattern: vec![
                 PatternItem::Regex(compile(r"from( the)?")),
                 dv(),
-                PatternItem::Regex(compile(r"[\-–—]|to( the)?|th?ru|through|(un)?til(l)?")),
+                PatternItem::Regex(compile(r"[\-–]|to( the)?|th?ru|through|(un)?til(l)?")),
                 dv(),
                 PatternItem::Regex(compile(r"of")),
                 am(),
