@@ -160,11 +160,29 @@ pub fn parse_locale(input: &str, ctx: &ResolveContext, locale: Locale) -> Vec<En
 /// "set a timer for 20 minutes and wake me at 7am" → a Duration and a Time
 /// (disjoint). `parse` (Time-only) is unchanged, so the Time corpus is untouched.
 pub fn parse_time_and_duration(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
+    time_and_duration(input, ctx, &[])
+}
+
+/// Whether a candidate spanning `start..end` starts strictly inside one of the
+/// `inside` spans and runs past its end: "0121 tomorrow" out of the phone
+/// "555-0121", "5 tomorrow" out of the number "1.5".
+fn straddles(start: usize, end: usize, inside: &[(usize, usize)]) -> bool {
+    inside
+        .iter()
+        .any(|&(s, e)| s < start && start < e && end > e)
+}
+
+/// [`parse_time_and_duration`], minus every candidate that [`straddles`] one
+/// of the `inside` spans. The filter runs BEFORE ranking: a straddler such as
+/// "0121 tomorrow" is wider than the "tomorrow" it contains, so ranking it
+/// first would discard the real date with it.
+fn time_and_duration(input: &str, ctx: &ResolveContext, inside: &[(usize, usize)]) -> Vec<Entity> {
     let doc = Document::new(input);
     let rules = rules_for(Locale::EnUs);
     let nodes = engine::parse_string(&rules, &doc);
     let scored: Vec<(Node, Entity)> = nodes
         .into_iter()
+        .filter(|n| !straddles(n.range.0, n.range.1, inside))
         .filter_map(|n| {
             let e = match &n.token {
                 Token::Time(td) => Entity {
@@ -200,7 +218,8 @@ pub fn parse_time_and_duration(input: &str, ctx: &ResolveContext) -> Vec<Entity>
 /// the unrestricted "all dimensions" surface for extracting all structured data
 /// from an utterance (e.g. "pay $20 for 2 lbs of coffee at 3pm" → an
 /// amount-of-money, a quantity, and a time). Time/Duration are ranked together
-/// by the classifier (via [`parse_time_and_duration`]); every other dimension is
+/// by the classifier (via [`parse_time_and_duration`], minus candidates that
+/// start partway through a number, phone, or identifier); every other dimension is
 /// resolved in its own isolated rule set. All results are then merged by
 /// **cross-dimension range domination**: an entity whose span is strictly
 /// contained in another's is dropped (so the bare numeral inside "$20" or the
@@ -208,8 +227,7 @@ pub fn parse_time_and_duration(input: &str, ctx: &ResolveContext) -> Vec<Entity>
 /// ambiguous equal spans across dimensions (e.g. "10 c" as cents vs. Celsius) are
 /// both surfaced — the caller picks. `parse` (Time-only) is untouched.
 pub fn parse_all(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
-    let mut all = parse_time_and_duration(input, ctx);
-    all.extend(parse_numeral(input));
+    let mut all = parse_numeral(input);
     all.extend(parse_ordinal(input));
     all.extend(parse_temperature(input));
     all.extend(parse_volume(input));
@@ -220,10 +238,27 @@ pub fn parse_all(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
     all.extend(parse_url(input));
     all.extend(parse_creditcard(input));
     all.extend(parse_phonenumber(input));
+    let identifiers = parse_identifier(input);
+
+    // A time or duration can't begin partway through a number, phone, or
+    // identifier: Duckling's military-time rule happily reads the last group
+    // of "555-0121" as 01:21, so "reach me at 555-0121 tomorrow" became 01:21
+    // tomorrow and lost "tomorrow". See `time_and_duration`.
+    let inside: Vec<(usize, usize)> = all
+        .iter()
+        // A "fraction" number like "13/12" is usually part of a date
+        // ("13/12/2013"), so it doesn't shut out the time reading.
+        .filter(|e| (e.dim == "number" && !e.body.contains('/')) || e.dim == "phone-number")
+        .chain(&identifiers)
+        .map(|e| (e.start, e.end))
+        .collect();
+    let mut times = time_and_duration(input, ctx, &inside);
+    times.append(&mut all);
+    let all = times;
 
     // Identifiers claim their whole token before range domination runs; see
     // `claim_identifiers`.
-    let all = claim_identifiers(all, parse_identifier(input));
+    let all = claim_identifiers(all, identifiers);
 
     // Cross-dimension range domination: drop any entity whose span is strictly
     // contained within another entity's span. Equal / partially-overlapping
