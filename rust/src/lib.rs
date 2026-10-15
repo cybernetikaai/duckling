@@ -15,6 +15,7 @@ pub mod duration;
 pub mod email;
 pub mod engine;
 pub mod grain;
+pub mod identifier;
 pub mod json;
 pub mod numeral;
 pub mod ordinal;
@@ -159,11 +160,29 @@ pub fn parse_locale(input: &str, ctx: &ResolveContext, locale: Locale) -> Vec<En
 /// "set a timer for 20 minutes and wake me at 7am" → a Duration and a Time
 /// (disjoint). `parse` (Time-only) is unchanged, so the Time corpus is untouched.
 pub fn parse_time_and_duration(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
+    time_and_duration(input, ctx, &[])
+}
+
+/// Whether a candidate spanning `start..end` starts strictly inside one of the
+/// `inside` spans and runs past its end: "0121 tomorrow" out of the phone
+/// "555-0121", "5 tomorrow" out of the number "1.5".
+fn straddles(start: usize, end: usize, inside: &[(usize, usize)]) -> bool {
+    inside
+        .iter()
+        .any(|&(s, e)| s < start && start < e && end > e)
+}
+
+/// [`parse_time_and_duration`], minus every candidate that [`straddles`] one
+/// of the `inside` spans. The filter runs BEFORE ranking: a straddler such as
+/// "0121 tomorrow" is wider than the "tomorrow" it contains, so ranking it
+/// first would discard the real date with it.
+fn time_and_duration(input: &str, ctx: &ResolveContext, inside: &[(usize, usize)]) -> Vec<Entity> {
     let doc = Document::new(input);
     let rules = rules_for(Locale::EnUs);
     let nodes = engine::parse_string(&rules, &doc);
     let scored: Vec<(Node, Entity)> = nodes
         .into_iter()
+        .filter(|n| !straddles(n.range.0, n.range.1, inside))
         .filter_map(|n| {
             let e = match &n.token {
                 Token::Time(td) => Entity {
@@ -199,7 +218,8 @@ pub fn parse_time_and_duration(input: &str, ctx: &ResolveContext) -> Vec<Entity>
 /// the unrestricted "all dimensions" surface for extracting all structured data
 /// from an utterance (e.g. "pay $20 for 2 lbs of coffee at 3pm" → an
 /// amount-of-money, a quantity, and a time). Time/Duration are ranked together
-/// by the classifier (via [`parse_time_and_duration`]); every other dimension is
+/// by the classifier (via [`parse_time_and_duration`], minus candidates that
+/// start partway through a number, phone, or identifier); every other dimension is
 /// resolved in its own isolated rule set. All results are then merged by
 /// **cross-dimension range domination**: an entity whose span is strictly
 /// contained in another's is dropped (so the bare numeral inside "$20" or the
@@ -207,8 +227,7 @@ pub fn parse_time_and_duration(input: &str, ctx: &ResolveContext) -> Vec<Entity>
 /// ambiguous equal spans across dimensions (e.g. "10 c" as cents vs. Celsius) are
 /// both surfaced — the caller picks. `parse` (Time-only) is untouched.
 pub fn parse_all(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
-    let mut all = parse_time_and_duration(input, ctx);
-    all.extend(parse_numeral(input));
+    let mut all = parse_numeral(input);
     all.extend(parse_ordinal(input));
     all.extend(parse_temperature(input));
     all.extend(parse_volume(input));
@@ -219,6 +238,33 @@ pub fn parse_all(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
     all.extend(parse_url(input));
     all.extend(parse_creditcard(input));
     all.extend(parse_phonenumber(input));
+    let identifiers = parse_identifier(input);
+
+    // A time or duration can't begin partway through a number, phone, or
+    // identifier: Duckling's military-time rule happily reads the last group
+    // of "555-0121" as 01:21, so "reach me at 555-0121 tomorrow" became 01:21
+    // tomorrow and lost "tomorrow". See `time_and_duration`.
+    let inside: Vec<(usize, usize)> = all
+        .iter()
+        // A "fraction" number like "13/12" is usually part of a date
+        // ("13/12/2013"), so it doesn't shut out the time reading.
+        .filter(|e| (e.dim == "number" && !e.body.contains('/')) || e.dim == "phone-number")
+        .chain(&identifiers)
+        // A dash read as a minus sign isn't the number's inside: "- 30 days"
+        // keeps its duration.
+        .map(|e| {
+            let sign = e.body.chars().take_while(|c| !c.is_ascii_digit()).count();
+            let sign = if e.dim == "number" { sign } else { 0 };
+            (e.start + sign, e.end)
+        })
+        .collect();
+    let mut times = time_and_duration(input, ctx, &inside);
+    times.append(&mut all);
+    let all = times;
+
+    // Identifiers claim their whole token before range domination runs; see
+    // `claim_identifiers`.
+    let all = claim_identifiers(all, identifiers);
 
     // Cross-dimension range domination: drop any entity whose span is strictly
     // contained within another entity's span. Equal / partially-overlapping
@@ -242,6 +288,83 @@ pub fn parse_all(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
     kept.retain(|e| seen.insert((e.start, e.end, e.dim.clone(), e.value.to_string())));
     kept.sort_by_key(|e| (e.start, e.end));
     kept
+}
+
+/// Dims whose reading of an identifier-shaped token is trusted when it covers
+/// the whole token: "Q3" is a quarter, "at 0800" a time, "x2.com" a URL,
+/// "1h30m" a duration. Any other dim overlapping an identifier is shrapnel.
+const COVERS_IDENTIFIERS: &[&str] = &["time", "duration", "email", "url"];
+
+/// Let identifiers claim their tokens against the other dims' entities.
+///
+/// Upstream Duckling has no identifier concept, so its dims carve identifier
+/// tokens into quantities and contact dims: "4.19.3" → phone "4193",
+/// "COVID-19" → number -19, "from 1.2.3 to 1.4.0" → the time "3 to 1".
+/// Plain range domination can't fix that, because the fragments only
+/// partially overlap the token or exactly match it. So, per identifier:
+/// - a trusted dim ([`COVERS_IDENTIFIERS`], or money with a real currency:
+///   "USD3.14") that covers the whole token wins, and the identifier is
+///   dropped;
+/// - a phone that strictly contains the token and adds digits or a `+`
+///   wins ("(+33) 1.46.64.79.98": the country code makes it a phone);
+/// - every other entity overlapping the token is dropped, and the
+///   identifier is kept.
+fn claim_identifiers(entities: Vec<Entity>, identifiers: Vec<Entity>) -> Vec<Entity> {
+    let overlaps = |a: &Entity, b: &Entity| a.start < b.end && b.start < a.end;
+    let covers = |a: &Entity, b: &Entity| a.start <= b.start && b.end <= a.end;
+    let phone_adds_context = |p: &Entity, id: &Entity| {
+        p.dim == "phone-number" && covers(p, id) && (p.end - p.start) > (id.end - id.start) && {
+            let extra = p.body.replacen(id.body.as_str(), "", 1);
+            extra.chars().any(|c| c.is_ascii_digit() || c == '+')
+        }
+    };
+    // "USD3.14", "RM42": a currency code glued to a number is money, but a
+    // unit-less money range ("A1234-5678" → 1234..5678) is identifier shrapnel.
+    let money_with_currency = |e: &Entity| {
+        e.dim == "amount-of-money" && {
+            let v = &e.value;
+            [&v["unit"], &v["from"]["unit"], &v["to"]["unit"]]
+                .iter()
+                .any(|u| u.as_str().is_some_and(|u| u != "unknown"))
+        }
+    };
+    let wins_over = |e: &Entity, id: &Entity| {
+        ((COVERS_IDENTIFIERS.contains(&e.dim.as_str()) || money_with_currency(e)) && covers(e, id))
+            || phone_adds_context(e, id)
+    };
+    let kept_ids: Vec<Entity> = identifiers
+        .into_iter()
+        .filter(|id| !entities.iter().any(|e| wins_over(e, id)))
+        .collect();
+    let mut out: Vec<Entity> = entities
+        .into_iter()
+        .filter(|e| {
+            !kept_ids
+                .iter()
+                .any(|id| overlaps(e, id) && !wins_over(e, id))
+        })
+        .collect();
+    out.extend(kept_ids);
+    out
+}
+
+/// Parse `input` and return **Identifier** entities (dim `"identifier"`,
+/// `{type:"value", value:<token>, kind:<provisional kind>}`) — the
+/// `dims:["identifier"]` surface. Not an upstream Duckling dim: see
+/// [`identifier`] for the shapes and kinds. The kind is a shape-based guess
+/// for the caller to confirm, not a validated type.
+pub fn parse_identifier(input: &str) -> Vec<Entity> {
+    identifier::find_identifiers(input)
+        .into_iter()
+        .map(|h| Entity {
+            dim: "identifier".to_string(),
+            value: serde_json::json!({"type": "value", "value": h.body, "kind": h.kind}),
+            body: h.body,
+            start: h.start,
+            end: h.end,
+            latent: false,
+        })
+        .collect()
 }
 
 /// Parse `input` and return resolved **Duration** entities (dim `"duration"`),
