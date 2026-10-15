@@ -16,8 +16,12 @@ Every Duckling EN dimension that has a corpus is ported and green against it:
   scaling), **AmountOfMoney** (~50 currencies, "$20 and 43c" cents composition).
 - **Regex dimensions**: **Email**, **Url**, **CreditCardNumber** (Luhn),
   **PhoneNumber**.
+- **Identifier** (not in upstream Duckling): versions, IPv4/IPv6, UUIDs, MAC
+  addresses, hashes, codes ("INV-2024-00417", "COVID-19") and cue-word
+  references ("order 112-4471983-2236150"), each with a *provisional* `kind`
+  for the caller to confirm. See [Identifiers](#identifiers).
 - **`parse_all`**: extract *every* dimension from one utterance, merged by
-  cross-dimension range domination.
+  cross-dimension range domination, after identifiers claim their tokens.
 - **Timezone/DST**: offsets verified per-instant against authoritative IANA tzdata
   (287 cases across 17 zones, incl. 45-minute and DST-in-exotic-zone offsets).
 
@@ -76,7 +80,7 @@ echo "in half an hour" | duckling
 
 | Option | Values | Default | Purpose |
 |---|---|---|---|
-| `--dims` | `time` \| `duration` \| `ordinal` \| `number` \| `temperature` \| `volume` \| `distance` \| `quantity` \| `amount-of-money` \| `email` \| `url` \| `credit-card-number` \| `phone-number` \| `all` | `time` | Which dimension to extract. `all` = every dimension, merged by range domination. |
+| `--dims` | `time` \| `duration` \| `ordinal` \| `number` \| `temperature` \| `volume` \| `distance` \| `quantity` \| `amount-of-money` \| `email` \| `url` \| `credit-card-number` \| `phone-number` \| `identifier` \| `all` | `time` | Which dimension to extract. `all` = every dimension, merged by range domination. |
 | `--ref` | RFC 3339 timestamp | system now | The reference "now" that relative expressions ("tomorrow", "in 2 hours") resolve from. |
 | `--tz` | IANA zone (e.g. `America/New_York`) | `UTC` | **Target timezone.** Relative expressions resolve in this zone and output offsets are derived from it. Set it here at parse time to coerce into the target zone — don't convert the result afterward. |
 | `--locale` | `en_US` `en_GB` `en_CA` `en_AU` `en_NZ` `en_IN` `en_IE` `en_ZA` `en_PH` `en_BZ` `en_JM` `en_TT` | `en_US` | English locale. Affects numeric date order (US `3/4`→Mar 4, GB `3/4`→Apr 3) and regional holidays. |
@@ -161,7 +165,8 @@ fn main() {
 |---|---|---|
 | `parse(input, ctx)` | Time | US English (`en_US`). |
 | `parse_locale(input, ctx, locale)` | Time | Pick the English locale. |
-| `parse_all(input, ctx)` | **all** | Every dimension, merged by cross-dimension range domination (span-contained entities dropped; disjoint all surface). |
+| `parse_all(input, ctx)` | **all** | Every dimension, merged by cross-dimension range domination (span-contained entities dropped; disjoint all surface). Identifiers claim their tokens first. |
+| `parse_identifier(input)` | Identifier | Context-free. `{value, kind}`; `kind` is provisional. |
 | `parse_time_and_duration(input, ctx)` | Time + Duration | The `dims:["time","duration"]` pool, classifier-ranked. |
 | `parse_duration(input)` | Duration | Context-free. |
 | `parse_numeral(input)` | Numeral | Context-free (corpus-complete). |
@@ -220,6 +225,36 @@ Each value/unit and regex dimension parses in its **own rule set** (numeral +
 that dimension's rules), isolated from the Time rule set — so adding or changing
 one can never perturb the Time corpus. `parse_all` runs them all and merges the
 results by range domination.
+
+### Identifiers
+
+Upstream Duckling has no identifier concept, so its dims carve identifier
+tokens into whatever they can read: `4.19.3` became phone `4193`, `127.0.0.1`
+phone `127001`, `COVID-19` the number `-19`, and "from 1.2.3 to 1.4.0" the
+time "3 to 1". The `identifier` dim (`src/identifier.rs`) finds those tokens
+first. A token is a run of ASCII alphanumerics joined by `-` `.` `_` (and `:`
+for MAC/IPv6/`ip:port`), optionally led by `#`, containing a digit. Its
+provisional `kind` comes from its shape:
+
+| kind | examples |
+|---|---|
+| `ipv4`, `ipv6` | `127.0.0.1`, `10.0.0.12:8080`, `2001:db8::1` (octets validated) |
+| `version` | `4.19.3`, `1.0.0-rc.1`, `v2` |
+| `dotted-number` | `01.29.01`, `4.8.6.6.8.2.7`, `300.1.2.3` |
+| `uuid`, `mac-address`, `hex` | `550e8400-…`, `00:1A:2B:3C:4D:5E`, `4438b3d`, `0x80070005` |
+| `code` | `INV-2024-00417`, `COVID-19`, `B22`, `1Z999AA10123456784`, `00731` |
+| `reference` | `#1342`; or a long digit run after a cue word: "order 112-4471983-2236150", "SSN 078-05-1120" |
+
+Quantities stay quantities: `5km`, `3pm`, `2.5k`, `21-mile`, `3-6pm`, `10:30`,
+`1,234.5`, bare integers, and dotted US phones (`202.555.0121`).
+
+In `parse_all`, an identifier drops every overlapping entity from the other
+dims, unless that entity covers the whole token and is a trusted reading: a
+time, duration, email or URL ("Q3", "at 0800", "1h30m"), money with a real
+currency ("USD3.14"), or a phone that adds a country code or more digits
+("(+33) 1.46.64.79.98"). Then the identifier is the one dropped. The `kind` is
+a shape guess, not a validation: `3.8.1.5` is a valid IPv4 and a plausible
+version, so callers with context (an NER model) should confirm it.
 
 **To add a language** (e.g. Spanish), add sibling `<lang>` modules and wire them
 into `build_rules` in `lib.rs`:
