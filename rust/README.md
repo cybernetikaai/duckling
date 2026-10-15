@@ -239,7 +239,7 @@ provisional `kind` comes from its shape:
 | kind | examples |
 |---|---|
 | `ipv4`, `ipv6` | `127.0.0.1`, `10.0.0.12:8080`, `2001:db8::1` (octets validated) |
-| `version` | `4.19.3`, `1.0.0-rc.1`, `v2` |
+| `version` | `4.19.3`, `1.0.0-rc.1`, `v2`; a dotted number after a version word: "Version 2.5" |
 | `dotted-number` | `01.29.01`, `4.8.6.6.8.2.7`, `300.1.2.3` |
 | `uuid`, `mac-address`, `hex` | `550e8400-…`, `00:1A:2B:3C:4D:5E`, `4438b3d`, `0x80070005` |
 | `code` | `INV-2024-00417`, `COVID-19`, `B22`, `1Z999AA10123456784`, `00731` |

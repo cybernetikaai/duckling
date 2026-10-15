@@ -74,6 +74,10 @@ const PREFIX_WORDS: &[&str] = &[
     "the", "a", "an", "non", "anti", "sub", "ex",
 ];
 
+/// Words after which a dotted number is a version, not a quantity.
+const VERSION_CUES: &[&str] = &["version", "ver", "release", "build", "firmware", "patch"];
+static DOTTED_VERSION: LazyLock<Regex> = LazyLock::new(|| re(r"^\d+(?:\.\d+)+$"));
+
 /// Words that announce an identifier: the next number-ish token is a
 /// reference, not a quantity ("order 112-4471983-2236150", "SSN 078-05-1120").
 const CUE_WORDS: &[&str] = &[
@@ -148,6 +152,7 @@ const CUE_WORDS: &[&str] = &[
     "postal",
     "deal",
     "contract",
+    "notice",
     "issue",
     "bug",
     "incident",
@@ -292,16 +297,29 @@ fn shape_kind(t: &str) -> Option<&'static str> {
     Some("code") // B22, EB572, 1Z999AA1…, 23H2, deal227922
 }
 
-/// The cue word right before `start_byte`, if any ("order", "SSN", …).
-fn cued(text: &str, start_byte: usize) -> bool {
+/// The word right before `start_byte`, past cue filler ("no.", "#", ":"),
+/// lowercased.
+fn cue_word(text: &str, start_byte: usize) -> Option<String> {
     let mut from = start_byte.saturating_sub(64);
     while !text.is_char_boundary(from) {
         from += 1;
     }
     match CUE_TAIL.captures(&text[from..start_byte]) {
-        Ok(Some(c)) => CUE_WORDS.contains(&c[1].to_ascii_lowercase().as_str()),
-        _ => false,
+        Ok(Some(c)) => Some(c[1].to_ascii_lowercase()),
+        _ => None,
     }
+}
+
+/// Whether a cue word ("order", "SSN", …) sits right before `start_byte`.
+fn cued(text: &str, start_byte: usize) -> bool {
+    cue_word(text, start_byte).is_some_and(|w| CUE_WORDS.contains(&w.as_str()))
+}
+
+/// A dotted number after a version word is a version: "Version 2.5",
+/// "release 10.1". A bare "2.5" stays a number.
+fn cued_version(text: &str, start_byte: usize, t: &str) -> bool {
+    m(&DOTTED_VERSION, t)
+        && cue_word(text, start_byte).is_some_and(|w| VERSION_CUES.contains(&w.as_str()))
 }
 
 /// A number-ish token after a cue word is a reference when it is long or
@@ -314,6 +332,9 @@ fn cued_reference(t: &str) -> bool {
 
 /// The kind of the token `t` found at `start_byte`, or None.
 fn classify(text: &str, start_byte: usize, t: &str, hashed: bool) -> Option<&'static str> {
+    if !hashed && cued_version(text, start_byte, t) {
+        return Some("version");
+    }
     shape_kind(t).or_else(|| {
         let tagged = hashed && t.len() >= 3 && has_digit(t);
         let cued = !hashed && cued(text, start_byte) && cued_reference(t);
@@ -328,16 +349,19 @@ pub fn find_identifiers(text: &str) -> Vec<IdentifierHit> {
     for hit in TOKEN.find_iter(text).flatten() {
         let (sb, eb) = (hit.start(), hit.end());
         let raw = hit.as_str();
-        // A '#' glued to a word ("C#7") is not a reference marker.
-        let hashed = raw.starts_with('#');
-        if hashed
+        // A '#' glued to a word ("C#7", "k#H02262") is not a reference
+        // marker: the token starts after it.
+        let glued = raw.starts_with('#')
             && text[..sb]
                 .chars()
                 .next_back()
-                .is_some_and(char::is_alphanumeric)
-        {
-            continue;
-        }
+                .is_some_and(char::is_alphanumeric);
+        let (sb, raw) = if glued {
+            (sb + 1, &raw[1..])
+        } else {
+            (sb, raw)
+        };
+        let hashed = raw.starts_with('#');
         // Either side of an '@' is part of an email address or a handle.
         if text[..sb].ends_with('@') || text[eb..].starts_with('@') {
             continue;
@@ -401,6 +425,9 @@ mod tests {
         assert_eq!(one("1.0.0-rc.1 is out"), id("1.0.0-rc.1", "version"));
         assert_eq!(one("v2 api"), id("v2", "version"));
         assert_eq!(one("on v1.2"), id("v1.2", "version"));
+        assert_eq!(one("Version 2.5 ships Friday"), id("2.5", "version"));
+        assert_eq!(one("release 10.1"), id("10.1", "version"));
+        assert_eq!(one("it costs 2.5 dollars"), None);
     }
 
     #[test]
@@ -455,6 +482,10 @@ mod tests {
         assert_eq!(one("Windows 11 23H2"), id("23H2", "code"));
         assert_eq!(one("badge 00731"), id("00731", "code"));
         assert_eq!(one("ref:INV-2024-00417"), id("INV-2024-00417", "code"));
+        assert_eq!(one("k#H02262"), id("H02262", "code"));
+        assert_eq!(one("k# A02353"), id("A02353", "code"));
+        assert_eq!(one("deal227922 and"), id("deal227922", "code"));
+        assert_eq!(one("deal 227926 settles"), id("227926", "reference"));
     }
 
     #[test]
