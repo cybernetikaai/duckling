@@ -65,13 +65,46 @@ static NUM_SUFFIX: LazyLock<Regex> = LazyLock::new(|| re(r"(?i)^\d[\d.,]*[a-z]+$
 static NUM: LazyLock<Regex> = LazyLock::new(|| re(r"^\d+(?:\.\d+)?$"));
 // 3x5, 4x4, 1920x1080: a multiplication or dimension, not a code.
 static TIMES: LazyLock<Regex> = LazyLock::new(|| re(r"(?i)^\d+(?:\.\d+)?x\d+(?:\.\d+)?$"));
+// A phone extension: "x57478", "x-6249". The phone's, not a record's.
+static EXTENSION: LazyLock<Regex> = LazyLock::new(|| re(r"(?i)^x-?\d{3,6}$"));
+// A Moody's-style credit grade: "Baa1", "Aa3". A grade, not a record.
+static GRADE: LazyLock<Regex> =
+    LazyLock::new(|| re(r"^(?:Aaa|Aa[1-3]|Baa[1-3]|Ba[1-3]|Caa[1-3])$"));
 
 /// Words that open a compound with a number without making it a code:
 /// "mid-2024", "pre-1990", "top-10", "under-18".
 const PREFIX_WORDS: &[&str] = &[
     "mid", "pre", "post", "early", "late", "end", "start", "circa", "ca", "top", "under", "over",
     "about", "around", "approx", "up", "to", "from", "since", "until", "by", "per", "and", "or",
-    "the", "a", "an", "non", "anti", "sub", "ex",
+    "the", "a", "an", "non", "anti", "sub", "ex", "gmt", "utc",
+];
+
+/// Month names: "07-Feb" is a date, not a code.
+const MONTHS: &[&str] = &[
+    "jan",
+    "feb",
+    "mar",
+    "apr",
+    "may",
+    "jun",
+    "jul",
+    "aug",
+    "sep",
+    "sept",
+    "oct",
+    "nov",
+    "dec",
+    "january",
+    "february",
+    "march",
+    "april",
+    "june",
+    "july",
+    "august",
+    "september",
+    "october",
+    "november",
+    "december",
 ];
 
 /// Words after which a dotted number is a version, not a quantity.
@@ -243,9 +276,10 @@ fn code_compound(t: &str) -> bool {
         return !PREFIX_WORDS.contains(&first.to_ascii_lowercase().as_str());
     }
     // Digit-led with an uppercase segment: "7700-112-B", "2024-CV-00891", "10-K".
-    segs[1..]
-        .iter()
-        .any(|s| s.bytes().any(|b| b.is_ascii_uppercase()))
+    segs[1..].iter().any(|s| {
+        s.bytes().any(|b| b.is_ascii_uppercase())
+            && !MONTHS.contains(&s.to_ascii_lowercase().as_str())
+    })
 }
 
 /// The provisional kind of a bare token (no cue word), or None when it reads
@@ -266,7 +300,7 @@ fn shape_kind(t: &str) -> Option<&'static str> {
     if t.contains(':') && valid_ipv6(t) {
         return Some("ipv6");
     }
-    if m(&DOTTED_PHONE, t) {
+    if m(&DOTTED_PHONE, t) || m(&EXTENSION, t) || m(&GRADE, t) {
         return None;
     }
     if m(&SEMVER, t) || m(&V_VERSION, t) {

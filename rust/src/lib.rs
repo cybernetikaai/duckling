@@ -250,7 +250,13 @@ pub fn parse_all(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
         // ("13/12/2013"), so it doesn't shut out the time reading.
         .filter(|e| (e.dim == "number" && !e.body.contains('/')) || e.dim == "phone-number")
         .chain(&identifiers)
-        .map(|e| (e.start, e.end))
+        // A dash read as a minus sign isn't the number's inside: "- 30 days"
+        // keeps its duration.
+        .map(|e| {
+            let sign = e.body.chars().take_while(|c| !c.is_ascii_digit()).count();
+            let sign = if e.dim == "number" { sign } else { 0 };
+            (e.start + sign, e.end)
+        })
         .collect();
     let mut times = time_and_duration(input, ctx, &inside);
     times.append(&mut all);

@@ -153,3 +153,23 @@ fn identifier_dim_alone() {
         .collect();
     assert_eq!(ids, pairs(&[("version", "1.11.0"), ("ipv4", "10.0.0.12")]));
 }
+
+#[test]
+fn dates_offsets_extensions_and_grades_are_not_identifiers() {
+    // Shapes from the customlong/custom300 gold that read as codes but
+    // aren't records (ner gold/CONVENTIONS.md ruling 16).
+    for t in [
+        "Canada defeated Italy , 07-Feb , while",
+        "1:30 PM-2:30 PM (GMT-06:00) Central Time",
+        "Robin x57478",
+        "Call Jim Pratico (x-6249) or",
+        "contact Cathy Phillips (X-36898) and",
+        "cut the rating from Baa1 to Baa2.",
+    ] {
+        assert!(
+            !all(t).iter().any(|(d, _)| d.starts_with("identifier")),
+            "{t:?} -> {:?}",
+            all(t)
+        );
+    }
+}

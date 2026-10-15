@@ -92,3 +92,13 @@ fn clocks_and_dates_that_start_at_their_own_number_stay() {
     // read survives, as before.
     assert_all("13/12/2013", &[("number", "13/12"), ("time", "12/2013")]);
 }
+
+#[test]
+fn a_dash_before_a_number_does_not_shut_out_its_duration() {
+    // "- 30" reads as the number -30, but the duration starts at its digits,
+    // not partway through it (v0.4.0 kept "30 days"; customlong gold).
+    assert_all(
+        "Inbox - 30 days Sent Mail",
+        &[("number", "- 30"), ("duration", "30 days")],
+    );
+}
