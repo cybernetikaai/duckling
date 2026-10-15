@@ -169,9 +169,11 @@ const CUE_WORDS: &[&str] = &[
 ];
 
 /// Filler allowed between a cue word and its identifier: "order no. 1234",
-/// "Order Number: 1234", "account #: 0012".
+/// "Order Number: 1234", "account #: 0012", "MRN is 4471-2290".
 static CUE_TAIL: LazyLock<Regex> = LazyLock::new(|| {
-    re(r"(?i)(?<![a-z])([a-z]+)(?:\s*(?:no\.?|num(?:ber)?\.?|#|id))?\s*[:#]?\s*$")
+    re(
+        r"(?i)(?<![a-z])([a-z]+)(?:\s*(?:no\.?|num(?:ber)?\.?|#|id))?(?:\s+(?:is|was))?\s*[:#=]?\s*$",
+    )
 });
 
 fn has_digit(s: &str) -> bool {
@@ -497,6 +499,10 @@ mod tests {
         assert_eq!(one("SSN 078-05-1120"), id("078-05-1120", "reference"));
         assert_eq!(one("Order Number: 99812345"), id("99812345", "reference"));
         assert_eq!(one("account no. 12345678"), id("12345678", "reference"));
+        assert_eq!(
+            one("the patient's MRN is 4471-2290"),
+            id("4471-2290", "reference")
+        );
         assert_eq!(one("see PR #1342"), id("#1342", "reference"));
         // a count after a cue word is still a count
         assert_eq!(one("order 3 pizzas"), None);
