@@ -600,6 +600,36 @@ from the parser; its 15:01 end is unchanged, and the other 62 `between` cases
 there pass untouched. Both changes are guarded by `tests/range_connectors.rs`
 (9 cases); reverting the source fails 7 of them.
 
+**Deliberate divergence: a range ending on a clock time ends at that time
+(BEHAVIOR CHANGE).** Upstream's closed interval always includes its last unit,
+which is right for days ("Aug 8 - Aug 12" ends at the start of the 13th) and
+wrong for clock times: "2-4pm" ended at 17:00, "9am-5pm" at 18:00, "9:30-5:30pm"
+at 17:31, and "from 4pm for thirty minutes" at 16:31. `time_interval`
+(`time/object.rs`) now ends a closed range at its end point when that end is
+finer than a day and carries no end of its own; a day-or-coarser end still
+includes its unit. Consequences for the oracle-derived fixtures: 332
+expectations re-baselined across en_time_corpus / differential / random_diff /
+ref_stress / spoken_forms / multi_entity / sentence_stress. 324 differ from the
+oracle only by the end moving exactly one grain earlier (checked mechanically
+per case). The other 8 pick a later occurrence because the shorter window no
+longer contains the reference: "between noon and 3pm" asked at 15:30 is
+tomorrow's, "between two and four" asked at 04:30 is the afternoon's. Guarded by
+`tests/day_range_by_clock.rs` and the updated `tests/range_connectors.rs`.
+
+**Deliberate divergence: a day range by a clock part is two readings (BEHAVIOR
+CHANGE).** Upstream intersects "Mon-Fri" with "9am-5pm" into Monday's window
+alone; the other days survive only in the 3-entry `values` list, which there
+lists members rather than alternative readings. When the winning parse is an
+intersect of an explicit day range or list (`<datetime> - <datetime>`,
+`<datetime>/<datetime>`, the `dd-dd <month>` family, "between", alone or
+narrowed as "next week Mon-Fri") with a clock part that names no day, the
+ranked output now carries the two parts, each resolved as it would be alone
+(`time/day_range_by_clock.rs`, applied after ranking in `lib.rs`). The caller
+decides how they combine. One-day intersects ("next Tuesday 2-4pm"), a period
+point by a clock ("next week at 3pm", which upstream reads as Monday 15:00), and
+a datetime range ("Mon 9am - Fri 5pm") are unchanged. No oracle fixture
+re-baselined.
+
 
 **Spoken-form audit (this iteration → 2 real fixes).** Prior fuzzing used
 written/templated inputs; this pass targeted the product's actual input

@@ -92,12 +92,12 @@ fn a_clock_range_sharing_its_meridiem() {
     assert_dash_forms(
         "2-4pm",
         "2026-10-14T14:00:00.000-04:00",
-        "2026-10-14T17:00:00.000-04:00",
+        "2026-10-14T16:00:00.000-04:00",
     );
     assert_dash_forms(
         "2 - 4pm",
         "2026-10-14T14:00:00.000-04:00",
-        "2026-10-14T17:00:00.000-04:00",
+        "2026-10-14T16:00:00.000-04:00",
     );
 }
 
@@ -106,12 +106,12 @@ fn a_clock_range_with_both_ends_clocked() {
     assert_dash_forms(
         "2pm-4pm",
         "2026-10-14T14:00:00.000-04:00",
-        "2026-10-14T17:00:00.000-04:00",
+        "2026-10-14T16:00:00.000-04:00",
     );
     assert_dash_forms(
         "9am - 5pm",
         "2026-10-14T09:00:00.000-04:00",
-        "2026-10-14T18:00:00.000-04:00",
+        "2026-10-14T17:00:00.000-04:00",
     );
 }
 
@@ -139,7 +139,7 @@ fn a_clock_range_with_a_trailing_timezone() {
     assert_dash_forms(
         "9:30-11:00 CST",
         "2026-10-14T11:30:00.000-04:00",
-        "2026-10-14T13:01:00.000-04:00",
+        "2026-10-14T13:00:00.000-04:00",
     );
 }
 
@@ -187,33 +187,34 @@ fn between_a_bare_hour_and_a_clocked_time() {
         span("between 2 and 4pm"),
         (
             "2026-10-14T14:00:00.000-04:00".into(),
-            "2026-10-14T17:00:00.000-04:00".into()
+            "2026-10-14T16:00:00.000-04:00".into()
         )
     );
     assert_eq!(
         span("between 2:30 and 4pm"),
         (
             "2026-10-14T14:30:00.000-04:00".into(),
-            "2026-10-14T16:01:00.000-04:00".into()
+            "2026-10-14T16:00:00.000-04:00".into()
         )
     );
 }
 
 #[test]
 fn between_with_no_trailing_meridiem_is_unchanged() {
-    // Nothing to share: both ends stay bare hours, nearest-upcoming as before.
+    // Nothing to share: both ends stay bare hours, nearest-upcoming. At 23:23
+    // tonight's 21:00-23:00 has ended, so it is tomorrow morning's.
     assert_eq!(
         span("between 9 and 11"),
         (
-            "2026-10-13T21:00:00.000-04:00".into(),
-            "2026-10-14T00:00:00.000-04:00".into()
+            "2026-10-14T09:00:00.000-04:00".into(),
+            "2026-10-14T11:00:00.000-04:00".into()
         )
     );
     assert_eq!(
         span("between 9am and 11am"),
         (
             "2026-10-14T09:00:00.000-04:00".into(),
-            "2026-10-14T12:00:00.000-04:00".into()
+            "2026-10-14T11:00:00.000-04:00".into()
         )
     );
 }
