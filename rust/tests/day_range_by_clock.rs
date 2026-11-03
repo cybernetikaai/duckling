@@ -214,3 +214,60 @@ fn last_n_cycles_include_the_final_cycle() {
         assert_eq!(span(input), (from.to_string(), to.to_string()), "{input:?}");
     }
 }
+
+#[test]
+fn a_year_qualified_day_range_by_clock_splits() {
+    for (input, days, clock) in [
+        ("Oct 20-22, 2026 2-4pm", "Oct 20-22, 2026", "2-4pm"),
+        ("October 20-22, 2026, 2-4pm", "October 20-22, 2026", "2-4pm"),
+    ] {
+        assert_eq!(
+            bodies(input),
+            vec![days.to_string(), clock.to_string()],
+            "{input:?}"
+        );
+    }
+}
+
+#[test]
+fn a_time_for_a_duration_ends_that_long_after_it_starts() {
+    for (input, from, to) in [
+        (
+            "3pm for 2 hours",
+            "2026-10-14T15:00:00.000-04:00",
+            "2026-10-14T17:00:00.000-04:00",
+        ),
+        (
+            "3pm for 30 minutes",
+            "2026-10-14T15:00:00.000-04:00",
+            "2026-10-14T15:30:00.000-04:00",
+        ),
+        (
+            "3pm for 3 days",
+            "2026-10-14T15:00:00.000-04:00",
+            "2026-10-17T15:00:00.000-04:00",
+        ),
+        (
+            "9am for a week",
+            "2026-10-14T09:00:00.000-04:00",
+            "2026-10-21T09:00:00.000-04:00",
+        ),
+        (
+            "from 4pm for thirty minutes",
+            "2026-10-14T16:00:00.000-04:00",
+            "2026-10-14T16:30:00.000-04:00",
+        ),
+        (
+            "for 2 hours from 3pm",
+            "2026-10-14T15:00:00.000-04:00",
+            "2026-10-14T17:00:00.000-04:00",
+        ),
+        (
+            "monday for 2 hours",
+            "2026-10-19T00:00:00.000-04:00",
+            "2026-10-19T02:00:00.000-04:00",
+        ),
+    ] {
+        assert_eq!(span(input), (from.to_string(), to.to_string()), "{input:?}");
+    }
+}

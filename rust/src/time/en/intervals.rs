@@ -166,8 +166,7 @@ pub(super) fn interval_rules() -> Vec<Rule> {
             prod: Box::new(|tokens| match tokens {
                 [Token::Time(td1), _, dur] => {
                     let (v, g) = duration_of(dur)?;
-                    interval_td(IntervalType::Closed, td1, &duration_after_td(v, g, td1))
-                        .map(Token::Time)
+                    for_duration_td(v, g, td1).map(Token::Time)
                 }
                 _ => None,
             }),
@@ -183,8 +182,7 @@ pub(super) fn interval_rules() -> Vec<Rule> {
             prod: Box::new(|tokens| match tokens {
                 [_, Token::Time(td1), _, dur] => {
                     let (v, g) = duration_of(dur)?;
-                    interval_td(IntervalType::Closed, td1, &duration_after_td(v, g, td1))
-                        .map(Token::Time)
+                    for_duration_td(v, g, td1).map(Token::Time)
                 }
                 _ => None,
             }),
@@ -200,8 +198,7 @@ pub(super) fn interval_rules() -> Vec<Rule> {
             prod: Box::new(|tokens| match tokens {
                 [_, dur, _, Token::Time(td1)] => {
                     let (v, g) = duration_of(dur)?;
-                    interval_td(IntervalType::Closed, td1, &duration_after_td(v, g, td1))
-                        .map(Token::Time)
+                    for_duration_td(v, g, td1).map(Token::Time)
                 }
                 _ => None,
             }),

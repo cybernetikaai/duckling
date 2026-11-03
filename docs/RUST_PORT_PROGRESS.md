@@ -609,14 +609,20 @@ at 17:31, and "from 4pm for thirty minutes" at 16:31. `time_interval`
 finer than a day and carries no end of its own; a day-or-coarser end still
 includes its unit. "last N \<cycle\>" (`cycle_n` in `time/predicate.rs`) shares
 `time_interval` but means "including the final cycle", so it ends after that
-cycle explicitly and is unchanged. Consequences for the oracle-derived
-fixtures: 326 expectations re-baselined across en_time_corpus / differential /
-random_diff / ref_stress / spoken_forms / multi_entity / sentence_stress. 318
-differ from the oracle only by the end moving exactly one grain earlier, each a
-stated clock range or "\<time\> for \<duration\>" (checked mechanically per case,
-then by rule). The other 8 pick a later occurrence because the shorter window no
-longer contains the reference: "between noon and 3pm" asked at 15:30 is
-tomorrow's, "between two and four" asked at 04:30 is the afternoon's. Guarded by
+cycle explicitly and is unchanged. "\<time\> for \<duration\>" no longer goes
+through `time_interval` at all: upstream intersected the time with the same
+recurring time shifted by the duration, so "3pm for 3 days" was 15:00-16:00 and
+"tomorrow for 3 days" ran four days. `for_duration` extends each occurrence of
+the time by exactly the duration, and the occurrence is the one the time alone
+resolves to. Consequences for the oracle-derived fixtures: 337 expectations
+re-baselined across en_time_corpus / differential / random_diff / ref_stress /
+spoken_forms / multi_entity / sentence_stress. 298 are stated clock ranges whose
+end moves exactly one grain earlier; 31 are "\<time\> for \<duration\>", each
+checked as start + duration; 8 pick a later occurrence because the shorter
+window no longer contains the reference: "between noon and 3pm" asked at 15:30
+is tomorrow's, "between two and four" asked at 04:30 is the afternoon's. 22
+random_diff ranges with equal ends ("between 3pm and 3pm") are now zero-length
+where upstream gave one unit; neither is a meaningful reading. Guarded by
 `tests/day_range_by_clock.rs` and the updated `tests/range_connectors.rs`.
 
 **Deliberate divergence: a day range by a clock part is two readings (BEHAVIOR

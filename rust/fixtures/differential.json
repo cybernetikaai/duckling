@@ -9605,7 +9605,7 @@
    "input": "3pm for 3 days",
    "expected": {
     "to": {
-     "value": "2013-02-12T15:00:00.000-02:00",
+     "value": "2013-02-15T15:00:00.000-02:00",
      "grain": "hour"
     },
     "from": {
@@ -9633,7 +9633,7 @@
    "input": "3pm for a week",
    "expected": {
     "to": {
-     "value": "2013-02-12T15:00:00.000-02:00",
+     "value": "2013-02-19T15:00:00.000-02:00",
      "grain": "hour"
     },
     "from": {
@@ -9661,7 +9661,7 @@
    "input": "9am for 3 days",
    "expected": {
     "to": {
-     "value": "2013-02-12T09:00:00.000-02:00",
+     "value": "2013-02-15T09:00:00.000-02:00",
      "grain": "hour"
     },
     "from": {
@@ -9689,7 +9689,7 @@
    "input": "9am for a week",
    "expected": {
     "to": {
-     "value": "2013-02-12T09:00:00.000-02:00",
+     "value": "2013-02-19T09:00:00.000-02:00",
      "grain": "hour"
     },
     "from": {
@@ -9903,7 +9903,7 @@
    "input": "march 3rd for 3 days",
    "expected": {
     "to": {
-     "value": "2013-03-07T00:00:00.000-02:00",
+     "value": "2013-03-06T00:00:00.000-02:00",
      "grain": "day"
     },
     "from": {
@@ -9931,7 +9931,7 @@
    "input": "march 3rd for a week",
    "expected": {
     "to": {
-     "value": "2013-03-11T00:00:00.000-02:00",
+     "value": "2013-03-10T00:00:00.000-02:00",
      "grain": "day"
     },
     "from": {
@@ -9959,11 +9959,11 @@
    "input": "monday for 3 days",
    "expected": {
     "to": {
-     "value": "2013-02-15T00:00:00.000-02:00",
+     "value": "2013-02-21T00:00:00.000-02:00",
      "grain": "day"
     },
     "from": {
-     "value": "2013-02-11T00:00:00.000-02:00",
+     "value": "2013-02-18T00:00:00.000-02:00",
      "grain": "day"
     },
     "type": "interval"
@@ -9987,7 +9987,7 @@
    "input": "monday for a week",
    "expected": {
     "to": {
-     "value": "2013-02-19T00:00:00.000-02:00",
+     "value": "2013-02-25T00:00:00.000-02:00",
      "grain": "day"
     },
     "from": {
@@ -10051,7 +10051,7 @@
    "input": "next week for 3 days",
    "expected": {
     "to": {
-     "value": "2013-02-22T00:00:00.000-02:00",
+     "value": "2013-02-21T00:00:00.000-02:00",
      "grain": "day"
     },
     "from": {
@@ -10079,7 +10079,7 @@
    "input": "next week for a week",
    "expected": {
     "to": {
-     "value": "2013-03-04T00:00:00.000-02:00",
+     "value": "2013-02-25T00:00:00.000-02:00",
      "grain": "week"
     },
     "from": {
@@ -10213,7 +10213,7 @@
    "input": "tomorrow for 3 days",
    "expected": {
     "to": {
-     "value": "2013-02-17T00:00:00.000-02:00",
+     "value": "2013-02-16T00:00:00.000-02:00",
      "grain": "day"
     },
     "from": {
@@ -10241,7 +10241,7 @@
    "input": "tomorrow for a week",
    "expected": {
     "to": {
-     "value": "2013-02-21T00:00:00.000-02:00",
+     "value": "2013-02-20T00:00:00.000-02:00",
      "grain": "day"
     },
     "from": {

@@ -677,6 +677,33 @@ pub fn shift_duration(base: Predicate, value: i64, grain: Grain) -> Predicate {
     }))
 }
 
+/// Each occurrence of `base`, extended to end `value` `grain`s after it starts.
+pub fn for_duration(base: Predicate, value: i64, grain: Grain) -> Predicate {
+    Predicate::Series(Rc::new(move |now: TimeObject, ctx: &TimeContext| {
+        let extend = move |x: TimeObject| {
+            let start = if x.grain == Grain::NoGrain {
+                time_round(x, lower(grain)).start
+            } else {
+                x.start
+            };
+            TimeObject {
+                start,
+                grain: x.grain.min(grain),
+                end: Some(add(start, grain, value)),
+            }
+        };
+        let (past, future) = base.run(now, ctx);
+        let mut future = future.map(extend).peekable();
+        // The start picks the occurrence: a window that began before now must
+        // not read as ongoing while the base still has an upcoming start.
+        let has_upcoming = future.peek().is_some();
+        let past = past
+            .map(extend)
+            .filter(move |w| !(has_upcoming && time_intersect(*w, now).is_some()));
+        (Box::new(past) as BoxIter, Box::new(future) as BoxIter)
+    }))
+}
+
 pub fn take_nth(n: i64, not_immediate: bool, pred: Predicate) -> Predicate {
     Predicate::Series(Rc::new(move |t: TimeObject, ctx: &TimeContext| {
         if n.unsigned_abs() > MAX_NTH {

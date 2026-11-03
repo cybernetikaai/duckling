@@ -17,7 +17,11 @@ const DAY_RANGE_RULES: &[&str] = &[
     "from the <day-of-month> (ordinal or number) to the <day-of-month> (ordinal or number) of <named-month> (interval)",
 ];
 
-const INTERSECT_RULES: &[&str] = &["intersect", "intersect by \",\", \"of\", \"from\", \"'s\""];
+const INTERSECT_RULES: &[&str] = &[
+    "intersect",
+    "intersect by \",\", \"of\", \"from\", \"'s\"",
+    "intersect by \",\", \"of\", \"from\" for year",
+];
 
 const WRAPPER_RULES: &[&str] = &["about|exactly <time-of-day>"];
 
