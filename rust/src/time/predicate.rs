@@ -415,7 +415,11 @@ pub fn cycle_n(not_immediate: bool, grain: Grain, n: i64) -> Predicate {
         } else {
             let p: Vec<TimeObject> = past.take((-n) as usize + 1).collect();
             match (p.get(((-n) - 1) as usize), p.first()) {
-                (Some(&start), Some(&end)) => Some(time_interval(IntervalType::Closed, start, end)),
+                (Some(&start), Some(&last)) => Some(time_interval(
+                    IntervalType::Open,
+                    start,
+                    time_starting_at_the_end_of(last),
+                )),
                 _ => None,
             }
         };
@@ -670,6 +674,33 @@ pub fn shift_duration(base: Predicate, value: i64, grain: Grain) -> Predicate {
             Box::new(past.into_iter()) as BoxIter,
             Box::new(future.into_iter()) as BoxIter,
         )
+    }))
+}
+
+/// Each occurrence of `base`, extended to end `value` `grain`s after it starts.
+pub fn for_duration(base: Predicate, value: i64, grain: Grain) -> Predicate {
+    Predicate::Series(Rc::new(move |now: TimeObject, ctx: &TimeContext| {
+        let extend = move |x: TimeObject| {
+            let start = if x.grain == Grain::NoGrain {
+                time_round(x, lower(grain)).start
+            } else {
+                x.start
+            };
+            TimeObject {
+                start,
+                grain: x.grain.min(grain),
+                end: Some(add(start, grain, value)),
+            }
+        };
+        let (past, future) = base.run(now, ctx);
+        let mut future = future.map(extend).peekable();
+        // The start picks the occurrence: a window that began before now must
+        // not read as ongoing while the base still has an upcoming start.
+        let has_upcoming = future.peek().is_some();
+        let past = past
+            .map(extend)
+            .filter(move |w| !(has_upcoming && time_intersect(*w, now).is_some()));
+        (Box::new(past) as BoxIter, Box::new(future) as BoxIter)
     }))
 }
 

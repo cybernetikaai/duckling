@@ -114,28 +114,47 @@ fn emit_entities(
         .collect()
 }
 
+fn time_entity(n: &Node, doc: &Document, ctx: &ResolveContext) -> Option<Entity> {
+    let Token::Time(td) = &n.token else {
+        return None;
+    };
+    Some(Entity {
+        dim: "time".to_string(),
+        body: doc.substring(n.range.0, n.range.1),
+        start: n.range.0,
+        end: n.range.1,
+        value: resolve::resolve_time(td, ctx)?,
+        latent: td.latent,
+    })
+}
+
+/// Replace each winning day-range-by-clock reading with its two parts.
+fn split_day_ranges_by_clock(
+    ranked: Vec<(Node, Entity)>,
+    doc: &Document,
+    ctx: &ResolveContext,
+) -> Vec<Entity> {
+    ranked
+        .into_iter()
+        .flat_map(|(n, e)| {
+            time::day_range_by_clock::split(&n)
+                .and_then(|parts| parts.iter().map(|p| time_entity(p, doc, ctx)).collect())
+                .unwrap_or_else(|| vec![e])
+        })
+        .collect()
+}
+
 fn resolve_entities(rules: &[Rule], doc: &Document, ctx: &ResolveContext) -> Vec<Entity> {
     let nodes = engine::parse_string(rules, doc);
-    let scored: Vec<(Node, Entity)> = nodes
+    let scored: Vec<(Node, (Node, Entity))> = nodes
         .into_iter()
         .filter_map(|n| {
-            let td = match &n.token {
-                Token::Time(td) => td.clone(),
-                _ => return None,
-            };
-            let value = resolve::resolve_time(&td, ctx)?;
-            let e = Entity {
-                dim: "time".to_string(),
-                body: doc.substring(n.range.0, n.range.1),
-                start: n.range.0,
-                end: n.range.1,
-                value,
-                latent: td.latent,
-            };
-            Some((n, e))
+            let e = time_entity(&n, doc, ctx)?;
+            Some((n.clone(), (n, e)))
         })
         .collect();
-    CLASSIFIERS.with(|cl| ranking::rank(cl, scored))
+    let ranked = CLASSIFIERS.with(|cl| ranking::rank(cl, scored));
+    split_day_ranges_by_clock(ranked, doc, ctx)
 }
 
 /// Parse `input` against the EN (US) Time rules and return resolved entities,
@@ -162,18 +181,11 @@ pub fn parse_time_and_duration(input: &str, ctx: &ResolveContext) -> Vec<Entity>
     let doc = Document::new(input);
     let rules = rules_for(Locale::EnUs);
     let nodes = engine::parse_string(&rules, &doc);
-    let scored: Vec<(Node, Entity)> = nodes
+    let scored: Vec<(Node, (Node, Entity))> = nodes
         .into_iter()
         .filter_map(|n| {
             let e = match &n.token {
-                Token::Time(td) => Entity {
-                    dim: "time".to_string(),
-                    body: doc.substring(n.range.0, n.range.1),
-                    start: n.range.0,
-                    end: n.range.1,
-                    value: resolve::resolve_time(td, ctx)?,
-                    latent: td.latent,
-                },
+                Token::Time(_) => time_entity(&n, &doc, ctx)?,
                 Token::Duration(dd) => Entity {
                     dim: "duration".to_string(),
                     body: doc.substring(n.range.0, n.range.1),
@@ -184,12 +196,12 @@ pub fn parse_time_and_duration(input: &str, ctx: &ResolveContext) -> Vec<Entity>
                 },
                 _ => return None,
             };
-            Some((n, e))
+            Some((n.clone(), (n, e)))
         })
         .collect();
     let ranked = CLASSIFIERS.with(|cl| ranking::rank(cl, scored));
     let mut seen = std::collections::HashSet::new();
-    ranked
+    split_day_ranges_by_clock(ranked, &doc, ctx)
         .into_iter()
         .filter(|e| seen.insert((e.start, e.end, e.dim.clone(), e.value.to_string())))
         .collect()

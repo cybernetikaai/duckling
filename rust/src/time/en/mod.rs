@@ -19,8 +19,8 @@ pub(super) use crate::regex::compile;
 pub(super) use crate::time::object::{IntervalDirection, IntervalType};
 pub(super) use crate::time::predicate::{
     Ampm, Predicate, ampm_predicate, cycle_n, cycle_nth, day_of_month, day_of_week,
-    floor_grain_to_minute, hour, hour_minute, hour_minute_second, in_duration, intersect,
-    merge_duration, minute, month, season_series, shift_duration, shift_timezone,
+    floor_grain_to_minute, for_duration, hour, hour_minute, hour_minute_second, in_duration,
+    intersect, merge_duration, minute, month, season_series, shift_duration, shift_timezone,
     take_last_days_of, take_last_of, take_next_dow, take_nth, take_nth_after, take_nth_closest,
     time_cycle, time_intervals, year as year_pred,
 };
@@ -648,6 +648,15 @@ fn duration_of(t: &Token) -> Option<(i64, Grain)> {
 /// A time shifted forward by a duration (port of durationAfter): the end of a
 /// "<time> for <duration>" interval. NoGrain times use shiftDuration, others
 /// mergeDuration; the result takes the duration's grain.
+fn for_duration_td(value: i64, grain: Grain, td: &TimeData) -> Option<TimeData> {
+    if matches!(td.pred, Predicate::Empty) {
+        return None;
+    }
+    Some(TimeData::new(
+        for_duration(td.pred.clone(), value, grain),
+        td.grain.min(grain),
+    ))
+}
 fn duration_after_td(value: i64, grain: Grain, td: &TimeData) -> TimeData {
     let pred = if td.grain == Grain::NoGrain {
         shift_duration(td.pred.clone(), value, grain)
