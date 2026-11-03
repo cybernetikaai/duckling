@@ -191,3 +191,26 @@ fn a_range_ending_on_a_day_includes_that_day() {
         assert_eq!(span(input), (from.to_string(), to.to_string()), "{input:?}");
     }
 }
+
+#[test]
+fn last_n_cycles_include_the_final_cycle() {
+    for (input, from, to) in [
+        (
+            "last 1 hour",
+            "2026-10-13T22:00:00.000-04:00",
+            "2026-10-13T23:00:00.000-04:00",
+        ),
+        (
+            "last 2 minutes",
+            "2026-10-13T23:21:00.000-04:00",
+            "2026-10-13T23:23:00.000-04:00",
+        ),
+        (
+            "last 2 seconds",
+            "2026-10-13T23:22:59.000-04:00",
+            "2026-10-13T23:23:01.000-04:00",
+        ),
+    ] {
+        assert_eq!(span(input), (from.to_string(), to.to_string()), "{input:?}");
+    }
+}

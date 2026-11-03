@@ -415,7 +415,11 @@ pub fn cycle_n(not_immediate: bool, grain: Grain, n: i64) -> Predicate {
         } else {
             let p: Vec<TimeObject> = past.take((-n) as usize + 1).collect();
             match (p.get(((-n) - 1) as usize), p.first()) {
-                (Some(&start), Some(&end)) => Some(time_interval(IntervalType::Closed, start, end)),
+                (Some(&start), Some(&last)) => Some(time_interval(
+                    IntervalType::Open,
+                    start,
+                    time_starting_at_the_end_of(last),
+                )),
                 _ => None,
             }
         };

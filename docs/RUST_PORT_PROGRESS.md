@@ -607,11 +607,14 @@ wrong for clock times: "2-4pm" ended at 17:00, "9am-5pm" at 18:00, "9:30-5:30pm"
 at 17:31, and "from 4pm for thirty minutes" at 16:31. `time_interval`
 (`time/object.rs`) now ends a closed range at its end point when that end is
 finer than a day and carries no end of its own; a day-or-coarser end still
-includes its unit. Consequences for the oracle-derived fixtures: 332
-expectations re-baselined across en_time_corpus / differential / random_diff /
-ref_stress / spoken_forms / multi_entity / sentence_stress. 324 differ from the
-oracle only by the end moving exactly one grain earlier (checked mechanically
-per case). The other 8 pick a later occurrence because the shorter window no
+includes its unit. "last N \<cycle\>" (`cycle_n` in `time/predicate.rs`) shares
+`time_interval` but means "including the final cycle", so it ends after that
+cycle explicitly and is unchanged. Consequences for the oracle-derived
+fixtures: 326 expectations re-baselined across en_time_corpus / differential /
+random_diff / ref_stress / spoken_forms / multi_entity / sentence_stress. 318
+differ from the oracle only by the end moving exactly one grain earlier, each a
+stated clock range or "\<time\> for \<duration\>" (checked mechanically per case,
+then by rule). The other 8 pick a later occurrence because the shorter window no
 longer contains the reference: "between noon and 3pm" asked at 15:30 is
 tomorrow's, "between two and four" asked at 04:30 is the afternoon's. Guarded by
 `tests/day_range_by_clock.rs` and the updated `tests/range_connectors.rs`.
