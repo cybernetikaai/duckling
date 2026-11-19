@@ -22,9 +22,9 @@
 //!   -h, --help                          print this help
 
 use duckling::{
-    Locale, ResolveContext, parse_creditcard, parse_distance, parse_duration,
-    parse_email, parse_locale, parse_numeral, parse_ordinal, parse_phonenumber, parse_temperature,
-    parse_url, parse_volume,
+    Locale, ResolveContext, parse_creditcard, parse_distance, parse_duration, parse_email,
+    parse_locale, parse_numeral, parse_ordinal, parse_phonenumber, parse_temperature, parse_url,
+    parse_volume,
 };
 
 const HELP: &str = "\
@@ -75,8 +75,14 @@ EXAMPLES:
     duckling --locale en_GB \"13/12/2013\"";
 
 fn locale_from(name: &str) -> Option<Locale> {
-    // Accept BCP 47 spelling ("en-GB") as well as "en_GB".
-    Some(match name.replace('-', "_").as_str() {
+    // Any common spelling ("en-GB", "en_gb", "EN-GB-x-foo", "en_GB.UTF-8") -> "en_GB".
+    let mut parts = name.trim().split(['-', '_', '.']);
+    let key = format!(
+        "{}_{}",
+        parts.next()?.to_ascii_lowercase(),
+        parts.next()?.to_ascii_uppercase()
+    );
+    Some(match key.as_str() {
         "en_US" => Locale::EnUs,
         "en_GB" => Locale::EnGb,
         "en_CA" => Locale::EnCa,

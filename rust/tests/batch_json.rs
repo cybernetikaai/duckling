@@ -94,10 +94,20 @@ fn batch_json_per_line_locale_for(dims: &str) {
         (r#","locale":"en-GB""#, "1985-02-03"),
         (r#","locale":"en_US""#, "1985-03-02"),
         (r#","locale":"xx_YY""#, "1985-03-02"),
+        (r#","locale":"en-gb""#, "1985-02-03"),
+        (r#","locale":"EN_AU""#, "1985-02-03"),
+        (r#","locale":" en-AU-x-foo ""#, "1985-02-03"),
+        (r#","locale":"en_GB.UTF-8""#, "1985-02-03"),
+        (r#","locale":"en""#, "1985-03-02"),
+        (r#","locale":null"#, "1985-03-02"),
+        (r#","locale":5"#, "1985-03-02"),
     ] {
         writeln!(stdin, r#"{{"text":"03/02/1985"{locale}}}"#).unwrap();
         let got = lines.next().unwrap().unwrap();
-        assert!(got.contains(want), "{dims} {locale:?}: want {want}, got {got}");
+        assert!(
+            got.contains(want),
+            "{dims} {locale:?}: want {want}, got {got}"
+        );
     }
     drop(stdin);
     child.wait().unwrap();

@@ -163,7 +163,7 @@ pub fn parse_time_and_duration(input: &str, ctx: &ResolveContext) -> Vec<Entity>
 }
 
 /// [`parse_time_and_duration`] in a specific English locale (numeric date order).
-pub fn parse_time_and_duration_locale(
+fn parse_time_and_duration_locale(
     input: &str,
     ctx: &ResolveContext,
     locale: Locale,
