@@ -22,7 +22,7 @@
 //!   -h, --help                          print this help
 
 use duckling::{
-    Locale, ResolveContext, parse_all, parse_creditcard, parse_distance, parse_duration,
+    Locale, ResolveContext, parse_creditcard, parse_distance, parse_duration,
     parse_email, parse_locale, parse_numeral, parse_ordinal, parse_phonenumber, parse_temperature,
     parse_url, parse_volume,
 };
@@ -124,7 +124,7 @@ fn parse_dims(
         "distance" => parse_distance(text),
         "quantity" => parse_quantity_opts(text, lat),
         "amount-of-money" => parse_amountofmoney_opts(text, lat),
-        "all" => parse_all(text, ctx),
+        "all" => duckling::parse_all_locale(text, ctx, locale),
         other => fail(&format!(
             "unknown --dims {other:?} (want time|duration|ordinal|number|email|url|\
              credit-card-number|phone-number|temperature|volume|distance|quantity|\

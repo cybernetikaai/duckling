@@ -161,7 +161,7 @@ fn main() {
 |---|---|---|
 | `parse(input, ctx)` | Time | US English (`en_US`). |
 | `parse_locale(input, ctx, locale)` | Time | Pick the English locale. |
-| `parse_all(input, ctx)` | **all** | Every dimension, merged by cross-dimension range domination (span-contained entities dropped; disjoint all surface). |
+| `parse_all(input, ctx)` / `parse_all_locale(input, ctx, locale)` | **all** | Every dimension, merged by cross-dimension range domination (span-contained entities dropped; disjoint all surface). |
 | `parse_time_and_duration(input, ctx)` | Time + Duration | The `dims:["time","duration"]` pool, classifier-ranked. |
 | `parse_duration(input)` | Duration | Context-free. |
 | `parse_numeral(input)` | Numeral | Context-free (corpus-complete). |
