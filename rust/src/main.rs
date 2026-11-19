@@ -50,8 +50,9 @@ OPTIONS:
                     a \"day\" -> 2026-07-03, an \"hour\" -> 2026-07-03T17:00-04:00)
     --batch         read one input per stdin line; print one compact JSON array
                     per line (NDJSON), for bulk corpora
-    --batch-json    read one {\"text\",\"ref\",\"tz\"} JSON object per stdin
-                    line (ref/tz optional, fall back to --ref/--tz); print one
+    --batch-json    read one {\"text\",\"ref\",\"tz\",\"locale\"} JSON object per
+                    stdin line (ref/tz/locale optional, fall back to
+                    --ref/--tz/--locale; an unknown value falls back too); print one
                     compact JSON array per line, flushed immediately after
                     each line — for eval harnesses driving one warm process
                     across many (text, reference-time, timezone) triples
@@ -74,7 +75,8 @@ EXAMPLES:
     duckling --locale en_GB \"13/12/2013\"";
 
 fn locale_from(name: &str) -> Option<Locale> {
-    Some(match name {
+    // Accept BCP 47 spelling ("en-GB") as well as "en_GB".
+    Some(match name.replace('-', "_").as_str() {
         "en_US" => Locale::EnUs,
         "en_GB" => Locale::EnGb,
         "en_CA" => Locale::EnCa,
@@ -199,9 +201,9 @@ fn main() {
         return;
     }
 
-    // Batch-JSON mode: one `{"text":..,"ref":..,"tz":..}` object per stdin
-    // line -> one compact JSON array per line, flushed immediately. `ref`/`tz`
-    // are per-line overrides of the process-level context, for eval harnesses
+    // Batch-JSON mode: one `{"text":..,"ref":..,"tz":..,"locale":..}` object per
+    // stdin line -> one compact JSON array per line, flushed immediately.
+    // `ref`/`tz`/`locale` are per-line overrides of the process-level context, for eval harnesses
     // driving one warm process across many (text, reference-time, timezone)
     // triples.
     if batch_json {
@@ -237,7 +239,13 @@ fn main() {
                             line_ctx.zone = zone;
                         }
                     }
-                    let mut entities = parse_dims(&dims, text, &line_ctx, locale);
+                    let line_locale = parsed
+                        .as_ref()
+                        .and_then(|v| v.get("locale"))
+                        .and_then(|l| l.as_str())
+                        .and_then(locale_from)
+                        .unwrap_or(locale);
+                    let mut entities = parse_dims(&dims, text, &line_ctx, line_locale);
                     if !raw {
                         entities
                             .iter_mut()

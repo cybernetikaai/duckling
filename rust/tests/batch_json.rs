@@ -67,3 +67,31 @@ fn batch_json_bad_line_yields_empty_array_and_continues() {
     drop(stdin);
     child.wait().unwrap();
 }
+
+/// Per-line `locale`: day-first locales read 03/02 as 3 Feb, interleaved with
+/// month-first lines in one process; hyphen spelling, absent and unknown
+/// locales fall back as documented, one reply per line.
+#[test]
+fn batch_json_per_line_locale() {
+    let mut child = Command::new(bin())
+        .args(["--dims", "time", "--batch-json"])
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .spawn()
+        .unwrap();
+    let mut stdin = child.stdin.take().unwrap();
+    let mut lines = BufReader::new(child.stdout.take().unwrap()).lines();
+    for (locale, want) in [
+        (r#","locale":"en_AU""#, "1985-02-03"),
+        ("", "1985-03-02"),
+        (r#","locale":"en-GB""#, "1985-02-03"),
+        (r#","locale":"en_US""#, "1985-03-02"),
+        (r#","locale":"xx_YY""#, "1985-03-02"),
+    ] {
+        writeln!(stdin, r#"{{"text":"03/02/1985"{locale}}}"#).unwrap();
+        let got = lines.next().unwrap().unwrap();
+        assert!(got.contains(want), "locale {locale:?}: want {want}, got {got}");
+    }
+    drop(stdin);
+    child.wait().unwrap();
+}
