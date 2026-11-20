@@ -89,17 +89,24 @@ fn emit_entities(
     input: &str,
     extract: impl Fn(&Token) -> Option<(&'static str, serde_json::Value)>,
 ) -> Vec<Entity> {
-    let doc = Document::new(input);
-    let nodes = engine::parse_string(rules, &doc);
+    emit_doc_entities(rules, &Document::new(input), extract)
+}
+
+fn emit_doc_entities(
+    rules: &[Rule],
+    doc: &Document,
+    extract: impl Fn(&Token) -> Option<(&'static str, serde_json::Value)>,
+) -> Vec<Entity> {
+    let nodes = engine::parse_string(rules, doc);
     let scored: Vec<(Node, Entity)> = nodes
         .into_iter()
         .filter_map(|n| {
             let (dim, value) = extract(&n.token)?;
             let e = Entity {
                 dim: dim.to_string(),
-                body: doc.substring(n.range.0, n.range.1),
-                start: n.range.0,
-                end: n.range.1,
+                body: doc.real_text(doc.stretch((n.range.0, n.range.1))),
+                start: doc.stretch((n.range.0, n.range.1)).0,
+                end: doc.stretch((n.range.0, n.range.1)).1,
                 value,
                 latent: false,
             };
@@ -120,9 +127,9 @@ fn time_entity(n: &Node, doc: &Document, ctx: &ResolveContext) -> Option<Entity>
     };
     Some(Entity {
         dim: "time".to_string(),
-        body: doc.substring(n.range.0, n.range.1),
-        start: n.range.0,
-        end: n.range.1,
+        body: doc.real_text(doc.stretch((n.range.0, n.range.1))),
+        start: doc.stretch((n.range.0, n.range.1)).0,
+        end: doc.stretch((n.range.0, n.range.1)).1,
         value: resolve::resolve_time(td, ctx)?,
         latent: td.latent,
     })
@@ -184,9 +191,9 @@ pub fn parse_time_and_duration(input: &str, ctx: &ResolveContext) -> Vec<Entity>
                 Token::Time(_) => time_entity(&n, &doc, ctx)?,
                 Token::Duration(dd) => Entity {
                     dim: "duration".to_string(),
-                    body: doc.substring(n.range.0, n.range.1),
-                    start: n.range.0,
-                    end: n.range.1,
+                    body: doc.real_text(doc.stretch((n.range.0, n.range.1))),
+                    start: doc.stretch((n.range.0, n.range.1)).0,
+                    end: doc.stretch((n.range.0, n.range.1)).1,
                     value: resolve::duration_value(dd),
                     latent: false,
                 },
@@ -270,9 +277,9 @@ pub fn parse_duration(input: &str) -> Vec<Entity> {
             };
             let e = Entity {
                 dim: "duration".to_string(),
-                body: doc.substring(n.range.0, n.range.1),
-                start: n.range.0,
-                end: n.range.1,
+                body: doc.real_text(doc.stretch((n.range.0, n.range.1))),
+                start: doc.stretch((n.range.0, n.range.1)).0,
+                end: doc.stretch((n.range.0, n.range.1)).1,
                 value: resolve::duration_value(&dd),
                 latent: false,
             };
@@ -308,9 +315,9 @@ pub fn parse_ordinal(input: &str) -> Vec<Entity> {
             };
             let e = Entity {
                 dim: "ordinal".to_string(),
-                body: doc.substring(n.range.0, n.range.1),
-                start: n.range.0,
-                end: n.range.1,
+                body: doc.real_text(doc.stretch((n.range.0, n.range.1))),
+                start: doc.stretch((n.range.0, n.range.1)).0,
+                end: doc.stretch((n.range.0, n.range.1)).1,
                 value: resolve::ordinal_value(&od),
                 latent: false,
             };
@@ -344,9 +351,9 @@ pub fn parse_numeral(input: &str) -> Vec<Entity> {
             };
             let e = Entity {
                 dim: "number".to_string(),
-                body: doc.substring(n.range.0, n.range.1),
-                start: n.range.0,
-                end: n.range.1,
+                body: doc.real_text(doc.stretch((n.range.0, n.range.1))),
+                start: doc.stretch((n.range.0, n.range.1)).0,
+                end: doc.stretch((n.range.0, n.range.1)).1,
                 value: resolve::numeral_value(&nd),
                 latent: false,
             };
@@ -376,10 +383,21 @@ pub fn parse_email(input: &str) -> Vec<Entity> {
 /// `{value, domain, type:"value"}`) — the `dims:["url"]` surface. Language-agnostic.
 pub fn parse_url(input: &str) -> Vec<Entity> {
     let rules = dim_rules("url", url::url_rules);
-    emit_entities(&rules, input, |t| match t {
+    let doc = Document::new(input);
+    let mut urls = emit_doc_entities(&rules, &doc, |t| match t {
         Token::Url(u) => Some(("url", resolve::url_value(u))),
         _ => None,
-    })
+    });
+    // Its host may have been cut by the quarantine, so claim none; its value is
+    // its real text, not the masked sample.
+    for e in urls
+        .iter_mut()
+        .filter(|e| doc.in_quarantine((e.start, e.end)))
+    {
+        e.value["domain"] = serde_json::Value::Null;
+        e.value["value"] = e.body.clone().into();
+    }
+    urls
 }
 
 /// Parse `input` and return resolved **CreditCardNumber** entities (dim

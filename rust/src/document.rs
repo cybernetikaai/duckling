@@ -6,14 +6,67 @@
 pub struct Document {
     text: String,
     chars: Vec<char>,
+    raw: Vec<char>,
+    masked_runs: Vec<(usize, usize)>,
+}
+
+/// A non-whitespace run this long (a link, an encoded blob) is quarantined:
+/// rules see only its first `SAMPLE_CHARS`, and an entity found there is
+/// stretched over the whole run as a hint of what it holds.
+pub const MAX_RUN_CHARS: usize = 400;
+/// Enough for a content hint; too short to strain any regex.
+pub const SAMPLE_CHARS: usize = 128;
+/// Neither a word char nor whitespace, so word, digit and spacing rules stop at
+/// it and composition does not bridge it; each char keeps its offset.
+pub const MASK: char = '\u{FFFC}';
+
+fn mask_long_runs(raw: &[char]) -> (Vec<char>, Vec<(usize, usize)>) {
+    let mut chars = raw.to_vec();
+    let mut runs = Vec::new();
+    let mut start = 0;
+    for i in 0..=chars.len() {
+        if i == chars.len() || chars[i].is_whitespace() {
+            if i - start >= MAX_RUN_CHARS {
+                chars[start + SAMPLE_CHARS..i].fill(MASK);
+                runs.push((start, i));
+            }
+            start = i + 1;
+        }
+    }
+    (chars, runs)
 }
 
 impl Document {
     pub fn new(s: &str) -> Self {
+        let raw: Vec<char> = s.chars().collect();
+        let (chars, masked_runs) = mask_long_runs(&raw);
         Document {
-            text: s.to_string(),
-            chars: s.chars().collect(),
+            text: chars.iter().collect(),
+            chars,
+            raw,
+            masked_runs,
         }
+    }
+
+    /// Whether `(start, end)` overlaps a quarantined run.
+    pub fn in_quarantine(&self, (start, end): (usize, usize)) -> bool {
+        self.masked_runs.iter().any(|&(s, e)| start < e && end > s)
+    }
+
+    /// `range` widened over every quarantined run it overlaps.
+    pub fn stretch(&self, (mut start, mut end): (usize, usize)) -> (usize, usize) {
+        for &(run_start, run_end) in &self.masked_runs {
+            if start < run_end && end > run_start {
+                start = start.min(run_start);
+                end = end.max(run_end);
+            }
+        }
+        (start, end)
+    }
+
+    /// The input as given (unmasked) over `(start, end)`.
+    pub fn real_text(&self, (start, end): (usize, usize)) -> String {
+        self.raw[start..end].iter().collect()
     }
 
     pub fn len(&self) -> usize {
@@ -72,5 +125,26 @@ mod tests {
     fn adjacency_rejects_letters_between() {
         let d = Document::new("onXmonday");
         assert!(!d.is_adjacent(2, 3)); // 'X' is not a separator
+    }
+    #[test]
+    fn a_run_at_the_cap_keeps_its_sample_and_masks_the_rest() {
+        let run = "x".repeat(MAX_RUN_CHARS);
+        let d = Document::new(&format!("at {run} 3pm"));
+        assert_eq!(d.len(), 3 + MAX_RUN_CHARS + 4);
+        assert_eq!(
+            d.substring(0, 3 + SAMPLE_CHARS),
+            format!("at {}", "x".repeat(SAMPLE_CHARS))
+        );
+        assert!(
+            d.substring(3 + SAMPLE_CHARS, 3 + MAX_RUN_CHARS)
+                .chars()
+                .all(|c| c == MASK)
+        );
+        assert_eq!(d.substring(4 + MAX_RUN_CHARS, d.len()), "3pm");
+    }
+    #[test]
+    fn a_run_under_the_cap_is_kept() {
+        let run = "é".repeat(MAX_RUN_CHARS - 1);
+        assert_eq!(Document::new(&run).text(), run);
     }
 }
