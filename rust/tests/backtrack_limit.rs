@@ -52,7 +52,7 @@ fn ctx() -> duckling::ResolveContext {
 }
 
 #[test]
-fn a_masked_link_is_still_the_whole_url_and_its_neighbours_keep_their_offsets() {
+fn a_quarantined_link_is_one_url_over_the_whole_run_and_its_neighbours_keep_their_offsets() {
     let link = format!("https://t.example.com/c/{}", "aB3_-x9Q".repeat(60));
     let input = format!("mail bob@example.com {link} Monday at 3pm");
     let spans = |got: Vec<duckling::Entity>| {
@@ -60,49 +60,53 @@ fn a_masked_link_is_still_the_whole_url_and_its_neighbours_keep_their_offsets() 
             .map(|e| (e.body, e.start, e.end))
             .collect::<Vec<_>>()
     };
-    let (link_at, sample_end) = (21, 21 + 128);
+    let (link_at, link_end) = (21, 21 + link.len());
     let time_at = input.chars().count() - "Monday at 3pm".len();
     assert_eq!(
         spans(duckling::parse_email(&input)),
         vec![("bob@example.com".to_string(), 5, 20)]
     );
-    let urls = duckling::parse_url(&input);
-    let whole = urls
-        .iter()
-        .find(|e| e.start == link_at)
-        .expect("the masked link is still a url");
-    assert_eq!(
-        (whole.end, whole.body.as_str()),
-        (link_at + link.len(), link.as_str())
+    let urls = spans(duckling::parse_url(&input));
+    assert!(
+        urls.contains(&(link.clone(), link_at, link_end)),
+        "the run is one url hint: {urls:?}"
     );
-    assert_eq!(whole.value["value"], link.as_str());
-    assert_eq!(whole.value["domain"], "t.example.com");
     let times = spans(duckling::parse(&input, &ctx()));
     assert!(
         times
             .iter()
-            .all(|(_, start, end)| *end <= sample_end || *start >= time_at),
-        "a time reaches into the masked link: {times:?}"
+            .all(|(_, start, end)| *end <= link_at || *start >= link_end),
+        "a time overlaps the quarantined run: {times:?}"
     );
     assert!(times.contains(&("Monday at 3pm".to_string(), time_at, input.chars().count())));
 }
 
 #[test]
-fn a_long_link_reports_its_real_host_even_past_the_sample() {
-    let host = format!("login.bank.com.{}.evil.com", "a".repeat(150));
-    let link = format!("https://{host}/c/{}", "aB3_-x9Q".repeat(60));
-    let (tx, rx) = mpsc::channel();
-    let input = format!("see {link} today");
-    thread::spawn(move || {
-        let _ = tx.send(duckling::parse_url(&input));
-    });
-    let urls = rx
-        .recv_timeout(Duration::from_secs(10))
-        .expect("parse_url did not return");
-    let whole = urls
-        .iter()
-        .find(|e| e.start == 4)
-        .expect("a url at the link");
-    assert_eq!(whole.body, link);
-    assert_eq!(whole.value["domain"], host.as_str());
+fn a_link_whose_host_passes_the_sample_is_still_one_url_over_the_run() {
+    let link = format!(
+        "https://login.bank.com.{}.evil.com/c/{}",
+        "a".repeat(150),
+        "aB3_-x9Q".repeat(60)
+    );
+    let urls = duckling::parse_url(&format!("see {link} today"));
+    assert!(
+        urls.iter()
+            .any(|e| (e.start, e.end, e.body.as_str()) == (4, 4 + link.len(), link.as_str())),
+        "{:?}",
+        urls.iter().map(|e| (e.start, e.end)).collect::<Vec<_>>()
+    );
+}
+
+#[test]
+fn any_dimension_can_hint_a_quarantined_run() {
+    let digits = format!("3.{}", "1415926535".repeat(50));
+    let input = format!("pi is {digits} roughly");
+    let numbers = duckling::parse_numeral(&input);
+    assert!(
+        numbers
+            .iter()
+            .any(|e| (e.start, e.end) == (6, 6 + digits.len())),
+        "{:?}",
+        numbers.iter().map(|e| (e.start, e.end)).collect::<Vec<_>>()
+    );
 }

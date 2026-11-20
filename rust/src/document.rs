@@ -6,47 +6,62 @@
 pub struct Document {
     text: String,
     chars: Vec<char>,
+    raw: Vec<char>,
+    masked_runs: Vec<(usize, usize)>,
 }
 
-/// A non-whitespace run this long (a link, an encoded blob) holds no
-/// primitive past its start; all but its first `SAMPLE_CHARS` are masked so
-/// no rule scans them.
+/// A non-whitespace run this long (a link, an encoded blob) is quarantined:
+/// rules see only its first `SAMPLE_CHARS`, and an entity found there is
+/// stretched over the whole run as a hint of what it holds.
 pub const MAX_RUN_CHARS: usize = 400;
-/// Left unmasked at the start of a long run; too short to strain any regex.
+/// Enough for a content hint; too short to strain any regex.
 pub const SAMPLE_CHARS: usize = 128;
 /// Neither a word char nor whitespace, so word, digit and spacing rules stop at
 /// it and composition does not bridge it; each char keeps its offset.
 pub const MASK: char = '\u{FFFC}';
 
-fn mask_long_runs(s: &str) -> Vec<char> {
-    let mut chars: Vec<char> = s.chars().collect();
+fn mask_long_runs(raw: &[char]) -> (Vec<char>, Vec<(usize, usize)>) {
+    let mut chars = raw.to_vec();
+    let mut runs = Vec::new();
     let mut start = 0;
     for i in 0..=chars.len() {
         if i == chars.len() || chars[i].is_whitespace() {
             if i - start >= MAX_RUN_CHARS {
                 chars[start + SAMPLE_CHARS..i].fill(MASK);
+                runs.push((start, i));
             }
             start = i + 1;
         }
     }
-    chars
+    (chars, runs)
 }
 
 impl Document {
     pub fn new(s: &str) -> Self {
-        let chars = mask_long_runs(s);
+        let raw: Vec<char> = s.chars().collect();
+        let (chars, masked_runs) = mask_long_runs(&raw);
         Document {
             text: chars.iter().collect(),
             chars,
+            raw,
+            masked_runs,
         }
     }
 
-    /// The text as given, for rules that are linear on any input (url).
-    pub fn unmasked(s: &str) -> Self {
-        Document {
-            text: s.to_string(),
-            chars: s.chars().collect(),
+    /// `range` widened over every quarantined run it overlaps.
+    pub fn stretch(&self, (mut start, mut end): (usize, usize)) -> (usize, usize) {
+        for &(run_start, run_end) in &self.masked_runs {
+            if start < run_end && end > run_start {
+                start = start.min(run_start);
+                end = end.max(run_end);
+            }
         }
+        (start, end)
+    }
+
+    /// The input as given (unmasked) over `(start, end)`.
+    pub fn real_text(&self, (start, end): (usize, usize)) -> String {
+        self.raw[start..end].iter().collect()
     }
 
     pub fn len(&self) -> usize {
