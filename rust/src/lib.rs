@@ -138,17 +138,13 @@ fn resolve_entities(rules: &[Rule], doc: &Document, ctx: &ResolveContext) -> Vec
     CLASSIFIERS.with(|cl| ranking::rank(cl, scored))
 }
 
-/// Parse `input` against the EN (US) Time rules and return resolved entities,
-/// ranked (competing parses collapsed to the winner).
+/// Parse `input` against the Time rules of `ctx.locale` and return resolved
+/// entities, ranked (competing parses collapsed to the winner). The locale only
+/// changes numeric date field order — US "3/4"→March 4, GB "3/4"→April 3 (and GB
+/// accepts "13/12").
 pub fn parse(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
-    parse_locale(input, ctx, Locale::EnUs)
-}
-
-/// Parse in a specific English locale. The only behavioral difference is numeric
-/// date field order — US "3/4"→March 4, GB "3/4"→April 3 (and GB accepts "13/12").
-pub fn parse_locale(input: &str, ctx: &ResolveContext, locale: Locale) -> Vec<Entity> {
     let doc = Document::new(input);
-    resolve_entities(&rules_for(locale), &doc, ctx)
+    resolve_entities(&rules_for(ctx.locale), &doc, ctx)
 }
 
 /// Parse `input` for **both** Time and Duration and return the ranked entities —
@@ -160,7 +156,7 @@ pub fn parse_locale(input: &str, ctx: &ResolveContext, locale: Locale) -> Vec<En
 /// (disjoint). `parse` (Time-only) is unchanged, so the Time corpus is untouched.
 pub fn parse_time_and_duration(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
     let doc = Document::new(input);
-    let rules = rules_for(Locale::EnUs);
+    let rules = rules_for(ctx.locale);
     let nodes = engine::parse_string(&rules, &doc);
     let scored: Vec<(Node, Entity)> = nodes
         .into_iter()

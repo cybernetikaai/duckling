@@ -28,6 +28,7 @@ fn ctx_in(year: i16) -> duckling::ResolveContext {
         reference,
         zone,
         with_latent: false,
+        locale: Default::default(),
     }
 }
 

@@ -127,20 +127,20 @@ Add the crate as a path/git dependency, then call the parse functions. Each
 returns `Vec<duckling::Entity>` (serializable to Duckling's JSON via `serde`).
 
 ```rust
-use duckling::{parse, parse_locale, parse_all, parse_amountofmoney, parse_quantity,
+use duckling::{parse, parse_all, parse_amountofmoney, parse_quantity,
                Locale, ResolveContext};
 
 fn main() {
     // Build a context: a reference instant + the target zone to resolve in.
     let zone = jiff::tz::TimeZone::get("America/New_York").unwrap();
     let reference = "2013-02-12T04:30:00Z".parse::<jiff::Timestamp>().unwrap();
-    let ctx = ResolveContext { reference, zone, with_latent: false };
+    let ctx = ResolveContext { reference, zone, with_latent: false, locale: Locale::EnUs };
 
     // Time (US English).
     let times = parse("tomorrow at 5pm", &ctx);
 
     // Time in another English locale (numeric date order differs).
-    let gb = parse_locale("13/12/2013", &ctx, Locale::EnGb);
+    let gb = parse("13/12/2013", &ResolveContext { locale: Locale::EnGb, ..ctx.clone() });
 
     // Value dimensions are context-free (no ResolveContext needed).
     let money = parse_amountofmoney("twenty dollars and 43 cents");   // $20.43
@@ -160,7 +160,6 @@ fn main() {
 | Function | Dimension(s) | Notes |
 |---|---|---|
 | `parse(input, ctx)` | Time | US English (`en_US`). |
-| `parse_locale(input, ctx, locale)` | Time | Pick the English locale. |
 | `parse_all(input, ctx)` | **all** | Every dimension, merged by cross-dimension range domination (span-contained entities dropped; disjoint all surface). |
 | `parse_time_and_duration(input, ctx)` | Time + Duration | The `dims:["time","duration"]` pool, classifier-ranked. |
 | `parse_duration(input)` | Duration | Context-free. |
@@ -185,6 +184,7 @@ pub struct ResolveContext {
     pub reference: jiff::Timestamp,   // "now" as a true UTC instant
     pub zone: jiff::tz::TimeZone,     // target zone: relative exprs resolve here; output offsets come from here
     pub with_latent: bool,            // false drops latent parses (e.g. a bare "7" as an hour)
+    pub locale: Locale,               // numeric date order: US "3/4" = March 4, GB = April 3
 }
 ```
 

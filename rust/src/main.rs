@@ -22,9 +22,8 @@
 //!   -h, --help                          print this help
 
 use duckling::{
-    Locale, ResolveContext, parse_all, parse_creditcard, parse_distance, parse_duration,
-    parse_email, parse_locale, parse_numeral, parse_ordinal, parse_phonenumber, parse_temperature,
-    parse_url, parse_volume,
+    Locale, ResolveContext, parse_creditcard, parse_distance, parse_duration, parse_email,
+    parse_numeral, parse_ordinal, parse_phonenumber, parse_temperature, parse_url, parse_volume,
 };
 
 const HELP: &str = "\
@@ -50,8 +49,9 @@ OPTIONS:
                     a \"day\" -> 2026-07-03, an \"hour\" -> 2026-07-03T17:00-04:00)
     --batch         read one input per stdin line; print one compact JSON array
                     per line (NDJSON), for bulk corpora
-    --batch-json    read one {\"text\",\"ref\",\"tz\"} JSON object per stdin
-                    line (ref/tz optional, fall back to --ref/--tz); print one
+    --batch-json    read one {\"text\",\"ref\",\"tz\",\"locale\"} JSON object per
+                    stdin line (ref/tz/locale optional, fall back to
+                    --ref/--tz/--locale; an unknown value falls back too); print one
                     compact JSON array per line, flushed immediately after
                     each line — for eval harnesses driving one warm process
                     across many (text, reference-time, timezone) triples
@@ -74,7 +74,14 @@ EXAMPLES:
     duckling --locale en_GB \"13/12/2013\"";
 
 fn locale_from(name: &str) -> Option<Locale> {
-    Some(match name {
+    // Any common spelling ("en-GB", "en_gb", "EN-GB-x-foo", "en_GB.UTF-8") -> "en_GB".
+    let mut parts = name.trim().split(['-', '_', '.']);
+    let key = format!(
+        "{}_{}",
+        parts.next()?.to_ascii_lowercase(),
+        parts.next()?.to_ascii_uppercase()
+    );
+    Some(match key.as_str() {
         "en_US" => Locale::EnUs,
         "en_GB" => Locale::EnGb,
         "en_CA" => Locale::EnCa,
@@ -100,16 +107,11 @@ fn fail(msg: &str) -> ! {
 /// Run one dimension over one text (the `--dims` dispatch). `with_latent` comes
 /// from `ctx.with_latent`; it also toggles the latent variants of the dimensions
 /// that have one (quantity, amount-of-money).
-fn parse_dims(
-    dims: &str,
-    text: &str,
-    ctx: &ResolveContext,
-    locale: Locale,
-) -> Vec<duckling::Entity> {
+fn parse_dims(dims: &str, text: &str, ctx: &ResolveContext) -> Vec<duckling::Entity> {
     use duckling::{parse_amountofmoney_opts, parse_quantity_opts};
     let lat = ctx.with_latent;
     match dims {
-        "time" => parse_locale(text, ctx, locale),
+        "time" => duckling::parse(text, ctx),
         "duration" => parse_duration(text),
         "ordinal" => parse_ordinal(text),
         "number" => parse_numeral(text),
@@ -122,7 +124,7 @@ fn parse_dims(
         "distance" => parse_distance(text),
         "quantity" => parse_quantity_opts(text, lat),
         "amount-of-money" => parse_amountofmoney_opts(text, lat),
-        "all" => parse_all(text, ctx),
+        "all" => duckling::parse_all(text, ctx),
         other => fail(&format!(
             "unknown --dims {other:?} (want time|duration|ordinal|number|email|url|\
              credit-card-number|phone-number|temperature|volume|distance|quantity|\
@@ -175,6 +177,7 @@ fn main() {
         reference,
         zone,
         with_latent,
+        locale,
     };
 
     // Batch mode: one input text per stdin line -> one compact JSON array per
@@ -186,7 +189,7 @@ fn main() {
         let mut out = std::io::BufWriter::new(stdout.lock());
         for line in stdin.lock().lines() {
             let line = line.unwrap_or_default();
-            let mut entities = parse_dims(&dims, line.trim(), &ctx, locale);
+            let mut entities = parse_dims(&dims, line.trim(), &ctx);
             if !raw {
                 entities
                     .iter_mut()
@@ -199,9 +202,9 @@ fn main() {
         return;
     }
 
-    // Batch-JSON mode: one `{"text":..,"ref":..,"tz":..}` object per stdin
-    // line -> one compact JSON array per line, flushed immediately. `ref`/`tz`
-    // are per-line overrides of the process-level context, for eval harnesses
+    // Batch-JSON mode: one `{"text":..,"ref":..,"tz":..,"locale":..}` object per
+    // stdin line -> one compact JSON array per line, flushed immediately.
+    // `ref`/`tz`/`locale` are per-line overrides of the process-level context, for eval harnesses
     // driving one warm process across many (text, reference-time, timezone)
     // triples.
     if batch_json {
@@ -237,7 +240,15 @@ fn main() {
                             line_ctx.zone = zone;
                         }
                     }
-                    let mut entities = parse_dims(&dims, text, &line_ctx, locale);
+                    if let Some(l) = parsed
+                        .as_ref()
+                        .and_then(|v| v.get("locale"))
+                        .and_then(|l| l.as_str())
+                        .and_then(locale_from)
+                    {
+                        line_ctx.locale = l;
+                    }
+                    let mut entities = parse_dims(&dims, text, &line_ctx);
                     if !raw {
                         entities
                             .iter_mut()
@@ -266,7 +277,7 @@ fn main() {
         std::process::exit(2);
     }
 
-    let mut entities = parse_dims(&dims, &text, &ctx, locale);
+    let mut entities = parse_dims(&dims, &text, &ctx);
     // Truncate time values to their grain by default (a date reads as a date, not
     // a midnight instant); `--raw` keeps the full RFC3339 timestamp.
     if !raw {
