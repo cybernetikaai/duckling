@@ -53,8 +53,12 @@ mod tests {
     #[test]
     fn a_backtrack_limit_error_ends_the_scan_instead_of_retrying_it() {
         // fancy-regex < 0.15 returned the same error forever (fancy-regex#137).
-        let re = compile(r"(x+x+)+(?=y)");
-        let doc = Document::new(&"x".repeat(64));
-        assert!(re.all_hits(&doc).is_empty());
+        let (tx, rx) = std::sync::mpsc::channel();
+        std::thread::spawn(move || {
+            let re = compile(r"(x+x+)+(?=y)");
+            let _ = tx.send(re.all_hits(&Document::new(&"x".repeat(64))).len());
+        });
+        let hits = rx.recv_timeout(std::time::Duration::from_secs(10));
+        assert_eq!(hits, Ok(0), "all_hits retried the backtrack-limit error");
     }
 }

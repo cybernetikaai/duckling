@@ -388,12 +388,14 @@ pub fn parse_url(input: &str) -> Vec<Entity> {
         Token::Url(u) => Some(("url", resolve::url_value(u))),
         _ => None,
     });
-    // Its host may have been cut by the quarantine, so claim none.
+    // Its host may have been cut by the quarantine, so claim none; its value is
+    // its real text, not the masked sample.
     for e in urls
         .iter_mut()
         .filter(|e| doc.in_quarantine((e.start, e.end)))
     {
         e.value["domain"] = serde_json::Value::Null;
+        e.value["value"] = e.body.clone().into();
     }
     urls
 }

@@ -77,6 +77,11 @@ fn a_quarantined_link_is_one_url_over_the_whole_run_and_its_neighbours_keep_thei
         hint.value["domain"].is_null(),
         "a quarantined url claims no domain"
     );
+    assert_eq!(
+        hint.value["value"],
+        link.as_str(),
+        "value is the real link, unmasked"
+    );
     let plain = hinted.iter().find(|e| e.end <= 20).unwrap();
     assert_eq!(plain.value["domain"], "example.com");
     let times = spans(duckling::parse(&input, &ctx()));
@@ -117,4 +122,33 @@ fn any_dimension_can_hint_a_quarantined_run() {
         "{:?}",
         numbers.iter().map(|e| (e.start, e.end)).collect::<Vec<_>>()
     );
+}
+
+#[test]
+fn many_runs_under_the_cap_do_not_starve_a_later_email() {
+    let runs = vec!["a".repeat(399); 20].join(" ");
+    assert_eq!(
+        emails_within(format!("{runs} bob@example.com"), 10),
+        vec!["bob@example.com"]
+    );
+}
+
+#[test]
+fn a_cut_through_a_two_label_host_is_still_one_url_over_the_run() {
+    let link = format!(
+        "https://{}.{}.com/{}",
+        "h".repeat(60),
+        "k".repeat(60),
+        "p".repeat(400)
+    );
+    let urls = duckling::parse_url(&format!("go {link} now"));
+    let hint = urls
+        .iter()
+        .find(|e| e.start == 3)
+        .expect("a url at the link");
+    assert_eq!(
+        (hint.end, hint.body.as_str()),
+        (3 + link.len(), link.as_str())
+    );
+    assert!(hint.value["domain"].is_null());
 }
