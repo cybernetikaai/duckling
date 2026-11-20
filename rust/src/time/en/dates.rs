@@ -260,7 +260,9 @@ pub(super) fn numeric_date_rules(locale: Locale) -> Vec<Rule> {
         Rule {
             // Spoken DOBs transcribe as "26 10 1982". With no separator to signal
             // a date, the regex itself takes the locale's field order and ranges,
-            // plus a 19xx/20xx year, so phone-like digit runs never match.
+            // plus a 19xx/20xx year, so phone-like digit runs never match. The
+            // lookarounds refuse a run embedded in more digit groups ("12 3 4 1985"),
+            // which composition would otherwise widen to the phone's full span.
             // shortcut: spaces only, not mixed ("26/10 1982"); add if calls show it.
             name: if year_day_first {
                 "dd mm yyyy (spaced)".into()
@@ -274,7 +276,7 @@ pub(super) fn numeric_date_rules(locale: Locale) -> Vec<Rule> {
                 } else {
                     (month, day)
                 };
-                format!(r"{a}\s+{b}\s+((?:19|20)\d{{2}})")
+                format!(r"(?<!\d\s){a}\s+{b}\s+((?:19|20)\d{{2}})(?!\s+\d)")
             }))],
             prod: Box::new(move |tokens| {
                 let g = regex_groups(tokens)?;

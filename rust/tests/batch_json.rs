@@ -160,6 +160,9 @@ fn batch_json_spaced_numeric_dates() {
         ("12 31 1985", "en-AU", None), // month 31: not an AU date
         ("00 12 1985", "en-AU", None), // day 0
         ("call 04 12 2034 5678", "en-AU", None), // inside a longer digit run
+        ("12 3 4 1985", "en-AU", None), // leading group would compose as an hour
+        ("04 12 2034 2034", "en-AU", None), // trailing group would compose as a year
+        ("5 3 4 1985", "en-US", None),
         ("0412 345 678", "en-AU", None),
         ("rooms 3 4 and 12", "en-AU", None),
         ("3 4 5", "en-AU", None), // no 19xx/20xx year
@@ -167,16 +170,16 @@ fn batch_json_spaced_numeric_dates() {
         writeln!(stdin, r#"{{"text":"{text}","locale":"{locale}"}}"#).unwrap();
         let got = lines.next().unwrap().unwrap();
         let entities: serde_json::Value = serde_json::from_str(&got).unwrap();
-        let time: Vec<&str> = entities
+        // Every time entity, whatever its value shape (intervals have no value.value).
+        let time: Vec<&serde_json::Value> = entities
             .as_array()
             .unwrap()
             .iter()
             .filter(|e| e["dim"] == "time")
-            .filter_map(|e| e["value"]["value"].as_str())
             .collect();
         match want {
             Some(day) => assert!(
-                time.contains(&day),
+                time.iter().any(|e| e["value"]["value"] == day),
                 "{text:?} {locale}: want {day}, got {got}"
             ),
             None => assert!(
