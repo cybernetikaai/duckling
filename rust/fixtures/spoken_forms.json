@@ -543,47 +543,47 @@
   },
   {
    "input": "nine am to five pm",
-   "wall": "[2013-02-12T09:00:00.000|2013-02-12T18:00:00.000]",
+   "wall": "[2013-02-12T09:00:00.000|2013-02-12T17:00:00.000]",
    "body": "nine am to five pm"
   },
   {
    "input": "from nine to five",
-   "wall": "[2013-02-11T21:00:00.000|2013-02-12T06:00:00.000]",
+   "wall": "[2013-02-11T21:00:00.000|2013-02-12T05:00:00.000]",
    "body": "from nine to five"
   },
   {
    "input": "from half past nine to eleven",
-   "wall": "[2013-02-12T09:30:00.000|2013-02-12T11:01:00.000]",
+   "wall": "[2013-02-12T09:30:00.000|2013-02-12T11:00:00.000]",
    "body": "from half past nine to eleven"
   },
   {
    "input": "half seven till nine",
-   "wall": "[2013-02-12T07:30:00.000|2013-02-12T09:01:00.000]",
+   "wall": "[2013-02-12T07:30:00.000|2013-02-12T09:00:00.000]",
    "body": "half seven till nine"
   },
   {
    "input": "quarter past two to quarter to four",
-   "wall": "[2013-02-12T14:15:00.000|2013-02-12T15:46:00.000]",
+   "wall": "[2013-02-12T14:15:00.000|2013-02-12T15:45:00.000]",
    "body": "quarter past two to quarter to four"
   },
   {
    "input": "from ten thirty to noon",
-   "wall": "[2013-02-11T22:30:00.000|2013-02-12T12:01:00.000]",
+   "wall": "[2013-02-11T22:30:00.000|2013-02-12T12:00:00.000]",
    "body": "from ten thirty to noon"
   },
   {
    "input": "between two and four",
-   "wall": "[2013-02-12T02:00:00.000|2013-02-12T05:00:00.000]",
+   "wall": "[2013-02-12T14:00:00.000|2013-02-12T16:00:00.000]",
    "body": "between two and four"
   },
   {
    "input": "between half two and half four",
-   "wall": "[2013-02-12T02:30:00.000|2013-02-12T04:31:00.000]",
+   "wall": "[2013-02-12T14:30:00.000|2013-02-12T16:30:00.000]",
    "body": "between half two and half four"
   },
   {
    "input": "twenty past two to quarter to four",
-   "wall": "[2013-02-12T14:20:00.000|2013-02-12T15:46:00.000]",
+   "wall": "[2013-02-12T14:20:00.000|2013-02-12T15:45:00.000]",
    "body": "twenty past two to quarter to four"
   },
   {
@@ -653,17 +653,17 @@
   },
   {
    "input": "between nine and noon",
-   "wall": "[2013-02-11T21:00:00.000|2013-02-12T13:00:00.000]",
+   "wall": "[2013-02-11T21:00:00.000|2013-02-12T12:00:00.000]",
    "body": "between nine and noon"
   },
   {
    "input": "from noon to midnight",
-   "wall": "[2013-02-12T12:00:00.000|2013-02-13T01:00:00.000]",
+   "wall": "[2013-02-12T12:00:00.000|2013-02-13T00:00:00.000]",
    "body": "from noon to midnight"
   },
   {
    "input": "noon till three",
-   "wall": "[2013-02-12T12:00:00.000|2013-02-12T16:00:00.000]",
+   "wall": "[2013-02-12T12:00:00.000|2013-02-12T15:00:00.000]",
    "body": "noon till three"
   },
   {
@@ -693,7 +693,7 @@
   },
   {
    "input": "from now to five pm",
-   "wall": "[2013-02-12T04:30:00.000|2013-02-12T17:00:01.000]",
+   "wall": "[2013-02-12T04:30:00.000|2013-02-12T17:00:00.000]",
    "body": "from now to five pm"
   },
   {

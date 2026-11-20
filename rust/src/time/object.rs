@@ -76,7 +76,13 @@ pub fn time_interval(kind: IntervalType, a: TimeObject, b: TimeObject) -> TimeOb
     };
     let end = match kind {
         IntervalType::Open => b.start,
-        IntervalType::Closed => b.end.unwrap_or_else(|| add(b.start, g2, 1)),
+        IntervalType::Closed => b.end.unwrap_or_else(|| {
+            if b.grain < Grain::Day {
+                b.start
+            } else {
+                add(b.start, g2, 1)
+            }
+        }),
     };
     TimeObject {
         start: a.start,

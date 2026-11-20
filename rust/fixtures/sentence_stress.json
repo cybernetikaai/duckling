@@ -156,7 +156,7 @@
    "input": "The event runs from 9am to 5pm",
    "expected": {
     "to": {
-     "value": "2013-02-12T18:00:00.000-02:00",
+     "value": "2013-02-12T17:00:00.000-02:00",
      "grain": "hour"
     },
     "from": {
@@ -549,7 +549,7 @@
    "input": "move the 3pm to 4pm",
    "expected": {
     "to": {
-     "value": "2013-02-12T17:00:00.000-02:00",
+     "value": "2013-02-12T16:00:00.000-02:00",
      "grain": "hour"
     },
     "from": {
