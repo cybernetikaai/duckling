@@ -376,10 +376,16 @@ pub fn parse_email(input: &str) -> Vec<Entity> {
 /// `{value, domain, type:"value"}`) — the `dims:["url"]` surface. Language-agnostic.
 pub fn parse_url(input: &str) -> Vec<Entity> {
     let rules = dim_rules("url", url::url_rules);
-    emit_entities(&rules, input, |t| match t {
+    let mut urls = emit_entities(&rules, input, |t| match t {
         Token::Url(u) => Some(("url", resolve::url_value(u))),
         _ => None,
-    })
+    });
+    // A url's path runs on through a long run's mask; give it back the real text.
+    for e in urls.iter_mut().filter(|e| e.body.contains(document::MASK)) {
+        e.body = input.chars().skip(e.start).take(e.end - e.start).collect();
+        e.value["value"] = e.body.clone().into();
+    }
+    urls
 }
 
 /// Parse `input` and return resolved **CreditCardNumber** entities (dim

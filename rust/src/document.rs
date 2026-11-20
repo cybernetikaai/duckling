@@ -9,10 +9,14 @@ pub struct Document {
 }
 
 /// A non-whitespace run this long (a link, an encoded blob) holds no
-/// primitive; it is masked so no rule scans it.
+/// primitive past its start; all but its first `SAMPLE_CHARS` are masked so
+/// no rule scans them.
 pub const MAX_RUN_CHARS: usize = 400;
-/// Neither a word char nor whitespace: no rule matches it and composition
-/// does not bridge it, and each char keeps its offset.
+/// Kept so a long link is still a url; too short to strain any regex.
+pub const SAMPLE_CHARS: usize = 128;
+/// Neither a word char nor whitespace, so word, digit and spacing rules stop at
+/// it and composition does not bridge it; each char keeps its offset. A url's
+/// path does run through it, and `parse_url` restores the real text.
 pub const MASK: char = '\u{FFFC}';
 
 fn mask_long_runs(s: &str) -> Vec<char> {
@@ -21,7 +25,7 @@ fn mask_long_runs(s: &str) -> Vec<char> {
     for i in 0..=chars.len() {
         if i == chars.len() || chars[i].is_whitespace() {
             if i - start >= MAX_RUN_CHARS {
-                chars[start..i].fill(MASK);
+                chars[start + SAMPLE_CHARS..i].fill(MASK);
             }
             start = i + 1;
         }
@@ -96,12 +100,19 @@ mod tests {
         assert!(!d.is_adjacent(2, 3)); // 'X' is not a separator
     }
     #[test]
-    fn a_run_at_the_cap_is_masked_and_offsets_hold() {
+    fn a_run_at_the_cap_keeps_its_sample_and_masks_the_rest() {
         let run = "x".repeat(MAX_RUN_CHARS);
         let d = Document::new(&format!("at {run} 3pm"));
         assert_eq!(d.len(), 3 + MAX_RUN_CHARS + 4);
-        assert_eq!(d.substring(0, 3), "at ");
-        assert!(d.substring(3, 3 + MAX_RUN_CHARS).chars().all(|c| c == MASK));
+        assert_eq!(
+            d.substring(0, 3 + SAMPLE_CHARS),
+            format!("at {}", "x".repeat(SAMPLE_CHARS))
+        );
+        assert!(
+            d.substring(3 + SAMPLE_CHARS, 3 + MAX_RUN_CHARS)
+                .chars()
+                .all(|c| c == MASK)
+        );
         assert_eq!(d.substring(4 + MAX_RUN_CHARS, d.len()), "3pm");
     }
     #[test]

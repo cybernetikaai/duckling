@@ -52,7 +52,7 @@ fn ctx() -> duckling::ResolveContext {
 }
 
 #[test]
-fn entities_around_a_masked_link_keep_their_offsets_and_do_not_bridge_it() {
+fn a_masked_link_is_still_the_whole_url_and_its_neighbours_keep_their_offsets() {
     let link = format!("https://t.example.com/c/{}", "aB3_-x9Q".repeat(60));
     let input = format!("mail bob@example.com {link} Monday at 3pm");
     let spans = |got: Vec<duckling::Entity>| {
@@ -60,22 +60,29 @@ fn entities_around_a_masked_link_keep_their_offsets_and_do_not_bridge_it() {
             .map(|e| (e.body, e.start, e.end))
             .collect::<Vec<_>>()
     };
+    let (link_at, sample_end) = (21, 21 + 128);
     let time_at = input.chars().count() - "Monday at 3pm".len();
     assert_eq!(
         spans(duckling::parse_email(&input)),
         vec![("bob@example.com".to_string(), 5, 20)]
     );
-    let urls = spans(duckling::parse_url(&input));
-    assert!(
-        urls.iter().all(|(_, _, end)| *end <= 21),
-        "a masked link yields no url: {urls:?}"
+    let urls = duckling::parse_url(&input);
+    let whole = urls
+        .iter()
+        .find(|e| e.start == link_at)
+        .expect("the masked link is still a url");
+    assert_eq!(
+        (whole.end, whole.body.as_str()),
+        (link_at + link.len(), link.as_str())
     );
+    assert_eq!(whole.value["value"], link.as_str());
+    assert_eq!(whole.value["domain"], "t.example.com");
     let times = spans(duckling::parse(&input, &ctx()));
     assert!(
         times
             .iter()
-            .all(|(_, start, end)| *end <= 21 || *start >= time_at),
-        "a time spans the masked link: {times:?}"
+            .all(|(_, start, end)| *end <= sample_end || *start >= time_at),
+        "a time reaches into the masked link: {times:?}"
     );
     assert!(times.contains(&("Monday at 3pm".to_string(), time_at, input.chars().count())));
 }
