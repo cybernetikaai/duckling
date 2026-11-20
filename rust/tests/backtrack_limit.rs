@@ -71,6 +71,14 @@ fn a_quarantined_link_is_one_url_over_the_whole_run_and_its_neighbours_keep_thei
         urls.contains(&(link.clone(), link_at, link_end)),
         "the run is one url hint: {urls:?}"
     );
+    let hinted = duckling::parse_url(&input);
+    let hint = hinted.iter().find(|e| e.start == link_at).unwrap();
+    assert!(
+        hint.value["domain"].is_null(),
+        "a quarantined url claims no domain"
+    );
+    let plain = hinted.iter().find(|e| e.end <= 20).unwrap();
+    assert_eq!(plain.value["domain"], "example.com");
     let times = spans(duckling::parse(&input, &ctx()));
     assert!(
         times

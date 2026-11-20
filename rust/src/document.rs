@@ -48,6 +48,11 @@ impl Document {
         }
     }
 
+    /// Whether `(start, end)` overlaps a quarantined run.
+    pub fn in_quarantine(&self, (start, end): (usize, usize)) -> bool {
+        self.masked_runs.iter().any(|&(s, e)| start < e && end > s)
+    }
+
     /// `range` widened over every quarantined run it overlaps.
     pub fn stretch(&self, (mut start, mut end): (usize, usize)) -> (usize, usize) {
         for &(run_start, run_end) in &self.masked_runs {

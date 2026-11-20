@@ -89,8 +89,15 @@ fn emit_entities(
     input: &str,
     extract: impl Fn(&Token) -> Option<(&'static str, serde_json::Value)>,
 ) -> Vec<Entity> {
-    let doc = Document::new(input);
-    let nodes = engine::parse_string(rules, &doc);
+    emit_doc_entities(rules, &Document::new(input), extract)
+}
+
+fn emit_doc_entities(
+    rules: &[Rule],
+    doc: &Document,
+    extract: impl Fn(&Token) -> Option<(&'static str, serde_json::Value)>,
+) -> Vec<Entity> {
+    let nodes = engine::parse_string(rules, doc);
     let scored: Vec<(Node, Entity)> = nodes
         .into_iter()
         .filter_map(|n| {
@@ -376,10 +383,19 @@ pub fn parse_email(input: &str) -> Vec<Entity> {
 /// `{value, domain, type:"value"}`) — the `dims:["url"]` surface. Language-agnostic.
 pub fn parse_url(input: &str) -> Vec<Entity> {
     let rules = dim_rules("url", url::url_rules);
-    emit_entities(&rules, input, |t| match t {
+    let doc = Document::new(input);
+    let mut urls = emit_doc_entities(&rules, &doc, |t| match t {
         Token::Url(u) => Some(("url", resolve::url_value(u))),
         _ => None,
-    })
+    });
+    // Its host may have been cut by the quarantine, so claim none.
+    for e in urls
+        .iter_mut()
+        .filter(|e| doc.in_quarantine((e.start, e.end)))
+    {
+        e.value["domain"] = serde_json::Value::Null;
+    }
+    urls
 }
 
 /// Parse `input` and return resolved **CreditCardNumber** entities (dim
