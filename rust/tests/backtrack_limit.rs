@@ -29,6 +29,13 @@ fn a_long_word_run_does_not_hang() {
     }
 }
 
+#[test]
+fn an_email_after_a_long_token_is_still_found() {
+    let token = "aB3_-x9Q".repeat(120);
+    let input = format!("Click https://t.example.com/c/{token} then email bob@example.com");
+    assert_eq!(emails_within(input, 10), vec!["bob@example.com"]);
+}
+
 fn ctx() -> duckling::ResolveContext {
     let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(-4));
     let reference = jiff::civil::date(2026, 10, 13)
