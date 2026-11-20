@@ -304,6 +304,12 @@ fn a_time_for_a_duration_ends_that_long_after_it_starts() {
             "2026-10-20T00:00:00.000-04:00",
             "2026-10-20T02:00:00.000-04:00",
         ),
+        // A stated date constrains the weekday: today, not a past year's.
+        (
+            "tuesday for 2 hours on Oct 13",
+            "2026-10-13T00:00:00.000-04:00",
+            "2026-10-13T02:00:00.000-04:00",
+        ),
     ] {
         assert_eq!(span(input), (from.to_string(), to.to_string()), "{input:?}");
     }

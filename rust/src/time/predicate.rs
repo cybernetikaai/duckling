@@ -679,10 +679,12 @@ pub fn shift_duration(base: Predicate, value: i64, grain: Grain) -> Predicate {
 
 /// Each occurrence of `base`, extended to end `value` `grain`s after it starts.
 /// The occurrence is the one `base` alone resolves to, judged against the
-/// reference time (not a composition segment's `now`): `not_immediate` (from
-/// the base time, e.g. a bare weekday) skips an occurrence covering the
-/// reference, and an occurrence the base is in the middle of (an ongoing
-/// holiday) stays first even once the duration has elapsed.
+/// reference time: an occurrence the base is in the middle of (an ongoing
+/// holiday) stays first even once the duration has elapsed. `not_immediate`
+/// (from the base time, e.g. a bare weekday) skips an occurrence covering the
+/// reference, but only when resolved directly (`now` is the reference): a
+/// composition ("... on Oct 13", "next week ...") constrains the occurrence
+/// itself, as it does for the bare weekday, whose flag resolution alone reads.
 pub fn for_duration(base: Predicate, value: i64, grain: Grain, not_immediate: bool) -> Predicate {
     Predicate::Series(Rc::new(move |now: TimeObject, ctx: &TimeContext| {
         let reference = ctx.ref_time;
@@ -703,7 +705,7 @@ pub fn for_duration(base: Predicate, value: i64, grain: Grain, not_immediate: bo
         let mut past = past.peekable();
         let mut future = future.peekable();
         let ahead_covers = future.peek().is_some_and(covers_ref);
-        if not_immediate && ahead_covers {
+        if not_immediate && now == reference && ahead_covers {
             future.next();
         }
         // As resolution picks for the base alone: an ongoing interval behind
@@ -1016,5 +1018,11 @@ mod tests {
         let w = future_head(&intersect(monday_for_2h, cycle_nth(Grain::Week, 1)), &ctx);
         assert_eq!(w.start, date(2026, 10, 19).at(0, 0, 0, 0));
         assert_eq!(w.end, Some(date(2026, 10, 19).at(2, 0, 0, 0)));
+        // "Tuesday for 2 hours" within this week, on that Tuesday: the week
+        // picks today, it is not skipped past the week's end.
+        let tuesday_for_2h = for_duration(day_of_week(2), 2, Grain::Hour, true);
+        let w = future_head(&intersect(tuesday_for_2h, cycle_nth(Grain::Week, 0)), &ctx);
+        assert_eq!(w.start, date(2026, 10, 13).at(0, 0, 0, 0));
+        assert_eq!(w.end, Some(date(2026, 10, 13).at(2, 0, 0, 0)));
     }
 }
