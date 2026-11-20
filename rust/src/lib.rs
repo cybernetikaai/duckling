@@ -89,8 +89,15 @@ fn emit_entities(
     input: &str,
     extract: impl Fn(&Token) -> Option<(&'static str, serde_json::Value)>,
 ) -> Vec<Entity> {
-    let doc = Document::new(input);
-    let nodes = engine::parse_string(rules, &doc);
+    emit_doc_entities(rules, &Document::new(input), extract)
+}
+
+fn emit_doc_entities(
+    rules: &[Rule],
+    doc: &Document,
+    extract: impl Fn(&Token) -> Option<(&'static str, serde_json::Value)>,
+) -> Vec<Entity> {
+    let nodes = engine::parse_string(rules, doc);
     let scored: Vec<(Node, Entity)> = nodes
         .into_iter()
         .filter_map(|n| {
@@ -376,16 +383,12 @@ pub fn parse_email(input: &str) -> Vec<Entity> {
 /// `{value, domain, type:"value"}`) — the `dims:["url"]` surface. Language-agnostic.
 pub fn parse_url(input: &str) -> Vec<Entity> {
     let rules = dim_rules("url", url::url_rules);
-    let mut urls = emit_entities(&rules, input, |t| match t {
+    // Url patterns have no lookaround, so they run on the linear engine and can
+    // read a long link whole, real host included.
+    emit_doc_entities(&rules, &Document::unmasked(input), |t| match t {
         Token::Url(u) => Some(("url", resolve::url_value(u))),
         _ => None,
-    });
-    // A url's path runs on through a long run's mask; give it back the real text.
-    for e in urls.iter_mut().filter(|e| e.body.contains(document::MASK)) {
-        e.body = input.chars().skip(e.start).take(e.end - e.start).collect();
-        e.value["value"] = e.body.clone().into();
-    }
-    urls
+    })
 }
 
 /// Parse `input` and return resolved **CreditCardNumber** entities (dim

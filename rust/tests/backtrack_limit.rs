@@ -86,3 +86,23 @@ fn a_masked_link_is_still_the_whole_url_and_its_neighbours_keep_their_offsets() 
     );
     assert!(times.contains(&("Monday at 3pm".to_string(), time_at, input.chars().count())));
 }
+
+#[test]
+fn a_long_link_reports_its_real_host_even_past_the_sample() {
+    let host = format!("login.bank.com.{}.evil.com", "a".repeat(150));
+    let link = format!("https://{host}/c/{}", "aB3_-x9Q".repeat(60));
+    let (tx, rx) = mpsc::channel();
+    let input = format!("see {link} today");
+    thread::spawn(move || {
+        let _ = tx.send(duckling::parse_url(&input));
+    });
+    let urls = rx
+        .recv_timeout(Duration::from_secs(10))
+        .expect("parse_url did not return");
+    let whole = urls
+        .iter()
+        .find(|e| e.start == 4)
+        .expect("a url at the link");
+    assert_eq!(whole.body, link);
+    assert_eq!(whole.value["domain"], host.as_str());
+}

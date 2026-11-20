@@ -12,11 +12,10 @@ pub struct Document {
 /// primitive past its start; all but its first `SAMPLE_CHARS` are masked so
 /// no rule scans them.
 pub const MAX_RUN_CHARS: usize = 400;
-/// Kept so a long link is still a url; too short to strain any regex.
+/// Left unmasked at the start of a long run; too short to strain any regex.
 pub const SAMPLE_CHARS: usize = 128;
 /// Neither a word char nor whitespace, so word, digit and spacing rules stop at
-/// it and composition does not bridge it; each char keeps its offset. A url's
-/// path does run through it, and `parse_url` restores the real text.
+/// it and composition does not bridge it; each char keeps its offset.
 pub const MASK: char = '\u{FFFC}';
 
 fn mask_long_runs(s: &str) -> Vec<char> {
@@ -39,6 +38,14 @@ impl Document {
         Document {
             text: chars.iter().collect(),
             chars,
+        }
+    }
+
+    /// The text as given, for rules that are linear on any input (url).
+    pub fn unmasked(s: &str) -> Self {
+        Document {
+            text: s.to_string(),
+            chars: s.chars().collect(),
         }
     }
 
