@@ -136,3 +136,58 @@ fn batch_json_line_locale_falls_back_to_process_locale() {
     drop(stdin);
     child.wait().unwrap();
 }
+
+/// Space-separated numeric dates (spoken DOBs) follow the locale's field order;
+/// phone numbers and number lists stay out of the time dimension.
+#[test]
+fn batch_json_spaced_numeric_dates() {
+    let mut child = Command::new(bin())
+        .args(["--dims", "all", "--batch-json"])
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .spawn()
+        .unwrap();
+    let mut stdin = child.stdin.take().unwrap();
+    let mut lines = BufReader::new(child.stdout.take().unwrap()).lines();
+    for (text, locale, want) in [
+        ("26 10 1982", "en-AU", Some("1982-10-26")),
+        ("16 2 1985", "en-AU", Some("1985-02-16")),
+        ("3 4 1985", "en-US", Some("1985-03-04")),
+        ("3 4 1985", "en-GB", Some("1985-04-03")),
+        ("born 26 10 1982 thanks", "en-GB", Some("1982-10-26")),
+        ("12 31 1985", "en-US", Some("1985-12-31")),
+        ("26 10 1982", "en-US", None), // month 26: not a US date
+        ("12 31 1985", "en-AU", None), // month 31: not an AU date
+        ("00 12 1985", "en-AU", None), // day 0
+        ("call 04 12 2034 5678", "en-AU", None), // inside a longer digit run
+        ("12 3 4 1985", "en-AU", None), // leading group would compose as an hour
+        ("04 12 2034 2034", "en-AU", None), // trailing group would compose as a year
+        ("5 3 4 1985", "en-US", None),
+        ("0412 345 678", "en-AU", None),
+        ("rooms 3 4 and 12", "en-AU", None),
+        ("3 4 5", "en-AU", None), // no 19xx/20xx year
+    ] {
+        writeln!(stdin, r#"{{"text":"{text}","locale":"{locale}"}}"#).unwrap();
+        let got = lines.next().unwrap().unwrap();
+        let entities: serde_json::Value = serde_json::from_str(&got).unwrap();
+        // Every time entity, whatever its value shape (intervals have no value.value).
+        let time: Vec<&serde_json::Value> = entities
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|e| e["dim"] == "time")
+            .collect();
+        match want {
+            Some(day) => assert!(
+                time.iter().any(|e| e["value"]["value"] == day),
+                "{text:?} {locale}: want {day}, got {got}"
+            ),
+            None => assert!(
+                time.is_empty(),
+                "{text:?} {locale}: want no date, got {got}"
+            ),
+        }
+    }
+    drop(stdin);
+    child.wait().unwrap();
+}

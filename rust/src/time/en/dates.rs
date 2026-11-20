@@ -258,6 +258,34 @@ pub(super) fn numeric_date_rules(locale: Locale) -> Vec<Rule> {
             }),
         },
         Rule {
+            // Spoken DOBs transcribe as "26 10 1982". With no separator to signal
+            // a date, the regex itself takes the locale's field order and ranges,
+            // plus a 19xx/20xx year, so phone-like digit runs never match. The
+            // lookarounds refuse a run embedded in more digit groups ("12 3 4 1985"),
+            // which composition would otherwise widen to the phone's full span.
+            // shortcut: spaces only, not mixed ("26/10 1982"); add if calls show it.
+            name: if year_day_first {
+                "dd mm yyyy (spaced)".into()
+            } else {
+                "mm dd yyyy (spaced)".into()
+            },
+            pattern: vec![PatternItem::Regex(compile(&{
+                let (day, month) = (r"(3[01]|[12]\d|0?[1-9])", r"(1[0-2]|0?[1-9])");
+                let (a, b) = if year_day_first {
+                    (day, month)
+                } else {
+                    (month, day)
+                };
+                format!(r"(?<!\d\s){a}\s+{b}\s+((?:19|20)\d{{2}})(?!\s+\d)")
+            }))],
+            prod: Box::new(move |tokens| {
+                let g = regex_groups(tokens)?;
+                let (m_idx, d_idx) = if year_day_first { (1, 0) } else { (0, 1) };
+                year_month_day_td(parse_i(g, 2)?, parse_i(g, m_idx)?, parse_i(g, d_idx)?)
+                    .map(Token::Time)
+            }),
+        },
+        Rule {
             name: "dd/mon/yyyy".into(),
             pattern: vec![PatternItem::Regex(compile(
                 r"(\d{1,2})(?:st|nd|rd|th)?[-/.\s](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[-/.\s](\d{2,4})",
