@@ -24,6 +24,7 @@ fn ctx() -> duckling::ResolveContext {
         reference,
         zone,
         with_latent: false,
+        locale: Default::default(),
     }
 }
 

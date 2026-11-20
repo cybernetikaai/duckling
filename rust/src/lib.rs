@@ -138,17 +138,13 @@ fn resolve_entities(rules: &[Rule], doc: &Document, ctx: &ResolveContext) -> Vec
     CLASSIFIERS.with(|cl| ranking::rank(cl, scored))
 }
 
-/// Parse `input` against the EN (US) Time rules and return resolved entities,
-/// ranked (competing parses collapsed to the winner).
+/// Parse `input` against the Time rules of `ctx.locale` and return resolved
+/// entities, ranked (competing parses collapsed to the winner). The locale only
+/// changes numeric date field order — US "3/4"→March 4, GB "3/4"→April 3 (and GB
+/// accepts "13/12").
 pub fn parse(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
-    parse_locale(input, ctx, Locale::EnUs)
-}
-
-/// Parse in a specific English locale. The only behavioral difference is numeric
-/// date field order — US "3/4"→March 4, GB "3/4"→April 3 (and GB accepts "13/12").
-pub fn parse_locale(input: &str, ctx: &ResolveContext, locale: Locale) -> Vec<Entity> {
     let doc = Document::new(input);
-    resolve_entities(&rules_for(locale), &doc, ctx)
+    resolve_entities(&rules_for(ctx.locale), &doc, ctx)
 }
 
 /// Parse `input` for **both** Time and Duration and return the ranked entities —
@@ -159,17 +155,8 @@ pub fn parse_locale(input: &str, ctx: &ResolveContext, locale: Locale) -> Vec<En
 /// "set a timer for 20 minutes and wake me at 7am" → a Duration and a Time
 /// (disjoint). `parse` (Time-only) is unchanged, so the Time corpus is untouched.
 pub fn parse_time_and_duration(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
-    parse_time_and_duration_locale(input, ctx, Locale::EnUs)
-}
-
-/// [`parse_time_and_duration`] in a specific English locale (numeric date order).
-fn parse_time_and_duration_locale(
-    input: &str,
-    ctx: &ResolveContext,
-    locale: Locale,
-) -> Vec<Entity> {
     let doc = Document::new(input);
-    let rules = rules_for(locale);
+    let rules = rules_for(ctx.locale);
     let nodes = engine::parse_string(&rules, &doc);
     let scored: Vec<(Node, Entity)> = nodes
         .into_iter()
@@ -216,12 +203,7 @@ fn parse_time_and_duration_locale(
 /// ambiguous equal spans across dimensions (e.g. "10 c" as cents vs. Celsius) are
 /// both surfaced — the caller picks. `parse` (Time-only) is untouched.
 pub fn parse_all(input: &str, ctx: &ResolveContext) -> Vec<Entity> {
-    parse_all_locale(input, ctx, Locale::EnUs)
-}
-
-/// [`parse_all`] in a specific English locale (numeric date order).
-pub fn parse_all_locale(input: &str, ctx: &ResolveContext, locale: Locale) -> Vec<Entity> {
-    let mut all = parse_time_and_duration_locale(input, ctx, locale);
+    let mut all = parse_time_and_duration(input, ctx);
     all.extend(parse_numeral(input));
     all.extend(parse_ordinal(input));
     all.extend(parse_temperature(input));

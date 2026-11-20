@@ -26,6 +26,7 @@ fn ctx() -> duckling::ResolveContext {
         reference,
         zone,
         with_latent: false,
+        locale: Default::default(),
     }
 }
 
@@ -131,6 +132,7 @@ fn tz_stress() {
             reference,
             zone,
             with_latent: false,
+            locale: Default::default(),
         };
         let got = full_range_time_values(input, &ctx);
         let exp = strip_values(expected.clone());
@@ -262,11 +264,13 @@ fn may_is_latent() {
         reference,
         zone: zone.clone(),
         with_latent: false,
+        locale: Default::default(),
     };
     let latent = duckling::ResolveContext {
         reference,
         zone,
         with_latent: true,
+        locale: Default::default(),
     };
 
     // Bare "May" / "may 2015": no time entity in default mode (latent, dropped).
@@ -324,6 +328,7 @@ fn tz_truth() {
             reference,
             zone,
             with_latent: false,
+            locale: Default::default(),
         };
         // "3pm" resolves to the reference date's 15:00 in-zone; its value string
         // ends with the RFC3339 offset the port assigned (e.g. "...15:00.000-04:00").
@@ -399,6 +404,7 @@ fn values_array() {
             reference,
             zone: zone.clone(),
             with_latent: false,
+            locale: Default::default(),
         };
         match n_of(input, &case_ctx) {
             Some(got) if got.as_slice() == want.as_slice() => {}
@@ -443,7 +449,7 @@ fn locale_of(s: &str) -> duckling::Locale {
 /// Heritage Day, …), ported from Duckling's per-region Rules.hs and cross-checked
 /// against the oracle (locale=en_XX) across 2013/2015/2018 — so nth-weekday and
 /// easter-relative regional holidays are validated year-over-year. Each is resolved
-/// via parse_locale in its region. Best-entity semantics; per-case reference.
+/// via parse with ctx.locale set to its region. Best-entity semantics; per-case reference.
 #[test]
 fn region_holidays() {
     let data: Value =
@@ -460,13 +466,20 @@ fn region_holidays() {
             reference,
             zone: zone.clone(),
             with_latent: false,
+            locale: Default::default(),
         };
         let exp = strip_values(c["expected"].clone());
-        let got: Vec<Value> = duckling::parse_locale(input, &ctx, locale)
-            .into_iter()
-            .filter(|e| e.dim == "time")
-            .map(|e| strip_values(e.value))
-            .collect();
+        let got: Vec<Value> = duckling::parse(
+            input,
+            &duckling::ResolveContext {
+                locale,
+                ..ctx.clone()
+            },
+        )
+        .into_iter()
+        .filter(|e| e.dim == "time")
+        .map(|e| strip_values(e.value))
+        .collect();
         if !got.iter().any(|g| g == &exp) {
             failures.push(format!(
                 "[{:?} {}] {input:?}\n  expected {exp}\n  got      {got:?}",
@@ -521,11 +534,17 @@ fn region_dates() {
         let input = c["input"].as_str().unwrap();
         let locale = loc(c["locale"].as_str().unwrap());
         let count = input.chars().count();
-        let got: Vec<Value> = duckling::parse_locale(input, &ctx, locale)
-            .into_iter()
-            .filter(|e| e.dim == "time" && e.start == 0 && e.end == count)
-            .map(|e| strip_values(e.value))
-            .collect();
+        let got: Vec<Value> = duckling::parse(
+            input,
+            &duckling::ResolveContext {
+                locale,
+                ..ctx.clone()
+            },
+        )
+        .into_iter()
+        .filter(|e| e.dim == "time" && e.start == 0 && e.end == count)
+        .map(|e| strip_values(e.value))
+        .collect();
         let expected = &c["expected"];
         let ok = if expected.is_null() {
             got.is_empty()
@@ -562,11 +581,17 @@ fn gb_locale() {
         checked += 1;
         let input = c["input"].as_str().unwrap();
         let count = input.chars().count();
-        let got: Vec<Value> = duckling::parse_locale(input, &ctx, duckling::Locale::EnGb)
-            .into_iter()
-            .filter(|e| e.dim == "time" && e.start == 0 && e.end == count)
-            .map(|e| strip_values(e.value))
-            .collect();
+        let got: Vec<Value> = duckling::parse(
+            input,
+            &duckling::ResolveContext {
+                locale: duckling::Locale::EnGb,
+                ..ctx.clone()
+            },
+        )
+        .into_iter()
+        .filter(|e| e.dim == "time" && e.start == 0 && e.end == count)
+        .map(|e| strip_values(e.value))
+        .collect();
         let expected = &c["expected"];
         let ok = if expected.is_null() {
             got.is_empty()
@@ -618,13 +643,20 @@ fn modern_holidays() {
             reference,
             zone: zone.clone(),
             with_latent: false,
+            locale: Default::default(),
         };
         let exp = strip_values(c["expected"].clone());
-        let got: Vec<Value> = duckling::parse_locale(input, &ctx, locale)
-            .into_iter()
-            .filter(|e| e.dim == "time")
-            .map(|e| strip_values(e.value))
-            .collect();
+        let got: Vec<Value> = duckling::parse(
+            input,
+            &duckling::ResolveContext {
+                locale,
+                ..ctx.clone()
+            },
+        )
+        .into_iter()
+        .filter(|e| e.dim == "time")
+        .map(|e| strip_values(e.value))
+        .collect();
         if !got.iter().any(|g| g == &exp) {
             failures.push(format!(
                 "[{:?}] {input:?}\n  expected {exp}\n  got      {got:?}",
@@ -1226,6 +1258,7 @@ fn random_diff() {
             reference,
             zone: zone.clone(),
             with_latent: false,
+            locale: Default::default(),
         };
         let exp = strip_values(c["expected"].clone());
         if !best_time_values(input, &ctx).iter().any(|g| g == &exp) {
@@ -1318,6 +1351,7 @@ fn tod_ref() {
             reference,
             zone: zone.clone(),
             with_latent: false,
+            locale: Default::default(),
         };
         let exp = strip_values(c["expected"].clone());
         if !best_time_values(input, &ctx).iter().any(|g| g == &exp) {
@@ -1361,6 +1395,7 @@ fn holiday_years() {
             reference,
             zone: zone.clone(),
             with_latent: false,
+            locale: Default::default(),
         };
         let exp = strip_values(c["expected"].clone());
         if !best_time_values(input, &ctx).iter().any(|g| g == &exp) {
@@ -1408,6 +1443,7 @@ fn tz_gapfold() {
             reference,
             zone,
             with_latent: false,
+            locale: Default::default(),
         };
         let got: Vec<String> = duckling::parse(input, &ctx)
             .into_iter()
@@ -1565,6 +1601,7 @@ fn ref_stress() {
             reference,
             zone: zone.clone(),
             with_latent: false,
+            locale: Default::default(),
         };
         let exp = strip_values(expected.clone());
         if !best_time_values(input, &ctx).iter().any(|g| g == &exp) {

@@ -23,8 +23,7 @@
 
 use duckling::{
     Locale, ResolveContext, parse_creditcard, parse_distance, parse_duration, parse_email,
-    parse_locale, parse_numeral, parse_ordinal, parse_phonenumber, parse_temperature, parse_url,
-    parse_volume,
+    parse_numeral, parse_ordinal, parse_phonenumber, parse_temperature, parse_url, parse_volume,
 };
 
 const HELP: &str = "\
@@ -108,16 +107,11 @@ fn fail(msg: &str) -> ! {
 /// Run one dimension over one text (the `--dims` dispatch). `with_latent` comes
 /// from `ctx.with_latent`; it also toggles the latent variants of the dimensions
 /// that have one (quantity, amount-of-money).
-fn parse_dims(
-    dims: &str,
-    text: &str,
-    ctx: &ResolveContext,
-    locale: Locale,
-) -> Vec<duckling::Entity> {
+fn parse_dims(dims: &str, text: &str, ctx: &ResolveContext) -> Vec<duckling::Entity> {
     use duckling::{parse_amountofmoney_opts, parse_quantity_opts};
     let lat = ctx.with_latent;
     match dims {
-        "time" => parse_locale(text, ctx, locale),
+        "time" => duckling::parse(text, ctx),
         "duration" => parse_duration(text),
         "ordinal" => parse_ordinal(text),
         "number" => parse_numeral(text),
@@ -130,7 +124,7 @@ fn parse_dims(
         "distance" => parse_distance(text),
         "quantity" => parse_quantity_opts(text, lat),
         "amount-of-money" => parse_amountofmoney_opts(text, lat),
-        "all" => duckling::parse_all_locale(text, ctx, locale),
+        "all" => duckling::parse_all(text, ctx),
         other => fail(&format!(
             "unknown --dims {other:?} (want time|duration|ordinal|number|email|url|\
              credit-card-number|phone-number|temperature|volume|distance|quantity|\
@@ -183,6 +177,7 @@ fn main() {
         reference,
         zone,
         with_latent,
+        locale,
     };
 
     // Batch mode: one input text per stdin line -> one compact JSON array per
@@ -194,7 +189,7 @@ fn main() {
         let mut out = std::io::BufWriter::new(stdout.lock());
         for line in stdin.lock().lines() {
             let line = line.unwrap_or_default();
-            let mut entities = parse_dims(&dims, line.trim(), &ctx, locale);
+            let mut entities = parse_dims(&dims, line.trim(), &ctx);
             if !raw {
                 entities
                     .iter_mut()
@@ -245,13 +240,15 @@ fn main() {
                             line_ctx.zone = zone;
                         }
                     }
-                    let line_locale = parsed
+                    if let Some(l) = parsed
                         .as_ref()
                         .and_then(|v| v.get("locale"))
                         .and_then(|l| l.as_str())
                         .and_then(locale_from)
-                        .unwrap_or(locale);
-                    let mut entities = parse_dims(&dims, text, &line_ctx, line_locale);
+                    {
+                        line_ctx.locale = l;
+                    }
+                    let mut entities = parse_dims(&dims, text, &line_ctx);
                     if !raw {
                         entities
                             .iter_mut()
@@ -280,7 +277,7 @@ fn main() {
         std::process::exit(2);
     }
 
-    let mut entities = parse_dims(&dims, &text, &ctx, locale);
+    let mut entities = parse_dims(&dims, &text, &ctx);
     // Truncate time values to their grain by default (a date reads as a date, not
     // a midnight instant); `--raw` keeps the full RFC3339 timestamp.
     if !raw {

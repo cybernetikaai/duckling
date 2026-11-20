@@ -24,6 +24,8 @@ pub struct ResolveContext {
     pub zone: jiff::tz::TimeZone,
     /// When false, latent parses (e.g. a bare "7" as an hour) are dropped.
     pub with_latent: bool,
+    /// English locale; sets numeric date order (US "3/4" = March 4, GB = April 3).
+    pub locale: crate::types::Locale,
 }
 
 /// A resolved entity in the public API format.
