@@ -258,6 +258,21 @@ pub(super) fn numeric_date_rules(locale: Locale) -> Vec<Rule> {
             }),
         },
         Rule {
+            // Spoken DOBs transcribe as "26 10 1982". Same field order as above;
+            // a 19xx/20xx year (and valid_md) keeps digit runs and phones out.
+            // shortcut: spaces only, not mixed ("26/10 1982"); add if calls show it.
+            name: "dd mm yyyy (spaced)".into(),
+            pattern: vec![PatternItem::Regex(compile(
+                r"(\d{1,2})\s+(\d{1,2})\s+((?:19|20)\d{2})",
+            ))],
+            prod: Box::new(move |tokens| {
+                let g = regex_groups(tokens)?;
+                let (m_idx, d_idx) = if year_day_first { (1, 0) } else { (0, 1) };
+                year_month_day_td(parse_i(g, 2)?, parse_i(g, m_idx)?, parse_i(g, d_idx)?)
+                    .map(Token::Time)
+            }),
+        },
+        Rule {
             name: "dd/mon/yyyy".into(),
             pattern: vec![PatternItem::Regex(compile(
                 r"(\d{1,2})(?:st|nd|rd|th)?[-/.\s](jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[-/.\s](\d{2,4})",

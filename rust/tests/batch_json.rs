@@ -136,3 +136,52 @@ fn batch_json_line_locale_falls_back_to_process_locale() {
     drop(stdin);
     child.wait().unwrap();
 }
+
+/// Space-separated numeric dates (spoken DOBs) follow the locale's field order;
+/// phone numbers and number lists stay out of the time dimension.
+#[test]
+fn batch_json_spaced_numeric_dates() {
+    let mut child = Command::new(bin())
+        .args(["--dims", "all", "--batch-json"])
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .spawn()
+        .unwrap();
+    let mut stdin = child.stdin.take().unwrap();
+    let mut lines = BufReader::new(child.stdout.take().unwrap()).lines();
+    for (text, locale, want) in [
+        ("26 10 1982", "en-AU", Some("1982-10-26")),
+        ("16 2 1985", "en-AU", Some("1985-02-16")),
+        ("3 4 1985", "en-US", Some("1985-03-04")),
+        ("3 4 1985", "en-GB", Some("1985-04-03")),
+        ("born 26 10 1982 thanks", "en-GB", Some("1982-10-26")),
+        ("26 10 1982", "en-US", None), // month 26: not a US date
+        ("call 04 12 2034 5678", "en-AU", None), // inside a longer digit run
+        ("0412 345 678", "en-AU", None),
+        ("rooms 3 4 and 12", "en-AU", None),
+        ("3 4 5", "en-AU", None), // no 19xx/20xx year
+    ] {
+        writeln!(stdin, r#"{{"text":"{text}","locale":"{locale}"}}"#).unwrap();
+        let got = lines.next().unwrap().unwrap();
+        let entities: serde_json::Value = serde_json::from_str(&got).unwrap();
+        let time: Vec<&str> = entities
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|e| e["dim"] == "time")
+            .filter_map(|e| e["value"]["value"].as_str())
+            .collect();
+        match want {
+            Some(day) => assert!(
+                time.contains(&day),
+                "{text:?} {locale}: want {day}, got {got}"
+            ),
+            None => assert!(
+                time.is_empty(),
+                "{text:?} {locale}: want no date, got {got}"
+            ),
+        }
+    }
+    drop(stdin);
+    child.wait().unwrap();
+}
