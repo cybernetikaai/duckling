@@ -155,7 +155,10 @@ fn batch_json_spaced_numeric_dates() {
         ("3 4 1985", "en-US", Some("1985-03-04")),
         ("3 4 1985", "en-GB", Some("1985-04-03")),
         ("born 26 10 1982 thanks", "en-GB", Some("1982-10-26")),
+        ("12 31 1985", "en-US", Some("1985-12-31")),
         ("26 10 1982", "en-US", None), // month 26: not a US date
+        ("12 31 1985", "en-AU", None), // month 31: not an AU date
+        ("00 12 1985", "en-AU", None), // day 0
         ("call 04 12 2034 5678", "en-AU", None), // inside a longer digit run
         ("0412 345 678", "en-AU", None),
         ("rooms 3 4 and 12", "en-AU", None),
