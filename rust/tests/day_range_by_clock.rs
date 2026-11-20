@@ -268,7 +268,41 @@ fn a_time_for_a_duration_ends_that_long_after_it_starts() {
             "2026-10-19T00:00:00.000-04:00",
             "2026-10-19T02:00:00.000-04:00",
         ),
+        // The reference is a Tuesday: "tuesday" alone means next week's, so
+        // its two hours are too, not today's already-ended 00:00-02:00.
+        (
+            "tuesday for 2 hours",
+            "2026-10-20T00:00:00.000-04:00",
+            "2026-10-20T02:00:00.000-04:00",
+        ),
     ] {
         assert_eq!(span(input), (from.to_string(), to.to_string()), "{input:?}");
     }
+}
+
+#[test]
+fn a_holiday_for_a_duration_asked_during_it_keeps_the_current_one() {
+    // 2013-11-28 noon is mid-Hanukkah (from 2013-11-27): "hanukkah" alone is
+    // the ongoing one, so "hanukkah for 3 days" must not skip to 2014.
+    let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(-4));
+    let reference = jiff::civil::date(2013, 11, 28)
+        .at(12, 0, 0, 0)
+        .to_zoned(zone.clone())
+        .unwrap()
+        .timestamp();
+    let ctx = duckling::ResolveContext {
+        reference,
+        zone,
+        with_latent: false,
+        locale: Default::default(),
+    };
+    let input = "hanukkah for 3 days";
+    let e = duckling::parse(input, &ctx)
+        .into_iter()
+        .find(|e| e.dim == "time" && e.body == input)
+        .unwrap_or_else(|| panic!("{input:?}: no full-span reading"));
+    let v = &e.value;
+    assert_eq!(v["type"], "interval", "{v}");
+    assert_eq!(v["from"]["value"], "2013-11-27T00:00:00.000-04:00", "{v}");
+    assert_eq!(v["to"]["value"], "2013-11-30T00:00:00.000-04:00", "{v}");
 }

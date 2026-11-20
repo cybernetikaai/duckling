@@ -653,7 +653,7 @@ fn for_duration_td(value: i64, grain: Grain, td: &TimeData) -> Option<TimeData> 
         return None;
     }
     Some(TimeData::new(
-        for_duration(td.pred.clone(), value, grain),
+        for_duration(td.pred.clone(), value, grain, td.not_immediate),
         td.grain.min(grain),
     ))
 }

@@ -678,7 +678,10 @@ pub fn shift_duration(base: Predicate, value: i64, grain: Grain) -> Predicate {
 }
 
 /// Each occurrence of `base`, extended to end `value` `grain`s after it starts.
-pub fn for_duration(base: Predicate, value: i64, grain: Grain) -> Predicate {
+/// The occurrence is the one `base` alone resolves to: `not_immediate` (from the
+/// base time, e.g. a bare weekday) skips an occurrence covering now, as
+/// resolution would for the base itself.
+pub fn for_duration(base: Predicate, value: i64, grain: Grain, not_immediate: bool) -> Predicate {
     Predicate::Series(Rc::new(move |now: TimeObject, ctx: &TimeContext| {
         let extend = move |x: TimeObject| {
             let start = if x.grain == Grain::NoGrain {
@@ -693,13 +696,25 @@ pub fn for_duration(base: Predicate, value: i64, grain: Grain) -> Predicate {
             }
         };
         let (past, future) = base.run(now, ctx);
+        let mut future = future.peekable();
+        if not_immediate
+            && future
+                .peek()
+                .is_some_and(|o| time_intersect(*o, now).is_some())
+        {
+            future.next();
+        }
         let mut future = future.map(extend).peekable();
         // The start picks the occurrence: a window that began before now must
-        // not read as ongoing while the base still has an upcoming start.
+        // not read as ongoing while the base still has an upcoming start. An
+        // occurrence the base itself is in the middle of (an ongoing holiday)
+        // stays: the base alone would resolve to it.
         let has_upcoming = future.peek().is_some();
-        let past = past
-            .map(extend)
-            .filter(move |w| !(has_upcoming && time_intersect(*w, now).is_some()));
+        let past = past.filter_map(move |o| {
+            let w = extend(o);
+            let base_ongoing = time_intersect(o, now).is_some();
+            (base_ongoing || !(has_upcoming && time_intersect(w, now).is_some())).then_some(w)
+        });
         (Box::new(past) as BoxIter, Box::new(future) as BoxIter)
     }))
 }
