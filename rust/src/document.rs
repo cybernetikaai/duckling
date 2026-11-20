@@ -8,11 +8,33 @@ pub struct Document {
     chars: Vec<char>,
 }
 
+/// A non-whitespace run this long (a link, an encoded blob) holds no
+/// primitive; it is masked so no rule scans it.
+pub const MAX_RUN_CHARS: usize = 400;
+/// Neither a word char nor whitespace: no rule matches it and composition
+/// does not bridge it, and each char keeps its offset.
+pub const MASK: char = '\u{FFFC}';
+
+fn mask_long_runs(s: &str) -> Vec<char> {
+    let mut chars: Vec<char> = s.chars().collect();
+    let mut start = 0;
+    for i in 0..=chars.len() {
+        if i == chars.len() || chars[i].is_whitespace() {
+            if i - start >= MAX_RUN_CHARS {
+                chars[start..i].fill(MASK);
+            }
+            start = i + 1;
+        }
+    }
+    chars
+}
+
 impl Document {
     pub fn new(s: &str) -> Self {
+        let chars = mask_long_runs(s);
         Document {
-            text: s.to_string(),
-            chars: s.chars().collect(),
+            text: chars.iter().collect(),
+            chars,
         }
     }
 
@@ -72,5 +94,19 @@ mod tests {
     fn adjacency_rejects_letters_between() {
         let d = Document::new("onXmonday");
         assert!(!d.is_adjacent(2, 3)); // 'X' is not a separator
+    }
+    #[test]
+    fn a_run_at_the_cap_is_masked_and_offsets_hold() {
+        let run = "x".repeat(MAX_RUN_CHARS);
+        let d = Document::new(&format!("at {run} 3pm"));
+        assert_eq!(d.len(), 3 + MAX_RUN_CHARS + 4);
+        assert_eq!(d.substring(0, 3), "at ");
+        assert!(d.substring(3, 3 + MAX_RUN_CHARS).chars().all(|c| c == MASK));
+        assert_eq!(d.substring(4 + MAX_RUN_CHARS, d.len()), "3pm");
+    }
+    #[test]
+    fn a_run_under_the_cap_is_kept() {
+        let run = "é".repeat(MAX_RUN_CHARS - 1);
+        assert_eq!(Document::new(&run).text(), run);
     }
 }

@@ -17,10 +17,8 @@ pub fn email_rules() -> Vec<Rule> {
         // followed (once you keep reading contiguous word/dot/hyphen chars)
         // by a literal "@" — that's the sign the true "@" of a real email is
         // just past what we grabbed as the domain, at any backtrack depth.
-        // The leading lookbehind starts a match only at the start of a run, so a
-        // long token costs one scan, not one per position (quadratic).
         pattern: vec![PatternItem::Regex(compile(
-            r"(?<![\w_+-])([\w_+-]+(?:(?: dot |\.)[\w_+-]+){0,10})(?: at |@)([a-zA-Z]+(?:(?:\.| dot )[\w_-]+){1,10})(?![\w.-]*@)",
+            r"([\w_+-]+(?:(?: dot |\.)[\w_+-]+){0,10})(?: at |@)([a-zA-Z]+(?:(?:\.| dot )[\w_-]+){1,10})(?![\w.-]*@)",
         ))],
         prod: Box::new(|tokens| {
             let g = match tokens.first() {

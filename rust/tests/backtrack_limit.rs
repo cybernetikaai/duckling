@@ -29,9 +29,46 @@ fn a_long_word_run_does_not_hang() {
     }
 }
 
+fn ctx() -> duckling::ResolveContext {
+    let zone = jiff::tz::TimeZone::fixed(jiff::tz::Offset::constant(-4));
+    let reference = jiff::civil::date(2026, 10, 13)
+        .at(9, 0, 0, 0)
+        .to_zoned(zone.clone())
+        .unwrap()
+        .timestamp();
+    duckling::ResolveContext {
+        reference,
+        zone,
+        with_latent: false,
+        locale: Default::default(),
+    }
+}
+
 #[test]
-fn an_email_after_a_long_token_is_still_found() {
-    let token = "aB3_-x9Q".repeat(120);
-    let input = format!("Click https://t.example.com/c/{token} then email bob@example.com");
-    assert_eq!(emails_within(input, 10), vec!["bob@example.com"]);
+fn entities_around_a_masked_link_keep_their_offsets_and_do_not_bridge_it() {
+    let link = format!("https://t.example.com/c/{}", "aB3_-x9Q".repeat(60));
+    let input = format!("mail bob@example.com {link} Monday at 3pm");
+    let spans = |got: Vec<duckling::Entity>| {
+        got.into_iter()
+            .map(|e| (e.body, e.start, e.end))
+            .collect::<Vec<_>>()
+    };
+    let time_at = input.chars().count() - "Monday at 3pm".len();
+    assert_eq!(
+        spans(duckling::parse_email(&input)),
+        vec![("bob@example.com".to_string(), 5, 20)]
+    );
+    let urls = spans(duckling::parse_url(&input));
+    assert!(
+        urls.iter().all(|(_, _, end)| *end <= 21),
+        "a masked link yields no url: {urls:?}"
+    );
+    let times = spans(duckling::parse(&input, &ctx()));
+    assert!(
+        times
+            .iter()
+            .all(|(_, start, end)| *end <= 21 || *start >= time_at),
+        "a time spans the masked link: {times:?}"
+    );
+    assert!(times.contains(&("Monday at 3pm".to_string(), time_at, input.chars().count())));
 }
