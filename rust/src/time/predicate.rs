@@ -678,11 +678,15 @@ pub fn shift_duration(base: Predicate, value: i64, grain: Grain) -> Predicate {
 }
 
 /// Each occurrence of `base`, extended to end `value` `grain`s after it starts.
-/// The occurrence is the one `base` alone resolves to: `not_immediate` (from the
-/// base time, e.g. a bare weekday) skips an occurrence covering now, as
-/// resolution would for the base itself.
+/// The occurrence is the one `base` alone resolves to, judged against the
+/// reference time (not a composition segment's `now`): `not_immediate` (from
+/// the base time, e.g. a bare weekday) skips an occurrence covering the
+/// reference, and an occurrence the base is in the middle of (an ongoing
+/// holiday) stays first even once the duration has elapsed.
 pub fn for_duration(base: Predicate, value: i64, grain: Grain, not_immediate: bool) -> Predicate {
     Predicate::Series(Rc::new(move |now: TimeObject, ctx: &TimeContext| {
+        let reference = ctx.ref_time;
+        let covers_ref = move |o: &TimeObject| time_intersect(*o, reference).is_some();
         let extend = move |x: TimeObject| {
             let start = if x.grain == Grain::NoGrain {
                 time_round(x, lower(grain)).start
@@ -696,25 +700,29 @@ pub fn for_duration(base: Predicate, value: i64, grain: Grain, not_immediate: bo
             }
         };
         let (past, future) = base.run(now, ctx);
+        let mut past = past.peekable();
         let mut future = future.peekable();
-        if not_immediate
-            && future
-                .peek()
-                .is_some_and(|o| time_intersect(*o, now).is_some())
-        {
+        let ahead_covers = future.peek().is_some_and(covers_ref);
+        if not_immediate && ahead_covers {
             future.next();
         }
-        let mut future = future.map(extend).peekable();
+        // As resolution picks for the base alone: an ongoing interval behind
+        // now wins over an upcoming occurrence that does not cover now.
+        let ongoing = if ahead_covers {
+            None
+        } else {
+            past.next_if(|o| o.end.is_some() && covers_ref(o))
+        };
+        let mut future = ongoing.into_iter().chain(future).map(extend).peekable();
         // The start picks the occurrence: a window that began before now must
-        // not read as ongoing while the base still has an upcoming start. An
-        // occurrence the base itself is in the middle of (an ongoing holiday)
-        // stays: the base alone would resolve to it.
+        // not read as ongoing while the base still has an upcoming start.
+        // Bounded like seq_map, so a long duration cannot make every one of
+        // centuries of past windows qualify for the scan.
         let has_upcoming = future.peek().is_some();
-        let past = past.filter_map(move |o| {
-            let w = extend(o);
-            let base_ongoing = time_intersect(o, now).is_some();
-            (base_ongoing || !(has_upcoming && time_intersect(w, now).is_some())).then_some(w)
-        });
+        let past = past
+            .take(SAFE_MAX_INTERVAL)
+            .map(extend)
+            .filter(move |w| !(has_upcoming && covers_ref(w)));
         (Box::new(past) as BoxIter, Box::new(future) as BoxIter)
     }))
 }
@@ -981,5 +989,32 @@ mod tests {
         let h = future_head(&hour_minute(true, 4, 23), &ctx);
         assert_eq!(h.start, date(2013, 2, 12).at(4, 23, 0, 0));
         assert_eq!(h.grain, Grain::Minute);
+    }
+    #[test]
+    fn for_duration_in_a_composition_judges_the_reference_not_the_segment() {
+        // "Monday for 2 hours" (not_immediate, like a bare weekday) inside
+        // next week, from Tue 2026-10-13: the segment starts on Monday the
+        // 19th, which must not count as the current occurrence to skip.
+        let now = TimeObject {
+            start: date(2026, 10, 13).at(23, 23, 1, 0),
+            grain: Grain::Second,
+            end: None,
+        };
+        let ctx = TimeContext {
+            ref_time: now,
+            min_time: TimeObject {
+                start: date(2024, 10, 13).at(0, 0, 0, 0),
+                ..now
+            },
+            max_time: TimeObject {
+                start: date(2028, 10, 13).at(0, 0, 0, 0),
+                ..now
+            },
+            ref_offset_minutes: -240,
+        };
+        let monday_for_2h = for_duration(day_of_week(1), 2, Grain::Hour, true);
+        let w = future_head(&intersect(monday_for_2h, cycle_nth(Grain::Week, 1)), &ctx);
+        assert_eq!(w.start, date(2026, 10, 19).at(0, 0, 0, 0));
+        assert_eq!(w.end, Some(date(2026, 10, 19).at(2, 0, 0, 0)));
     }
 }

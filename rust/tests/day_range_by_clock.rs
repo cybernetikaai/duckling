@@ -231,6 +231,35 @@ fn a_year_qualified_day_range_by_clock_splits() {
 }
 
 #[test]
+fn an_on_wrapped_day_range_by_clock_splits() {
+    for (input, days, clock) in [
+        ("on Oct 20-22 at 3pm", "on Oct 20-22", "at 3pm"),
+        ("on Oct 20-22 2-4pm", "on Oct 20-22", "2-4pm"),
+    ] {
+        assert_eq!(
+            bodies(input),
+            vec![days.to_string(), clock.to_string()],
+            "{input:?}"
+        );
+    }
+    // One day stays one reading.
+    assert_eq!(bodies("on Monday at 3pm"), vec!["on Monday at 3pm"]);
+}
+
+#[test]
+fn a_long_duration_does_not_scan_its_whole_past() {
+    let t = std::time::Instant::now();
+    let (from, to) = span("noon for 1000 years");
+    assert_eq!(from, "2026-10-14T12:00:00.000-04:00");
+    assert_eq!(to, "3026-10-14T12:00:00.000-04:00");
+    assert!(
+        t.elapsed() < std::time::Duration::from_secs(5),
+        "{:?}",
+        t.elapsed()
+    );
+}
+
+#[test]
 fn a_time_for_a_duration_ends_that_long_after_it_starts() {
     for (input, from, to) in [
         (
@@ -296,13 +325,22 @@ fn a_holiday_for_a_duration_asked_during_it_keeps_the_current_one() {
         with_latent: false,
         locale: Default::default(),
     };
-    let input = "hanukkah for 3 days";
-    let e = duckling::parse(input, &ctx)
-        .into_iter()
-        .find(|e| e.dim == "time" && e.body == input)
-        .unwrap_or_else(|| panic!("{input:?}: no full-span reading"));
-    let v = &e.value;
-    assert_eq!(v["type"], "interval", "{v}");
-    assert_eq!(v["from"]["value"], "2013-11-27T00:00:00.000-04:00", "{v}");
-    assert_eq!(v["to"]["value"], "2013-11-30T00:00:00.000-04:00", "{v}");
+    // "for 1 day" has already elapsed at the reference, but the holiday the
+    // base picks is still the ongoing one.
+    for (input, to) in [
+        ("hanukkah for 3 days", "2013-11-30T00:00:00.000-04:00"),
+        ("hanukkah for 1 day", "2013-11-28T00:00:00.000-04:00"),
+    ] {
+        let e = duckling::parse(input, &ctx)
+            .into_iter()
+            .find(|e| e.dim == "time" && e.body == input)
+            .unwrap_or_else(|| panic!("{input:?}: no full-span reading"));
+        let v = &e.value;
+        assert_eq!(v["type"], "interval", "{input:?}: {v}");
+        assert_eq!(
+            v["from"]["value"], "2013-11-27T00:00:00.000-04:00",
+            "{input:?}: {v}"
+        );
+        assert_eq!(v["to"]["value"], to, "{input:?}: {v}");
+    }
 }

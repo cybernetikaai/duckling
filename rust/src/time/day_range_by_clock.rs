@@ -25,6 +25,10 @@ const INTERSECT_RULES: &[&str] = &[
 
 const WRAPPER_RULES: &[&str] = &["about|exactly <time-of-day>"];
 
+/// Connective words absorbed around a day ("on Oct 20-22"): the day part keeps
+/// them in its span, and is a day range if what they wrap is.
+const DAY_WRAPPER_RULES: &[&str] = &["on <day>"];
+
 fn rule_in(n: &Node, rules: &[&str]) -> bool {
     n.rule.as_deref().is_some_and(|r| rules.contains(&r))
 }
@@ -41,11 +45,12 @@ fn time_children(n: &Node) -> Vec<&Node> {
 }
 
 /// An explicit range or list of days, alone or narrowed by another date part
-/// ("next week Mon-Fri").
+/// ("next week Mon-Fri"), or wrapped in "on".
 fn is_day_range(n: &Node) -> bool {
     grain(n) == Some(Grain::Day)
         && (rule_in(n, DAY_RANGE_RULES)
-            || (rule_in(n, INTERSECT_RULES) && time_children(n).into_iter().any(is_day_range)))
+            || (rule_in(n, INTERSECT_RULES) && time_children(n).into_iter().any(is_day_range))
+            || (rule_in(n, DAY_WRAPPER_RULES) && time_children(n).into_iter().any(is_day_range)))
 }
 
 /// A time of day or clock range that names no day of its own.
